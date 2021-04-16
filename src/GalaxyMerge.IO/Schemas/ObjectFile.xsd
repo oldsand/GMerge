@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="ObjectFile" type="ObjectFileType"/>
+
+    <xs:complexType name="ObjectFileType">
+        <xs:sequence>
+            <xs:element type="ObjectContentType" name="Configuration"/>
+            <xs:element type="DependenciesType" name="Dependencies"/>
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="OriginatingGalaxy"/>
+        <xs:attribute type="xs:string" name="IsaVersion"/>
+        <xs:attribute type="xs:string" name="CdiVersion"/>
+        <xs:attribute type="xs:integer" name="ObjectId"/>
+        <xs:attribute type="xs:string" name="TagName"/>
+        <xs:attribute type="xs:string" name="HierarchicalName"/>
+        <xs:attribute type="xs:integer" name="Version"/>
+        <xs:attribute type="xs:string" name="Codebase"/>
+    </xs:complexType>
+    
+    <xs:complexType name="ObjectContentType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="Type"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="AttributeType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="Description"/>
+            <xs:element type="xs:string" name="EngUnits"/>
+            <xs:element type="xs:string" name="Value"/>
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="Name" use="required"/>
+        <xs:attribute type="xs:string" name="DataType" use="required"/>
+        <xs:attribute type="xs:string" name="Category"/>
+        <xs:attribute type="xs:string" name="Security"/>
+        <xs:attribute type="xs:boolean" name="Locked"/>
+    </xs:complexType>
+
+    <xs:complexType name="AttributesType">
+        <xs:sequence>
+            <xs:element type="AttributeType" name="Attribute" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="DependencyType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute type="xs:integer" name="ObjectId" use="required"/>
+                <xs:attribute type="xs:string" name="TagName" use="required"/>
+                <xs:attribute type="xs:string" name="Codebase"/>
+                <xs:attribute type="xs:integer" name="Level" default="0"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="DependenciesType">
+        <xs:sequence>
+            <xs:element type="DependencyType" name="Dependency" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
