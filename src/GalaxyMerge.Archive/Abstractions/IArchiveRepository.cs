@@ -12,6 +12,9 @@ namespace GalaxyMerge.Archive.Abstractions
         IEnumerable<ArchiveEntry> FindByObjectId(int objectId);
         IEnumerable<ArchiveEntry> FindByTagName(string tagName);
         ArchiveEntry GetLatest(string tagName);
+        void AddInfo(ArchiveInfo archiveInfo);
+        void RemoveInfo(ArchiveInfo archiveInfo);
+        void UpdateInfo(ArchiveInfo archiveInfo);
         void AddEntry(ArchiveEntry archiveEntry);
         void RemoveEntry(ArchiveEntry archiveEntry);
         void UpdateEntry(ArchiveEntry archiveEntry);

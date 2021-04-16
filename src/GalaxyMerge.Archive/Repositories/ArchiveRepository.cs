@@ -48,6 +48,21 @@ namespace GalaxyMerge.Archive.Repositories
             return _context.Entries.OrderByDescending(x => x.Created).FirstOrDefault(x => x.TagName == tagName);
         }
 
+        public void AddInfo(ArchiveInfo archiveInfo)
+        {
+            _context.Info.Add(archiveInfo);
+        }
+
+        public void RemoveInfo(ArchiveInfo archiveInfo)
+        {
+            _context.Info.Remove(archiveInfo);
+        }
+
+        public void UpdateInfo(ArchiveInfo archiveInfo)
+        {
+            _context.Info.Update(archiveInfo);
+        }
+
         public void AddEntry(ArchiveEntry archiveEntry)
         {
             _context.Entries.Add(archiveEntry);
