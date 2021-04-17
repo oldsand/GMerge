@@ -4,17 +4,17 @@
     <PropertyGroup>
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
         <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-        <ProjectGuid>{A1DE5D14-C80E-4F06-AF43-A0A7B3B24072}</ProjectGuid>
+        <ProjectGuid>{E2FC3885-5BD4-4E4C-B08A-DEC5A18896DA}</ProjectGuid>
+        <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
         <OutputType>Library</OutputType>
         <AppDesignerFolder>Properties</AppDesignerFolder>
-        <RootNamespace>GalaxyMerge.Contracts</RootNamespace>
-        <AssemblyName>GalaxyMerge.Contracts</AssemblyName>
+        <RootNamespace>GalaxyMerge.Services.Tests</RootNamespace>
+        <AssemblyName>GalaxyMerge.Services.Tests</AssemblyName>
         <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
-        <LangVersion>default</LangVersion>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-        <PlatformTarget>x86</PlatformTarget>
+        <PlatformTarget>AnyCPU</PlatformTarget>
         <DebugSymbols>true</DebugSymbols>
         <DebugType>full</DebugType>
         <Optimize>false</Optimize>
@@ -36,33 +36,23 @@
         <Reference Include="System" />
         <Reference Include="System.Core" />
         <Reference Include="System.Data" />
-        <Reference Include="System.Runtime.Serialization" />
-        <Reference Include="System.ServiceModel" />
         <Reference Include="System.Xml" />
-        <Reference Include="System.Xml.Linq" />
+        <Reference Include="nunit.framework, Version=3.5.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb">
+            <HintPath>..\packages\NUnit.3.5.0\lib\net45\nunit.framework.dll</HintPath>
+        </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Data\CustomProperty.cs" />
-        <Compile Include="Data\GalaxyAttribute.cs" />
-        <Compile Include="Data\GalaxyObject.cs" />
-        <Compile Include="Data\GalaxySymbol.cs" />
-        <Compile Include="Data\NamedScript.cs" />
-        <Compile Include="Data\PredefinedScript.cs" />
-        <Compile Include="Data\WizardChoice.cs" />
-        <Compile Include="Data\WizardLayer.cs" />
-        <Compile Include="Data\WizardOption.cs" />
-        <Compile Include="Data\WizardAssociation.cs" />
+        <Compile Include="GalaxyRegistrationServiceTests.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
-        <Compile Include="Services\IGalaxyService.cs" />
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\GalaxyMerge.Common\GalaxyMerge.Common.csproj">
-        <Project>{446fe87c-5122-4344-9df9-9f641e81a476}</Project>
-        <Name>GalaxyMerge.Common</Name>
+      <ProjectReference Include="..\GalaxyMerge.Archestra\GalaxyMerge.Archestra.csproj">
+        <Project>{32ea2985-26c5-44b5-b8c1-46c8d4da0979}</Project>
+        <Name>GalaxyMerge.Archestra</Name>
       </ProjectReference>
-      <ProjectReference Include="..\GalaxyMerge.Core\GalaxyMerge.Core.csproj">
-        <Project>{dd496472-fb15-4ffc-86ca-2ac8f0e6cf3c}</Project>
-        <Name>GalaxyMerge.Core</Name>
+      <ProjectReference Include="..\GalaxyMerge.Services\GalaxyMerge.Services.csproj">
+        <Project>{0a10ea2f-bb40-4da4-b4b0-9efc58a58725}</Project>
+        <Name>GalaxyMerge.Services</Name>
       </ProjectReference>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -16,21 +16,21 @@ namespace GalaxyMerge.Services
 {
     public class GalaxyArchiveService
     {
-        private readonly IGalaxyFinder _galaxyFinder;
+        
         private readonly IGalaxyRegistry _galaxyRegistry;
-        private const string ChangeLogTableName = "gobject_change_log";
         private readonly List<SqlListener> _listeners;
+        private const string ChangeLogTableName = "gobject_change_log";
+        private const int CheckInOperationId = 0;
 
-        public GalaxyArchiveService(IGalaxyFinder galaxyFinder, IGalaxyRegistry galaxyRegistry)
+        public GalaxyArchiveService(IGalaxyRegistry galaxyRegistry)
         {
-            _galaxyFinder = galaxyFinder;
             _galaxyRegistry = galaxyRegistry;
             _listeners = new List<SqlListener>();
         }
 
         public void Start()
         {
-            RegisterGalaxies();
+            InitializeListeners();
 
             Console.WriteLine("Starting Listeners");
             foreach (var listener in _listeners)
@@ -39,33 +39,25 @@ namespace GalaxyMerge.Services
 
         public void Stop()
         {
-            var galaxies = _galaxyRegistry.GetUserGalaxies("admin");
-            foreach (var galaxy in galaxies)
-                _galaxyRegistry.UnregisterGalaxy(galaxy.Name, "admin");
-
             foreach (var listener in _listeners)
                 listener.Stop();
         }
 
-        private void RegisterGalaxies()
+        private void InitializeListeners()
         {
-            Console.WriteLine("Registering Galaxies");
-            var galaxies = _galaxyFinder.FindAll();
+            Console.WriteLine("Initializing Listeners");
+            
+            var galaxies = _galaxyRegistry.GetAllGalaxies();
+            
             foreach (var galaxy in galaxies)
             {
-                var builder = new SqlConnectionStringBuilder
-                {
-                    DataSource = Environment.MachineName,
-                    InitialCatalog = galaxy,
-                    IntegratedSecurity = true
-                };
+                var connectionString = ConnectionStringBuilder.BuildGalaxyConnection(galaxy.Name);
 
                 Console.WriteLine($"Instantiating listener for galaxy '{galaxy}'");
-                var listener = new SqlListener(builder.ConnectionString, galaxy, ChangeLogTableName);
+                
+                var listener = new SqlListener(connectionString, galaxy.Name, ChangeLogTableName);
                 listener.TableChanged += OnChangeLogTableUpdated;
                 _listeners.Add(listener);
-                //TODO find out how to get local service account name here
-                _galaxyRegistry.RegisterGalaxy(galaxy, "admin");
             }
         }
 
@@ -111,7 +103,7 @@ namespace GalaxyMerge.Services
         private static bool IsCheckInOperation(XContainer data, string connectionString)
         {
             var operationId = Convert.ToInt32(data.Descendants("operation_id").Select(e => e.Value).SingleOrDefault());
-            return operationId == 0;
+            return operationId == CheckInOperationId;
         }
     }
 }

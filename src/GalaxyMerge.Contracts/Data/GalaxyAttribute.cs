@@ -7,9 +7,6 @@ using GalaxyMerge.Common.Primitives;
 using GalaxyMerge.Core;
 using GalaxyMerge.Core.Extensions;
 
-// Object will be deserialized via xml
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-
 namespace GalaxyMerge.Contracts.Data
 {
     public class GalaxyAttribute : IGalaxyAttribute

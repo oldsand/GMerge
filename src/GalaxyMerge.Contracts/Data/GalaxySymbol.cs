@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using GalaxyMerge.Common.Abstractions;
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-// ReSharper disable MemberCanBePrivate.Global
 
 namespace GalaxyMerge.Contracts.Data
 {

@@ -43,7 +43,7 @@
     <ItemGroup>
         <Compile Include="GalaxyArchiveService.cs" />
         <Compile Include="GalaxyManager.cs" />
-        <Compile Include="GalaxyRegistrationManager.cs" />
+        <Compile Include="GalaxyRegistrationService.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
     <ItemGroup>

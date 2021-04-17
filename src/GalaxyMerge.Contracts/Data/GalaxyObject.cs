@@ -6,9 +6,6 @@ using System.Xml.Serialization;
 using GalaxyMerge.Common.Abstractions;
 using GalaxyMerge.Common.Primitives;
 
-// Object will be deserialized via xml
-// ReSharper disable UnusedAutoPropertyAccessor.Global
-
 namespace GalaxyMerge.Contracts.Data
 {
     [XmlRoot]

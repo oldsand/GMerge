@@ -35,6 +35,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Archive.Tests",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestConsole", "..\tests\TestConsole\TestConsole.csproj", "{2969914A-CA35-45C9-B421-EFBB28CC0994}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Services.Tests", "GalaxyMerge.Services.Tests\GalaxyMerge.Services.Tests.csproj", "{E2FC3885-5BD4-4E4C-B08A-DEC5A18896DA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -89,6 +91,10 @@ Global
 		{2969914A-CA35-45C9-B421-EFBB28CC0994}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2969914A-CA35-45C9-B421-EFBB28CC0994}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2969914A-CA35-45C9-B421-EFBB28CC0994}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2FC3885-5BD4-4E4C-B08A-DEC5A18896DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2FC3885-5BD4-4E4C-B08A-DEC5A18896DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2FC3885-5BD4-4E4C-B08A-DEC5A18896DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2FC3885-5BD4-4E4C-B08A-DEC5A18896DA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -109,5 +115,6 @@ Global
 		{A794D19C-AAAD-4228-B9BC-1BCB8944B823} = {5B40454C-F34F-4EC8-80BF-48E4F9DCD4C9}
 		{96F065FC-F8ED-49DE-9B17-7F7E2BAC4B53} = {5B40454C-F34F-4EC8-80BF-48E4F9DCD4C9}
 		{2969914A-CA35-45C9-B421-EFBB28CC0994} = {5B40454C-F34F-4EC8-80BF-48E4F9DCD4C9}
+		{E2FC3885-5BD4-4E4C-B08A-DEC5A18896DA} = {5B40454C-F34F-4EC8-80BF-48E4F9DCD4C9}
 	EndGlobalSection
 EndGlobal

@@ -15,12 +15,11 @@ namespace GalaxyMerge.Host
             var builder = new ContainerBuilder();
             builder.RegisterType<GalaxyFactory>().As<IGalaxyFactory>();
             builder.RegisterType<GalaxyRegistry>().AsSelf().AsImplementedInterfaces().SingleInstance();
-            builder.RegisterType<GalaxyRegistrationManager>();
             builder.RegisterType<GalaxyManager>();
             var container = builder.Build();
 
-            var hostGalaxyManager = new ServiceHost(typeof(GalaxyRegistrationManager));
-            hostGalaxyManager.AddDependencyInjectionBehavior(typeof(GalaxyRegistrationManager), container);
+            /*var hostGalaxyManager = new ServiceHost(typeof(GalaxyRegistrationManager));
+            hostGalaxyManager.AddDependencyInjectionBehavior(typeof(GalaxyRegistrationManager), container);*/
 
             var hostGalaxyDataManager = new ServiceHost(typeof(GalaxyManager));
             hostGalaxyDataManager.AddDependencyInjectionBehavior(typeof(GalaxyManager), container);
@@ -30,14 +29,12 @@ namespace GalaxyMerge.Host
             var binding = new NetTcpBinding();
             var contract = typeof(IGalaxyService);
             hostGalaxyManager.AddServiceEndpoint(contract, binding, address);*/
-
-            hostGalaxyManager.Open();
+            
             hostGalaxyDataManager.Open();
             
             Console.WriteLine("Service Started. Press [Enter] to stop service.");
             Console.ReadLine();
             
-            hostGalaxyManager.Close();
             hostGalaxyDataManager.Close();
         }
     }
