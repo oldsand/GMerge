@@ -1,5 +1,4 @@
-﻿using System;
-using System.ServiceModel;
+﻿using System.ServiceModel;
 using System.ServiceProcess;
 using Autofac;
 using Autofac.Integration.Wcf;

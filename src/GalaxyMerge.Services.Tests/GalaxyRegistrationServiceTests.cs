@@ -11,7 +11,7 @@ namespace GalaxyMerge.Services.Tests
         {
             var finder = new GalaxyFinder();
             var registry = new GalaxyRegistry();
-            var service = new GalaxyRegistrationService(finder, registry);
+            var service = new GalaxyRegistrant(finder, registry);
             Assert.NotNull(service);
         }
 
@@ -20,9 +20,9 @@ namespace GalaxyMerge.Services.Tests
         {
             var finder = new GalaxyFinder();
             var registry = new GalaxyRegistry();
-            var service = new GalaxyRegistrationService(finder, registry);
+            var service = new GalaxyRegistrant(finder, registry);
             
-            service.Start();
+            service.RunRegistration();
 
             var galaxies = registry.GetAllGalaxies();
             Assert.IsNotEmpty(galaxies);
