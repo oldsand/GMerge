@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GalaxyMerge.Data.Helpers
 {
-    public static class ContextCreator
+    internal static class ContextCreator
     {
         public static GalaxyContext Create(string connectionString)
         {

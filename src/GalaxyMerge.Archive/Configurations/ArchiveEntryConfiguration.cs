@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GalaxyMerge.Archive.Configurations
 {
-    public class ArchiveEntryConfiguration : IEntityTypeConfiguration<ArchiveEntry>
+    internal class ArchiveEntryConfiguration : IEntityTypeConfiguration<ArchiveEntry>
     {
         public void Configure(EntityTypeBuilder<ArchiveEntry> builder)
         {

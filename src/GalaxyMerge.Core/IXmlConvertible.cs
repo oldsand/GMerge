@@ -4,7 +4,7 @@ namespace GalaxyMerge.Core
 {
     public interface IXmlConvertible<out T>
     {
-        T FromXml(XElement element);
         XElement ToXml();
+        T FromXml(XElement element);
     }
 }

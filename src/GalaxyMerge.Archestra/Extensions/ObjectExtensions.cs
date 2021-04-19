@@ -24,6 +24,7 @@ namespace GalaxyMerge.Archestra.Extensions
             return gObject.Tagname.StartsWith("$");
         }
 
+        //TODO: This is not complete. Also not sure if it's necessary...
         public static bool IsAssignableTo(this IgObject gObject, IgObject assignee)
         {
             if (assignee.category == ECATEGORY.idxCategoryArea)
@@ -34,6 +35,7 @@ namespace GalaxyMerge.Archestra.Extensions
             return false;
         }
         
+        //TODO: This is not complete/tested. Also not sure if it's necessary...
         public static void Assign(this IgObject gObject, IgObject assignee)
         {
             switch (assignee.category)
@@ -196,15 +198,15 @@ namespace GalaxyMerge.Archestra.Extensions
         {
             return (IgObject) template;
         }
+        
+        public static IgObject AsGObject(this IInstance instance)
+        {
+            return (IgObject) instance;
+        }
 
         public static ITemplate AsTemplate(this IgObject gObject)
         {
             return (ITemplate) gObject;
-        }
-
-        public static IgObject AsGObject(this IInstance instance)
-        {
-            return (IgObject) instance;
         }
 
         public static IInstance AsInstance(this IgObject gObject)
