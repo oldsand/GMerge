@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using ArchestrA.GRAccess;
 using ArchestrA.Visualization.GraphicAccess;
@@ -54,6 +56,15 @@ namespace GalaxyMerge.Archestra
             ResultHandler.Handle(_galaxy.CommandResult, _galaxy.Name);
             Connected = true;
             LoggedInUser = userName;
+        }
+
+        public Task LoginAsync(string userName, CancellationToken token)
+        {
+            return Task.Run(() =>
+            {
+                token.ThrowIfCancellationRequested();
+                Login(userName);
+            }, token);
         }
 
         public void Logout()

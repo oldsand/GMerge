@@ -56,23 +56,23 @@ namespace GalaxyMerge.Archestra
         {
             if (IsGalaxyRegistered(galaxyName, userName)) return;
             var galaxy = await _galaxyFactory.CreateAsync(galaxyName, token);
-            galaxy.Login(userName);
+            await galaxy.LoginAsync(userName, token);
             _galaxies.Add(galaxy);
         }
         
         public async Task RegisterGalaxiesAsync(string userName, CancellationToken token)
         {
-            var galaxies = await _galaxyFinder.FindAllAsync(token);
+            var galaxies = (await _galaxyFinder.FindAllAsync(token)).ToList();
             var creationTasks = galaxies.Select(g => _galaxyFactory.CreateAsync(g, token)).ToList();
 
-            _galaxies.Clear();
+            UnregisterGalaxies(galaxies, userName);
             
             while (creationTasks.Any())
             {
                 var connection = await Task.WhenAny(creationTasks);
                 creationTasks.Remove(connection);
                 var galaxy = connection.Result;
-                galaxy.Login(userName);
+                await galaxy.LoginAsync(userName, token);
                 _galaxies.Add(galaxy);
             }
         }
@@ -83,6 +83,12 @@ namespace GalaxyMerge.Archestra
             var galaxy = GetGalaxy(galaxyName, userName);
             _galaxies.Remove(galaxy);
             galaxy.Logout();
+        }
+
+        public void UnregisterGalaxies(IEnumerable<string> galaxies, string userName)
+        {
+            foreach (var galaxy in galaxies)
+                UnregisterGalaxy(galaxy, userName);
         }
     }
 }

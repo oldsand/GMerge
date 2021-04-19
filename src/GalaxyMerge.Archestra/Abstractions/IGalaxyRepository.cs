@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Tasks;
 using GalaxyMerge.Archestra.Options;
 using GalaxyMerge.Common.Abstractions;
 
@@ -18,6 +20,7 @@ namespace GalaxyMerge.Archestra.Abstractions
         string CdiVersion { get; }
         void SynchronizeClient();
         void Login(string userName);
+        Task LoginAsync(string userName, CancellationToken token);
         void Logout();
         bool UserIsAuthorized(string userName);
         IGalaxyObject GetObject(string tagName);

@@ -6,7 +6,7 @@ namespace GalaxyMerge.Services
     {
         private readonly IGalaxyFinder _galaxyFinder;
         private readonly IGalaxyRegistry _galaxyRegistry;
-        private readonly string _serviceAccountName = "Admin"; //TODO Need to determine if I need a service account and how to get that.
+        private readonly string _serviceAccountName = "admin"; //TODO Need to determine if I need a service account and how to get that.
 
         public GalaxyRegistrationService(IGalaxyFinder galaxyFinder, IGalaxyRegistry galaxyRegistry)
         {
