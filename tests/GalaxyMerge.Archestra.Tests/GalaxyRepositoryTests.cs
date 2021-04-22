@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using NUnit.Framework;
 
 namespace GalaxyMerge.Archestra.Tests
@@ -28,6 +29,18 @@ namespace GalaxyMerge.Archestra.Tests
 
             Assert.IsTrue(galaxy.Connected);
             Assert.AreEqual(userName, galaxy.LoggedInUser);
+        }
+
+        [Test]
+        public void Login_WindowsIdentity_ConnectsWithUserName()
+        {
+            var galaxy = new GalaxyRepository(Settings.CurrentTestGalaxy);
+
+            var user = WindowsIdentity.GetCurrent();
+            galaxy.Login(user.Name);
+            
+            Assert.True(galaxy.Connected);
+            Assert.AreEqual(user.Name, galaxy.LoggedInUser);
         }
 
         [Test]

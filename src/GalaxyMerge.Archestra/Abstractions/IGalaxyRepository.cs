@@ -34,6 +34,7 @@ namespace GalaxyMerge.Archestra.Abstractions
         void DeleteObject(string tagName, bool recursive);
         void DeleteObjects(IEnumerable<string> tagNames, bool recursive);
         void UpdateObject(IGalaxyObject galaxyObject);
+        void UpdateSymbol(IGalaxySymbol galaxySymbol);
         void Deploy(IEnumerable<string> tagNames, DeploymentOptions options);
         void Undeploy(IEnumerable<string> tagNames, DeploymentOptions options);
         void ExportPkg(string tagName, string fileName);

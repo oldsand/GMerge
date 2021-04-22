@@ -220,6 +220,11 @@ namespace GalaxyMerge.Archestra
             }
         }
 
+        public void UpdateSymbol(IGalaxySymbol galaxySymbol)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Deploy(IEnumerable<string> tagNames, DeploymentOptions options)
         {
             if (options == null) throw new ArgumentException("Value cannot be null");

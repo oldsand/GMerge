@@ -2,25 +2,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using GalaxyMerge.Archestra;
 using GalaxyMerge.Archestra.Abstractions;
 
-namespace GalaxyMerge.Archestra
+namespace GalaxyMerge.Services
 {
     public class GalaxyRegistry : IGalaxyRegistry
     {
-        private readonly IGalaxyFactory _galaxyFactory;
+        private readonly IGalaxyRepositoryFactory _repositoryFactory;
         private readonly IGalaxyFinder _galaxyFinder;
         private readonly List<IGalaxyRepository> _galaxies = new List<IGalaxyRepository>();
 
         public GalaxyRegistry()
         {
-            _galaxyFactory = new GalaxyFactory();
+            _repositoryFactory = new GalaxyRepositoryFactory();
             _galaxyFinder = new GalaxyFinder();
         }
 
-        internal GalaxyRegistry(IGalaxyFactory galaxyFactory, IGalaxyFinder galaxyFinder)
+        internal GalaxyRegistry(IGalaxyRepositoryFactory repositoryFactory, IGalaxyFinder galaxyFinder)
         {
-            _galaxyFactory = galaxyFactory;
+            _repositoryFactory = repositoryFactory;
             _galaxyFinder = galaxyFinder;
         }
 
@@ -47,7 +48,7 @@ namespace GalaxyMerge.Archestra
         public void RegisterGalaxy(string galaxyName, string userName)
         {
             if (IsGalaxyRegistered(galaxyName, userName)) return;
-            var galaxy = _galaxyFactory.Create(galaxyName);
+            var galaxy = _repositoryFactory.Create(galaxyName);
             galaxy.Login(userName);
             _galaxies.Add(galaxy);
         }
@@ -55,7 +56,7 @@ namespace GalaxyMerge.Archestra
         public async Task RegisterGalaxyAsync(string galaxyName, string userName, CancellationToken token)
         {
             if (IsGalaxyRegistered(galaxyName, userName)) return;
-            var galaxy = await _galaxyFactory.CreateAsync(galaxyName, token);
+            var galaxy = await _repositoryFactory.CreateAsync(galaxyName, token);
             await galaxy.LoginAsync(userName, token);
             _galaxies.Add(galaxy);
         }
@@ -63,7 +64,7 @@ namespace GalaxyMerge.Archestra
         public async Task RegisterGalaxiesAsync(string userName, CancellationToken token)
         {
             var galaxies = (await _galaxyFinder.FindAllAsync(token)).ToList();
-            var creationTasks = galaxies.Select(g => _galaxyFactory.CreateAsync(g, token)).ToList();
+            var creationTasks = galaxies.Select(g => _repositoryFactory.CreateAsync(g, token)).ToList();
 
             UnregisterGalaxies(galaxies, userName);
             

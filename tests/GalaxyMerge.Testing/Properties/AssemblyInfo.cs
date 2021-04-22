@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("GalaxyMerge.Services.Tests")]
+[assembly: AssemblyTitle("GalaxyMerge.Testing")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("GalaxyMerge.Services.Tests")]
+[assembly: AssemblyProduct("GalaxyMerge.Testing")]
 [assembly: AssemblyCopyright("Copyright ©  2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("E2FC3885-5BD4-4E4C-B08A-DEC5A18896DA")]
+[assembly: Guid("97387893-B985-4FA7-BE27-598C33142963")]
 
 // Version information for an assembly consists of the following four values:
 //

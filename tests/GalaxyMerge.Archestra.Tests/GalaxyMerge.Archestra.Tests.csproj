@@ -53,7 +53,6 @@
         <Compile Include="GalaxyExtensionTests.cs" />
         <Compile Include="GalaxyFactoryTests.cs" />
         <Compile Include="GalaxyFinderTests.cs" />
-        <Compile Include="GalaxyRegistryTests.cs" />
         <Compile Include="GalaxyRepositoryTests.cs" />
         <Compile Include="MxValueExtensionsIntegrationTests.cs" />
         <Compile Include="MxValueExtensionsUnitTest.cs" />
@@ -63,7 +62,6 @@
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="AttributeExtensionTests.cs" />
         <Compile Include="ObjectExtensionTests.cs" />
-        <Compile Include="Settings.cs" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\..\src\GalaxyMerge.Archestra\GalaxyMerge.Archestra.csproj">
@@ -81,6 +79,10 @@
       <ProjectReference Include="..\..\src\GalaxyMerge.Core\GalaxyMerge.Core.csproj">
         <Project>{dd496472-fb15-4ffc-86ca-2ac8f0e6cf3c}</Project>
         <Name>GalaxyMerge.Core</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\GalaxyMerge.Testing\GalaxyMerge.Testing.csproj">
+        <Project>{97387893-b985-4fa7-be27-598c33142963}</Project>
+        <Name>GalaxyMerge.Testing</Name>
       </ProjectReference>
     </ItemGroup>
     <ItemGroup>

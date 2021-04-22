@@ -1,3 +1,4 @@
+using System.Security.Principal;
 using GalaxyMerge.Archestra.Abstractions;
 
 namespace GalaxyMerge.Services
@@ -6,7 +7,6 @@ namespace GalaxyMerge.Services
     {
         private readonly IGalaxyFinder _galaxyFinder;
         private readonly IGalaxyRegistry _galaxyRegistry;
-        private readonly string _serviceAccountName = "admin"; //TODO Need to determine if I need a service account and how to get that.
 
         public GalaxyRegistrant(IGalaxyFinder galaxyFinder, IGalaxyRegistry galaxyRegistry)
         {
@@ -16,16 +16,20 @@ namespace GalaxyMerge.Services
         
         public void RunRegistration()
         {
+            var user = WindowsIdentity.GetCurrent();
             var galaxies = _galaxyFinder.FindAll();
+            
             foreach (var galaxy in galaxies)
-                _galaxyRegistry.RegisterGalaxy(galaxy, _serviceAccountName);
+                _galaxyRegistry.RegisterGalaxy(galaxy, user.Name);
         }
 
         public void Unregister()
         {
-            var galaxies = _galaxyRegistry.GetUserGalaxies(_serviceAccountName);
+            var user = WindowsIdentity.GetCurrent();
+            var galaxies = _galaxyRegistry.GetUserGalaxies(user.Name);
+            
             foreach (var galaxy in galaxies)
-                _galaxyRegistry.UnregisterGalaxy(galaxy.Name, _serviceAccountName);
+                _galaxyRegistry.UnregisterGalaxy(galaxy.Name, user.Name);
         }
     }
 }

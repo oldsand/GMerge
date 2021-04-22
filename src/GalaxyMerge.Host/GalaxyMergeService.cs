@@ -21,6 +21,7 @@ namespace GalaxyMerge.Host
         
         protected override void OnStart(string[] args)
         {
+            //TODO: Another thing to think about will be host configuration. Would like to do it programatically. 
             _galaxyManagerHost?.Close();
             
             var bootstrapper = new Bootstrapper();

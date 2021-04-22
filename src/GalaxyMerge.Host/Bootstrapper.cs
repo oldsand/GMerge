@@ -26,7 +26,7 @@ namespace GalaxyMerge.Host
         private void ConfigureContainer()
         {
             var builder = new ContainerBuilder();
-            builder.RegisterType<GalaxyFactory>().As<IGalaxyFactory>();
+            builder.RegisterType<GalaxyRepositoryFactory>().As<IGalaxyRepositoryFactory>();
             builder.RegisterType<GalaxyRegistry>().AsSelf().AsImplementedInterfaces().SingleInstance();
             builder.RegisterType<GalaxyManager>();
             _container = builder.Build();

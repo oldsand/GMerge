@@ -4,7 +4,7 @@ using GalaxyMerge.Archestra.Abstractions;
 
 namespace GalaxyMerge.Archestra
 {
-    public class GalaxyFactory : IGalaxyFactory
+    public class GalaxyRepositoryFactory : IGalaxyRepositoryFactory
     {
         public IGalaxyRepository Create(string galaxyName)
         {

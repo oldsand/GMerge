@@ -12,7 +12,7 @@ namespace GalaxyMerge.Archestra.Tests
         [TestCase("Butane_Production")]
         public void Create_WhenCalled_ReturnsNotNull(string galaxyName)
         {
-            var factory = new GalaxyFactory();
+            var factory = new GalaxyRepositoryFactory();
             var connection = factory.Create(galaxyName);
             Assert.NotNull(connection);
         }
@@ -22,7 +22,7 @@ namespace GalaxyMerge.Archestra.Tests
         [TestCase("Butane_Production")]
         public async Task CreateAsync_WhenCalled_ReturnsNotNull(string galaxyName)
         {
-            var factory = new GalaxyFactory();
+            var factory = new GalaxyRepositoryFactory();
             var connection = await  factory.CreateAsync(galaxyName, CancellationToken.None);
             Assert.NotNull(connection);
         }

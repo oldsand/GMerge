@@ -15,6 +15,5 @@ namespace GalaxyMerge.Archestra.Abstractions
         IEnumerable<IGalaxyRepository> GetAllGalaxies();
         void RegisterGalaxy(string galaxyName, string userName);
         void UnregisterGalaxy(string galaxyName, string userName);
-        
     }
 }

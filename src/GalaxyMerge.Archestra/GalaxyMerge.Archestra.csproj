@@ -49,9 +49,8 @@
         <Reference Include="System.Xml.Linq" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Abstractions\IGalaxyFactory.cs" />
+        <Compile Include="Abstractions\IGalaxyRepositoryFactory.cs" />
         <Compile Include="Abstractions\IGalaxyFinder.cs" />
-        <Compile Include="Abstractions\IGalaxyRegistry.cs" />
         <Compile Include="Abstractions\IGalaxyRepository.cs" />
         <Compile Include="GalaxyCommandResult.cs" />
         <Compile Include="Extensions\AttributeExtensions.cs" />
@@ -63,8 +62,7 @@
         <Compile Include="Extensions\TypeExtensions.cs" />
         <Compile Include="Extensions\MxValueExtensions.cs" />
         <Compile Include="GalaxyRepository.cs" />
-        <Compile Include="GalaxyRegistry.cs" />
-        <Compile Include="GalaxyFactory.cs" />
+        <Compile Include="GalaxyRepositoryFactory.cs" />
         <Compile Include="GalaxyFinder.cs" />
         <Compile Include="Options\CsvImportOptions.cs" />
         <Compile Include="Options\CurrentlyDeployedOption.cs" />
