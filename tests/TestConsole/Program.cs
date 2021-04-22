@@ -8,11 +8,10 @@ namespace TestConsole
     {
         private static void Main(string[] args)
         {
-            var service = new GalaxyRegistrant(new GalaxyFinder(), new GalaxyRegistry());
-            service.RunRegistration();
+            /*var service = new GalaxyRegistry();
+            service.RegisterAll();
             Console.WriteLine("Press and Key to stop");
-            Console.ReadLine();
-            service.Unregister();
+            Console.ReadLine();*/
 
             /*var service = new GalaxyArchiveService(new GalaxyRegistry());
             service.Start();

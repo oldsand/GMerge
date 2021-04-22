@@ -13,10 +13,10 @@ namespace GalaxyMerge.Services
         IEnumerable<IGalaxyRepository> GetAll();
         void Register(string galaxyName);
         void Register(string galaxyName, string userName);
-        Task RegisterAsync(string galaxyName, CancellationToken token);
-        Task RegisterAsync(string galaxyName, string userName, CancellationToken token);
         void RegisterAll();
         void RegisterAll(string userName);
+        Task RegisterAsync(string galaxyName, CancellationToken token);
+        Task RegisterAsync(string galaxyName, string userName, CancellationToken token);
         Task RegisterAllAsync(CancellationToken token);
         Task RegisterAllAsync(string userName, CancellationToken token);
         void Unregister(string galaxyName, string userName);

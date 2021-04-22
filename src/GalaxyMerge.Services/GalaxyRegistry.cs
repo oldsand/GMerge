@@ -57,18 +57,7 @@ namespace GalaxyMerge.Services
         {
             RegisterGalaxy(galaxyName, userName);
         }
-
-        public Task RegisterAsync(string galaxyName, CancellationToken token)
-        {
-            var user = WindowsIdentity.GetCurrent();
-            return RegisterGalaxyAsync(galaxyName, user.Name, token);
-        }
-
-        public Task RegisterAsync(string galaxyName, string userName, CancellationToken token)
-        {
-            return RegisterGalaxyAsync(galaxyName, userName, token);
-        }
-
+        
         public void RegisterAll()
         {
             var user = WindowsIdentity.GetCurrent();
@@ -82,6 +71,17 @@ namespace GalaxyMerge.Services
             var galaxies = _galaxyFinder.FindAll();
             foreach (var galaxy in galaxies)
                 RegisterGalaxy(galaxy, userName);
+        }
+
+        public Task RegisterAsync(string galaxyName, CancellationToken token)
+        {
+            var user = WindowsIdentity.GetCurrent();
+            return RegisterGalaxyAsync(galaxyName, user.Name, token);
+        }
+
+        public Task RegisterAsync(string galaxyName, string userName, CancellationToken token)
+        {
+            return RegisterGalaxyAsync(galaxyName, userName, token);
         }
 
         public async Task RegisterAllAsync(CancellationToken token)
