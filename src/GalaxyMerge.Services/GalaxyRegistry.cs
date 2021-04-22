@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
 using GalaxyMerge.Archestra;
@@ -18,14 +20,14 @@ namespace GalaxyMerge.Services
             _repositoryFactory = new GalaxyRepositoryFactory();
             _galaxyFinder = new GalaxyFinder();
         }
-
+        
         internal GalaxyRegistry(IGalaxyRepositoryFactory repositoryFactory, IGalaxyFinder galaxyFinder)
         {
             _repositoryFactory = repositoryFactory;
             _galaxyFinder = galaxyFinder;
         }
 
-        public bool IsGalaxyRegistered(string galaxyName, string userName)
+        public bool IsRegistered(string galaxyName, string userName)
         {
             return _galaxies.SingleOrDefault(g => g.Name == galaxyName && g.LoggedInUser == userName) != null;
         }
@@ -35,39 +37,50 @@ namespace GalaxyMerge.Services
             return _galaxies.SingleOrDefault(g => g.Name == galaxyName && g.LoggedInUser == userName);
         }
 
-        public IEnumerable<IGalaxyRepository> GetUserGalaxies(string userName)
+        public IEnumerable<IGalaxyRepository> GetByGalaxy(string galaxyName)
+        {
+            return _galaxies.Where(g => g.Name == galaxyName);
+        }
+        
+        public IEnumerable<IGalaxyRepository> GetByUser(string userName)
         {
             return _galaxies.Where(g => g.LoggedInUser == userName);
         }
 
-        public IEnumerable<IGalaxyRepository> GetAllGalaxies()
+        public IEnumerable<IGalaxyRepository> GetAll()
         {
             return _galaxies;
         }
 
-        public void RegisterGalaxy(string galaxyName, string userName)
+        public void Register(string galaxyName)
         {
-            if (IsGalaxyRegistered(galaxyName, userName)) return;
-            var galaxy = _repositoryFactory.Create(galaxyName);
-            galaxy.Login(userName);
-            _galaxies.Add(galaxy);
+            var user = WindowsIdentity.GetCurrent();
+            RegisterGalaxy(galaxyName, user.Name);
         }
         
-        public async Task RegisterGalaxyAsync(string galaxyName, string userName, CancellationToken token)
+        public void Register(string galaxyName, string userName)
         {
-            if (IsGalaxyRegistered(galaxyName, userName)) return;
-            var galaxy = await _repositoryFactory.CreateAsync(galaxyName, token);
-            await galaxy.LoginAsync(userName, token);
-            _galaxies.Add(galaxy);
+            RegisterGalaxy(galaxyName, userName);
         }
         
-        public async Task RegisterGalaxiesAsync(string userName, CancellationToken token)
+        public Task RegisterAsync(string galaxyName, CancellationToken token)
+        {
+            var user = WindowsIdentity.GetCurrent();
+            return RegisterGalaxyAsync(galaxyName, user.Name, token);
+        }
+
+        public Task RegisterAsync(string galaxyName, string userName, CancellationToken token)
+        {
+            return RegisterGalaxyAsync(galaxyName, userName, token);
+        }
+
+        public async Task RegisterAllAsync(string userName, CancellationToken token)
         {
             var galaxies = (await _galaxyFinder.FindAllAsync(token)).ToList();
             var creationTasks = galaxies.Select(g => _repositoryFactory.CreateAsync(g, token)).ToList();
 
-            UnregisterGalaxies(galaxies, userName);
-            
+            Unregister(galaxies, userName);
+
             while (creationTasks.Any())
             {
                 var connection = await Task.WhenAny(creationTasks);
@@ -78,18 +91,60 @@ namespace GalaxyMerge.Services
             }
         }
 
-        public void UnregisterGalaxy(string galaxyName, string userName)
+        public void Unregister(string galaxyName, string userName)
         {
-            if (!IsGalaxyRegistered(galaxyName, userName)) return;
-            var galaxy = GetGalaxy(galaxyName, userName);
-            _galaxies.Remove(galaxy);
-            galaxy.Logout();
+            UnregisterGalaxy(galaxyName, userName);
         }
 
-        public void UnregisterGalaxies(IEnumerable<string> galaxies, string userName)
+        public void Unregister(IEnumerable<string> galaxies, string userName)
         {
             foreach (var galaxy in galaxies)
                 UnregisterGalaxy(galaxy, userName);
+        }
+
+        private void RegisterGalaxy(string galaxyName, string userName)
+        {
+            if (string.IsNullOrEmpty(galaxyName))
+                throw new ArgumentException("Value cannot be null or empty", nameof(galaxyName));
+            
+            if (userName == null)
+                throw new ArgumentException("Value cannot be null", nameof(userName));
+
+            if (IsRegistered(galaxyName, userName)) return;
+
+            var galaxy = _repositoryFactory.Create(galaxyName);
+            galaxy.Login(userName);
+            _galaxies.Add(galaxy);
+        }
+        
+        private async Task RegisterGalaxyAsync(string galaxyName, string userName, CancellationToken token)
+        {
+            if (string.IsNullOrEmpty(galaxyName))
+                throw new ArgumentException("Value cannot be null or empty", nameof(galaxyName));
+            
+            if (userName == null)
+                throw new ArgumentException("Value cannot be null", nameof(userName));
+
+            if (IsRegistered(galaxyName, userName)) return;
+            
+            var galaxy = await _repositoryFactory.CreateAsync(galaxyName, token);
+            await galaxy.LoginAsync(userName, token);
+            _galaxies.Add(galaxy);
+        }
+
+        private void UnregisterGalaxy(string galaxyName, string userName)
+        {
+            if (string.IsNullOrEmpty(galaxyName))
+                throw new ArgumentException("Value cannot be null or empty", nameof(galaxyName));
+            
+            if (userName == null)
+                throw new ArgumentException("Value cannot be null", nameof(userName));
+            
+            if (!IsRegistered(galaxyName, userName)) return;
+            
+            var galaxy = GetGalaxy(galaxyName, userName);
+            _galaxies.Remove(galaxy);
+            galaxy.Logout();
         }
     }
 }

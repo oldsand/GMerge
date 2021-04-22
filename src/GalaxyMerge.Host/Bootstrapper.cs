@@ -47,7 +47,7 @@ namespace GalaxyMerge.Host
                 throw new InvalidOperationException("Container not yet initialized");
 
             var registry = _container.Resolve<IGalaxyRegistry>();
-            var galaxies = registry.GetAllGalaxies();
+            var galaxies = registry.GetAll();
 
             foreach (var galaxy in galaxies)
             {

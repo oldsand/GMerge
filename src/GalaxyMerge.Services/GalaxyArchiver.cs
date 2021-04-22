@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Xml.Linq;
 using GalaxyMerge.Archestra.Abstractions;
@@ -14,7 +13,7 @@ using GalaxyMerge.Data.Repositories;
 
 namespace GalaxyMerge.Services
 {
-    public class GalaxyArchiveService
+    public class GalaxyArchiver
     {
         
         private readonly IGalaxyRegistry _galaxyRegistry;
@@ -22,7 +21,7 @@ namespace GalaxyMerge.Services
         private const string ChangeLogTableName = "gobject_change_log";
         private const int CheckInOperationId = 0;
 
-        public GalaxyArchiveService(IGalaxyRegistry galaxyRegistry)
+        public GalaxyArchiver(IGalaxyRegistry galaxyRegistry)
         {
             _galaxyRegistry = galaxyRegistry;
             _listeners = new List<SqlListener>();
@@ -47,7 +46,7 @@ namespace GalaxyMerge.Services
         {
             Console.WriteLine("Initializing Listeners");
             
-            var galaxies = _galaxyRegistry.GetAllGalaxies();
+            var galaxies = _galaxyRegistry.GetAll();
             
             foreach (var galaxy in galaxies)
             {

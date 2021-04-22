@@ -20,16 +20,16 @@ namespace GalaxyMerge.Services
             var galaxies = _galaxyFinder.FindAll();
             
             foreach (var galaxy in galaxies)
-                _galaxyRegistry.RegisterGalaxy(galaxy, user.Name);
+                _galaxyRegistry.Register(galaxy, user.Name);
         }
 
         public void Unregister()
         {
             var user = WindowsIdentity.GetCurrent();
-            var galaxies = _galaxyRegistry.GetUserGalaxies(user.Name);
+            var galaxies = _galaxyRegistry.GetByUser(user.Name);
             
             foreach (var galaxy in galaxies)
-                _galaxyRegistry.UnregisterGalaxy(galaxy.Name, user.Name);
+                _galaxyRegistry.Unregister(galaxy.Name, user.Name);
         }
     }
 }
