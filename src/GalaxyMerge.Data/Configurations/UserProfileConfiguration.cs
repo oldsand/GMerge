@@ -9,7 +9,7 @@ namespace GalaxyMerge.Data.Configurations
         public void Configure(EntityTypeBuilder<UserProfile> builder)
         {
             //Configuring as view because EF core will treat this table as read-only, which we want.
-            builder.ToView("").HasKey(x => x.UserId);
+            builder.ToView("user_profile").HasKey(x => x.UserId);
 
             builder.Property(x => x.UserId).HasColumnName("user_profile_id");
             builder.Property(x => x.UserGuid).HasColumnName("user_guid");

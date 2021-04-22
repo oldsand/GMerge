@@ -7,8 +7,9 @@ namespace GalaxyMerge.Services
 {
     public interface IGalaxyRegistry
     {
+        bool IsRegistered(string galaxyName, string userName);
         IGalaxyRepository GetGalaxy(string galaxyName, string userName);
-        IEnumerable<IGalaxyRepository> GetByGalaxy(string galaxyName);
+        IEnumerable<IGalaxyRepository> GetByName(string galaxyName);
         IEnumerable<IGalaxyRepository> GetByUser(string userName);
         IEnumerable<IGalaxyRepository> GetAll();
         void Register(string galaxyName);

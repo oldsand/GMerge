@@ -20,9 +20,8 @@ namespace GalaxyMerge.Data.Entities
         public short SecurityClassificationId { get; private set; }
         public int AttributeCategoryId { get; private set; }
         public bool IsLocked { get; private set; }
-        public object RawValue { get; private set; }
+        public string RawValue { get; private set; }
         public bool IsArray { get; private set; }
-
         public PrimitiveDefinition PrimitiveDefinition { get; private set; }
     }
 }

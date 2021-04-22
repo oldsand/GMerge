@@ -1,11 +1,17 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Security;
+using System.Security.Principal;
 using System.ServiceModel;
+using System.Xml.Linq;
 using GalaxyMerge.Archestra.Abstractions;
 using GalaxyMerge.Archive.Abstractions;
-using GalaxyMerge.Contracts;
 using GalaxyMerge.Contracts.Data;
 using GalaxyMerge.Contracts.Services;
+using GalaxyMerge.Core.Extensions;
+using GalaxyMerge.Core.Utilities;
+using GalaxyMerge.Data.Repositories;
 
 namespace GalaxyMerge.Services
 {
@@ -13,21 +19,30 @@ namespace GalaxyMerge.Services
     public class GalaxyManager : IGalaxyService
     {
         private readonly IGalaxyRegistry _galaxyRegistry;
-        
-        public GalaxyManager(IGalaxyRegistry galaxyRegistry)
+        private readonly IArchiveRepository _archiveRepository;
+
+        public GalaxyManager(IGalaxyRegistry galaxyRegistry, IArchiveRepository archiveRepository)
         {
             _galaxyRegistry = galaxyRegistry;
+            _archiveRepository = archiveRepository;
         }
 
         public GalaxyObject GetObject(string galaxyName, string tagName)
         {
-            /*var galaxy = GetGalaxyRepository(galaxyName);
-            var cacheRepository = _archiveRepositoryFactory.Create(galaxy);
-            var cacheObject = cacheRepository.Find(tagName); //TODO should probably just have repo cache object if not found, so that this should always return data
-            var xml = XElement.Load(new MemoryStream(cacheObject.CompressedData.Decompress()));
-            var galaxyObject = new GalaxyObject {TagName = "Test"};
-            return galaxyObject.DeserializeXml(xml.ToString());*/
-            return null;
+            var hasEntries = _archiveRepository.HasEntries(tagName);
+            if (!hasEntries)
+            {
+                var galaxyRepository = GetClientGalaxyRepository(galaxyName);
+                var objectRepository = new ObjectRepository(ConnectionStringBuilder.BuildGalaxyConnection(galaxyName));
+                var archiver = new GalaxyArchiver(galaxyRepository, objectRepository, _archiveRepository);
+                archiver.Archive(tagName);
+            }
+
+            var latest = _archiveRepository.GetLatest(tagName);
+            
+            var xml = XElement.Load(new MemoryStream(latest.CompressedData.Decompress()));
+            var galaxyObject = new GalaxyObject().FromXml(xml);
+            return (GalaxyObject) galaxyObject;
         }
 
         public IEnumerable<GalaxyObject> GetObjects(string galaxyName, IEnumerable<string> tagNames)
@@ -45,43 +60,53 @@ namespace GalaxyMerge.Services
             throw new NotImplementedException();
         }
 
-        public void CreateTemplate(string galaxyName, string tagName)
+        public void CreateObject(string galaxyName, string tagName)
         {
             throw new NotImplementedException();
         }
 
-        public void CreateTemplates(string galaxyName, IEnumerable<string> tagNames)
+        public void CreateObject(string galaxyName, IEnumerable<string> tagNames)
         {
             throw new NotImplementedException();
         }
 
-        public void DeleteTemplate(string galaxyName, string tagName)
+        public void DeleteObject(string galaxyName, string tagName)
         {
             throw new NotImplementedException();
         }
 
-        public void DeleteTemplates(string galaxyName, IEnumerable<string> tagNames)
+        public void DeleteObjects(string galaxyName, IEnumerable<string> tagNames)
         {
             throw new NotImplementedException();
         }
         
-        private IGalaxyRepository GetGalaxyRepository(string galaxyName)
+        private IGalaxyRepository GetClientGalaxyRepository(string galaxyName)
         {
             var clientUserName = ServiceSecurityContext.Current.PrimaryIdentity.Name;
+            if (!_galaxyRegistry.IsRegistered(galaxyName, clientUserName))
+                RegisterGalaxyToClient(galaxyName);
+            
             var galaxy = _galaxyRegistry.GetGalaxy(galaxyName, clientUserName);
-
-            if (galaxy == null)
-                throw new InvalidOperationException(
-                    $"Could not find registration for galaxy '{galaxyName}' and user '{clientUserName}'." +
-                    $" This may because the galaxy has not been registered or the galaxy does not exist.");
-
+            galaxy.SynchronizeClient();
             return galaxy;
         }
 
-        private static void ValidateUserAccess()
+        private void RegisterGalaxyToClient(string galaxyName)
         {
             var clientUserName = ServiceSecurityContext.Current.PrimaryIdentity.Name;
-            //TODO Check user roles either via database or from current galaxy
+            var serviceUser = WindowsIdentity.GetCurrent();
+            var galaxy = _galaxyRegistry.GetGalaxy(galaxyName, serviceUser.Name);
+
+            if (galaxy == null)
+                throw new InvalidOperationException(
+                    $"Cannot find registered galaxy with name '{galaxyName}' under current service name '{serviceUser.Name}'");
+
+            if (galaxy.UserIsAuthorized(clientUserName))
+                _galaxyRegistry.Register(galaxyName, clientUserName);
+            else
+            {
+                throw new SecurityException("User does not have access to the specified galaxy");
+            }
         }
     }
 }

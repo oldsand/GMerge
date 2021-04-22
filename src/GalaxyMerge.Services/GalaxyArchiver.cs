@@ -1,108 +1,58 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Linq;
 using GalaxyMerge.Archestra.Abstractions;
+using GalaxyMerge.Archive.Abstractions;
 using GalaxyMerge.Archive.Entities;
-using GalaxyMerge.Archive.Repositories;
-using GalaxyMerge.Contracts.Data;
 using GalaxyMerge.Core.Extensions;
-using GalaxyMerge.Core.Utilities;
-using GalaxyMerge.Data.Entities;
-using GalaxyMerge.Data.Repositories;
+using GalaxyMerge.Data.Abstractions;
 
 namespace GalaxyMerge.Services
 {
     public class GalaxyArchiver
     {
+        private readonly IGalaxyRepository _galaxyRepository;
+        private readonly IObjectRepository _objectRepository;
+        private readonly IArchiveRepository _archiveRepository;
+
+        public GalaxyArchiver(IGalaxyRepository galaxyRepository, IObjectRepository objectRepository, IArchiveRepository archiveRepository)
+        {
+            _galaxyRepository = galaxyRepository ?? throw new ArgumentNullException(nameof(galaxyRepository), "Value cannot be null");
+            _objectRepository = objectRepository ?? throw new ArgumentNullException(nameof(objectRepository), "Value cannot be null");
+            _archiveRepository = archiveRepository ?? throw new ArgumentNullException(nameof(archiveRepository), "Value cannot be null");
+        }
+
+        public void Archive(string tagName)
+        {
+            var obj = _objectRepository.FindInclude(x => x.TagName == tagName, g => g.Template);
+            var data = obj.Template.TagName == "$Symbol" ? GetSymbolData(tagName) : GetObjectData(tagName);
+            
+            var entry = new ArchiveEntry(obj.ObjectId, obj.TagName, obj.ConfigVersion, obj.Template.TagName, data);
+            _archiveRepository.AddEntry(entry);
+            _archiveRepository.Save();
+        }
         
-        private readonly IGalaxyRegistry _galaxyRegistry;
-        private readonly List<SqlListener> _listeners;
-        private const string ChangeLogTableName = "gobject_change_log";
-        private const int CheckInOperationId = 0;
-
-        public GalaxyArchiver(IGalaxyRegistry galaxyRegistry)
+        public bool UpToDate(string tagName)
         {
-            _galaxyRegistry = galaxyRegistry;
-            _listeners = new List<SqlListener>();
-        }
-
-        public void Start()
-        {
-            InitializeListeners();
-
-            Console.WriteLine("Starting Listeners");
-            foreach (var listener in _listeners)
-                listener.Start();
-        }
-
-        public void Stop()
-        {
-            foreach (var listener in _listeners)
-                listener.Stop();
-        }
-
-        private void InitializeListeners()
-        {
-            Console.WriteLine("Initializing Listeners");
+            var gObject = _objectRepository.FindInclude(x => x.TagName == tagName, x => x.ChangeLogs);
+            var entry = _archiveRepository.GetLatest(tagName);
             
-            var galaxies = _galaxyRegistry.GetAll();
-            
-            foreach (var galaxy in galaxies)
-            {
-                var connectionString = ConnectionStringBuilder.BuildGalaxyConnection(galaxy.Name);
+            var lastCheckInDate = gObject.ChangeLogs
+                .OrderByDescending(x => x.ChangeDate)
+                .FirstOrDefault(x => x.OperationId == 0)?.ChangeDate;
 
-                Console.WriteLine($"Instantiating listener for galaxy '{galaxy}'");
-                
-                var listener = new SqlListener(connectionString, galaxy.Name, ChangeLogTableName);
-                listener.TableChanged += OnChangeLogTableUpdated;
-                _listeners.Add(listener);
-            }
+            return gObject.ConfigVersion == entry.Version && lastCheckInDate <= entry.Created;
         }
 
-        private void OnChangeLogTableUpdated(object sender, SqlListener.TableChangedEventArgs e)
+        private byte[] GetObjectData(string tagName)
         {
-            if (!(sender is SqlListener listener)) return;
-            if (!IsCheckInOperation(e.Data, listener.ConnectionString)) return;
-
-            var gObject = GetObject(e.Data, listener.ConnectionString);
-            var galaxy = _galaxyRegistry.GetGalaxy(listener.DatabaseName, "admin");
-            var xml = GetXmlData(gObject, galaxy);
-            ArchiveData(gObject, xml, listener);
+            var galaxyObject = _galaxyRepository.GetObject(tagName);
+            return galaxyObject.ToXml().ToByteArray();
         }
 
-        private static void ArchiveData(GObject gObject, XNode xml, SqlListener listener)
+        private byte[] GetSymbolData(string tagName)
         {
-            var archive = new ArchiveRepository(listener.DatabaseName);
-            var entry = new ArchiveEntry(gObject.ObjectId, gObject.TagName, gObject.ConfigVersion,
-                gObject.Template.TagName, xml.ToByteArray());
-            archive.AddEntry(entry);
-            archive.Save();
-        }
-
-        private static XElement GetXmlData(GObject gObject, IGalaxyRepository galaxy)
-        {
-            if (gObject.Template.TagName == "$Symbol")
-            {
-                var galaxySymbol = (GalaxySymbol) galaxy.GetSymbol(gObject.TagName);
-                return galaxySymbol.ToXml();
-            }
-
-            var galaxyObject = (GalaxyObject) galaxy.GetObject(gObject.TagName);
-            return galaxyObject.ToXml();
-        }
-
-        private static GObject GetObject(XContainer data, string connectionString)
-        {
-            var repository = new ObjectRepository(connectionString);
-            var id = Convert.ToInt32(data.Descendants("gobject_id").Select(e => e.Value).SingleOrDefault());
-            return repository.FindByIdIncludeTemplate(id);
-        }
-
-        private static bool IsCheckInOperation(XContainer data, string connectionString)
-        {
-            var operationId = Convert.ToInt32(data.Descendants("operation_id").Select(e => e.Value).SingleOrDefault());
-            return operationId == CheckInOperationId;
+            var galaxySymbol = _galaxyRepository.GetSymbol(tagName);
+            return galaxySymbol.ToXml().ToByteArray();
         }
     }
 }

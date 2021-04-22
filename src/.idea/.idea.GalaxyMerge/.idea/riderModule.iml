@@ -5,6 +5,7 @@
     <content url="file://$MODULE_DIR$/../.." />
     <content url="file://$MODULE_DIR$/../../../tests/GalaxyMerge.Archestra.Tests" />
     <content url="file://$MODULE_DIR$/../../../tests/GalaxyMerge.Archive.Tests" />
+    <content url="file://$MODULE_DIR$/../../../tests/GalaxyMerge.Data.Tests" />
     <content url="file://$MODULE_DIR$/../../../tests/GalaxyMerge.Services.Tests" />
     <content url="file://$MODULE_DIR$/../../../tests/GalaxyMerge.Testing" />
     <content url="file://$MODULE_DIR$/../../../tests/TestConsole" />

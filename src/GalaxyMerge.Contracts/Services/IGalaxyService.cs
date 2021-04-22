@@ -20,15 +20,15 @@ namespace GalaxyMerge.Contracts.Services
         void UpdateObjects(string galaxyName, IEnumerable<GalaxyObject> templates);
         
         [OperationContract]
-        void CreateTemplate(string galaxyName, string tagName);
+        void CreateObject(string galaxyName, string tagName);
 
         [OperationContract]
-        void CreateTemplates(string galaxyName, IEnumerable<string> tagNames);
+        void CreateObject(string galaxyName, IEnumerable<string> tagNames);
 
         [OperationContract]
-        void DeleteTemplate(string galaxyName, string tagName);
+        void DeleteObject(string galaxyName, string tagName);
 
         [OperationContract]
-        void DeleteTemplates(string galaxyName, IEnumerable<string> tagNames);
+        void DeleteObjects(string galaxyName, IEnumerable<string> tagNames);
     }
 }

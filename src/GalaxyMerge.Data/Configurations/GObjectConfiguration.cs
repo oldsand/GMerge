@@ -37,6 +37,7 @@ namespace GalaxyMerge.Data.Configurations
             builder.HasOne(x => x.Container).WithMany(t => t.ContainedObjects).HasForeignKey(x => x.ContainedById);
             builder.HasOne(x => x.Area).WithMany(t => t.AreaObjects).HasForeignKey(x => x.AreaId);
             builder.HasOne(x => x.Host).WithMany(t => t.HostedObjects).HasForeignKey(x => x.HostId);
+            builder.HasMany(x => x.ChangeLogs).WithOne(c => c.GObject).HasForeignKey(x => x.ObjectId);
         }
     }
 }

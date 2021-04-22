@@ -46,5 +46,6 @@ namespace GalaxyMerge.Data.Entities
         public IEnumerable<GObject> AreaObjects { get; private set; }
         public GObject Host { get; private set; }
         public IEnumerable<GObject> HostedObjects { get; private set; }
+        public IEnumerable<ChangeLog> ChangeLogs { get; private set; }
     }
 }

@@ -16,6 +16,5 @@ namespace GalaxyMerge.Data.Entities
         public string Comment { get; private set; }
         public string UserName { get; private set; }
         public GObject GObject { get; private set; }
-        public ChangeOperation Operation { get; private set; }
     }
 }

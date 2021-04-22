@@ -20,11 +20,16 @@ namespace GalaxyMerge.Services
             _repositoryFactory = new GalaxyRepositoryFactory();
             _galaxyFinder = new GalaxyFinder();
         }
-
+        
         internal GalaxyRegistry(IGalaxyRepositoryFactory repositoryFactory, IGalaxyFinder galaxyFinder)
         {
             _repositoryFactory = repositoryFactory;
             _galaxyFinder = galaxyFinder;
+        }
+        
+        public bool IsRegistered(string galaxyName, string userName)
+        {
+            return _galaxies.SingleOrDefault(g => g.Name == galaxyName && g.LoggedInUser == userName) != null;
         }
         
         public IGalaxyRepository GetGalaxy(string galaxyName, string userName)
@@ -32,7 +37,7 @@ namespace GalaxyMerge.Services
             return _galaxies.SingleOrDefault(g => g.Name == galaxyName && g.LoggedInUser == userName);
         }
 
-        public IEnumerable<IGalaxyRepository> GetByGalaxy(string galaxyName)
+        public IEnumerable<IGalaxyRepository> GetByName(string galaxyName)
         {
             return _galaxies.Where(g => g.Name == galaxyName);
         }
@@ -171,11 +176,6 @@ namespace GalaxyMerge.Services
             var galaxy = GetGalaxy(galaxyName, userName);
             _galaxies.Remove(galaxy);
             galaxy.Logout();
-        }
-        
-        private bool IsRegistered(string galaxyName, string userName)
-        {
-            return _galaxies.SingleOrDefault(g => g.Name == galaxyName && g.LoggedInUser == userName) != null;
         }
     }
 }
