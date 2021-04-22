@@ -20,18 +20,13 @@ namespace GalaxyMerge.Services
             _repositoryFactory = new GalaxyRepositoryFactory();
             _galaxyFinder = new GalaxyFinder();
         }
-        
+
         internal GalaxyRegistry(IGalaxyRepositoryFactory repositoryFactory, IGalaxyFinder galaxyFinder)
         {
             _repositoryFactory = repositoryFactory;
             _galaxyFinder = galaxyFinder;
         }
-
-        public bool IsRegistered(string galaxyName, string userName)
-        {
-            return _galaxies.SingleOrDefault(g => g.Name == galaxyName && g.LoggedInUser == userName) != null;
-        }
-
+        
         public IGalaxyRepository GetGalaxy(string galaxyName, string userName)
         {
             return _galaxies.SingleOrDefault(g => g.Name == galaxyName && g.LoggedInUser == userName);
@@ -41,7 +36,7 @@ namespace GalaxyMerge.Services
         {
             return _galaxies.Where(g => g.Name == galaxyName);
         }
-        
+
         public IEnumerable<IGalaxyRepository> GetByUser(string userName)
         {
             return _galaxies.Where(g => g.LoggedInUser == userName);
@@ -57,12 +52,12 @@ namespace GalaxyMerge.Services
             var user = WindowsIdentity.GetCurrent();
             RegisterGalaxy(galaxyName, user.Name);
         }
-        
+
         public void Register(string galaxyName, string userName)
         {
             RegisterGalaxy(galaxyName, userName);
         }
-        
+
         public Task RegisterAsync(string galaxyName, CancellationToken token)
         {
             var user = WindowsIdentity.GetCurrent();
@@ -74,12 +69,43 @@ namespace GalaxyMerge.Services
             return RegisterGalaxyAsync(galaxyName, userName, token);
         }
 
+        public void RegisterAll()
+        {
+            var user = WindowsIdentity.GetCurrent();
+            var galaxies = _galaxyFinder.FindAll();
+            foreach (var galaxy in galaxies)
+                RegisterGalaxy(galaxy, user.Name);
+        }
+
+        public void RegisterAll(string userName)
+        {
+            var galaxies = _galaxyFinder.FindAll();
+            foreach (var galaxy in galaxies)
+                RegisterGalaxy(galaxy, userName);
+        }
+
+        public async Task RegisterAllAsync(CancellationToken token)
+        {
+            var user = WindowsIdentity.GetCurrent();
+            var unregisteredGalaxies = (await _galaxyFinder.FindAllAsync(token))
+                .Where(g => !IsRegistered(g, user.Name)).ToList();
+            var creationTasks = unregisteredGalaxies.Select(g => _repositoryFactory.CreateAsync(g, token)).ToList();
+
+            while (creationTasks.Any())
+            {
+                var connection = await Task.WhenAny(creationTasks);
+                creationTasks.Remove(connection);
+                var galaxy = connection.Result;
+                await galaxy.LoginAsync(user.Name, token);
+                _galaxies.Add(galaxy);
+            }
+        }
+
         public async Task RegisterAllAsync(string userName, CancellationToken token)
         {
-            var galaxies = (await _galaxyFinder.FindAllAsync(token)).ToList();
+            var galaxies = (await _galaxyFinder.FindAllAsync(token))
+                .Where(g => !IsRegistered(g, userName)).ToList();
             var creationTasks = galaxies.Select(g => _repositoryFactory.CreateAsync(g, token)).ToList();
-
-            Unregister(galaxies, userName);
 
             while (creationTasks.Any())
             {
@@ -106,7 +132,7 @@ namespace GalaxyMerge.Services
         {
             if (string.IsNullOrEmpty(galaxyName))
                 throw new ArgumentException("Value cannot be null or empty", nameof(galaxyName));
-            
+
             if (userName == null)
                 throw new ArgumentException("Value cannot be null", nameof(userName));
 
@@ -116,17 +142,17 @@ namespace GalaxyMerge.Services
             galaxy.Login(userName);
             _galaxies.Add(galaxy);
         }
-        
+
         private async Task RegisterGalaxyAsync(string galaxyName, string userName, CancellationToken token)
         {
             if (string.IsNullOrEmpty(galaxyName))
                 throw new ArgumentException("Value cannot be null or empty", nameof(galaxyName));
-            
+
             if (userName == null)
                 throw new ArgumentException("Value cannot be null", nameof(userName));
 
             if (IsRegistered(galaxyName, userName)) return;
-            
+
             var galaxy = await _repositoryFactory.CreateAsync(galaxyName, token);
             await galaxy.LoginAsync(userName, token);
             _galaxies.Add(galaxy);
@@ -136,15 +162,20 @@ namespace GalaxyMerge.Services
         {
             if (string.IsNullOrEmpty(galaxyName))
                 throw new ArgumentException("Value cannot be null or empty", nameof(galaxyName));
-            
+
             if (userName == null)
                 throw new ArgumentException("Value cannot be null", nameof(userName));
-            
+
             if (!IsRegistered(galaxyName, userName)) return;
-            
+
             var galaxy = GetGalaxy(galaxyName, userName);
             _galaxies.Remove(galaxy);
             galaxy.Logout();
+        }
+        
+        private bool IsRegistered(string galaxyName, string userName)
+        {
+            return _galaxies.SingleOrDefault(g => g.Name == galaxyName && g.LoggedInUser == userName) != null;
         }
     }
 }

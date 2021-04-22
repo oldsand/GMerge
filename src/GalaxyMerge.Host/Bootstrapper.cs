@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using Autofac;
 using GalaxyMerge.Archestra;
 using GalaxyMerge.Archestra.Abstractions;
@@ -27,7 +28,7 @@ namespace GalaxyMerge.Host
         {
             var builder = new ContainerBuilder();
             builder.RegisterType<GalaxyRepositoryFactory>().As<IGalaxyRepositoryFactory>();
-            builder.RegisterType<GalaxyRegistry>().AsSelf().AsImplementedInterfaces().SingleInstance();
+            builder.RegisterType<GalaxyRegistry>().AsSelf().SingleInstance();
             builder.RegisterType<GalaxyManager>();
             _container = builder.Build();
         }
@@ -37,8 +38,9 @@ namespace GalaxyMerge.Host
             if (_container == null)
                 throw new InvalidOperationException("Container not yet initialized");
 
-            var registrant = _container.Resolve<GalaxyRegistrant>();
-            registrant.RunRegistration();
+            var registrant = _container.Resolve<GalaxyRegistry>();
+            
+            registrant.RegisterAllAsync(CancellationToken.None); //todo should I be passing in a cancellation here? perhaps after x seconds stop service.
         }
 
         private void ValidateArchives()
@@ -46,7 +48,7 @@ namespace GalaxyMerge.Host
             if (_container == null)
                 throw new InvalidOperationException("Container not yet initialized");
 
-            var registry = _container.Resolve<IGalaxyRegistry>();
+            var registry = _container.Resolve<GalaxyRegistry>();
             var galaxies = registry.GetAll();
 
             foreach (var galaxy in galaxies)

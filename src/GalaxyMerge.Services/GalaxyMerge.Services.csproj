@@ -43,7 +43,6 @@
     <ItemGroup>
         <Compile Include="GalaxyArchiver.cs" />
         <Compile Include="GalaxyManager.cs" />
-        <Compile Include="GalaxyRegistrant.cs" />
         <Compile Include="GalaxyRegistry.cs" />
         <Compile Include="IGalaxyRegistry.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
