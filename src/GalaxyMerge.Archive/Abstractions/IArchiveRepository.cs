@@ -11,6 +11,7 @@ namespace GalaxyMerge.Archive.Abstractions
         ArchiveEntry GetEntry(Guid id);
         IEnumerable<ArchiveEntry> FindByObjectId(int objectId);
         IEnumerable<ArchiveEntry> FindByTagName(string tagName);
+        ArchiveEntry GetLatest(int objectId);
         ArchiveEntry GetLatest(string tagName);
         bool HasEntries(string tagName);
         void AddInfo(ArchiveInfo archiveInfo);

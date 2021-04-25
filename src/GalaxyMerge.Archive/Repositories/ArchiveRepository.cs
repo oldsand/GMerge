@@ -8,6 +8,7 @@ using GalaxyMerge.Archive.Abstractions;
 using GalaxyMerge.Archive.Entities;
 using GalaxyMerge.Core.Utilities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace GalaxyMerge.Archive.Repositories
 {
@@ -41,6 +42,11 @@ namespace GalaxyMerge.Archive.Repositories
         public IEnumerable<ArchiveEntry> FindByTagName(string tagName)
         {
             return _context.Entries.Where(x => x.TagName == tagName);
+        }
+
+        public ArchiveEntry GetLatest(int objectId)
+        {
+            return _context.Entries.OrderByDescending(x => x.Created).FirstOrDefault(x => x.ObjectId == objectId);
         }
 
         public ArchiveEntry GetLatest(string tagName)

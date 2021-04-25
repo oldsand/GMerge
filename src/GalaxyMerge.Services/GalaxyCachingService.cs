@@ -5,7 +5,6 @@ using System.Security.Principal;
 using System.Xml.Linq;
 using GalaxyMerge.Archive.Repositories;
 using GalaxyMerge.Core.Utilities;
-using GalaxyMerge.Data.Abstractions;
 using GalaxyMerge.Data.Repositories;
 
 namespace GalaxyMerge.Services
@@ -62,14 +61,13 @@ namespace GalaxyMerge.Services
             var archiveRepo = new ArchiveRepository(ConnectionStringBuilder.BuildArchiveConnection(listener.DatabaseName));
             var archiver = new GalaxyArchiver(galaxyRepo, objectRepo, archiveRepo);
             
-            var tagName = GetTagName(e.Data, objectRepo);
-            archiver.Archive(tagName);
+            var objectId = ExtractObjectId(e.Data);
+            archiver.Archive(objectId);
         }
 
-        private static string GetTagName(XContainer data, IObjectRepository objectRepository)
+        private static int ExtractObjectId(XContainer data)
         {
-            var id = Convert.ToInt32(data.Descendants("gobject_id").Select(x => x.Value).SingleOrDefault());
-            return objectRepository.FindById(id).TagName;
+            return Convert.ToInt32(data.Descendants("gobject_id").Select(x => x.Value).SingleOrDefault());
         }
         
         private static bool IsCheckInOperation(XContainer data)

@@ -21,13 +21,12 @@ namespace GalaxyMerge.Host
         
         protected override void OnStart(string[] args)
         {
-            //TODO: Another thing to think about will be host configuration. Would like to do it programatically. 
-            _galaxyManagerHost?.Close();
-            
             var bootstrapper = new Bootstrapper();
             bootstrapper.Bootstrap();
             var container = bootstrapper.GetContainer();
             
+            //TODO: Another thing to think about will be host configuration. Would like to do it programatically. 
+            _galaxyManagerHost?.Close();
             _galaxyManagerHost = new ServiceHost(typeof(GalaxyManager));
             _galaxyManagerHost.AddDependencyInjectionBehavior(typeof(GalaxyManager), container);
             _galaxyManagerHost.Open();
