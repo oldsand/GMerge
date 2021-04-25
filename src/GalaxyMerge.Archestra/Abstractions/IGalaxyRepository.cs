@@ -14,7 +14,7 @@ namespace GalaxyMerge.Archestra.Abstractions
         string Name { get; }
         string Host { get; }
         bool Connected { get; }
-        string LoggedInUser { get; }
+        string ConnectedUser { get; }
         string VersionString { get; }
         int? VersionNumber { get; }
         string CdiVersion { get; }

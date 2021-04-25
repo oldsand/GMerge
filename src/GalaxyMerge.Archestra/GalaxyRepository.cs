@@ -18,7 +18,7 @@ namespace GalaxyMerge.Archestra
 {
     public class GalaxyRepository : IGalaxyRepository
     {
-        // ReSharper disable PrivateFieldCanBeConvertedToLocalVariable because this had to be in memory for operations to work (according to documentation)
+        // ReSharper disable PrivateFieldCanBeConvertedToLocalVariable because this has to be in memory for operations to work (according to documentation)
         private readonly GRAccessAppClass _grAccessApp;
         private readonly GraphicAccess _graphicAccess;
         private readonly IGalaxy _galaxy;
@@ -39,7 +39,7 @@ namespace GalaxyMerge.Archestra
         public string Name => _galaxy.Name;
         public string Host => Environment.MachineName;
         public bool Connected { get; private set; }
-        public string LoggedInUser { get; private set; }
+        public string ConnectedUser { get; private set; }
         public string VersionString => _galaxy?.VersionString;
         public int? VersionNumber => _galaxy?.VersionNumber;
         public string CdiVersion => _galaxy?.CdiVersionString;
@@ -55,7 +55,7 @@ namespace GalaxyMerge.Archestra
             _galaxy.Login(userName, string.Empty);
             ResultHandler.Handle(_galaxy.CommandResult, _galaxy.Name);
             Connected = true;
-            LoggedInUser = userName;
+            ConnectedUser = userName;
         }
 
         public Task LoginAsync(string userName, CancellationToken token)
@@ -72,7 +72,7 @@ namespace GalaxyMerge.Archestra
             _galaxy.Logout();
             ResultHandler.Handle(_galaxy.CommandResult, _galaxy.Name);
             Connected = false;
-            LoggedInUser = string.Empty;
+            ConnectedUser = string.Empty;
         }
 
         public bool UserIsAuthorized(string userName)

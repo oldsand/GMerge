@@ -29,12 +29,12 @@ namespace GalaxyMerge.Services
         
         public bool IsRegistered(string galaxyName, string userName)
         {
-            return _galaxies.SingleOrDefault(g => g.Name == galaxyName && g.LoggedInUser == userName) != null;
+            return _galaxies.SingleOrDefault(g => g.Name == galaxyName && g.ConnectedUser == userName) != null;
         }
         
         public IGalaxyRepository GetGalaxy(string galaxyName, string userName)
         {
-            return _galaxies.SingleOrDefault(g => g.Name == galaxyName && g.LoggedInUser == userName);
+            return _galaxies.SingleOrDefault(g => g.Name == galaxyName && g.ConnectedUser == userName);
         }
 
         public IEnumerable<IGalaxyRepository> GetByName(string galaxyName)
@@ -44,7 +44,7 @@ namespace GalaxyMerge.Services
 
         public IEnumerable<IGalaxyRepository> GetByUser(string userName)
         {
-            return _galaxies.Where(g => g.LoggedInUser == userName);
+            return _galaxies.Where(g => g.ConnectedUser == userName);
         }
 
         public IEnumerable<IGalaxyRepository> GetAll()

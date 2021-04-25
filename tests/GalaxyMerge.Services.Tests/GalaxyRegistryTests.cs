@@ -21,7 +21,7 @@ namespace GalaxyMerge.Services.Tests
             
             Assert.NotNull(connection);
             Assert.IsTrue(connection.Name == "ButaneDev2014");
-            Assert.IsTrue(connection.LoggedInUser == "admin");
+            Assert.IsTrue(connection.ConnectedUser == "admin");
         }
 
         [Test]
@@ -35,7 +35,7 @@ namespace GalaxyMerge.Services.Tests
             
             Assert.NotNull(connection);
             Assert.IsTrue(connection.Name == Settings.CurrentTestGalaxy);
-            Assert.IsTrue(connection.LoggedInUser == Settings.CurrentTestUser);
+            Assert.IsTrue(connection.ConnectedUser == Settings.CurrentTestUser);
         }
 
         [Test]

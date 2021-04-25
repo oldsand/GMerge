@@ -28,7 +28,7 @@ namespace GalaxyMerge.Archestra.Tests
             galaxy.Login(userName);
 
             Assert.IsTrue(galaxy.Connected);
-            Assert.AreEqual(userName, galaxy.LoggedInUser);
+            Assert.AreEqual(userName, galaxy.ConnectedUser);
         }
 
         [Test]
@@ -40,7 +40,7 @@ namespace GalaxyMerge.Archestra.Tests
             galaxy.Login(user.Name);
             
             Assert.True(galaxy.Connected);
-            Assert.AreEqual(user.Name, galaxy.LoggedInUser);
+            Assert.AreEqual(user.Name, galaxy.ConnectedUser);
         }
 
         [Test]
@@ -49,12 +49,12 @@ namespace GalaxyMerge.Archestra.Tests
             var galaxy = new GalaxyRepository("ButaneDev2014");
             galaxy.Login("admin");
             Assert.IsTrue(galaxy.Connected);
-            Assert.AreEqual("admin", galaxy.LoggedInUser);
+            Assert.AreEqual("admin", galaxy.ConnectedUser);
 
             galaxy.Logout();
 
             Assert.IsFalse(galaxy.Connected);
-            Assert.IsEmpty(galaxy.LoggedInUser);
+            Assert.IsEmpty(galaxy.ConnectedUser);
         }
 
         [Test]
