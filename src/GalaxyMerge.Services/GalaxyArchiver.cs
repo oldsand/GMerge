@@ -5,6 +5,7 @@ using GalaxyMerge.Archive.Abstractions;
 using GalaxyMerge.Archive.Entities;
 using GalaxyMerge.Core.Extensions;
 using GalaxyMerge.Data.Abstractions;
+using GalaxyMerge.Data.Entities;
 
 namespace GalaxyMerge.Services
 {
@@ -24,13 +25,15 @@ namespace GalaxyMerge.Services
         public void Archive(string tagName)
         {
             var obj = _objectRepository.FindInclude(x => x.TagName == tagName, g => g.Template);
-            var data = obj.Template.TagName == "$Symbol" ? GetSymbolData(tagName) : GetObjectData(tagName);
-            
-            var entry = new ArchiveEntry(obj.ObjectId, obj.TagName, obj.ConfigVersion, obj.Template.TagName, data);
-            _archiveRepository.AddEntry(entry);
-            _archiveRepository.Save();
+            ArchiveInternal(obj);
         }
-        
+
+        public void Archive(int objectId)
+        {
+            var obj = _objectRepository.FindInclude(x => x.ObjectId == objectId, x => x.Template);
+            ArchiveInternal(obj);
+        }
+
         public bool UpToDate(string tagName)
         {
             var gObject = _objectRepository.FindInclude(x => x.TagName == tagName, x => x.ChangeLogs);
@@ -41,6 +44,15 @@ namespace GalaxyMerge.Services
                 .FirstOrDefault(x => x.OperationId == 0)?.ChangeDate;
 
             return gObject.ConfigVersion == entry.Version && lastCheckInDate <= entry.Created;
+        }
+        
+        private void ArchiveInternal(GObject obj)
+        {
+            var data = obj.Template.TagName == "$Symbol" ? GetSymbolData(obj.TagName) : GetObjectData(obj.TagName);
+
+            var entry = new ArchiveEntry(obj.ObjectId, obj.TagName, obj.ConfigVersion, obj.Template.TagName, data);
+            _archiveRepository.AddEntry(entry);
+            _archiveRepository.Save();
         }
 
         private byte[] GetObjectData(string tagName)

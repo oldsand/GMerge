@@ -54,7 +54,7 @@ namespace GalaxyMerge.Services
 
         private void OnChangeLogTableUpdated(object sender, SqlListener.TableChangedEventArgs e)
         {
-            if (!(sender is SqlListener listener)) return;
+            if (sender is not SqlListener listener) return;
             if (!IsCheckInOperation(e.Data)) return;
             
             var galaxyRepo = _galaxyRegistry.GetGalaxy(listener.DatabaseName, _serviceUserName);

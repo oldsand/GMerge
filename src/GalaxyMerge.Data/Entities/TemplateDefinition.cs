@@ -18,7 +18,6 @@ namespace GalaxyMerge.Data.Entities
         public short CategoryId { get;  private set; }
         public string Codebase { get;  private set; }
         public IEnumerable<GObject> Derivations { get; private set; }
-
-        public IEnumerable<PrimitiveDefinition> PrimitiveDefinitions { get; set; }
+        public IEnumerable<PrimitiveDefinition> PrimitiveDefinitions { get; private set; }
     }
 }

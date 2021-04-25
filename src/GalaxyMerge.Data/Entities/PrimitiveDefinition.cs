@@ -21,7 +21,6 @@ namespace GalaxyMerge.Data.Entities
         public bool IsVirtual { get; private set; }
         public bool SupportsDynamicAttributes { get; private set; }
         public int MajorVersion { get; private set; }
-
         public TemplateDefinition TemplateDefinition { get; private set; }
         public IEnumerable<AttributeDefinition> AttributeDefinitions { get; private set; }
     }
