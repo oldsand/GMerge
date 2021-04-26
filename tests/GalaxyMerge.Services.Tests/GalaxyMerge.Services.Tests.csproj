@@ -40,6 +40,7 @@
         <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="GalaxyArchiverTests.cs" />
         <Compile Include="GalaxyRegistryTests.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
@@ -47,6 +48,26 @@
       <ProjectReference Include="..\..\src\GalaxyMerge.Archestra\GalaxyMerge.Archestra.csproj">
         <Project>{32ea2985-26c5-44b5-b8c1-46c8d4da0979}</Project>
         <Name>GalaxyMerge.Archestra</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\..\src\GalaxyMerge.Archive\GalaxyMerge.Archive.csproj">
+        <Project>{a5993bff-2469-4b9d-a4cd-be795a13d4f6}</Project>
+        <Name>GalaxyMerge.Archive</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\..\src\GalaxyMerge.Common\GalaxyMerge.Common.csproj">
+        <Project>{446fe87c-5122-4344-9df9-9f641e81a476}</Project>
+        <Name>GalaxyMerge.Common</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\..\src\GalaxyMerge.Contracts\GalaxyMerge.Contracts.csproj">
+        <Project>{a1de5d14-c80e-4f06-af43-a0a7b3b24072}</Project>
+        <Name>GalaxyMerge.Contracts</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\..\src\GalaxyMerge.Core\GalaxyMerge.Core.csproj">
+        <Project>{dd496472-fb15-4ffc-86ca-2ac8f0e6cf3c}</Project>
+        <Name>GalaxyMerge.Core</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\..\src\GalaxyMerge.Data\GalaxyMerge.Data.csproj">
+        <Project>{1116a38e-aa67-46e3-9d09-e2de5c2a694e}</Project>
+        <Name>GalaxyMerge.Data</Name>
       </ProjectReference>
       <ProjectReference Include="..\..\src\GalaxyMerge.Services\GalaxyMerge.Services.csproj">
         <Project>{0a10ea2f-bb40-4da4-b4b0-9efc58a58725}</Project>
