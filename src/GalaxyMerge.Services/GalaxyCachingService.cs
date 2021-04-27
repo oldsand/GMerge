@@ -5,6 +5,9 @@ using System.Security.Principal;
 using System.Xml.Linq;
 using GalaxyMerge.Archive.Repositories;
 using GalaxyMerge.Core.Utilities;
+using GalaxyMerge.Data;
+using GalaxyMerge.Data.Abstractions;
+using GalaxyMerge.Data.Entities;
 using GalaxyMerge.Data.Repositories;
 
 namespace GalaxyMerge.Services
@@ -57,6 +60,7 @@ namespace GalaxyMerge.Services
             if (!IsCheckInOperation(e.Data)) return;
             
             var galaxyRepo = _galaxyRegistry.GetGalaxy(listener.DatabaseName, _serviceUserName);
+            //var repo = RepositoryFactory.Instance<GObject, IObjectRepository>(listener.ConnectionString); Is this really better?
             var objectRepo = new ObjectRepository(listener.ConnectionString);
             var archiveRepo = new ArchiveRepository(ConnectionStringBuilder.BuildArchiveConnection(listener.DatabaseName));
             var archiver = new GalaxyArchiver(galaxyRepo, objectRepo, archiveRepo);
