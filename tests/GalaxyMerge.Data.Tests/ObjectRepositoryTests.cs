@@ -57,7 +57,6 @@ namespace GalaxyMerge.Data.Tests
             Assert.AreEqual("$UserDefined", result.TagName);
         }
 
-
         [Test]
         [TestCase("$UserDefined")]
         [TestCase("$ViewEngine")]
@@ -118,7 +117,7 @@ namespace GalaxyMerge.Data.Tests
         {
             var repo = new ObjectRepository(_connectionString);
 
-            var result = repo.FindIncludeDerivations(tagName);
+            var result = repo.FindIncludeDescendants(tagName);
 
             Assert.NotNull(result);
             Assert.AreEqual(tagName, result.TagName);

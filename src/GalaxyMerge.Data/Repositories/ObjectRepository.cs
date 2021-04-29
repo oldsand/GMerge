@@ -17,17 +17,12 @@ namespace GalaxyMerge.Data.Repositories
             return GetQueryable().SingleOrDefault(x => x.ObjectId == objectId);
         }
 
-        public GObject FindByIdIncludeTemplate(int objectId)
-        {
-            return Set.Include(x => x.Derivations).SingleOrDefault(x => x.ObjectId == objectId);
-        }
-
         public GObject FindByTagName(string tagName)
         {
             return GetQueryable().SingleOrDefault(x => x.TagName == tagName);
         }
 
-        public GObject FindIncludeDerivations(string tagName)
+        public GObject FindIncludeDescendants(string tagName)
         {
             var results = Set.Include(x => x.Derivations).ToList();
             return results.SingleOrDefault(x => x.TagName == tagName);
