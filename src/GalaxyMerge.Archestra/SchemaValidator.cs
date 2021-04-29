@@ -8,8 +8,8 @@ namespace GalaxyMerge.Archestra
     {
         private const string SchemaNameSpace = "Schemas";
         private const string GraphicsSchemaFileName = "aaGraphics.xsd";
-        private static readonly EmbeddedResources Resources = new(typeof(SchemaValidator));
-        private static readonly XmlSchemaSet SchemaSet = new();
+        private static readonly EmbeddedResources Resources = new EmbeddedResources(typeof(SchemaValidator));
+        private static readonly XmlSchemaSet SchemaSet = new XmlSchemaSet();
         
         public static void ValidateSymbol(XDocument symbol)
         {
