@@ -10,7 +10,7 @@ namespace GalaxyMerge.Archive.Configurations
         {
             builder.ToTable("Entry").HasKey(x => x.EntryId);
             builder.Property(g => g.ObjectId).IsRequired();
-            builder.Property(g => g.TagName).IsRequired();
+            builder.Property(g => g.Version).IsRequired();
             builder.Property(g => g.CompressedData).IsRequired();
         }
     }

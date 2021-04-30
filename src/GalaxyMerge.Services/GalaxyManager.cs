@@ -21,6 +21,12 @@ namespace GalaxyMerge.Services
         private readonly IGalaxyRegistry _galaxyRegistry;
         private readonly IArchiveRepository _archiveRepository;
 
+        public GalaxyManager(string galaxyName)
+        {
+            //todo figure out how to pass this to constructor from client using WCF service.
+            // this way we can construct dependencies.
+        }
+
         public GalaxyManager(IGalaxyRegistry galaxyRegistry, IArchiveRepository archiveRepository)
         {
             _galaxyRegistry = galaxyRegistry;
@@ -29,7 +35,8 @@ namespace GalaxyMerge.Services
 
         public GalaxyObject GetObject(string galaxyName, string tagName)
         {
-            var hasEntries = _archiveRepository.HasEntries(tagName);
+            var objectId = 0; //todo need object repo here.
+            var hasEntries = _archiveRepository.HasEntries(objectId);
             if (!hasEntries)
             {
                 var galaxyRepository = GetClientGalaxyRepository(galaxyName);
@@ -38,7 +45,7 @@ namespace GalaxyMerge.Services
                 archiver.Archive(tagName);
             }
 
-            var latest = _archiveRepository.GetLatest(tagName);
+            var latest = _archiveRepository.GetLatestEntry(objectId);
             
             var xml = XElement.Load(new MemoryStream(latest.CompressedData.Decompress()));
             var galaxyObject = new GalaxyObject().FromXml(xml);

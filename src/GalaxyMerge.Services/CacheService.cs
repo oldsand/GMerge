@@ -31,6 +31,7 @@ namespace GalaxyMerge.Services
         public void Start()
         {
             InitializeListeners();
+            //Is this where I should validate that galaxy dbs all have the 
             
             foreach (var listener in _listeners)
                 listener.Start();

@@ -11,7 +11,7 @@ namespace GalaxyMerge.Archive.Tests
     public class ArchiveRepositoryTests
     {
         private const string GalaxyName = "Sandbox";
-        
+
         [Test]
         public void Constructor_WhenCalled_ReturnsNotNull()
         {
@@ -19,32 +19,7 @@ namespace GalaxyMerge.Archive.Tests
             Assert.NotNull(repo);
         }
 
-        [Test]
-        public void AddInfo_WhenCalled_AddsInfo()
-        {
-            using var repo = new ArchiveRepository(GalaxyName);
-            var info = new ArchiveInfo(GalaxyName, 45, "Doesn't Matter", "1234.5678.9100");
-
-            var current = repo.GetInfo();
-            if (current != null)
-            {
-                repo.RemoveInfo(current);
-                repo.Save();
-            }
-
-            repo.AddInfo(info);
-            repo.Save();
-
-            var result = repo.GetInfo();
-            
-            Assert.NotNull(result);
-            Assert.AreEqual(result.GalaxyName, GalaxyName);
-            Assert.AreEqual(result.VersionNumber, 45);
-            Assert.AreEqual(result.CdiVersion, "Doesn't Matter");
-            Assert.AreEqual(result.IsaVersion, "1234.5678.9100");
-        }
-
-        [Test]
+        /*[Test]
         public void AddEntry_WhenCalled_AddsEntry()
         {
             using var repo = new ArchiveRepository(GalaxyName);
@@ -68,7 +43,7 @@ namespace GalaxyMerge.Archive.Tests
         {
             using var repo = new ArchiveRepository(GalaxyName);
 
-            var result = repo.GetLatest("SomeTag");
+            var result = repo.GetLatestEntry("SomeTag");
             
             Assert.NotNull(result);
         }
@@ -83,7 +58,7 @@ namespace GalaxyMerge.Archive.Tests
             repo.AddEntry(entry);
             repo.Save();
 
-            var results = repo.FindByObjectId(53262).ToList();
+            var results = repo.FindEntriesByObjectId(53262).ToList();
 
             Assert.IsNotEmpty(results);
             Assert.True(results.Any(x => x.ObjectId == 53262));
@@ -104,6 +79,6 @@ namespace GalaxyMerge.Archive.Tests
             Assert.IsNotEmpty(results);
             Assert.True(results.Any(x => x.TagName == "Single_Tag_Name"));
 
-        }
+        }*/
     }
 }

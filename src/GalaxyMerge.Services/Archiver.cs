@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using GalaxyMerge.Archestra.Abstractions;
 using GalaxyMerge.Archive.Abstractions;
 using GalaxyMerge.Archive.Entities;
@@ -22,19 +21,23 @@ namespace GalaxyMerge.Services
             _archiveRepository = archiveRepository ?? throw new ArgumentNullException(nameof(archiveRepository), "Value cannot be null");
         }
 
+        //todo need to rethink how this is possible if tag name is not unique
         public void Archive(string tagName)
         {
             var obj = _objectRepository.FindInclude(x => x.TagName == tagName, g => g.Template);
-            ArchiveInternal(obj);
+            UpsertObject(obj);
+            AddEntry(obj);
         }
 
         public void Archive(int objectId)
         {
             var obj = _objectRepository.FindInclude(x => x.ObjectId == objectId, x => x.Template);
-            ArchiveInternal(obj);
+            UpsertObject(obj);
+            AddEntry(obj);
         }
 
-        public bool UpToDate(string tagName)
+        //todo figure out where this should go.
+        /*public bool UpToDate(string tagName)
         {
             var gObject = _objectRepository.FindInclude(x => x.TagName == tagName, x => x.ChangeLogs);
             var entry = _archiveRepository.GetLatest(tagName);
@@ -43,14 +46,26 @@ namespace GalaxyMerge.Services
                 .OrderByDescending(x => x.ChangeDate)
                 .FirstOrDefault(x => x.OperationId == 0)?.ChangeDate;
 
-            return gObject.ConfigVersion == entry.Version && lastCheckInDate <= entry.Created;
+            return gObject.ConfigVersion == entry.Version && lastCheckInDate <= entry.CreatedOn;
+        }*/
+
+        private void UpsertObject(GObject obj)
+        {
+            var archiveObject = new ArchiveObject(obj.ObjectId, obj.TagName, obj.ConfigVersion, obj.Template.TagName);
+            
+            if (_archiveRepository.ObjectExists(obj.ObjectId))
+                _archiveRepository.UpdateObject(archiveObject);
+            else
+                _archiveRepository.AddObject(archiveObject);
+            
+            _archiveRepository.Save();
         }
         
-        private void ArchiveInternal(GObject obj)
+        private void AddEntry(GObject obj)
         {
             var data = obj.Template.TagName == "$Symbol" ? GetSymbolData(obj.TagName) : GetObjectData(obj.TagName);
 
-            var entry = new ArchiveEntry(obj.ObjectId, obj.TagName, obj.ConfigVersion, obj.Template.TagName, data);
+            var entry = new ArchiveEntry(obj.ObjectId, obj.ConfigVersion, data);
             _archiveRepository.AddEntry(entry);
             _archiveRepository.Save();
         }

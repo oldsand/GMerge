@@ -41,8 +41,9 @@
         <Reference Include="System.Xml.Linq" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="GalaxyArchiver.cs" />
-        <Compile Include="GalaxyCachingService.cs" />
+        <Compile Include="ArchiveBuilder.cs" />
+        <Compile Include="Archiver.cs" />
+        <Compile Include="CacheService.cs" />
         <Compile Include="GalaxyManager.cs" />
         <Compile Include="GalaxyRegistry.cs" />
         <Compile Include="IGalaxyRegistry.cs" />

@@ -11,14 +11,12 @@ namespace GalaxyMerge.Archive.Entities
         {
         }
         
-        public ArchiveEntry(int objectId, string tagName, int version, string baseType, byte[] data)
+        public ArchiveEntry(int objectId, int version, byte[] data)
         {
             EntryId = Guid.NewGuid();
             ObjectId = objectId;
-            TagName = tagName;
             Version = version;
-            BaseType = baseType;
-            Created = DateTime.Now;
+            CreatedOn = DateTime.Now;
             OriginalSize = data.Length;
             CompressedData = data.Compress();
             CompressedSize = CompressedData.Length;
@@ -26,10 +24,9 @@ namespace GalaxyMerge.Archive.Entities
 
         public Guid EntryId { get; private set; }
         public int ObjectId { get; private set; }
-        public string TagName { get; private set; }
+        public ArchiveObject ArchiveObject { get; set; }
         public int Version { get; private set; }
-        public string BaseType { get; private set; }
-        public DateTime Created { get; private set; }
+        public DateTime CreatedOn { get; private set; }
         public long OriginalSize { get; private set; }
         public long CompressedSize { get; private set; }
         public byte[] CompressedData { get; private set; }

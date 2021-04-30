@@ -8,18 +8,28 @@ namespace GalaxyMerge.Archive.Abstractions
     public interface IArchiveRepository : IDisposable
     {
         ArchiveInfo GetInfo();
-        ArchiveEntry GetEntry(Guid id);
-        IEnumerable<ArchiveEntry> FindByObjectId(int objectId);
-        IEnumerable<ArchiveEntry> FindByTagName(string tagName);
-        ArchiveEntry GetLatest(int objectId);
-        ArchiveEntry GetLatest(string tagName);
-        bool HasEntries(string tagName);
-        void AddInfo(ArchiveInfo archiveInfo);
-        void RemoveInfo(ArchiveInfo archiveInfo);
+        bool ObjectExists(int objectId);
+        ArchiveObject GetObject(int objectId);
+        ArchiveObject GetObjectIncludeEntries(int objectId);
+        IEnumerable<ArchiveObject> FindObjectsByTagName(string tagName);
+        bool HasEntries(int objectId);
+        IEnumerable<ArchiveEntry> FindEntriesByObjectId(int objectId);
+        ArchiveEntry GetLatestEntry(int objectId);
+        bool HasEvent(string eventName);
+        ArchiveEvent GetEvent(int eventId);
+        IEnumerable<ArchiveEvent> GetEvents();
+        bool HasExclusion(string exclusionName);
+        ArchiveExclusion GetExclusion(int exclusionId);
+        IEnumerable<ArchiveExclusion> GetExclusions();
         void UpdateInfo(ArchiveInfo archiveInfo);
+        void AddObject(ArchiveObject archiveObject);
+        void RemoveObject(ArchiveObject archiveObject);
+        void UpdateObject(ArchiveObject archiveObject);
         void AddEntry(ArchiveEntry archiveEntry);
-        void RemoveEntry(ArchiveEntry archiveEntry);
-        void UpdateEntry(ArchiveEntry archiveEntry);
+        void AddEvent(ArchiveEvent archiveEvent);
+        void RemoveEvent(ArchiveEvent archiveEvent);
+        void AddExclusion(ArchiveExclusion archiveExclusion);
+        void RemoveExclusion(ArchiveExclusion archiveExclusion);
         bool HasChanges();
         int Save();
         Task<int> SaveAsync();
