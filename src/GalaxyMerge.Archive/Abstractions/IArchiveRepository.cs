@@ -19,8 +19,8 @@ namespace GalaxyMerge.Archive.Abstractions
         ArchiveEvent GetEvent(int eventId);
         IEnumerable<ArchiveEvent> GetEvents();
         bool HasExclusion(string exclusionName);
-        ArchiveExclusion GetExclusion(int exclusionId);
-        IEnumerable<ArchiveExclusion> GetExclusions();
+        ArchiveTemplate GetExclusion(int exclusionId);
+        IEnumerable<ArchiveTemplate> GetExclusions();
         void UpdateInfo(ArchiveInfo archiveInfo);
         void AddObject(ArchiveObject archiveObject);
         void RemoveObject(ArchiveObject archiveObject);
@@ -28,8 +28,8 @@ namespace GalaxyMerge.Archive.Abstractions
         void AddEntry(ArchiveEntry archiveEntry);
         void AddEvent(ArchiveEvent archiveEvent);
         void RemoveEvent(ArchiveEvent archiveEvent);
-        void AddExclusion(ArchiveExclusion archiveExclusion);
-        void RemoveExclusion(ArchiveExclusion archiveExclusion);
+        void AddExclusion(ArchiveTemplate archiveTemplate);
+        void RemoveExclusion(ArchiveTemplate archiveTemplate);
         bool HasChanges();
         int Save();
         Task<int> SaveAsync();

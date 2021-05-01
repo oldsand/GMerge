@@ -1,6 +1,8 @@
+using System.Runtime.CompilerServices;
 using GalaxyMerge.Archive.Entities;
 using Microsoft.EntityFrameworkCore;
 
+[assembly:InternalsVisibleTo("GalaxyMerge.Archive.Tests")]
 namespace GalaxyMerge.Archive
 {
     internal class ArchiveContext : DbContext
@@ -18,6 +20,6 @@ namespace GalaxyMerge.Archive
         public DbSet<ArchiveObject> Objects { get; set; }
         public DbSet<ArchiveEntry> Entries { get; set; }
         public DbSet<ArchiveEvent> Events { get; set; }
-        public DbSet<ArchiveExclusion> Exclusions { get; set; }
+        public DbSet<ArchiveTemplate> Exclusions { get; set; }
     }
 }

@@ -44,6 +44,8 @@
         <Reference Include="System.Xml.Linq" />
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="ArchiveBuilderTests.cs" />
+        <Compile Include="ArchiveConfigurationTests.cs" />
         <Compile Include="ArchiveRepositoryTests.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>

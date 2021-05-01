@@ -54,7 +54,7 @@
         <Compile Include="Configurations\ArchiveInfoConfiguration.cs" />
         <Compile Include="Configurations\ArchiveObjectConfiguration.cs" />
         <Compile Include="Entities\ArchiveEntry.cs" />
-        <Compile Include="Entities\ArchiveExclusion.cs" />
+        <Compile Include="Entities\ArchiveTemplate.cs" />
         <Compile Include="Entities\ArchiveInfo.cs" />
         <Compile Include="Entities\ArchiveEvent.cs" />
         <Compile Include="Entities\ArchiveObject.cs" />

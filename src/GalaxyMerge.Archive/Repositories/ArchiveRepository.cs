@@ -76,15 +76,15 @@ namespace GalaxyMerge.Archive.Repositories
         
         public bool HasExclusion(string exclusionName)
         {
-            return _context.Exclusions.Any(x => x.ExclusionName == exclusionName);
+            return _context.Exclusions.Any(x => x.TemplateName == exclusionName);
         }
 
-        public ArchiveExclusion GetExclusion(int exclusionId)
+        public ArchiveTemplate GetExclusion(int exclusionId)
         {
             return _context.Exclusions.Find(exclusionId);
         }
 
-        public IEnumerable<ArchiveExclusion> GetExclusions()
+        public IEnumerable<ArchiveTemplate> GetExclusions()
         {
             return _context.Exclusions.ToList();
         }
@@ -124,14 +124,14 @@ namespace GalaxyMerge.Archive.Repositories
             _context.Events.Remove(archiveEvent);
         }
 
-        public void AddExclusion(ArchiveExclusion archiveExclusion)
+        public void AddExclusion(ArchiveTemplate archiveTemplate)
         {
-            _context.Exclusions.Remove(archiveExclusion);
+            _context.Exclusions.Remove(archiveTemplate);
         }
 
-        public void RemoveExclusion(ArchiveExclusion archiveExclusion)
+        public void RemoveExclusion(ArchiveTemplate archiveTemplate)
         {
-            _context.Exclusions.Remove(archiveExclusion);
+            _context.Exclusions.Remove(archiveTemplate);
         }
 
         public bool HasChanges()

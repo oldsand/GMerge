@@ -10,7 +10,7 @@ namespace GalaxyMerge.Archive.Configurations
         {
             builder.ToTable("Event").HasKey(x => x.EventId);
             builder.Property(x => x.EventName).IsRequired();
-            builder.Property(x => x.CreationEvent).IsRequired();
+            builder.Property(x => x.IsCreationEvent).IsRequired();
         }
     }
 }

@@ -12,6 +12,7 @@ namespace GalaxyMerge.Archive
             using var context = new ArchiveContext(options);
 
             context.Database.EnsureCreated();
+            
             ApplyConfiguration(context, configuration);
         }
 
@@ -19,7 +20,7 @@ namespace GalaxyMerge.Archive
         {
             context.Info.Add(configuration.ArchiveInfo);
             context.Events.AddRange(configuration.ArchiveEvents);
-            context.Exclusions.AddRange(configuration.ArchiveExclusions);
+            context.Exclusions.AddRange(configuration.ArchiveTemplates);
             context.SaveChanges();
         }
     }
