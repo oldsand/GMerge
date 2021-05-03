@@ -11,13 +11,14 @@ namespace GalaxyMerge.Archive.Tests
         public void Build_EmptyConfiguration_CreatesDatabaseWithExpectedData()
         {
             var config = ArchiveConfiguration.Empty("SomeGalaxy", 1, "1234", "5678");
-            ArchiveBuilder.Build(config);
+            var builder = new ArchiveBuilder();
+            builder.Build(config);
 
             FileAssert.Exists(config.FileName);
             
             var options = new DbContextOptionsBuilder<ArchiveContext>().UseSqlite(config.ConnectionString).Options;
             var context = new ArchiveContext(options);
-            var info = context.Info.Single();
+            var info = context.GalaxyInfo.Single();
             Assert.AreEqual("SomeGalaxy", info.GalaxyName);
             Assert.AreEqual(1, info.VersionNumber);
             Assert.AreEqual("1234", info.CdiVersion);

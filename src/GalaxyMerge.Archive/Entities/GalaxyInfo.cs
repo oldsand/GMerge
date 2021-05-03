@@ -1,9 +1,9 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Local
 namespace GalaxyMerge.Archive.Entities
 {
-    public class ArchiveInfo
+    public class GalaxyInfo
     {
-        public ArchiveInfo(string galaxyName, int versionNumber, string cdiVersion, string isaVersion)
+        public GalaxyInfo(string galaxyName, int versionNumber, string cdiVersion, string isaVersion)
         {
             GalaxyName = galaxyName;
             VersionNumber = versionNumber;

@@ -19,119 +19,109 @@ namespace GalaxyMerge.Archive.Repositories
             _context = new ArchiveContext(options);
         }
         
-        public ArchiveInfo GetInfo()
+        public GalaxyInfo GetInfo()
         {
-            return _context.Info.SingleOrDefault();
+            return _context.GalaxyInfo.SingleOrDefault();
         }
         
         public bool ObjectExists(int objectId)
         {
-            return _context.Objects.Any(x => x.ObjectId == objectId);
+            return _context.ArchiveObjects.Any(x => x.ObjectId == objectId);
         }
 
         public ArchiveObject GetObject(int objectId)
         {
-            return _context.Objects.Find(objectId);
+            return _context.ArchiveObjects.Find(objectId);
         }
         
         public ArchiveObject GetObjectIncludeEntries(int objectId)
         {
-            return _context.Objects.Include(x => x.Entries).SingleOrDefault(x => x.ObjectId == objectId);
+            return _context.ArchiveObjects.Include(x => x.Entries).SingleOrDefault(x => x.ObjectId == objectId);
         }
 
         public IEnumerable<ArchiveObject> FindObjectsByTagName(string tagName)
         {
-            return _context.Objects.Where(x => x.TagName == tagName);
+            return _context.ArchiveObjects.Where(x => x.TagName == tagName);
         }
 
         public bool HasEntries(int objectId)
         {
-            return _context.Entries.Any(x => x.ObjectId == objectId);
+            return _context.ArchiveEntries.Any(x => x.ObjectId == objectId);
         }
 
         public IEnumerable<ArchiveEntry> FindEntriesByObjectId(int objectId)
         {
-            return _context.Entries.Where(x => x.ObjectId == objectId);
+            return _context.ArchiveEntries.Where(x => x.ObjectId == objectId);
         }
 
         public ArchiveEntry GetLatestEntry(int objectId)
         {
-            return _context.Entries.OrderByDescending(x => x.CreatedOn).FirstOrDefault(x => x.ObjectId == objectId);
+            return _context.ArchiveEntries.OrderByDescending(x => x.ArchivedOn).FirstOrDefault(x => x.ObjectId == objectId);
         }
         
-        public bool HasEvent(string eventName)
+        public EventSetting GetEventSetting(int eventId)
         {
-            return _context.Events.Any(x => x.EventName == eventName);
+            return _context.EventSettings.Find(eventId);
         }
 
-        public ArchiveEvent GetEvent(int eventId)
+        public IEnumerable<EventSetting> GetEventSettings()
         {
-            return _context.Events.Find(eventId);
+            return _context.EventSettings.ToList();
         }
 
-        public IEnumerable<ArchiveEvent> GetEvents()
+        public InclusionSetting GetInclusionSetting(int exclusionId)
         {
-            return _context.Events.ToList();
-        }
-        
-        public bool HasExclusion(string exclusionName)
-        {
-            return _context.Exclusions.Any(x => x.TemplateName == exclusionName);
+            return _context.InclusionSettings.Find(exclusionId);
         }
 
-        public ArchiveTemplate GetExclusion(int exclusionId)
+        public IEnumerable<InclusionSetting> GetInclusionSettings()
         {
-            return _context.Exclusions.Find(exclusionId);
+            return _context.InclusionSettings.ToList();
         }
 
-        public IEnumerable<ArchiveTemplate> GetExclusions()
+        public void UpdateInfo(GalaxyInfo galaxyInfo)
         {
-            return _context.Exclusions.ToList();
-        }
-
-        public void UpdateInfo(ArchiveInfo archiveInfo)
-        {
-            _context.Info.Update(archiveInfo);
+            _context.GalaxyInfo.Update(galaxyInfo);
         }
 
         public void AddObject(ArchiveObject archiveObject)
         {
-            _context.Objects.Add(archiveObject);
+            _context.ArchiveObjects.Add(archiveObject);
         }
 
         public void RemoveObject(ArchiveObject archiveObject)
         {
-            _context.Objects.Remove(archiveObject);
+            _context.ArchiveObjects.Remove(archiveObject);
         }
 
         public void UpdateObject(ArchiveObject archiveObject)
         {
-            _context.Objects.Update(archiveObject);
+            _context.ArchiveObjects.Update(archiveObject);
         }
 
         public void AddEntry(ArchiveEntry archiveEntry)
         {
-            _context.Entries.Add(archiveEntry);
+            _context.ArchiveEntries.Add(archiveEntry);
         }
 
-        public void AddEvent(ArchiveEvent archiveEvent)
+        public void AddEvent(EventSetting eventSetting)
         {
-            _context.Events.Add(archiveEvent);
+            _context.EventSettings.Add(eventSetting);
         }
 
-        public void RemoveEvent(ArchiveEvent archiveEvent)
+        public void RemoveEvent(EventSetting eventSetting)
         {
-            _context.Events.Remove(archiveEvent);
+            _context.EventSettings.Remove(eventSetting);
         }
 
-        public void AddExclusion(ArchiveTemplate archiveTemplate)
+        public void AddInclusion(InclusionSetting inclusionSetting)
         {
-            _context.Exclusions.Remove(archiveTemplate);
+            _context.InclusionSettings.Remove(inclusionSetting);
         }
 
-        public void RemoveExclusion(ArchiveTemplate archiveTemplate)
+        public void RemoveInclusion(InclusionSetting inclusionSetting)
         {
-            _context.Exclusions.Remove(archiveTemplate);
+            _context.InclusionSettings.Remove(inclusionSetting);
         }
 
         public bool HasChanges()

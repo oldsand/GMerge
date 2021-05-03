@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using GalaxyMerge.Archive.Entities;
+using GalaxyMerge.Archive.Enum;
 using GalaxyMerge.Common.Primitives;
+using GalaxyMerge.Core;
 using GalaxyMerge.Core.Utilities;
 using Microsoft.Data.Sqlite;
 
@@ -10,27 +12,27 @@ namespace GalaxyMerge.Archive
     {
         public string FileName { get; private set; }
         public string ConnectionString { get; private set; }
-        public ArchiveInfo ArchiveInfo { get; private set; }
-        public List<ArchiveEvent> ArchiveEvents { get; private set; }
-        public List<ArchiveTemplate> ArchiveTemplates { get; private set; }
+        public GalaxyInfo GalaxyInfo { get; private set; }
+        public List<EventSetting> ArchiveEvents { get; private set; }
+        public List<InclusionSetting> ArchiveTemplates { get; private set; }
 
         private ArchiveConfiguration()
         {
-            ArchiveEvents = new List<ArchiveEvent>();
-            ArchiveTemplates = new List<ArchiveTemplate>();
+            ArchiveEvents = new List<EventSetting>();
+            ArchiveTemplates = new List<InclusionSetting>();
         }
         
         public static ArchiveConfiguration Empty(string galaxyName, int version, string cdiVersion, string isaVersion)
         {
             return new ArchiveConfiguration()
-                .SetInfo(new ArchiveInfo(galaxyName, version, cdiVersion, isaVersion))
+                .SetInfo(new GalaxyInfo(galaxyName, version, cdiVersion, isaVersion))
                 .SetConnectionString(ConnectionStringBuilder.BuildArchiveConnection(galaxyName));
         }
         
         public static ArchiveConfiguration Default(string galaxyName, int version, string cdiVersion, string isaVersion)
         {
             return new ArchiveConfiguration()
-                .SetInfo(new ArchiveInfo(galaxyName, version, cdiVersion, isaVersion))
+                .SetInfo(new GalaxyInfo(galaxyName, version, cdiVersion, isaVersion))
                 .SetConnectionString(ConnectionStringBuilder.BuildArchiveConnection(galaxyName))
                 .SetArchiveEvent(Operation.CheckInSuccess)
                 .SetArchiveEvent(Operation.CreateDerivedTemplate)
@@ -50,7 +52,7 @@ namespace GalaxyMerge.Archive
 
         public ArchiveConfiguration WithInfo(string galaxyName, int versionNumber, string cdiVersion, string isaVersion)
         {
-            var archiveInfo = new ArchiveInfo(galaxyName, versionNumber, cdiVersion, isaVersion);
+            var archiveInfo = new GalaxyInfo(galaxyName, versionNumber, cdiVersion, isaVersion);
             return SetInfo(archiveInfo);
         }
 
@@ -77,23 +79,30 @@ namespace GalaxyMerge.Archive
             return this;
         }
 
-        private ArchiveConfiguration SetInfo(ArchiveInfo info)
+        private ArchiveConfiguration SetInfo(GalaxyInfo info)
         {
-            ArchiveInfo = info;
+            GalaxyInfo = info;
             return this;
         }
 
         private ArchiveConfiguration SetArchiveEvent(Operation operation)
         {
-            var creationEvent = operation == Operation.CreateInstance || operation == Operation.CreateDerivedTemplate;
-            ArchiveEvents.Add(new ArchiveEvent(operation.Id, operation.Name, creationEvent));
+            ArchiveEvents.Add(new EventSetting(operation.Id, operation.Name, EventType.FromOperation(operation)));
             return this;
         }
 
-        private ArchiveConfiguration SetArchiveTemplate(Template template)
+        private ArchiveConfiguration SetArchiveTemplate(Enumeration template)
         {
-            ArchiveTemplates.Add(new ArchiveTemplate(template.Id, template.Name));
+            var option = DetermineInclusionOption(template);
+            ArchiveTemplates.Add(new InclusionSetting(template.Id, template.Name, option));
             return this;
+        }
+
+        private static InclusionOption DetermineInclusionOption(Enumeration template)
+        {
+            return template == Template.UserDefined || template == Template.Symbol
+                ? InclusionOption.All
+                : InclusionOption.Select;
         }
     }
 }

@@ -16,6 +16,7 @@ namespace GalaxyMerge.Archive.Entities
             Version = version;
             BaseType = baseType;
             AddedOn = DateTime.Now;
+            Entries = new List<ArchiveEntry>();
         }
         
         public int ObjectId { get; private set; }

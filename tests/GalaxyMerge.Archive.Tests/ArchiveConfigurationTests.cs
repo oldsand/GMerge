@@ -11,10 +11,10 @@ namespace GalaxyMerge.Archive.Tests
         {
             var config = ArchiveConfiguration.Empty("GalaxyName", 1, "123", "456");
             
-            Assert.AreEqual("GalaxyName", config.ArchiveInfo.GalaxyName);
-            Assert.AreEqual(1, config.ArchiveInfo.VersionNumber);
-            Assert.AreEqual("123", config.ArchiveInfo.CdiVersion);
-            Assert.AreEqual("456", config.ArchiveInfo.IsaVersion);
+            Assert.AreEqual("GalaxyName", config.GalaxyInfo.GalaxyName);
+            Assert.AreEqual(1, config.GalaxyInfo.VersionNumber);
+            Assert.AreEqual("123", config.GalaxyInfo.CdiVersion);
+            Assert.AreEqual("456", config.GalaxyInfo.IsaVersion);
             Assert.AreEqual(@"Data Source=C:\ProgramData\GalaxyMerge\Archives\GalaxyName.db", config.ConnectionString);
             Assert.AreEqual(@"C:\ProgramData\GalaxyMerge\Archives\GalaxyName.db", config.FileName);
         }
@@ -24,10 +24,10 @@ namespace GalaxyMerge.Archive.Tests
         {
             var config = ArchiveConfiguration.Default("GalaxyName", 1, "123", "456");
             
-            Assert.AreEqual("GalaxyName", config.ArchiveInfo.GalaxyName);
-            Assert.AreEqual(1, config.ArchiveInfo.VersionNumber);
-            Assert.AreEqual("123", config.ArchiveInfo.CdiVersion);
-            Assert.AreEqual("456", config.ArchiveInfo.IsaVersion);
+            Assert.AreEqual("GalaxyName", config.GalaxyInfo.GalaxyName);
+            Assert.AreEqual(1, config.GalaxyInfo.VersionNumber);
+            Assert.AreEqual("123", config.GalaxyInfo.CdiVersion);
+            Assert.AreEqual("456", config.GalaxyInfo.IsaVersion);
             Assert.AreEqual(@"Data Source=C:\ProgramData\GalaxyMerge\Archives\GalaxyName.db", config.ConnectionString);
             Assert.AreEqual(@"C:\ProgramData\GalaxyMerge\Archives\GalaxyName.db", config.FileName);
             Assert.IsNotEmpty(config.ArchiveEvents);

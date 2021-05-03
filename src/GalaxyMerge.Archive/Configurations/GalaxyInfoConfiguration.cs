@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GalaxyMerge.Archive.Configurations
 {
-    internal class ArchiveInfoConfiguration : IEntityTypeConfiguration<ArchiveInfo>
+    internal class GalaxyInfoConfiguration : IEntityTypeConfiguration<GalaxyInfo>
     {
-        public void Configure(EntityTypeBuilder<ArchiveInfo> builder)
+        public void Configure(EntityTypeBuilder<GalaxyInfo> builder)
         {
             builder.HasKey(x => x.GalaxyName);
             builder.Property(x => x.GalaxyName).IsRequired();

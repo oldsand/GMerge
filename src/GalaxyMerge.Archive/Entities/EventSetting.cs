@@ -1,20 +1,22 @@
+using GalaxyMerge.Archive.Enum;
+
 namespace GalaxyMerge.Archive.Entities
 {
-    public class ArchiveEvent
+    public class EventSetting
     {
-        protected ArchiveEvent()
+        protected EventSetting()
         {
         }
         
-        public ArchiveEvent(int eventId, string eventName, bool isCreationEvent)
+        public EventSetting(int eventId, string eventName, EventType eventType)
         {
             EventId = eventId;
             EventName = eventName;
-            IsCreationEvent = isCreationEvent;
+            EventType = eventType;
         }
         
         public int EventId { get; private set; }
         public string EventName { get;  private set; }
-        public bool IsCreationEvent { get; private set; }
+        public EventType EventType { get; private set; }
     }
 }

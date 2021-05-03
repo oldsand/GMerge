@@ -16,7 +16,7 @@ namespace GalaxyMerge.Archive.Entities
             EntryId = Guid.NewGuid();
             ObjectId = objectId;
             Version = version;
-            CreatedOn = DateTime.Now;
+            ArchivedOn = DateTime.Now;
             OriginalSize = data.Length;
             CompressedData = data.Compress();
             CompressedSize = CompressedData.Length;
@@ -26,7 +26,7 @@ namespace GalaxyMerge.Archive.Entities
         public int ObjectId { get; private set; }
         public ArchiveObject ArchiveObject { get; set; }
         public int Version { get; private set; }
-        public DateTime CreatedOn { get; private set; }
+        public DateTime ArchivedOn { get; private set; }
         public long OriginalSize { get; private set; }
         public long CompressedSize { get; private set; }
         public byte[] CompressedData { get; private set; }

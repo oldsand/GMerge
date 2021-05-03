@@ -1,10 +1,11 @@
+using GalaxyMerge.Archive.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
 namespace GalaxyMerge.Archive
 {
-    public static class ArchiveBuilder
+    public class ArchiveBuilder : IArchiveBuilder
     {
-        public static void Build(ArchiveConfiguration configuration)
+        public void Build(ArchiveConfiguration configuration)
         {
             var options = new DbContextOptionsBuilder<ArchiveContext>()
                 .UseSqlite(configuration.ConnectionString).Options;
@@ -18,9 +19,9 @@ namespace GalaxyMerge.Archive
 
         private static void ApplyConfiguration(ArchiveContext context, ArchiveConfiguration configuration)
         {
-            context.Info.Add(configuration.ArchiveInfo);
-            context.Events.AddRange(configuration.ArchiveEvents);
-            context.Exclusions.AddRange(configuration.ArchiveTemplates);
+            context.GalaxyInfo.Add(configuration.GalaxyInfo);
+            context.EventSettings.AddRange(configuration.ArchiveEvents);
+            context.InclusionSettings.AddRange(configuration.ArchiveTemplates);
             context.SaveChanges();
         }
     }

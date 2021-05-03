@@ -49,15 +49,17 @@
         <Compile Include="ArchiveConfiguration.cs" />
         <Compile Include="ArchiveContext.cs" />
         <Compile Include="Configurations\ArchiveEntryConfiguration.cs" />
-        <Compile Include="Configurations\ArchiveEventConfiguration.cs" />
-        <Compile Include="Configurations\ArchiveExclusionConfiguration.cs" />
-        <Compile Include="Configurations\ArchiveInfoConfiguration.cs" />
+        <Compile Include="Configurations\EventSettingConfiguration.cs" />
+        <Compile Include="Configurations\InclusionSettingConfiguration.cs" />
+        <Compile Include="Configurations\GalaxyInfoConfiguration.cs" />
         <Compile Include="Configurations\ArchiveObjectConfiguration.cs" />
         <Compile Include="Entities\ArchiveEntry.cs" />
-        <Compile Include="Entities\ArchiveTemplate.cs" />
-        <Compile Include="Entities\ArchiveInfo.cs" />
-        <Compile Include="Entities\ArchiveEvent.cs" />
+        <Compile Include="Entities\InclusionSetting.cs" />
+        <Compile Include="Entities\GalaxyInfo.cs" />
+        <Compile Include="Entities\EventSetting.cs" />
         <Compile Include="Entities\ArchiveObject.cs" />
+        <Compile Include="Enum\EventType.cs" />
+        <Compile Include="Enum\InclusionOption.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="Repositories\ArchiveRepository.cs" />
     </ItemGroup>
