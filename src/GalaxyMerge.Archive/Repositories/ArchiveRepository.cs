@@ -61,12 +61,12 @@ namespace GalaxyMerge.Archive.Repositories
         
         public EventSetting GetEventSetting(int eventId)
         {
-            return _context.EventSettings.Find(eventId);
+            return _context.OperationSettings.Find(eventId);
         }
 
         public IEnumerable<EventSetting> GetEventSettings()
         {
-            return _context.EventSettings.ToList();
+            return _context.OperationSettings.ToList();
         }
 
         public InclusionSetting GetInclusionSetting(int exclusionId)
@@ -106,12 +106,12 @@ namespace GalaxyMerge.Archive.Repositories
 
         public void AddEvent(EventSetting eventSetting)
         {
-            _context.EventSettings.Add(eventSetting);
+            _context.OperationSettings.Add(eventSetting);
         }
 
         public void RemoveEvent(EventSetting eventSetting)
         {
-            _context.EventSettings.Remove(eventSetting);
+            _context.OperationSettings.Remove(eventSetting);
         }
 
         public void AddInclusion(InclusionSetting inclusionSetting)

@@ -46,7 +46,7 @@
         <Compile Include="Abstractions\IArchiveBuilder.cs" />
         <Compile Include="Abstractions\IArchiveRepository.cs" />
         <Compile Include="ArchiveBuilder.cs" />
-        <Compile Include="ArchiveConfiguration.cs" />
+        <Compile Include="ArchiveConfigurationBuilder.cs" />
         <Compile Include="ArchiveContext.cs" />
         <Compile Include="Configurations\ArchiveEntryConfiguration.cs" />
         <Compile Include="Configurations\EventSettingConfiguration.cs" />
@@ -58,8 +58,6 @@
         <Compile Include="Entities\GalaxyInfo.cs" />
         <Compile Include="Entities\EventSetting.cs" />
         <Compile Include="Entities\ArchiveObject.cs" />
-        <Compile Include="Enum\EventType.cs" />
-        <Compile Include="Enum\InclusionOption.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="Repositories\ArchiveRepository.cs" />
     </ItemGroup>
@@ -110,6 +108,9 @@
         <Project>{dd496472-fb15-4ffc-86ca-2ac8f0e6cf3c}</Project>
         <Name>GalaxyMerge.Core</Name>
       </ProjectReference>
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Enum" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

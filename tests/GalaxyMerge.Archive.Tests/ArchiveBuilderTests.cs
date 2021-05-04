@@ -10,7 +10,7 @@ namespace GalaxyMerge.Archive.Tests
         [Test]
         public void Build_EmptyConfiguration_CreatesDatabaseWithExpectedData()
         {
-            var config = ArchiveConfiguration.Empty("SomeGalaxy", 1, "1234", "5678");
+            var config = new ArchiveConfigurationBuilder("SomeGalaxy", 1, "1234", "5678");
             var builder = new ArchiveBuilder();
             builder.Build(config);
 

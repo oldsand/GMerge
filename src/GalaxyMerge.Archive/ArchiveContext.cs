@@ -16,10 +16,11 @@ namespace GalaxyMerge.Archive
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ArchiveContext).Assembly);
         }
         
-        public DbSet<GalaxyInfo> GalaxyInfo { get; set; }
-        public DbSet<ArchiveObject> ArchiveObjects { get; set; }
         public DbSet<ArchiveEntry> ArchiveEntries { get; set; }
-        public DbSet<EventSetting> EventSettings { get; set; }
+        public DbSet<ArchiveObject> ArchiveObjects { get; set; }
+        public DbSet<GalaxyInfo> GalaxyInfo { get; set; }
         public DbSet<InclusionSetting> InclusionSettings { get; set; }
+        public DbSet<EventSetting> OperationSettings { get; set; }
+        
     }
 }
