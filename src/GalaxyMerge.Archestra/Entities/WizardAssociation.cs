@@ -3,7 +3,7 @@ using System.Xml.Linq;
 using GalaxyMerge.Common.Abstractions;
 using GalaxyMerge.Common.Primitives;
 
-namespace GalaxyMerge.Contracts.Data
+namespace GalaxyMerge.Archestra.Entities
 {
     public class WizardAssociation : IWizardAssociation
     {

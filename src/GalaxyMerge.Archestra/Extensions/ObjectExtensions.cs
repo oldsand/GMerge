@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using ArchestrA.GRAccess;
+using GalaxyMerge.Archestra.Entities;
 using GalaxyMerge.Common.Abstractions;
 using GalaxyMerge.Common.Primitives;
-using GalaxyMerge.Contracts.Data;
 using GalaxyMerge.Core;
 
 // ReSharper disable SuspiciousTypeConversion.Global

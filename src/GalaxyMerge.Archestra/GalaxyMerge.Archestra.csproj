@@ -52,6 +52,16 @@
         <Compile Include="Abstractions\IGalaxyRepositoryFactory.cs" />
         <Compile Include="Abstractions\IGalaxyFinder.cs" />
         <Compile Include="Abstractions\IGalaxyRepository.cs" />
+        <Compile Include="Entities\CustomProperty.cs" />
+        <Compile Include="Entities\GalaxyAttribute.cs" />
+        <Compile Include="Entities\GalaxyObject.cs" />
+        <Compile Include="Entities\GalaxySymbol.cs" />
+        <Compile Include="Entities\NamedScript.cs" />
+        <Compile Include="Entities\PredefinedScript.cs" />
+        <Compile Include="Entities\WizardAssociation.cs" />
+        <Compile Include="Entities\WizardChoice.cs" />
+        <Compile Include="Entities\WizardLayer.cs" />
+        <Compile Include="Entities\WizardOption.cs" />
         <Compile Include="GalaxyCommandResult.cs" />
         <Compile Include="Extensions\AttributeExtensions.cs" />
         <Compile Include="Extensions\ObjectExtensions.cs" />
@@ -76,17 +86,9 @@
         <Project>{446fe87c-5122-4344-9df9-9f641e81a476}</Project>
         <Name>GalaxyMerge.Common</Name>
       </ProjectReference>
-      <ProjectReference Include="..\GalaxyMerge.Contracts\GalaxyMerge.Contracts.csproj">
-        <Project>{a1de5d14-c80e-4f06-af43-a0a7b3b24072}</Project>
-        <Name>GalaxyMerge.Contracts</Name>
-      </ProjectReference>
       <ProjectReference Include="..\GalaxyMerge.Core\GalaxyMerge.Core.csproj">
         <Project>{dd496472-fb15-4ffc-86ca-2ac8f0e6cf3c}</Project>
         <Name>GalaxyMerge.Core</Name>
-      </ProjectReference>
-      <ProjectReference Include="..\GalaxyMerge.Data\GalaxyMerge.Data.csproj">
-        <Project>{1116a38e-aa67-46e3-9d09-e2de5c2a694e}</Project>
-        <Name>GalaxyMerge.Data</Name>
       </ProjectReference>
     </ItemGroup>
     <ItemGroup>

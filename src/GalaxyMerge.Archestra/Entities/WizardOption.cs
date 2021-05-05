@@ -8,7 +8,7 @@ using GalaxyMerge.Common.Primitives;
 // Object will be deserialized via xml
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
-namespace GalaxyMerge.Contracts.Data
+namespace GalaxyMerge.Archestra.Entities
 {
     public class WizardOption : IWizardOption
     {

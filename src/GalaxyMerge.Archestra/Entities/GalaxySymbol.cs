@@ -3,7 +3,7 @@ using System.Linq;
 using System.Xml.Linq;
 using GalaxyMerge.Common.Abstractions;
 
-namespace GalaxyMerge.Contracts.Data
+namespace GalaxyMerge.Archestra.Entities
 {
     public class GalaxySymbol : IGalaxySymbol
     {

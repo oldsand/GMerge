@@ -7,7 +7,7 @@ using GalaxyMerge.Common.Primitives;
 using GalaxyMerge.Core;
 using GalaxyMerge.Core.Extensions;
 
-namespace GalaxyMerge.Contracts.Data
+namespace GalaxyMerge.Archestra.Entities
 {
     public class GalaxyAttribute : IGalaxyAttribute
     {

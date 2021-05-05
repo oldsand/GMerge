@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using ArchestrA.GRAccess;
+using GalaxyMerge.Archestra.Entities;
 using GalaxyMerge.Common.Abstractions;
 using GalaxyMerge.Common.Primitives;
-using GalaxyMerge.Contracts.Data;
 
 namespace GalaxyMerge.Archestra.Extensions
 {

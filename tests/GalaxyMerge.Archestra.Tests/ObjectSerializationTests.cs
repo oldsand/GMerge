@@ -1,4 +1,4 @@
-using GalaxyMerge.Contracts.Data;
+using GalaxyMerge.Archestra.Entities;
 using NUnit.Framework;
 
 namespace GalaxyMerge.Archestra.Tests

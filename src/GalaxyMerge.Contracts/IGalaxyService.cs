@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.ServiceModel;
-using GalaxyMerge.Contracts.Data;
+using GalaxyMerge.Archestra.Entities;
 
-namespace GalaxyMerge.Contracts.Services
+namespace GalaxyMerge.Contracts
 {
     [ServiceContract(Namespace = "http://www.GalaxyAccess.com/2014/Contracts")]
     public interface IGalaxyService

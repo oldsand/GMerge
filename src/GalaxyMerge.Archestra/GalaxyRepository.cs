@@ -9,9 +9,9 @@ using ArchestrA.GRAccess;
 using ArchestrA.Visualization.GraphicAccess;
 using GalaxyMerge.Archestra.Extensions;
 using GalaxyMerge.Archestra.Abstractions;
+using GalaxyMerge.Archestra.Entities;
 using GalaxyMerge.Archestra.Options;
 using GalaxyMerge.Common.Abstractions;
-using GalaxyMerge.Contracts.Data;
 using GalaxyMerge.Core.Utilities;
 
 namespace GalaxyMerge.Archestra
