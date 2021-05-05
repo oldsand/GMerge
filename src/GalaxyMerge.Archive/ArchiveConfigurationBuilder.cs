@@ -13,12 +13,12 @@ namespace GalaxyMerge.Archive
         public string FileName { get; private set; }
         public string ConnectionString { get; private set; }
         public GalaxyInfo GalaxyInfo { get; private set; }
-        public List<EventSetting> OperationSettings { get; private set; }
+        public List<EventSetting> EventSettings { get; private set; }
         public List<InclusionSetting> InclusionSettings { get; private set; }
 
         public ArchiveConfigurationBuilder(string galaxyName, int version, string cdiVersion, string isaVersion)
         {
-            OperationSettings = new List<EventSetting>();
+            EventSettings = new List<EventSetting>();
             InclusionSettings = new List<InclusionSetting>();
 
             SetInfo(new GalaxyInfo(galaxyName, version, cdiVersion, isaVersion));
@@ -87,12 +87,12 @@ namespace GalaxyMerge.Archive
 
         private void UpdateOperationSetting(Operation operation, bool isArchiveTrigger)
         {
-            var operationSetting = OperationSettings.SingleOrDefault(s => s.Operation == operation);
+            var operationSetting = EventSettings.SingleOrDefault(s => s.Operation == operation);
 
             if (operationSetting == null)
             {
                 var setting = new EventSetting(operation, isArchiveTrigger);
-                OperationSettings.Add(setting);
+                EventSettings.Add(setting);
                 return;
             }
             

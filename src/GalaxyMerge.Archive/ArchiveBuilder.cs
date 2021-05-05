@@ -28,7 +28,7 @@ namespace GalaxyMerge.Archive
         private static void ApplyConfiguration(ArchiveContext context, ArchiveConfigurationBuilder configurationBuilder)
         {
             context.GalaxyInfo.Add(configurationBuilder.GalaxyInfo);
-            context.OperationSettings.AddRange(configurationBuilder.OperationSettings);
+            context.EventSettings.AddRange(configurationBuilder.EventSettings);
             context.InclusionSettings.AddRange(configurationBuilder.InclusionSettings);
             context.SaveChanges();
         }

@@ -19,7 +19,7 @@ namespace GalaxyMerge.Archive.Repositories
             _context = new ArchiveContext(options);
         }
         
-        public GalaxyInfo GetInfo()
+        public GalaxyInfo GetGalaxyInfo()
         {
             return _context.GalaxyInfo.SingleOrDefault();
         }
@@ -61,12 +61,12 @@ namespace GalaxyMerge.Archive.Repositories
         
         public EventSetting GetEventSetting(int eventId)
         {
-            return _context.OperationSettings.Find(eventId);
+            return _context.EventSettings.Find(eventId);
         }
 
         public IEnumerable<EventSetting> GetEventSettings()
         {
-            return _context.OperationSettings.ToList();
+            return _context.EventSettings.ToList();
         }
 
         public InclusionSetting GetInclusionSetting(int exclusionId)
@@ -79,7 +79,7 @@ namespace GalaxyMerge.Archive.Repositories
             return _context.InclusionSettings.ToList();
         }
 
-        public void UpdateInfo(GalaxyInfo galaxyInfo)
+        public void UpdateGalaxyInfo(GalaxyInfo galaxyInfo)
         {
             _context.GalaxyInfo.Update(galaxyInfo);
         }
@@ -106,12 +106,17 @@ namespace GalaxyMerge.Archive.Repositories
 
         public void AddEvent(EventSetting eventSetting)
         {
-            _context.OperationSettings.Add(eventSetting);
+            _context.EventSettings.Add(eventSetting);
         }
 
         public void RemoveEvent(EventSetting eventSetting)
         {
-            _context.OperationSettings.Remove(eventSetting);
+            _context.EventSettings.Remove(eventSetting);
+        }
+
+        public void UpdateEvent(EventSetting eventSetting)
+        {
+            _context.EventSettings.Update(eventSetting);
         }
 
         public void AddInclusion(InclusionSetting inclusionSetting)
@@ -122,6 +127,11 @@ namespace GalaxyMerge.Archive.Repositories
         public void RemoveInclusion(InclusionSetting inclusionSetting)
         {
             _context.InclusionSettings.Remove(inclusionSetting);
+        }
+
+        public void UpdateInclusion(InclusionSetting inclusionSetting)
+        {
+            _context.InclusionSettings.Update(inclusionSetting);
         }
 
         public bool HasChanges()
