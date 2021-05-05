@@ -18,6 +18,12 @@ namespace GalaxyMerge.Contracts
         IEnumerable<ArchiveEntry> GetEntries(int objectId);
 
         [OperationContract]
+        IEnumerable<EventSetting> GetEventSettings();
+        
+        [OperationContract]
+        IEnumerable<InclusionSetting> GetInclusionSettings();
+
+        [OperationContract]
         void AddObject(int objectId);
 
         [OperationContract]

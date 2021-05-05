@@ -22,6 +22,16 @@ namespace GalaxyMerge.Services
             throw new System.NotImplementedException();
         }
 
+        public IEnumerable<EventSetting> GetEventSettings()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public IEnumerable<InclusionSetting> GetInclusionSettings()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void AddObject(int objectId)
         {
             throw new System.NotImplementedException();

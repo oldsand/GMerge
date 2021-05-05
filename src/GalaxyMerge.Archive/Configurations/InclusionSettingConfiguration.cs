@@ -11,11 +11,16 @@ namespace GalaxyMerge.Archive.Configurations
         public void Configure(EntityTypeBuilder<InclusionSetting> builder)
         {
             builder.ToTable("InclusionSetting").HasKey(x => x.InclusionId);
+            
             builder.Property(x => x.TemplateId).IsRequired();
             builder.Property(x => x.TemplateName).IsRequired();
             builder.Property(x => x.InclusionOption).IsRequired()
                 .HasConversion(x => x.Name, x => Enumeration.FromName<InclusionOption>(x));
             builder.Property(x => x.IncludedInstances).IsRequired();
+            
+            builder.HasIndex(x => x.TemplateId).IsUnique();
+            builder.HasIndex(x => x.TemplateName).IsUnique();
+            
             builder.Ignore(x => x.Template);
         }
     }
