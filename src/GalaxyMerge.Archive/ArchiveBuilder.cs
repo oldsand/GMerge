@@ -13,23 +13,9 @@ namespace GalaxyMerge.Archive
             
             using var context = new ArchiveContext(options);
 
-            if (DatabaseFileExists(configurationBuilder.FileName))
-            {
-                UpdateConfiguration(context, configurationBuilder);
-                return;
-            }
-            
-            context.Database.EnsureCreated();
-            ApplyConfiguration(context, configurationBuilder);
-        }
+            if (DatabaseFileExists(configurationBuilder.FileName)) return;
 
-        public void Configure(ArchiveConfigurationBuilder configurationBuilder)
-        {
-            var options = new DbContextOptionsBuilder<ArchiveContext>()
-                .UseSqlite(configurationBuilder.ConnectionString).Options;
-            
-            using var context = new ArchiveContext(options);
-            
+            context.Database.EnsureCreated();
             ApplyConfiguration(context, configurationBuilder);
         }
 
@@ -38,14 +24,6 @@ namespace GalaxyMerge.Archive
             context.GalaxyInfo.Add(configurationBuilder.GalaxyInfo);
             context.EventSettings.AddRange(configurationBuilder.EventSettings);
             context.InclusionSettings.AddRange(configurationBuilder.InclusionSettings);
-            context.SaveChanges();
-        }
-        
-        private static void UpdateConfiguration(ArchiveContext context, ArchiveConfigurationBuilder configurationBuilder)
-        {
-            context.GalaxyInfo.Update(configurationBuilder.GalaxyInfo);
-            context.EventSettings.UpdateRange(configurationBuilder.EventSettings);
-            context.InclusionSettings.UpdateRange(configurationBuilder.InclusionSettings);
             context.SaveChanges();
         }
 

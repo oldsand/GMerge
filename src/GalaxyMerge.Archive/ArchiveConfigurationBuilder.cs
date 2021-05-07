@@ -17,7 +17,7 @@ namespace GalaxyMerge.Archive
         public List<EventSetting> EventSettings { get; private set; }
         public List<InclusionSetting> InclusionSettings { get; private set; }
 
-        public ArchiveConfigurationBuilder(string galaxyName, int version, string cdiVersion, string isaVersion)
+        public ArchiveConfigurationBuilder(string galaxyName, int? version, string cdiVersion, string isaVersion)
         {
             EventSettings = new List<EventSetting>();
             InclusionSettings = new List<InclusionSetting>();
@@ -34,7 +34,7 @@ namespace GalaxyMerge.Archive
                 UpdateInclusionSetting(template, InclusionOption.None, false);
         }
 
-        public static ArchiveConfigurationBuilder Default(string galaxyName, int version, string cdiVersion, string isaVersion)
+        public static ArchiveConfigurationBuilder Default(string galaxyName, int? version, string cdiVersion, string isaVersion)
         {
             var builder = new ArchiveConfigurationBuilder(galaxyName, version, cdiVersion, isaVersion);
             
@@ -49,7 +49,7 @@ namespace GalaxyMerge.Archive
             return builder;
         }
         
-        public ArchiveConfigurationBuilder HasInfo(string galaxyName, int versionNumber, string cdiVersion, string isaVersion)
+        public ArchiveConfigurationBuilder HasInfo(string galaxyName, int? versionNumber, string cdiVersion, string isaVersion)
         {
             var archiveInfo = new GalaxyInfo(galaxyName, versionNumber, cdiVersion, isaVersion);
             UpdateInfo(archiveInfo);

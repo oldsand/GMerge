@@ -3,7 +3,7 @@ namespace GalaxyMerge.Archive.Entities
 {
     public class GalaxyInfo
     {
-        public GalaxyInfo(string galaxyName, int versionNumber, string cdiVersion, string isaVersion)
+        public GalaxyInfo(string galaxyName, int? versionNumber, string cdiVersion, string isaVersion)
         {
             GalaxyName = galaxyName;
             VersionNumber = versionNumber;
@@ -12,7 +12,7 @@ namespace GalaxyMerge.Archive.Entities
         }
         
         public string GalaxyName { get; private set; }
-        public int VersionNumber { get; private set; }
+        public int? VersionNumber { get; private set; }
         public string CdiVersion { get; private set; }
         public string IsaVersion { get; private set; }
     }

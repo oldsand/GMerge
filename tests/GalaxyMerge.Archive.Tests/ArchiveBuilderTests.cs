@@ -56,15 +56,5 @@ namespace GalaxyMerge.Archive.Tests
 
             FileAssert.DoesNotExist(config.FileName);
         }
-
-        [Test]
-        public void Build_Default_DontDeleteToSeeItWork()
-        {
-            var config =  ArchiveConfigurationBuilder.Default("SomeGalaxy", 1, "1234", "5678");
-            var builder = new ArchiveBuilder();
-            builder.Build(config);
-
-            FileAssert.Exists(config.FileName);
-        }
     }
 }

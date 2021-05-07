@@ -9,10 +9,6 @@ namespace GalaxyMerge.Archive.Configurations
         public void Configure(EntityTypeBuilder<GalaxyInfo> builder)
         {
             builder.ToTable("GalaxyInfo").HasKey(x => x.GalaxyName);
-            builder.Property(x => x.GalaxyName).IsRequired();
-            builder.Property(x => x.VersionNumber).IsRequired();
-            builder.Property(x => x.IsaVersion).IsRequired();
-            builder.Property(x => x.CdiVersion).IsRequired();
         }
     }
 }

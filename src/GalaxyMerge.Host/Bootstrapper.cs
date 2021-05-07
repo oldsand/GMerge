@@ -2,6 +2,8 @@ using System;
 using Autofac;
 using GalaxyMerge.Archestra;
 using GalaxyMerge.Archestra.Abstractions;
+using GalaxyMerge.Archive;
+using GalaxyMerge.Archive.Abstractions;
 using GalaxyMerge.Core.Utilities;
 using GalaxyMerge.Services;
 
@@ -29,6 +31,7 @@ namespace GalaxyMerge.Host
             builder.RegisterType<GalaxyRepositoryFactory>().As<IGalaxyRepositoryFactory>();
             builder.RegisterType<GalaxyRegistry>().AsSelf().AsImplementedInterfaces().SingleInstance();
             builder.RegisterType<GalaxyManager>();
+            builder.RegisterType<ArchiveBuilder>().AsSelf().AsImplementedInterfaces();
             _container = builder.Build();
         }
 
@@ -47,14 +50,13 @@ namespace GalaxyMerge.Host
             if (_container == null)
                 throw new InvalidOperationException("Container not yet initialized");
 
+            var builder = _container.Resolve<IArchiveBuilder>();
             var registry = _container.Resolve<IGalaxyRegistry>();
             var galaxies = registry.GetAll();
 
             foreach (var galaxy in galaxies)
-            {
-                var connectionString = ConnectionStringBuilder.BuildArchiveConnection(galaxy.Name);
-                //TODO I guess figure out if the DBs exists and create them if not.
-            }
+                builder.Build(ArchiveConfigurationBuilder.Default(galaxy.Name, galaxy.VersionNumber, galaxy.CdiVersion,
+                    galaxy.VersionString));
         }
     }
 }
