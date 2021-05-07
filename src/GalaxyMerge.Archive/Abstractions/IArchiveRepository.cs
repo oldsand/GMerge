@@ -13,7 +13,6 @@ namespace GalaxyMerge.Archive.Abstractions
         ArchiveObject GetObjectIncludeEntries(int objectId);
         IEnumerable<ArchiveObject> FindObjectsByTagName(string tagName);
         bool HasEntries(int objectId);
-        IEnumerable<ArchiveEntry> FindEntriesByObjectId(int objectId);
         ArchiveEntry GetLatestEntry(int objectId);
         EventSetting GetEventSetting(int eventId);
         IEnumerable<EventSetting> GetEventSettings();
@@ -22,7 +21,6 @@ namespace GalaxyMerge.Archive.Abstractions
         void AddObject(ArchiveObject archiveObject);
         void RemoveObject(ArchiveObject archiveObject);
         void UpdateObject(ArchiveObject archiveObject);
-        void AddEntry(ArchiveEntry archiveEntry);
         void UpdateGalaxyInfo(GalaxyInfo galaxyInfo);
         void UpdateEventSettings(IEnumerable<EventSetting> eventSettings);
         void UpdateInclusionSettings(IEnumerable<InclusionSetting> inclusionSettings);

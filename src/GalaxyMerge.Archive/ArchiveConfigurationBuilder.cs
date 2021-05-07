@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using GalaxyMerge.Archive.Entities;
@@ -21,8 +22,8 @@ namespace GalaxyMerge.Archive
             EventSettings = new List<EventSetting>();
             InclusionSettings = new List<InclusionSetting>();
 
-            SetInfo(new GalaxyInfo(galaxyName, version, cdiVersion, isaVersion));
-            SetConnectionString(ConnectionStringBuilder.BuildArchiveConnection(galaxyName));
+            UpdateInfo(new GalaxyInfo(galaxyName, version, cdiVersion, isaVersion));
+            UpdateConnectionString(ConnectionStringBuilder.BuildArchiveConnection(galaxyName));
             
             var operations = Enumeration.GetAll<Operation>();
             foreach (var operation in operations)
@@ -48,37 +49,44 @@ namespace GalaxyMerge.Archive
             return builder;
         }
         
-        public ArchiveConfigurationBuilder OverrideInfo(string galaxyName, int versionNumber, string cdiVersion, string isaVersion)
+        public ArchiveConfigurationBuilder HasInfo(string galaxyName, int versionNumber, string cdiVersion, string isaVersion)
         {
             var archiveInfo = new GalaxyInfo(galaxyName, versionNumber, cdiVersion, isaVersion);
-            SetInfo(archiveInfo);
+            UpdateInfo(archiveInfo);
             return this;
         }
 
-        public ArchiveConfigurationBuilder OverrideConnectionString(string connectionString)
+        public ArchiveConfigurationBuilder HasConnectionString(string connectionString)
         {
-            SetConnectionString(connectionString);
+            UpdateConnectionString(connectionString);
             return this;
         }
 
-        public ArchiveConfigurationBuilder TriggerOn(Operation operation)
+        public ArchiveConfigurationBuilder SetTrigger(Operation operation, bool isArchiveTrigger = true)
         {
-            UpdateOperationSetting(operation, true);
+            if (operation == null) throw new ArgumentNullException(nameof(operation), "Operation value cannot be null");
+            
+            UpdateOperationSetting(operation, isArchiveTrigger);
             return this;
         }
 
-        public ArchiveConfigurationBuilder TriggerOff(Operation operation)
+        public ArchiveConfigurationBuilder SetInclusion(Template template, InclusionOption option = null, bool includeInstances = false)
         {
-            UpdateOperationSetting(operation, false);
+            if (template == null) throw new ArgumentNullException(nameof(template), "Template value cannot be null");
+            
+            if (option == null)
+                option = InclusionOption.All;
+            
+            UpdateInclusionSetting(template, option, includeInstances);
             return this;
         }
 
-        private void SetInfo(GalaxyInfo info)
+        private void UpdateInfo(GalaxyInfo info)
         {
             GalaxyInfo = info;
         }
         
-        private void SetConnectionString(string connectionString)
+        private void UpdateConnectionString(string connectionString)
         {
             var builder = new SqliteConnectionStringBuilder(connectionString);
             ConnectionString = builder.ConnectionString;

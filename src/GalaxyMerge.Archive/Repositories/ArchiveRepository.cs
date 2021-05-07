@@ -49,11 +49,6 @@ namespace GalaxyMerge.Archive.Repositories
             return _context.ArchiveEntries.Any(x => x.ObjectId == objectId);
         }
 
-        public IEnumerable<ArchiveEntry> FindEntriesByObjectId(int objectId)
-        {
-            return _context.ArchiveEntries.Where(x => x.ObjectId == objectId);
-        }
-
         public ArchiveEntry GetLatestEntry(int objectId)
         {
             return _context.ArchiveEntries.OrderByDescending(x => x.ArchivedOn).FirstOrDefault(x => x.ObjectId == objectId);
@@ -94,11 +89,6 @@ namespace GalaxyMerge.Archive.Repositories
             _context.ArchiveObjects.Update(archiveObject);
         }
 
-        public void AddEntry(ArchiveEntry archiveEntry)
-        {
-            _context.ArchiveEntries.Add(archiveEntry);
-        }
-        
         public void UpdateGalaxyInfo(GalaxyInfo galaxyInfo)
         {
             _context.GalaxyInfo.Update(galaxyInfo);

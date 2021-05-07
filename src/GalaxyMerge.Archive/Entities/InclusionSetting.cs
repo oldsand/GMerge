@@ -5,7 +5,7 @@ namespace GalaxyMerge.Archive.Entities
 {
     public class InclusionSetting
     {
-        protected InclusionSetting()
+        private InclusionSetting()
         {
         }
         
@@ -14,22 +14,22 @@ namespace GalaxyMerge.Archive.Entities
             TemplateId = template.Id;
             TemplateName = template.Name;
             InclusionOption = InclusionOption.All;
-            IncludedInstances = false;
+            IncludesInstances = false;
         }
 
-        public InclusionSetting(Template template, InclusionOption inclusionOption, bool includedInstances)
+        public InclusionSetting(Template template, InclusionOption inclusionOption, bool includesInstances)
         {
             TemplateId = template.Id;
             TemplateName = template.Name;
             InclusionOption = inclusionOption;
-            IncludedInstances = includedInstances;
+            IncludesInstances = includesInstances;
         }
 
         public int InclusionId { get; private set; }
         public int TemplateId { get; private set; }
         public string TemplateName { get; private set; }
         public InclusionOption InclusionOption { get; private set; }
-        public bool IncludedInstances { get; private set; }
+        public bool IncludesInstances { get; private set; }
         public Template Template => Enumeration.FromId<Template>(TemplateId);
 
         public void SetInclusionOption(InclusionOption inclusionOption)
@@ -39,7 +39,7 @@ namespace GalaxyMerge.Archive.Entities
         
         public void SetIncludeInstance(bool includeInstances)
         {
-            IncludedInstances = includeInstances;
+            IncludesInstances = includeInstances;
         }
     }
 }

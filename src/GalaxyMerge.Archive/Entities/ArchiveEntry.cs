@@ -7,7 +7,7 @@ namespace GalaxyMerge.Archive.Entities
 {
     public class ArchiveEntry
     {
-        protected ArchiveEntry()
+        private ArchiveEntry()
         {
         }
         

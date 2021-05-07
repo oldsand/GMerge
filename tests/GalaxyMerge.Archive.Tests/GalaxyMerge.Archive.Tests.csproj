@@ -45,7 +45,7 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="ArchiveBuilderTests.cs" />
-        <Compile Include="ArchiveConfigurationTests.cs" />
+        <Compile Include="ArchiveConfigurationBuilderTests.cs" />
         <Compile Include="ArchiveRepositoryTests.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
@@ -96,6 +96,10 @@
       <ProjectReference Include="..\..\src\GalaxyMerge.Archive\GalaxyMerge.Archive.csproj">
         <Project>{a5993bff-2469-4b9d-a4cd-be795a13d4f6}</Project>
         <Name>GalaxyMerge.Archive</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\..\src\GalaxyMerge.Common\GalaxyMerge.Common.csproj">
+        <Project>{446fe87c-5122-4344-9df9-9f641e81a476}</Project>
+        <Name>GalaxyMerge.Common</Name>
       </ProjectReference>
       <ProjectReference Include="..\..\src\GalaxyMerge.Core\GalaxyMerge.Core.csproj">
         <Project>{dd496472-fb15-4ffc-86ca-2ac8f0e6cf3c}</Project>

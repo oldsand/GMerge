@@ -5,7 +5,7 @@ namespace GalaxyMerge.Archive.Entities
 {
     public class EventSetting
     {
-        protected EventSetting()
+        private EventSetting()
         {
         }
         

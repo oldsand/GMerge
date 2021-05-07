@@ -1,3 +1,4 @@
+using System.IO;
 using GalaxyMerge.Archive.Abstractions;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,10 +10,16 @@ namespace GalaxyMerge.Archive
         {
             var options = new DbContextOptionsBuilder<ArchiveContext>()
                 .UseSqlite(configurationBuilder.ConnectionString).Options;
+            
             using var context = new ArchiveContext(options);
 
-            context.Database.EnsureCreated();
+            if (DatabaseFileExists(configurationBuilder.FileName))
+            {
+                UpdateConfiguration(context, configurationBuilder);
+                return;
+            }
             
+            context.Database.EnsureCreated();
             ApplyConfiguration(context, configurationBuilder);
         }
 
@@ -20,6 +27,7 @@ namespace GalaxyMerge.Archive
         {
             var options = new DbContextOptionsBuilder<ArchiveContext>()
                 .UseSqlite(configurationBuilder.ConnectionString).Options;
+            
             using var context = new ArchiveContext(options);
             
             ApplyConfiguration(context, configurationBuilder);
@@ -31,6 +39,19 @@ namespace GalaxyMerge.Archive
             context.EventSettings.AddRange(configurationBuilder.EventSettings);
             context.InclusionSettings.AddRange(configurationBuilder.InclusionSettings);
             context.SaveChanges();
+        }
+        
+        private static void UpdateConfiguration(ArchiveContext context, ArchiveConfigurationBuilder configurationBuilder)
+        {
+            context.GalaxyInfo.Update(configurationBuilder.GalaxyInfo);
+            context.EventSettings.UpdateRange(configurationBuilder.EventSettings);
+            context.InclusionSettings.UpdateRange(configurationBuilder.InclusionSettings);
+            context.SaveChanges();
+        }
+
+        private static bool DatabaseFileExists(string fileName)
+        {
+            return File.Exists(fileName);
         }
     }
 }

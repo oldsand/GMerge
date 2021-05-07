@@ -8,9 +8,10 @@ namespace GalaxyMerge.Archive.Configurations
     {
         public void Configure(EntityTypeBuilder<ArchiveEntry> builder)
         {
-            builder.ToTable("Entry").HasKey(x => x.EntryId);
+            builder.ToTable("ArchiveEntry").HasKey(x => x.EntryId);
             builder.Property(g => g.ObjectId).IsRequired();
             builder.Property(g => g.Version).IsRequired();
+            builder.Property(g => g.ArchivedOn).IsRequired();
             builder.Property(g => g.CompressedData).IsRequired();
         }
     }

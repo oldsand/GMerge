@@ -51,7 +51,7 @@ namespace GalaxyMerge.Services
 
         private void UpsertObject(GObject obj)
         {
-            var archiveObject = new ArchiveObject(obj.ObjectId, obj.TagName, obj.ConfigVersion, obj.Template.TagName);
+            var archiveObject = _archiveRepository.GetObject(obj.ObjectId);
             
             if (_archiveRepository.ObjectExists(obj.ObjectId))
                 _archiveRepository.UpdateObject(archiveObject);
@@ -65,8 +65,16 @@ namespace GalaxyMerge.Services
         {
             var data = obj.Template.TagName == "$Symbol" ? GetSymbolData(obj.TagName) : GetObjectData(obj.TagName);
 
-            var entry = new ArchiveEntry(obj.ObjectId, obj.ConfigVersion, data);
-            _archiveRepository.AddEntry(entry);
+            var archiveObject = _archiveRepository.GetObject(obj.ObjectId);
+            archiveObject.AddEntry(data);
+
+            if (obj.TagName != archiveObject.TagName)
+                archiveObject.UpdateTagName(obj.TagName);
+            
+            if (obj.ConfigVersion != archiveObject.Version)
+                archiveObject.UpdateVersion(obj.ConfigVersion);
+            
+            _archiveRepository.UpdateObject(archiveObject);
             _archiveRepository.Save();
         }
 
