@@ -1,8 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.ServiceModel;
+using GalaxyMerge.Archestra.Entities;
 using GalaxyMerge.Archive.Entities;
-using GalaxyMerge.Common.Primitives;
 
 namespace GalaxyMerge.Contracts
 {
@@ -13,13 +12,19 @@ namespace GalaxyMerge.Contracts
         bool Connect(string galaxyName);
         
         [OperationContract]
-        ArchiveObject GetObject(int objectId);
+        ArchiveObject GetArchiveObject(int objectId);
 
         [OperationContract]
-        IEnumerable<ArchiveObject> GetObjects(string tagName);
+        IEnumerable<ArchiveObject> GetArchiveObjects();
 
         [OperationContract]
-        IEnumerable<ArchiveEntry> GetEntries(int objectId);
+        IEnumerable<ArchiveEntry> GetArchiveEntries();
+
+        [OperationContract]
+        GalaxyObject GetGalaxyObject(int objectId);
+        
+        [OperationContract]
+        GalaxySymbol GetGalaxySymbol(int objectId);
 
         [OperationContract]
         IEnumerable<EventSetting> GetEventSettings();

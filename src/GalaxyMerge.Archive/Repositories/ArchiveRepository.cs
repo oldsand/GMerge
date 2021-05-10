@@ -33,7 +33,12 @@ namespace GalaxyMerge.Archive.Repositories
         {
             return _context.ArchiveObjects.Find(objectId);
         }
-        
+
+        public IEnumerable<ArchiveObject> GetAllObjects()
+        {
+            return _context.ArchiveObjects.ToList();
+        }
+
         public ArchiveObject GetObjectIncludeEntries(int objectId)
         {
             return _context.ArchiveObjects.Include(x => x.Entries).SingleOrDefault(x => x.ObjectId == objectId);
@@ -53,7 +58,12 @@ namespace GalaxyMerge.Archive.Repositories
         {
             return _context.ArchiveEntries.OrderByDescending(x => x.ArchivedOn).FirstOrDefault(x => x.ObjectId == objectId);
         }
-        
+
+        public IEnumerable<ArchiveEntry> GetAllEntries()
+        {
+            return _context.ArchiveEntries.ToList();
+        }
+
         public EventSetting GetEventSetting(int operationId)
         {
             return _context.EventSettings.SingleOrDefault(x => x.OperationId == operationId);

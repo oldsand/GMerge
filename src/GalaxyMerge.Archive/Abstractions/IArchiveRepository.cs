@@ -10,10 +10,12 @@ namespace GalaxyMerge.Archive.Abstractions
         GalaxyInfo GetGalaxyInfo();
         bool ObjectExists(int objectId);
         ArchiveObject GetObject(int objectId);
+        IEnumerable<ArchiveObject> GetAllObjects();
         ArchiveObject GetObjectIncludeEntries(int objectId);
         IEnumerable<ArchiveObject> FindObjectsByTagName(string tagName);
         bool HasEntries(int objectId);
         ArchiveEntry GetLatestEntry(int objectId);
+        IEnumerable<ArchiveEntry> GetAllEntries();
         EventSetting GetEventSetting(int operationId);
         IEnumerable<EventSetting> GetEventSettings();
         InclusionSetting GetInclusionSetting(int templateId);
