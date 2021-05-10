@@ -17,13 +17,10 @@ namespace GalaxyMerge.Archive
         public List<EventSetting> EventSettings { get; private set; }
         public List<InclusionSetting> InclusionSettings { get; private set; }
 
-        public ArchiveConfigurationBuilder(string galaxyName, int? version, string cdiVersion, string isaVersion)
+        private ArchiveConfigurationBuilder()
         {
             EventSettings = new List<EventSetting>();
             InclusionSettings = new List<InclusionSetting>();
-
-            UpdateInfo(new GalaxyInfo(galaxyName, version, cdiVersion, isaVersion));
-            UpdateConnectionString(ConnectionStringBuilder.BuildArchiveConnection(galaxyName));
             
             var operations = Enumeration.GetAll<Operation>();
             foreach (var operation in operations)
@@ -34,9 +31,36 @@ namespace GalaxyMerge.Archive
                 UpdateInclusionSetting(template, InclusionOption.None, false);
         }
 
+        public ArchiveConfigurationBuilder(string galaxyName) : this()
+        {
+            UpdateInfo(new GalaxyInfo(galaxyName));
+            UpdateConnectionString(ConnectionStringBuilder.BuildArchiveConnection(galaxyName));
+        }
+
+        public ArchiveConfigurationBuilder(string galaxyName, int? version, string cdiVersion, string isaVersion) : this()
+        {
+            UpdateInfo(new GalaxyInfo(galaxyName, version, cdiVersion, isaVersion));
+            UpdateConnectionString(ConnectionStringBuilder.BuildArchiveConnection(galaxyName));
+        }
+
         public static ArchiveConfigurationBuilder Default(string galaxyName, int? version, string cdiVersion, string isaVersion)
         {
             var builder = new ArchiveConfigurationBuilder(galaxyName, version, cdiVersion, isaVersion);
+            
+            var operations = Enumeration.GetAll<Operation>();
+            foreach (var operation in operations)
+                builder.UpdateOperationSetting(operation, IsDefaultArchiveOperation(operation));
+
+            var templates = Enumeration.GetAll<Template>();
+            foreach (var template in templates)
+                builder.UpdateInclusionSetting(template, DefaultInclusionOption(template), DefaultIncludeInstances(template));
+            
+            return builder;
+        }
+        
+        public static ArchiveConfigurationBuilder Default(string galaxyName)
+        {
+            var builder = new ArchiveConfigurationBuilder(galaxyName);
             
             var operations = Enumeration.GetAll<Operation>();
             foreach (var operation in operations)

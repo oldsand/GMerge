@@ -1,7 +1,5 @@
 using System;
-using System.Linq;
 using GalaxyMerge.Archestra.Abstractions;
-using GalaxyMerge.Archive.Abstractions;
 using GalaxyMerge.Archive.Entities;
 using GalaxyMerge.Archive.Repositories;
 using GalaxyMerge.Common.Primitives;
@@ -25,40 +23,76 @@ namespace GalaxyMerge.Services
 
         public void Archive(int objectId, bool forceArchive = false)
         {
-            using var objectRepo = new ObjectRepository(_galaxyName);
-            var gObject = objectRepo.FindInclude(x => x.ObjectId == objectId, x => x.Template);
+            var gObject = GetGObject(objectId);
 
-            using var archiveRepo = new ArchiveRepository(_galaxyName);
-            var archiveObject = GetArchiveObject(gObject, archiveRepo);
-
-            if (!forceArchive && IsLatest(archiveObject)) return;
-
-            var data = gObject.Template.TagName == "$Symbol" 
-                ? GetSymbolData(gObject.TagName) : GetObjectData(gObject.TagName);
+            if (Exists(gObject.ObjectId) && (forceArchive || !IsLatest(gObject)))
+            {
+                UpdateArchive(gObject);
+                return;
+            }
             
+            AddArchive(gObject);
+        }
+        
+        private void AddArchive(GObject gObject)
+        {
+            using var archiveRepo = new ArchiveRepository(_galaxyName);
+            
+            var template = Enumeration.FromId<Template>(gObject.TemplateId);
+            var archiveObject = new ArchiveObject(gObject.ObjectId, gObject.TagName, gObject.ConfigVersion, template);
+            
+            var data = IsSymbol(gObject) ? GetSymbolData(gObject.TagName) : GetObjectData(gObject.TagName);
             archiveObject.AddEntry(data);
+            
+            archiveRepo.AddObject(archiveObject);
+            archiveRepo.Save();
+        }
+        
+        private void UpdateArchive(GObject gObject)
+        {
+            using var archiveRepo = new ArchiveRepository(_galaxyName);
+
+            var archiveObject = archiveRepo.GetObject(gObject.ObjectId);
+
+            if (gObject.TagName != archiveObject.TagName)
+                archiveObject.UpdateTagName(gObject.TagName);
+            
+            if (gObject.ConfigVersion != archiveObject.Version)
+                archiveObject.UpdateVersion(gObject.ConfigVersion);
+            
+            var data = IsSymbol(gObject) ? GetSymbolData(gObject.TagName) : GetObjectData(gObject.TagName);
+            archiveObject.AddEntry(data);
+            
+            archiveRepo.UpdateObject(archiveObject);
             archiveRepo.Save();
         }
 
-        private static ArchiveObject GetArchiveObject(GObject gObject, IArchiveRepository archiveRepo)
+        private static bool IsSymbol(GObject gObject)
         {
-            if (archiveRepo.ObjectExists(gObject.ObjectId))
-                return archiveRepo.GetObject(gObject.ObjectId);
-            
-            var archiveObject = new ArchiveObject(gObject.ObjectId, gObject.TagName, gObject.ConfigVersion,
-                    Enumeration.FromId<Template>(gObject.Template.TemplateDefinitionId));
-            archiveRepo.AddObject(archiveObject);
-            return archiveObject;
+            return Enumeration.FromId<Template>(gObject.TemplateId).Equals(Template.Symbol);
         }
 
-        private bool IsLatest(ArchiveObject archiveObject)
+        private bool IsLatest(GObject gObject)
         {
+            using var archiveRepo = new ArchiveRepository(_galaxyName);
+            var latest = archiveRepo.GetLatestEntry(gObject.ObjectId);
+            
             using var changeLogRepo = new ChangeLogRepository(_galaxyName);
-            var changeLog = changeLogRepo.GetLatestByOperation(archiveObject.ObjectId, Operation.CheckInSuccess);
+            var changeLog = changeLogRepo.GetLatestByOperation(gObject.ObjectId, Operation.CheckInSuccess);
+            
+            return latest != null && changeLog.ConfigurationVersion == latest.Version && changeLog.ChangeDate <= latest.ArchivedOn;
+        }
 
-            var entry = archiveObject.Entries.OrderByDescending(x => x.ArchivedOn).FirstOrDefault();
-
-            return changeLog.ConfigurationVersion == entry?.Version && changeLog.ChangeDate <= entry.ArchivedOn;
+        private bool Exists(int objectId)
+        {
+            using var repo = new ArchiveRepository(_galaxyName);
+            return repo.ObjectExists(objectId);
+        }
+        
+        private GObject GetGObject(int objectId)
+        {
+            using var objectRepo = new ObjectRepository(_galaxyName);
+            return objectRepo.FindInclude(x => x.ObjectId == objectId, x => x.Template);
         }
         
         private byte[] GetObjectData(string tagName)

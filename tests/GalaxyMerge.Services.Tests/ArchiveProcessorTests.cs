@@ -1,7 +1,13 @@
+using System.IO;
 using GalaxyMerge.Archestra;
+using GalaxyMerge.Archive;
+using GalaxyMerge.Archive.Entities;
 using GalaxyMerge.Archive.Repositories;
+using GalaxyMerge.Common.Primitives;
+using GalaxyMerge.Core;
 using GalaxyMerge.Core.Utilities;
 using GalaxyMerge.Data.Repositories;
+using GalaxyMerge.Testing;
 using NUnit.Framework;
 
 namespace GalaxyMerge.Services.Tests
@@ -9,19 +15,39 @@ namespace GalaxyMerge.Services.Tests
     [TestFixture]
     public class ArchiveProcessorTests
     {
-        /*[Test]
-        public void Archive_ValidTagName_CreateArchiveEntry()
+        [SetUp]
+        public void Setup()
         {
-            var galaxyRepo = new GalaxyRepository("ButaneDev2014");
-            var objectRepo = new ObjectRepository(ConnectionStringBuilder.BuildGalaxyConnection("ButaneDev2014"));
-            var archiveRepo = new ArchiveRepository("ButaneDev2014");
-            var archiver = new GalaxyArchiver(galaxyRepo, objectRepo, archiveRepo);
+            var builder = new ArchiveBuilder();
+            builder.Build(ArchiveConfigurationBuilder.Default(Settings.CurrentTestGalaxy));
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            File.Delete($"{ApplicationPath.Archives}\\{Settings.CurrentTestGalaxy}.db");
+        }
+        
+        [Test]
+        [TestCase("$Test_Template")]
+        public void Archive_ValidTagName_CreateArchiveEntry(string tagName)
+        {
+            var galaxyRepo = new GalaxyRepository(Settings.CurrentTestGalaxy);
+            galaxyRepo.Login("");
             
-            archiver.Archive("$Test_Template");
+            var archiver = new ArchiveProcessor(galaxyRepo);
 
-            var result = archiveRepo.GetLatestEntry("$Test_Template");
+            using var objectRepo = new ObjectRepository(Settings.CurrentTestGalaxy);
+            var gObject = objectRepo.FindByTagName(tagName);
 
+            archiver.Archive(gObject.ObjectId);
+
+            using var archiveRepo = new ArchiveRepository(Settings.CurrentTestGalaxy);
+            var result = archiveRepo.GetObjectIncludeEntries(gObject.ObjectId);
+            
             Assert.NotNull(result);
-        }*/
+            Assert.AreEqual(tagName, result.TagName);
+            Assert.IsNotEmpty(result.Entries);
+        }
     }
 }

@@ -40,7 +40,9 @@
         <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="ArchiveControllerTests.cs" />
         <Compile Include="ArchiveProcessorTests.cs" />
+        <Compile Include="ArchiveSettingValidatorTests.cs" />
         <Compile Include="GalaxyRegistryTests.cs" />
         <Compile Include="GalaxyRepositoryProviderTests.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
@@ -81,6 +83,9 @@
     </ItemGroup>
     <ItemGroup>
       <PackageReference Include="NUnit" Version="3.13.1" />
+    </ItemGroup>
+    <ItemGroup>
+      <None Include="app.config" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
