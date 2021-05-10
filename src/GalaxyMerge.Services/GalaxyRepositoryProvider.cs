@@ -64,7 +64,7 @@ namespace GalaxyMerge.Services
         {
             var galaxyRepository = GetServiceGr(galaxyName);
             if (!galaxyRepository.UserIsAuthorized(userName))
-                throw new SecurityException($"User '{userName}' does not have access to '{galaxyName}'");
+                throw new SecurityException($"User '{userName}' does not have access to galaxy '{galaxyName}'");
             
             _galaxyRegistry.Register(galaxyName, userName);
         }

@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace GalaxyMerge.Services.Tests
 {
     [TestFixture]
-    public class GalaxyArchiverTests
+    public class ArchiveProcessorTests
     {
         /*[Test]
         public void Archive_ValidTagName_CreateArchiveEntry()

@@ -40,8 +40,9 @@
         <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="GalaxyArchiverTests.cs" />
+        <Compile Include="ArchiveProcessorTests.cs" />
         <Compile Include="GalaxyRegistryTests.cs" />
+        <Compile Include="GalaxyRepositoryProviderTests.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
     <ItemGroup>
