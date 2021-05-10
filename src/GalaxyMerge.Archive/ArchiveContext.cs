@@ -1,5 +1,6 @@
 using System.Runtime.CompilerServices;
 using GalaxyMerge.Archive.Entities;
+using GalaxyMerge.Core.Utilities;
 using Microsoft.EntityFrameworkCore;
 
 [assembly:InternalsVisibleTo("GalaxyMerge.Archive.Tests")]
@@ -7,8 +8,18 @@ namespace GalaxyMerge.Archive
 {
     internal class ArchiveContext : DbContext
     {
+        public ArchiveContext()
+        {
+        }
+
         public ArchiveContext(DbContextOptions<ArchiveContext> options) : base(options)
         {
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+                optionsBuilder.UseSqlite($"Data Source={ApplicationPath.Archives}.Default.db");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
