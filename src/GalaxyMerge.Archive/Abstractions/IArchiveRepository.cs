@@ -14,7 +14,7 @@ namespace GalaxyMerge.Archive.Abstractions
         IEnumerable<ArchiveObject> FindObjectsByTagName(string tagName);
         bool HasEntries(int objectId);
         ArchiveEntry GetLatestEntry(int objectId);
-        EventSetting GetEventSetting(int eventId);
+        EventSetting GetEventSetting(int operationId);
         IEnumerable<EventSetting> GetEventSettings();
         InclusionSetting GetInclusionSetting(int templateId);
         IEnumerable<InclusionSetting> GetInclusionSettings();

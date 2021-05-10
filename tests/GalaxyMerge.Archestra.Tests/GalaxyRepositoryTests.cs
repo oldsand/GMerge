@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
+using GalaxyMerge.Testing;
 using NUnit.Framework;
 
 namespace GalaxyMerge.Archestra.Tests
@@ -91,6 +92,15 @@ namespace GalaxyMerge.Archestra.Tests
             var template = _galaxy.GetObject(tagName);
 
             Assert.IsNull(template);
+        }
+
+        [Test]
+        [TestCase("$EthFLP01.EthFLP01_SmplPmp.EthFLP01_SmplPmp_FTA")]
+        public void GetObject_TagNameWithMultipleObjects_ReturnsNotNull(string tagName)
+        {
+            var result = _galaxy.GetObject(tagName);
+
+            Assert.NotNull(result);
         }
 
         [Test]

@@ -54,9 +54,9 @@ namespace GalaxyMerge.Archive.Repositories
             return _context.ArchiveEntries.OrderByDescending(x => x.ArchivedOn).FirstOrDefault(x => x.ObjectId == objectId);
         }
         
-        public EventSetting GetEventSetting(int eventId)
+        public EventSetting GetEventSetting(int operationId)
         {
-            return _context.EventSettings.Find(eventId);
+            return _context.EventSettings.SingleOrDefault(x => x.OperationId == operationId);
         }
 
         public IEnumerable<EventSetting> GetEventSettings()

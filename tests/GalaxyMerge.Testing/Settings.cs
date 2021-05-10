@@ -1,8 +1,8 @@
-namespace GalaxyMerge.Archestra.Tests
+namespace GalaxyMerge.Testing
 {
     public static class Settings
     {
-        public const string CurrentTestGalaxy = "Sandbox";
+        public const string CurrentTestGalaxy = "ButaneDev2014";
         public const string CurrentTestUser = @"ENE\tnunnink";
     }
 }

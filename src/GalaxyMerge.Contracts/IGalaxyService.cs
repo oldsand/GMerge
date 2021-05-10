@@ -4,31 +4,22 @@ using GalaxyMerge.Archestra.Entities;
 
 namespace GalaxyMerge.Contracts
 {
-    [ServiceContract(Namespace = "http://www.GalaxyAccess.com/2014/Contracts")]
+    [ServiceContract(Namespace = "http://www.gmerge.com/2014/Contracts")]
     public interface IGalaxyService
     {
         [OperationContract]
-        GalaxyObject GetObject(string galaxyName, string tagName);
-
-        [OperationContract]
-        IEnumerable<GalaxyObject> GetObjects(string galaxyName, IEnumerable<string> tagNames);
+        bool Connect(string galaxyName);
         
         [OperationContract]
-        void UpdateObject(string galaxyName, GalaxyObject template);
-
-        [OperationContract]
-        void UpdateObjects(string galaxyName, IEnumerable<GalaxyObject> templates);
+        GalaxyObject GetObject(int objectId);
         
         [OperationContract]
-        void CreateObject(string galaxyName, string tagName);
+        GalaxyObject GetObjects(string tagName);
 
         [OperationContract]
-        void CreateObject(string galaxyName, IEnumerable<string> tagNames);
-
+        IEnumerable<GalaxyObject> GetObjects(IEnumerable<int> objectIds);
+        
         [OperationContract]
-        void DeleteObject(string galaxyName, string tagName);
-
-        [OperationContract]
-        void DeleteObjects(string galaxyName, IEnumerable<string> tagNames);
+        IEnumerable<GalaxyObject> GetObjects(IEnumerable<string> tagNames);
     }
 }

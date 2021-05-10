@@ -1,4 +1,5 @@
 using System.Linq;
+using GalaxyMerge.Core.Utilities;
 using GalaxyMerge.Data.Abstractions;
 using GalaxyMerge.Data.Entities;
 using GalaxyMerge.Data.Helpers;
@@ -8,18 +9,25 @@ namespace GalaxyMerge.Data.Repositories
 {
     public class ObjectRepository : Repository<GObject>, IObjectRepository
     {
-        public ObjectRepository(string connectionString) : base(ContextCreator.Create(connectionString))
+        public ObjectRepository(string galaxyName) 
+            : base(ContextCreator.Create(ConnectionStringBuilder.BuildGalaxyConnection(galaxyName)))
         {
         }
-
-        public GObject FindById(int objectId)
-        {
-            return GetQueryable().SingleOrDefault(x => x.ObjectId == objectId);
-        }
-
+        
         public GObject FindByTagName(string tagName)
         {
-            return GetQueryable().SingleOrDefault(x => x.TagName == tagName);
+            return GetQueryable().FirstOrDefault(x => x.TagName == tagName);
+        }
+
+        public string GetTagName(int objectId)
+        {
+            return Set.Find(objectId).TagName;
+        }
+
+        public int GetObjectId(string tagName)
+        {
+            var gObject = Set.FirstOrDefault(x => x.TagName == tagName);
+            return gObject?.ObjectId ?? 0;
         }
 
         public GObject FindIncludeDescendants(string tagName)

@@ -41,9 +41,10 @@
         <Reference Include="System.Xml.Linq" />
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="ArchiveSettingValidator.cs" />
         <Compile Include="ArchiveManager.cs" />
-        <Compile Include="Archiver.cs" />
-        <Compile Include="CacheService.cs" />
+        <Compile Include="ArchiveProcessor.cs" />
+        <Compile Include="ArchiveService.cs" />
         <Compile Include="GalaxyManager.cs" />
         <Compile Include="GalaxyRegistry.cs" />
         <Compile Include="IGalaxyRegistry.cs" />

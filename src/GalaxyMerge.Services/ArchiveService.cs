@@ -3,25 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
 using System.Xml.Linq;
-using GalaxyMerge.Archive.Repositories;
 using GalaxyMerge.Core.Utilities;
-using GalaxyMerge.Data;
-using GalaxyMerge.Data.Abstractions;
-using GalaxyMerge.Data.Entities;
-using GalaxyMerge.Data.Repositories;
 
 namespace GalaxyMerge.Services
 {
-    public class GalaxyCachingService
+    public class ArchiveService
     {
         
         private readonly IGalaxyRegistry _galaxyRegistry;
         private readonly List<SqlListener> _listeners;
         private const string ChangeLogTableName = "gobject_change_log";
-        private const int CheckInOperationId = 0;
         private readonly string _serviceUserName;
 
-        public GalaxyCachingService(IGalaxyRegistry galaxyRegistry)
+        public ArchiveService(IGalaxyRegistry galaxyRegistry)
         {
             _galaxyRegistry = galaxyRegistry;
             _listeners = new List<SqlListener>();
@@ -30,9 +24,9 @@ namespace GalaxyMerge.Services
 
         public void Start()
         {
-            InitializeListeners();
-            //Is this where I should validate that galaxy dbs all have the 
             
+            InitializeListeners();
+
             foreach (var listener in _listeners)
                 listener.Start();
         }
@@ -58,27 +52,34 @@ namespace GalaxyMerge.Services
         private void OnChangeLogTableUpdated(object sender, SqlListener.TableChangedEventArgs e)
         {
             if (!(sender is SqlListener listener)) return;
-            if (!IsCheckInOperation(e.Data)) return;
-            
+            if (!IsArchivable(e.Data, listener.DatabaseName)) return;
+
             var galaxyRepo = _galaxyRegistry.GetGalaxy(listener.DatabaseName, _serviceUserName);
-            //var repo = RepositoryFactory.Instance<GObject, IObjectRepository>(listener.ConnectionString); Is this really better?
-            var objectRepo = new ObjectRepository(listener.ConnectionString);
-            var archiveRepo = new ArchiveRepository(ConnectionStringBuilder.BuildArchiveConnection(listener.DatabaseName));
-            var archiver = new GalaxyArchiver(galaxyRepo, objectRepo, archiveRepo);
-            
             var objectId = ExtractObjectId(e.Data);
+            
+            var archiver = new ArchiveProcessor(galaxyRepo);
             archiver.Archive(objectId);
         }
+        
+        private static bool IsArchivable(XContainer data, string galaxyName)
+        {
+            var settingValidator = new ArchiveSettingValidator(galaxyName);
 
+            var objectId = ExtractObjectId(data);
+            if (!settingValidator.HasValidInclusionOption(objectId)) return false;
+
+            var operationId = ExtractOperationId(data);
+            return settingValidator.IsValidArchiveTrigger(operationId);
+        }
+        
         private static int ExtractObjectId(XContainer data)
         {
             return Convert.ToInt32(data.Descendants("gobject_id").Select(x => x.Value).SingleOrDefault());
         }
         
-        private static bool IsCheckInOperation(XContainer data)
+        private static int ExtractOperationId(XContainer data)
         {
-            var operationId = Convert.ToInt32(data.Descendants("operation_id").Select(e => e.Value).SingleOrDefault());
-            return operationId == CheckInOperationId;
+            return Convert.ToInt32(data.Descendants("operation_id").Select(x => x.Value).SingleOrDefault());
         }
     }
 }

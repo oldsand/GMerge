@@ -5,7 +5,7 @@ using GalaxyMerge.Common.Primitives;
 
 namespace GalaxyMerge.Contracts
 {
-    [ServiceContract(Namespace = "http://www.GalaxyAccess.com/2014/Contracts")]
+    [ServiceContract(Namespace = "http://www.gmerge.com/2014/Contracts")]
     public interface IArchiveService
     {
         [OperationContract]
