@@ -44,10 +44,12 @@
         <Compile Include="ArchiveSettingValidator.cs" />
         <Compile Include="ArchiveManager.cs" />
         <Compile Include="ArchiveProcessor.cs" />
-        <Compile Include="ArchiveService.cs" />
+        <Compile Include="ArchiveController.cs" />
         <Compile Include="GalaxyManager.cs" />
         <Compile Include="GalaxyRegistry.cs" />
+        <Compile Include="GalaxyRepositoryProvider.cs" />
         <Compile Include="IGalaxyRegistry.cs" />
+        <Compile Include="IGalaxyRepositoryProvider.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
     <ItemGroup>

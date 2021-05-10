@@ -20,6 +20,7 @@ namespace GalaxyMerge.Archive.Abstractions
         IEnumerable<InclusionSetting> GetInclusionSettings();
         void AddObject(ArchiveObject archiveObject);
         void RemoveObject(ArchiveObject archiveObject);
+        void RemoveObject(int objectId);
         void UpdateObject(ArchiveObject archiveObject);
         void UpdateGalaxyInfo(GalaxyInfo galaxyInfo);
         void UpdateEventSettings(IEnumerable<EventSetting> eventSettings);

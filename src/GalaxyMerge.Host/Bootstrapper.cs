@@ -17,7 +17,7 @@ namespace GalaxyMerge.Host
         {
             ConfigureContainer();
             RegisterGalaxies();
-            ValidateArchives();
+            EnsureArchivesExist();
         }
 
         public IContainer GetContainer()
@@ -30,6 +30,7 @@ namespace GalaxyMerge.Host
             var builder = new ContainerBuilder();
             builder.RegisterType<GalaxyRepositoryFactory>().As<IGalaxyRepositoryFactory>();
             builder.RegisterType<GalaxyRegistry>().AsSelf().AsImplementedInterfaces().SingleInstance();
+            builder.RegisterType<GalaxyRepositoryProvider>().AsSelf().AsImplementedInterfaces();
             builder.RegisterType<GalaxyManager>();
             builder.RegisterType<ArchiveBuilder>().AsSelf().AsImplementedInterfaces();
             _container = builder.Build();
@@ -40,12 +41,12 @@ namespace GalaxyMerge.Host
             if (_container == null)
                 throw new InvalidOperationException("Container not yet initialized");
 
-            var registrant = _container.Resolve<IGalaxyRegistry>();
+            var registry = _container.Resolve<IGalaxyRegistry>();
             
-            registrant.RegisterAll(); //todo should this be async/parallel?
+            registry.RegisterAll(); //todo should this be async/parallel?
         }
 
-        private void ValidateArchives()
+        private void EnsureArchivesExist()
         {
             if (_container == null)
                 throw new InvalidOperationException("Container not yet initialized");

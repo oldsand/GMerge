@@ -7,7 +7,6 @@ using GalaxyMerge.Archive.Repositories;
 using GalaxyMerge.Common.Primitives;
 using GalaxyMerge.Core;
 using GalaxyMerge.Core.Extensions;
-using GalaxyMerge.Data.Abstractions;
 using GalaxyMerge.Data.Entities;
 using GalaxyMerge.Data.Repositories;
 
@@ -22,11 +21,6 @@ namespace GalaxyMerge.Services
         {
             _galaxyRepository = galaxyRepository ?? throw new ArgumentNullException(nameof(galaxyRepository), "Value cannot be null");
             _galaxyName = _galaxyRepository.Name;
-        }
-
-        public ArchiveProcessor(IGalaxyRepository galaxyRepository, IObjectRepository objectRepository, IArchiveRepository archiveRepository)
-        {
-            _galaxyRepository = galaxyRepository ?? throw new ArgumentNullException(nameof(galaxyRepository), "Value cannot be null");
         }
 
         public void Archive(int objectId, bool forceArchive = false)

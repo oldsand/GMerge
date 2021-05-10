@@ -1,30 +1,26 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Principal;
 using System.Xml.Linq;
 using GalaxyMerge.Core.Utilities;
 
 namespace GalaxyMerge.Services
 {
-    public class ArchiveService
+    public class ArchiveController
     {
-        
-        private readonly IGalaxyRegistry _galaxyRegistry;
+        private readonly IGalaxyRepositoryProvider _galaxyRepositoryProvider;
         private readonly List<SqlListener> _listeners;
         private const string ChangeLogTableName = "gobject_change_log";
-        private readonly string _serviceUserName;
 
-        public ArchiveService(IGalaxyRegistry galaxyRegistry)
+
+        public ArchiveController(IGalaxyRepositoryProvider galaxyRepositoryProvider)
         {
-            _galaxyRegistry = galaxyRegistry;
+            _galaxyRepositoryProvider = galaxyRepositoryProvider;
             _listeners = new List<SqlListener>();
-            _serviceUserName = WindowsIdentity.GetCurrent().Name;
         }
 
         public void Start()
         {
-            
             InitializeListeners();
 
             foreach (var listener in _listeners)
@@ -39,7 +35,7 @@ namespace GalaxyMerge.Services
 
         private void InitializeListeners()
         {
-            var galaxies = _galaxyRegistry.GetByUser(_serviceUserName);
+            var galaxies = _galaxyRepositoryProvider.GetAllServiceInstances();
             foreach (var galaxy in galaxies)
             {
                 var connectionString = ConnectionStringBuilder.BuildGalaxyConnection(galaxy.Name);
@@ -54,7 +50,7 @@ namespace GalaxyMerge.Services
             if (!(sender is SqlListener listener)) return;
             if (!IsArchivable(e.Data, listener.DatabaseName)) return;
 
-            var galaxyRepo = _galaxyRegistry.GetGalaxy(listener.DatabaseName, _serviceUserName);
+            var galaxyRepo = _galaxyRepositoryProvider.GetServiceInstance(listener.DatabaseName);
             var objectId = ExtractObjectId(e.Data);
             
             var archiver = new ArchiveProcessor(galaxyRepo);

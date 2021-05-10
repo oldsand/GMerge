@@ -84,6 +84,12 @@ namespace GalaxyMerge.Archive.Repositories
             _context.ArchiveObjects.Remove(archiveObject);
         }
 
+        public void RemoveObject(int objectId)
+        {
+            var target = _context.ArchiveObjects.Find(objectId);
+            _context.Remove(target);
+        }
+
         public void UpdateObject(ArchiveObject archiveObject)
         {
             _context.ArchiveObjects.Update(archiveObject);

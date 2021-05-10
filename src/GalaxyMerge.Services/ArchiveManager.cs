@@ -1,15 +1,31 @@
 using System.Collections.Generic;
+using GalaxyMerge.Archestra.Abstractions;
 using GalaxyMerge.Archive.Entities;
-using GalaxyMerge.Common.Primitives;
+using GalaxyMerge.Archive.Repositories;
 using GalaxyMerge.Contracts;
 
 namespace GalaxyMerge.Services
 {
     public class ArchiveManager : IArchiveService
     {
+        private readonly IGalaxyRepositoryProvider _galaxyRepositoryProvider;
+        private IGalaxyRepository _clientGrSession;
+
+        public ArchiveManager(IGalaxyRepositoryProvider galaxyRepositoryProvider)
+        {
+            _galaxyRepositoryProvider = galaxyRepositoryProvider;
+        }
+        
+        public bool Connect(string galaxyName)
+        {
+            _clientGrSession = _galaxyRepositoryProvider.GetClientInstance(galaxyName);
+            return _clientGrSession.Name == galaxyName && _clientGrSession.Connected;
+        }
+        
         public ArchiveObject GetObject(int objectId)
         {
-            throw new System.NotImplementedException();
+            using var repo = new ArchiveRepository(_clientGrSession.Name);
+            return repo.GetObject(objectId);
         }
 
         public IEnumerable<ArchiveObject> GetObjects(string tagName)
@@ -24,37 +40,44 @@ namespace GalaxyMerge.Services
 
         public IEnumerable<EventSetting> GetEventSettings()
         {
-            throw new System.NotImplementedException();
+            using var repo = new ArchiveRepository(_clientGrSession.Name);
+            return repo.GetEventSettings();
         }
 
         public IEnumerable<InclusionSetting> GetInclusionSettings()
         {
-            throw new System.NotImplementedException();
+            using var repo = new ArchiveRepository(_clientGrSession.Name);
+            return repo.GetInclusionSettings();
         }
 
         public void AddObject(int objectId)
         {
-            throw new System.NotImplementedException();
+            var archiver = new ArchiveProcessor(_clientGrSession);
+            archiver.Archive(objectId);
         }
 
         public void RemoveObject(int objectId)
         {
-            throw new System.NotImplementedException();
+            using var repo = new ArchiveRepository(_clientGrSession.Name);
+            repo.RemoveObject(objectId);
         }
 
-        public void ArchiveObject(int objectId)
+        public void ArchiveObject(int objectId, bool force = false)
         {
-            throw new System.NotImplementedException();
+            var archiver = new ArchiveProcessor(_clientGrSession);
+            archiver.Archive(objectId);
         }
 
-        public void UpdateEventSetting(Operation operation, bool isArchiveEvent)
+        public void UpdateEventSetting(IEnumerable<EventSetting> eventSettings)
         {
-            throw new System.NotImplementedException();
+            using var repo = new ArchiveRepository(_clientGrSession.Name);
+            repo.UpdateEventSettings(eventSettings);
         }
 
-        public void UpdateInclusionSetting(Template template, InclusionOption option, bool includeInstances)
+        public void UpdateInclusionSetting(IEnumerable<InclusionSetting> inclusionSettings)
         {
-            throw new System.NotImplementedException();
+            using var repo = new ArchiveRepository(_clientGrSession.Name);
+            repo.UpdateInclusionSettings(inclusionSettings);
         }
     }
 }
