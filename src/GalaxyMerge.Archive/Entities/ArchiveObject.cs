@@ -6,7 +6,7 @@ namespace GalaxyMerge.Archive.Entities
 {
     public class ArchiveObject
     {
-        private readonly List<ArchiveEntry> _entries;
+        private readonly List<ArchiveEntry> _entries = new List<ArchiveEntry>();
         
         private ArchiveObject()
         {
@@ -20,7 +20,6 @@ namespace GalaxyMerge.Archive.Entities
             Template = template;
             AddedOn = DateTime.Now;
             ModifiedOn = DateTime.Now;
-            _entries = new List<ArchiveEntry>();
         }
         
         public int ObjectId { get; private set; }
@@ -45,7 +44,7 @@ namespace GalaxyMerge.Archive.Entities
         
         public void AddEntry(byte[] data, Operation operation = null)
         {
-            var entry = new ArchiveEntry(ObjectId, Version, data, operation);
+            var entry = new ArchiveEntry(this, data, operation);
             _entries.Add(entry);
             ModifiedOn = DateTime.Now;
         }

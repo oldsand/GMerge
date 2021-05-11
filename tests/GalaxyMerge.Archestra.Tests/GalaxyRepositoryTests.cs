@@ -130,6 +130,21 @@ namespace GalaxyMerge.Archestra.Tests
         }
 
         [Test]
+        [TestCase("FileCopy")]
+        [TestCase("FormatString")]
+        [TestCase("DatabaseAccess")]
+        [TestCase("SearchBar")]
+        [TestCase("_PIDTuning_DataCollector")]
+        [TestCase("Symbol_020")]
+        public void GetSymbol_ValidaTagName_ReturnsExpectedInstance(string tagName)
+        {
+            var instance = _galaxy.GetSymbol(tagName);
+            
+            Assert.NotNull(instance);
+            Assert.AreEqual(tagName, instance.TagName);
+        }
+
+        [Test]
         public void ExportPkg_ValidObjects_CreatesFile()
         {
             _galaxy.ExportPkg("$Test_Template",

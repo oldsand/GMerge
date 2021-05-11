@@ -127,7 +127,7 @@ namespace GalaxyMerge.Services
         private static GalaxySymbol MaterializeSymbol(ArchiveEntry latest)
         {
             var xml = XElement.Load(new MemoryStream(latest.CompressedData.Decompress()));
-            var galaxyObject = new GalaxySymbol().FromXml(xml);
+            var galaxyObject = new GalaxySymbol("").FromXml(xml); //todo figure out tagname here
             return (GalaxySymbol) galaxyObject;
         }
     }

@@ -14,9 +14,20 @@ namespace GalaxyMerge.Archive.Entities
         
         public ArchiveEntry(int objectId, int version, byte[] data, Operation operation = null)
         {
-            EntryId = Guid.NewGuid();   
             ObjectId = objectId;
             Version = version;
+            ArchivedOn = DateTime.Now;
+            Operation = operation;
+            OriginalSize = data.Length;
+            CompressedData = data.Compress();
+            CompressedSize = CompressedData.Length;
+        }
+        
+        public ArchiveEntry(ArchiveObject archiveObject, byte[] data, Operation operation = null)
+        {
+            ObjectId = archiveObject.ObjectId;
+            Version = archiveObject.Version;
+            ArchiveObject = archiveObject;
             ArchivedOn = DateTime.Now;
             Operation = operation;
             OriginalSize = data.Length;

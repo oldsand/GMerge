@@ -7,7 +7,12 @@ namespace GalaxyMerge.Archestra.Entities
 {
     public class GalaxySymbol : IGalaxySymbol
     {
-        public string TagName { get; set; }
+        public GalaxySymbol(string tagName)
+        {
+            TagName = tagName;
+        }
+        
+        public string TagName { get; private set; }
         public XElement Root { get; set; }
         public IEnumerable<ICustomProperty> CustomProperties { get; set; }
         public IEnumerable<IPredefinedScript> PredefinedScripts { get; set; }

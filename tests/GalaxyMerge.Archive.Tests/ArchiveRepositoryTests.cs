@@ -90,6 +90,43 @@ namespace GalaxyMerge.Archive.Tests
         }
 
         [Test]
+        public void UpdateObjet_WhenCalled_UpdatesDatabaseRecord()
+        {
+            using var repo = new ArchiveRepository(GalaxyName);
+            SeedArchiveObjects();
+
+            var target = repo.GetObject(3);
+            target.UpdateVersion(23);
+            target.UpdateTagName("Test_Update_Tag");
+            
+            repo.UpdateObject(target);
+            repo.Save();
+
+            var result = repo.GetObject(3);
+            
+            Assert.AreEqual("Test_Update_Tag", result.TagName);
+            Assert.AreEqual(23, result.Version);
+        }
+        
+        [Test]
+        public void UpdateObjet_AddEntry_UpdatesDatabaseRecord()
+        {
+            using var repo = new ArchiveRepository(GalaxyName);
+            SeedArchiveObjects();
+
+            var target = repo.GetObjectIncludeEntries(3);
+            target.AddEntry(new byte[1034], Operation.CheckInSuccess);
+            
+            repo.UpdateObject(target);
+            repo.Save();
+
+            var result = repo.GetObjectIncludeEntries(3);
+            
+            Assert.IsNotEmpty(result.Entries);
+            Assert.True(result.Entries.Any(x => x.Operation == Operation.CheckInSuccess));
+        }
+
+        [Test]
         public void GetLatest_WhenCalled_ReturnsSingleEntry()
         {
             using var repo = new ArchiveRepository(GalaxyName);

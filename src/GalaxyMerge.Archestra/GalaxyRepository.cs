@@ -105,7 +105,7 @@ namespace GalaxyMerge.Archestra
             var fileName = Path.Combine(tempDirectory.FullName, $@"{tagName}.xml");
             ExportSymbol(tagName, fileName);
             var symbol = XElement.Load(fileName);
-            return new GalaxySymbol().FromXml(symbol);
+            return new GalaxySymbol(tagName).FromXml(symbol);
         }
 
         public IEnumerable<IGalaxySymbol> GetSymbols(IEnumerable<string> tagNames)
@@ -290,7 +290,7 @@ namespace GalaxyMerge.Archestra
 
         public void ExportSymbol(string tagName, string fileName)
         {
-            _graphicAccess.ValidateSymboltoExport(_galaxy, tagName);
+            //_graphicAccess.ValidateSymboltoExport(_galaxy, tagName);
             var result = _graphicAccess.ExportGraphicToXml(_galaxy, tagName, fileName);
             ResultHandler.Handle(result, tagName);
         }
