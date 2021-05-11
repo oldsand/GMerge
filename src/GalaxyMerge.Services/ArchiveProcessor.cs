@@ -18,6 +18,11 @@ namespace GalaxyMerge.Services
         public ArchiveProcessor(IGalaxyRepository galaxyRepository)
         {
             _galaxyRepository = galaxyRepository ?? throw new ArgumentNullException(nameof(galaxyRepository), "Value cannot be null");
+
+            if (!galaxyRepository.Connected)
+                throw new ArgumentException("Galaxy Repository must be connect in order to initialize this object",
+                    nameof(galaxyRepository));
+            
             _galaxyName = _galaxyRepository.Name;
         }
 
@@ -33,12 +38,14 @@ namespace GalaxyMerge.Services
             
             AddArchive(gObject);
         }
-        
+
         private void AddArchive(GObject gObject)
         {
             using var archiveRepo = new ArchiveRepository(_galaxyName);
             
             var template = Enumeration.FromId<Template>(gObject.TemplateId);
+            if (template == null) throw new InvalidOperationException("Cannot Archive Unknown Template Type");
+            
             var archiveObject = new ArchiveObject(gObject.ObjectId, gObject.TagName, gObject.ConfigVersion, template);
             
             var data = IsSymbol(gObject) ? GetSymbolData(gObject.TagName) : GetObjectData(gObject.TagName);

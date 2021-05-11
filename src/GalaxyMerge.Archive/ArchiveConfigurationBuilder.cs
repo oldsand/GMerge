@@ -6,6 +6,7 @@ using GalaxyMerge.Common.Primitives;
 using GalaxyMerge.Core;
 using GalaxyMerge.Core.Utilities;
 using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
 
 namespace GalaxyMerge.Archive
 {
@@ -13,6 +14,7 @@ namespace GalaxyMerge.Archive
     {
         public string FileName { get; private set; }
         public string ConnectionString { get; private set; }
+        internal DbContextOptions<ArchiveContext> ContextOptions { get; private set; }
         public GalaxyInfo GalaxyInfo { get; private set; }
         public List<EventSetting> EventSettings { get; private set; }
         public List<InclusionSetting> InclusionSettings { get; private set; }
@@ -115,6 +117,7 @@ namespace GalaxyMerge.Archive
             var builder = new SqliteConnectionStringBuilder(connectionString);
             ConnectionString = builder.ConnectionString;
             FileName = builder.DataSource;
+            ContextOptions = new DbContextOptionsBuilder<ArchiveContext>().UseSqlite(connectionString).Options;
         }
 
         private void UpdateOperationSetting(Operation operation, bool isArchiveTrigger)

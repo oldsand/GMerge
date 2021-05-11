@@ -1,10 +1,7 @@
 using System.IO;
 using GalaxyMerge.Archestra;
 using GalaxyMerge.Archive;
-using GalaxyMerge.Archive.Entities;
 using GalaxyMerge.Archive.Repositories;
-using GalaxyMerge.Common.Primitives;
-using GalaxyMerge.Core;
 using GalaxyMerge.Core.Utilities;
 using GalaxyMerge.Data.Repositories;
 using GalaxyMerge.Testing;
@@ -30,6 +27,9 @@ namespace GalaxyMerge.Services.Tests
         
         [Test]
         [TestCase("$Test_Template")]
+        [TestCase("$Site_Data")]
+        [TestCase("FileCopy")]
+        [TestCase("DatabaseAccess")]
         public void Archive_ValidTagName_CreateArchiveEntry(string tagName)
         {
             var galaxyRepo = new GalaxyRepository(Settings.CurrentTestGalaxy);

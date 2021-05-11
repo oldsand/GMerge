@@ -44,7 +44,7 @@ namespace GalaxyMerge.Archive.Repositories
             return _context.ArchiveObjects.Include(x => x.Entries).SingleOrDefault(x => x.ObjectId == objectId);
         }
 
-        public IEnumerable<ArchiveObject> FindObjectsByTagName(string tagName)
+        public IEnumerable<ArchiveObject> FindAllByTagName(string tagName)
         {
             return _context.ArchiveObjects.Where(x => x.TagName == tagName);
         }

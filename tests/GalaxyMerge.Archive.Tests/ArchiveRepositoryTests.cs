@@ -1,9 +1,11 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using GalaxyMerge.Archive.Entities;
 using GalaxyMerge.Archive.Repositories;
 using GalaxyMerge.Common.Primitives;
+using GalaxyMerge.Core;
 using GalaxyMerge.Core.Extensions;
 using NUnit.Framework;
 
@@ -34,6 +36,19 @@ namespace GalaxyMerge.Archive.Tests
         {
             using var repo = new ArchiveRepository(GalaxyName);
             Assert.NotNull(repo);
+        }
+
+        [Test]
+        public void GetGalaxyInfo_WhenCalled_ReturnsExpectedData()
+        {
+            using var repo = new ArchiveRepository(GalaxyName);
+
+            var result = repo.GetGalaxyInfo();
+            
+            Assert.AreEqual(GalaxyName, result.GalaxyName);
+            Assert.AreEqual(4, result.VersionNumber);
+            Assert.AreEqual("456", result.IsaVersion);
+            Assert.AreEqual("123", result.CdiVersion);
         }
         
         [Test]
@@ -74,47 +89,74 @@ namespace GalaxyMerge.Archive.Tests
             Assert.IsNotEmpty(result.Entries);
         }
 
-        /*[Test]
+        [Test]
         public void GetLatest_WhenCalled_ReturnsSingleEntry()
         {
             using var repo = new ArchiveRepository(GalaxyName);
+            SeedArchiveObjects();
 
-            var result = repo.GetLatestEntry("SomeTag");
+            var result = repo.GetLatestEntry(4);
             
             Assert.NotNull(result);
+            Assert.AreEqual(4, result.ObjectId);
+            Assert.NotNull(result.CompressedData);
         }
 
         [Test]
-        public void FindByObjectId_WhenCalled_ReturnsEntryWithObjectId()
+        public void GetObject_WhenCalled_ReturnsExpectedObject()
         {
             using var repo = new ArchiveRepository(GalaxyName);
-            
-            var data = new XElement("SomeObject", "SomeData");
-            var entry = new ArchiveEntry(53262, "TagName", 4, "$Area", data.ToByteArray());
-            repo.AddEntry(entry);
-            repo.Save();
+            SeedArchiveObjects();
 
-            var results = repo.FindEntriesByObjectId(53262).ToList();
+            var result = repo.GetObject(3);
 
-            Assert.IsNotEmpty(results);
-            Assert.True(results.Any(x => x.ObjectId == 53262));
+            Assert.NotNull(result);
+            Assert.AreEqual(3, result.ObjectId);
+        }
+        
+        [Test]
+        public void GetObjectIncludeEntries_WhenCalled_ReturnsExpectedObject()
+        {
+            using var repo = new ArchiveRepository(GalaxyName);
+            SeedArchiveObjects();
+
+            var result = repo.GetObjectIncludeEntries(3);
+
+            Assert.NotNull(result);
+            Assert.IsNotEmpty(result.Entries);
+            Assert.AreEqual(3, result.ObjectId);
         }
 
         [Test]
-        public void FindByTagName_WhenCalled_ReturnsObjectsWithTagName()
+        public void FindAllByTagName_WhenCalled_ReturnsExpectedObjects()
         {
             using var repo = new ArchiveRepository(GalaxyName);
-            
-            var data = new XElement("SomeObject", "SomeData");
-            var entry = new ArchiveEntry(1234, "Single_Tag_Name", 4, "$Area", data.ToByteArray());
-            repo.AddEntry(entry);
-            repo.Save();
+            SeedArchiveObjects();
 
-            var results = repo.FindByTagName("Single_Tag_Name").ToList();
+            var results = repo.FindAllByTagName("TagName_2").ToList();
 
             Assert.IsNotEmpty(results);
-            Assert.True(results.Any(x => x.TagName == "Single_Tag_Name"));
+            Assert.True(results.Any(x => x.TagName == "TagName_2"));
 
-        }*/
+        }
+
+        private void SeedArchiveObjects()
+        {
+            using var context = new ArchiveContext(_configBuilder.ContextOptions);
+
+            for (var i = 1; i < 10; i++)
+            {
+                var random = new Random();
+                var template = Enumeration.FromId<Template>(random.Next(1, 19));
+                var archiveObject = new ArchiveObject(i, $"TagName_{i}", i * 10, template);
+
+                for (var j = 0; j < 5; j++)
+                    archiveObject.AddEntry(new byte[10000]);
+                
+                context.ArchiveObjects.Add(archiveObject);
+            }
+
+            context.SaveChanges();
+        }
     }
 }
