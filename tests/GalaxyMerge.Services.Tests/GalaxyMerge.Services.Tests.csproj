@@ -41,6 +41,7 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="ArchiveControllerTests.cs" />
+        <Compile Include="ArchiveManualTesting.cs" />
         <Compile Include="ArchiveProcessorTests.cs" />
         <Compile Include="ArchiveSettingValidatorTests.cs" />
         <Compile Include="GalaxyRegistryTests.cs" />

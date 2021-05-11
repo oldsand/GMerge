@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.ServiceModel;
 using GalaxyMerge.Archestra.Abstractions;
 using GalaxyMerge.Archestra.Entities;
@@ -32,19 +30,21 @@ namespace GalaxyMerge.Services
             return (GalaxyObject) _clientGrSession.GetObject(tagName);
         }
 
-        public GalaxyObject GetObjects(string tagName)
+        public GalaxyObject GetObject(string tagName)
         {
-            throw new NotImplementedException();
+            return (GalaxyObject) _clientGrSession.GetObject(tagName);
         }
 
-        public IEnumerable<GalaxyObject> GetObjects(IEnumerable<int> objectIds)
+        public GalaxySymbol GetSymbol(int objectId)
         {
-            throw new NotImplementedException();
+            using var objectRepository = new ObjectRepository(_clientGrSession.Name);
+            var tagName = objectRepository.GetTagName(objectId);
+            return (GalaxySymbol) _clientGrSession.GetSymbol(tagName);
         }
 
-        public IEnumerable<GalaxyObject> GetObjects(IEnumerable<string> tagNames)
+        public GalaxySymbol GetSymbol(string tagName)
         {
-            throw new NotImplementedException();
+            return (GalaxySymbol) _clientGrSession.GetSymbol(tagName);
         }
     }
 }

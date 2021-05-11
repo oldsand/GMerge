@@ -14,12 +14,12 @@ namespace GalaxyMerge.Contracts
         GalaxyObject GetObject(int objectId);
         
         [OperationContract]
-        GalaxyObject GetObjects(string tagName);
+        GalaxyObject GetObject(string tagName);
 
         [OperationContract]
-        IEnumerable<GalaxyObject> GetObjects(IEnumerable<int> objectIds);
+        GalaxySymbol GetSymbol(int objectId);
         
         [OperationContract]
-        IEnumerable<GalaxyObject> GetObjects(IEnumerable<string> tagNames);
+        GalaxySymbol GetSymbol(string tagName);
     }
 }

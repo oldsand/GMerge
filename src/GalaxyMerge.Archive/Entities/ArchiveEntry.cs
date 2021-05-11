@@ -1,4 +1,5 @@
 using System;
+using GalaxyMerge.Common.Primitives;
 using GalaxyMerge.Core.Extensions;
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global
@@ -11,12 +12,13 @@ namespace GalaxyMerge.Archive.Entities
         {
         }
         
-        public ArchiveEntry(int objectId, int version, byte[] data)
+        public ArchiveEntry(int objectId, int version, byte[] data, Operation operation = null)
         {
-            EntryId = Guid.NewGuid();
+            EntryId = Guid.NewGuid();   
             ObjectId = objectId;
             Version = version;
             ArchivedOn = DateTime.Now;
+            Operation = operation;
             OriginalSize = data.Length;
             CompressedData = data.Compress();
             CompressedSize = CompressedData.Length;
@@ -24,9 +26,10 @@ namespace GalaxyMerge.Archive.Entities
 
         public Guid EntryId { get; private set; }
         public int ObjectId { get; private set; }
-        public ArchiveObject ArchiveObject { get; set; }
+        public ArchiveObject ArchiveObject { get; private set; }
         public int Version { get; private set; }
         public DateTime ArchivedOn { get; private set; }
+        public Operation Operation { get; private set; }
         public long OriginalSize { get; private set; }
         public long CompressedSize { get; private set; }
         public byte[] CompressedData { get; private set; }

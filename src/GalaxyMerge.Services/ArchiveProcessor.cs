@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using GalaxyMerge.Archestra.Abstractions;
 using GalaxyMerge.Archive.Entities;
 using GalaxyMerge.Archive.Repositories;
@@ -26,20 +27,33 @@ namespace GalaxyMerge.Services
             _galaxyName = _galaxyRepository.Name;
         }
 
-        public void Archive(int objectId, bool forceArchive = false)
+        public void Archive(int objectId, bool forceArchive = false, Operation operation = null)
         {
             var gObject = GetGObject(objectId);
 
             if (Exists(gObject.ObjectId) && (forceArchive || !IsLatest(gObject)))
             {
-                UpdateArchive(gObject);
+                UpdateArchive(gObject, operation);
                 return;
             }
             
-            AddArchive(gObject);
+            AddArchive(gObject, operation);
+        }
+        
+        public void Archive(string tagName, bool forceArchive = false, Operation operation = null)
+        {
+            var gObject = GetGObject(tagName);
+
+            if (Exists(gObject.ObjectId) && (forceArchive || !IsLatest(gObject)))
+            {
+                UpdateArchive(gObject, operation);
+                return;
+            }
+            
+            AddArchive(gObject, operation);
         }
 
-        private void AddArchive(GObject gObject)
+        private void AddArchive(GObject gObject, Operation operation)
         {
             using var archiveRepo = new ArchiveRepository(_galaxyName);
             
@@ -49,13 +63,13 @@ namespace GalaxyMerge.Services
             var archiveObject = new ArchiveObject(gObject.ObjectId, gObject.TagName, gObject.ConfigVersion, template);
             
             var data = IsSymbol(gObject) ? GetSymbolData(gObject.TagName) : GetObjectData(gObject.TagName);
-            archiveObject.AddEntry(data);
+            archiveObject.AddEntry(data, operation);
             
             archiveRepo.AddObject(archiveObject);
             archiveRepo.Save();
         }
         
-        private void UpdateArchive(GObject gObject)
+        private void UpdateArchive(GObject gObject, Operation operation)
         {
             using var archiveRepo = new ArchiveRepository(_galaxyName);
 
@@ -68,7 +82,7 @@ namespace GalaxyMerge.Services
                 archiveObject.UpdateVersion(gObject.ConfigVersion);
             
             var data = IsSymbol(gObject) ? GetSymbolData(gObject.TagName) : GetObjectData(gObject.TagName);
-            archiveObject.AddEntry(data);
+            archiveObject.AddEntry(data, operation);
             
             archiveRepo.UpdateObject(archiveObject);
             archiveRepo.Save();
@@ -79,6 +93,7 @@ namespace GalaxyMerge.Services
             return Enumeration.FromId<Template>(gObject.TemplateId).Equals(Template.Symbol);
         }
 
+        //todo this still needs work. we can't assume comparing version/date to check in operation only will work.
         private bool IsLatest(GObject gObject)
         {
             using var archiveRepo = new ArchiveRepository(_galaxyName);
@@ -100,6 +115,12 @@ namespace GalaxyMerge.Services
         {
             using var objectRepo = new ObjectRepository(_galaxyName);
             return objectRepo.FindInclude(x => x.ObjectId == objectId, x => x.Template);
+        }
+        
+        private GObject GetGObject(string tagName)
+        {
+            using var objectRepo = new ObjectRepository(_galaxyName);
+            return objectRepo.FindAllInclude(x => x.TagName == tagName, x => x.Template).FirstOrDefault();
         }
         
         private byte[] GetObjectData(string tagName)

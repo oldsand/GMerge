@@ -1,4 +1,6 @@
 using GalaxyMerge.Archive.Entities;
+using GalaxyMerge.Common.Primitives;
+using GalaxyMerge.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -13,6 +15,7 @@ namespace GalaxyMerge.Archive.Configurations
             builder.Property(g => g.Version).IsRequired();
             builder.Property(g => g.ArchivedOn).IsRequired();
             builder.Property(g => g.CompressedData).IsRequired();
+            builder.Property(x => x.Operation).HasConversion(x => x.Name, x => Enumeration.FromName<Operation>(x));
         }
     }
 }

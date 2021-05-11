@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
+using GalaxyMerge.Common.Primitives;
+using GalaxyMerge.Core;
 using GalaxyMerge.Core.Utilities;
 
 namespace GalaxyMerge.Services
@@ -52,9 +54,11 @@ namespace GalaxyMerge.Services
 
             var galaxyRepo = _galaxyRepositoryProvider.GetServiceInstance(listener.DatabaseName);
             var objectId = ExtractObjectId(e.Data);
+            var operation = Enumeration.FromId<Operation>(ExtractOperationId(e.Data));
             
             var archiver = new ArchiveProcessor(galaxyRepo);
-            archiver.Archive(objectId);
+            
+            archiver.Archive(objectId, false, operation);
         }
         
         private static bool IsArchivable(XContainer data, string galaxyName)
