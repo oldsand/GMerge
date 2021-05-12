@@ -14,6 +14,7 @@ namespace GalaxyMerge.Data
         public virtual DbSet<PrimitiveDefinition> PrimitiveDefinitions { get; set; }
         public virtual DbSet<UserProfile> Users { get; set; }
         public virtual DbSet<ChangeLog> ChangeLogs { get; set; }
+        public virtual DbSet<AncestorLookup> AncestorLookups { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

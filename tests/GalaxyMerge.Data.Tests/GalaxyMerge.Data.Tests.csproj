@@ -40,6 +40,7 @@
         <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="LookupRepositoryTests.cs" />
         <Compile Include="ObjectRepositoryTests.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
@@ -55,6 +56,10 @@
       <ProjectReference Include="..\..\src\GalaxyMerge.Data\GalaxyMerge.Data.csproj">
         <Project>{1116a38e-aa67-46e3-9d09-e2de5c2a694e}</Project>
         <Name>GalaxyMerge.Data</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\GalaxyMerge.Testing\GalaxyMerge.Testing.csproj">
+        <Project>{97387893-b985-4fa7-be27-598c33142963}</Project>
+        <Name>GalaxyMerge.Testing</Name>
       </ProjectReference>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
