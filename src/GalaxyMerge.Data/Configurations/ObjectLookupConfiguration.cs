@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GalaxyMerge.Data.Configurations
 {
-    public class AncestorLookupConfiguration : IEntityTypeConfiguration<AncestorLookup>
+    public class ObjectLookupConfiguration : IEntityTypeConfiguration<ObjectLookup>
     {
-        public void Configure(EntityTypeBuilder<AncestorLookup> builder)
+        public void Configure(EntityTypeBuilder<ObjectLookup> builder)
         {
             builder.HasKey(x => x.ObjectId);
             builder.Property(x => x.ObjectId).HasColumnName("gobject_id");

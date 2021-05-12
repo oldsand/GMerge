@@ -4,7 +4,7 @@
 
 namespace GalaxyMerge.Data.Entities
 {
-    public class AncestorLookup
+    public class ObjectLookup
     {
         public int ObjectId { get; private set;  }
         public int DerivedFromId { get; private set;  }

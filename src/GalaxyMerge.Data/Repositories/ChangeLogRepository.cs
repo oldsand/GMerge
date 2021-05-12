@@ -3,14 +3,13 @@ using GalaxyMerge.Common.Primitives;
 using GalaxyMerge.Core.Utilities;
 using GalaxyMerge.Data.Abstractions;
 using GalaxyMerge.Data.Entities;
-using GalaxyMerge.Data.Helpers;
 
 namespace GalaxyMerge.Data.Repositories
 {
     public class ChangeLogRepository : Repository<ChangeLog>, IChangeLogRepository
     {
         public ChangeLogRepository(string galaxyName) 
-            : base(ContextCreator.Create(ConnectionStringBuilder.BuildGalaxyConnection(galaxyName)))
+            : base(GalaxyContext.Create(ConnectionStringBuilder.BuildGalaxyConnection(galaxyName)))
         {
         }
 

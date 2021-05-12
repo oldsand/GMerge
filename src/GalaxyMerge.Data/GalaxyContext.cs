@@ -14,11 +14,17 @@ namespace GalaxyMerge.Data
         public virtual DbSet<PrimitiveDefinition> PrimitiveDefinitions { get; set; }
         public virtual DbSet<UserProfile> Users { get; set; }
         public virtual DbSet<ChangeLog> ChangeLogs { get; set; }
-        public virtual DbSet<AncestorLookup> AncestorLookups { get; set; }
+        public virtual DbSet<ObjectLookup> ObjectLookups { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(GalaxyContext).Assembly);
+        }
+        
+        public static GalaxyContext Create(string connectionString)
+        {
+            var options = new DbContextOptionsBuilder<GalaxyContext>().UseSqlServer(connectionString).Options;
+            return new GalaxyContext(options);
         }
     }
 }

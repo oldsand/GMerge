@@ -3,7 +3,6 @@ using System.Linq;
 using GalaxyMerge.Core.Utilities;
 using GalaxyMerge.Data.Abstractions;
 using GalaxyMerge.Data.Entities;
-using GalaxyMerge.Data.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace GalaxyMerge.Data.Repositories
@@ -11,7 +10,7 @@ namespace GalaxyMerge.Data.Repositories
     public class DefinitionRepository : Repository<TemplateDefinition>, IDefinitionRepository
     {
         public DefinitionRepository(string galaxyName) 
-            : base(ContextCreator.Create(ConnectionStringBuilder.BuildGalaxyConnection(galaxyName)))
+            : base(GalaxyContext.Create(ConnectionStringBuilder.BuildGalaxyConnection(galaxyName)))
         {
         }
 

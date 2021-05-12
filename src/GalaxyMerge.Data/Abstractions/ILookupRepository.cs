@@ -6,6 +6,6 @@ namespace GalaxyMerge.Data.Abstractions
 {
     public interface ILookupRepository : IDisposable
     {
-        IEnumerable<AncestorLookup> FindAncestors(int objectId, bool excludeSelf);
+        IEnumerable<ObjectLookup> FindAncestors(int objectId, bool excludeSelf);
     }
 }
