@@ -3,6 +3,10 @@ namespace GalaxyMerge.Archive.Entities
 {
     public class GalaxyInfo
     {
+        private GalaxyInfo()
+        {
+        }
+        
         public GalaxyInfo(string galaxyName)
         {
             GalaxyName = galaxyName;

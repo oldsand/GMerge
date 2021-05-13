@@ -55,6 +55,7 @@
     <Compile Include="Configurations\GalaxyInfoConfiguration.cs" />
     <Compile Include="Configurations\ArchiveObjectConfiguration.cs" />
     <Compile Include="Entities\ArchiveEntry.cs" />
+    <Compile Include="Entities\IgnoreSettings.cs" />
     <Compile Include="Entities\InclusionSetting.cs" />
     <Compile Include="Entities\GalaxyInfo.cs" />
     <Compile Include="Entities\EventSetting.cs" />

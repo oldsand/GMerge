@@ -27,13 +27,13 @@ namespace GalaxyMerge.Services
             _galaxyName = _galaxyRepository.Name;
         }
 
-        public void Archive(int objectId, bool forceArchive = false, Operation operation = null)
+        public void Archive(int objectId, Operation operation = null, bool forceArchive = false)
         {
             var gObject = GetGObject(objectId);
             ArchiveObject(gObject, forceArchive, operation);
         }
         
-        public void Archive(string tagName, bool forceArchive = false, Operation operation = null)
+        public void Archive(string tagName, Operation operation = null, bool forceArchive = false)
         {
             var gObject = GetGObject(tagName);
             ArchiveObject(gObject, forceArchive, operation);

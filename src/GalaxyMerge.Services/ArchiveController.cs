@@ -53,12 +53,11 @@ namespace GalaxyMerge.Services
             if (!IsArchivable(e.Data, listener.DatabaseName)) return;
 
             var galaxyRepo = _galaxyRepositoryProvider.GetServiceInstance(listener.DatabaseName);
-            var objectId = ExtractObjectId(e.Data);
-            var operation = Enumeration.FromId<Operation>(ExtractOperationId(e.Data));
-            
             var archiver = new ArchiveProcessor(galaxyRepo);
             
-            archiver.Archive(objectId, false, operation);
+            var objectId = ExtractObjectId(e.Data);
+            var operation = Enumeration.FromId<Operation>(ExtractOperationId(e.Data));
+            archiver.Archive(objectId, operation);
         }
         
         private static bool IsArchivable(XContainer data, string galaxyName)
