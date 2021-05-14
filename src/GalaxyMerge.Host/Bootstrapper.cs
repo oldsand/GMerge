@@ -1,10 +1,7 @@
 using System;
 using Autofac;
-using GalaxyMerge.Archestra;
-using GalaxyMerge.Archestra.Abstractions;
 using GalaxyMerge.Archive;
 using GalaxyMerge.Archive.Abstractions;
-using GalaxyMerge.Core.Utilities;
 using GalaxyMerge.Services;
 
 namespace GalaxyMerge.Host
@@ -28,10 +25,10 @@ namespace GalaxyMerge.Host
         private void ConfigureContainer()
         {
             var builder = new ContainerBuilder();
-            builder.RegisterType<GalaxyRepositoryFactory>().As<IGalaxyRepositoryFactory>();
             builder.RegisterType<GalaxyRegistry>().AsSelf().AsImplementedInterfaces().SingleInstance();
             builder.RegisterType<GalaxyRepositoryProvider>().AsSelf().AsImplementedInterfaces();
-            builder.RegisterType<GalaxyManager>();
+            builder.RegisterType<GalaxyManager>().AsSelf().AsImplementedInterfaces();
+            builder.RegisterType<ArchiveManager>().AsSelf().AsImplementedInterfaces();
             builder.RegisterType<ArchiveBuilder>().AsSelf().AsImplementedInterfaces();
             _container = builder.Build();
         }

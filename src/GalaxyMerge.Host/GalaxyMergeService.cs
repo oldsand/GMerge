@@ -1,50 +1,67 @@
 ﻿using System.ServiceModel;
-using System.ServiceProcess;
 using Autofac;
 using Autofac.Integration.Wcf;
 using GalaxyMerge.Services;
+using Topshelf;
+using Topshelf.Autofac;
+using Topshelf.HostConfigurators;
+// ReSharper disable ClassNeverInstantiated.Global
 
 namespace GalaxyMerge.Host
 {
-    public class GalaxyMergeService : ServiceBase
+    public class GalaxyMergeService
     {
         private ServiceHost _galaxyManagerHost;
         private ServiceHost _archiveManagerHost;
         private ArchiveController _archiveController;
+        private static IContainer _container;
 
-        private GalaxyMergeService()
-        {
-            ServiceName = "GalaxyMerge";
-        }
-        
-        public static void Main()
-        {
-            Run(new GalaxyMergeService());
-        }
-        
-        protected override void OnStart(string[] args)
+        public static void Main(string[] args)
         {
             var bootstrapper = new Bootstrapper();
             bootstrapper.Bootstrap();
-            var container = bootstrapper.GetContainer();
+            _container = bootstrapper.GetContainer();
+
+            HostFactory.Run(ServiceConfiguration);
+        }
+
+        private static void ServiceConfiguration(HostConfigurator config)
+        {
+            config.UseAutofacContainer(_container);
             
-            //TODO: Another thing to think about will be host configuration. Would like to do it programatically. 
+            config.Service<GalaxyMergeService>(instance =>
+            {
+                instance.ConstructUsingAutofacContainer();
+                instance.WhenStarted(x => x.OnStart());
+                instance.WhenStopped(x => x.OnStop());
+            });
+            
+            config.SetServiceName("gmerge");
+            config.SetDisplayName("Galaxy Merge");
+            config.SetDescription(@"Service host for the Galaxy Merge application.
+                                  This service provides retrieval, archiving, and modification of System Platform
+                                  Archestra objects and graphics hosted on this machine's galaxy repositories.");
+            config.StartAutomatically();
+        }
+
+        private void OnStart()
+        {
             _galaxyManagerHost?.Close();
             _galaxyManagerHost = new ServiceHost(typeof(GalaxyManager));
-            _galaxyManagerHost.AddDependencyInjectionBehavior(typeof(GalaxyManager), container);
+            _galaxyManagerHost.AddDependencyInjectionBehavior(typeof(GalaxyManager), _container);
             _galaxyManagerHost.Open();
             
             _archiveManagerHost?.Close();
             _archiveManagerHost = new ServiceHost(typeof(ArchiveManager));
-            _archiveManagerHost.AddDependencyInjectionBehavior(typeof(ArchiveManager), container);
+            _archiveManagerHost.AddDependencyInjectionBehavior(typeof(ArchiveManager), _container);
             _archiveManagerHost.Open();
 
             _archiveController?.Stop();
-            _archiveController = new ArchiveController(container.Resolve<IGalaxyRepositoryProvider>());
+            _archiveController = new ArchiveController(_container.Resolve<IGalaxyRepositoryProvider>());
             _archiveController.Start();
         }
         
-        protected override void OnStop()
+        private void OnStop()
         {
             if (_galaxyManagerHost == null) return;
             _galaxyManagerHost.Close();
@@ -57,6 +74,9 @@ namespace GalaxyMerge.Host
             if (_archiveController == null) return;
             _archiveController.Stop();
             _archiveController = null;
+            
+            _container.Dispose();
+            _container = null;
         }
     }
 }

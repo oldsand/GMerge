@@ -20,13 +20,7 @@ namespace GalaxyMerge.Services
             _repositoryFactory = new GalaxyRepositoryFactory();
             _galaxyFinder = new GalaxyFinder();
         }
-        
-        internal GalaxyRegistry(IGalaxyRepositoryFactory repositoryFactory, IGalaxyFinder galaxyFinder)
-        {
-            _repositoryFactory = repositoryFactory;
-            _galaxyFinder = galaxyFinder;
-        }
-        
+
         public bool IsRegistered(string galaxyName, string userName)
         {
             return _galaxies.SingleOrDefault(g => g.Name == galaxyName && g.ConnectedUser == userName) != null;

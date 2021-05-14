@@ -38,11 +38,16 @@ namespace GalaxyMerge.Services
         private void InitializeListeners()
         {
             var galaxies = _galaxyRepositoryProvider.GetAllServiceInstances();
+            
             foreach (var galaxy in galaxies)
             {
+                if (!SqlServiceBroker.IsEnabled(galaxy.Name))
+                    SqlServiceBroker.Enable(galaxy.Name);
+                
                 var connectionString = ConnectionStringBuilder.BuildGalaxyConnection(galaxy.Name);
                 var listener = new SqlListener(connectionString, galaxy.Name, ChangeLogTableName);
                 listener.TableChanged += OnChangeLogTableUpdated;
+                
                 _listeners.Add(listener);
             }
         }

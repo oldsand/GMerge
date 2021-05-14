@@ -41,6 +41,7 @@ namespace GalaxyMerge.Services
                 throw new InvalidOperationException(
                     $"Cannot find registered galaxy with name '{galaxyName}' for current service user '{serviceUser.Name}'");
 
+            galaxyRepository.SynchronizeClient();
             return galaxyRepository;
         }
         
