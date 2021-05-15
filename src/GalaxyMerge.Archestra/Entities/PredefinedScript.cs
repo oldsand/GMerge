@@ -1,14 +1,15 @@
 using System.Xml.Linq;
 using GalaxyMerge.Common.Abstractions;
+using GalaxyMerge.Core;
 
 namespace GalaxyMerge.Archestra.Entities
 {
-    public class PredefinedScript : IPredefinedScript
+    public class PredefinedScript : IXmlConvertible<PredefinedScript>
     {
         public string Name { get; set; }
         public string Text { get; set; }
         
-        public IPredefinedScript FromXml(XElement element)
+        public PredefinedScript FromXml(XElement element)
         {
             Name = element.Name.ToString();
             Text = element.Value;

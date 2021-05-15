@@ -2,10 +2,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using GalaxyMerge.Common.Abstractions;
+using GalaxyMerge.Core;
 
 namespace GalaxyMerge.Archestra.Entities
 {
-    public class GalaxySymbol : IGalaxySymbol
+    public class GalaxySymbol : IXmlConvertible<GalaxySymbol>
     {
         public GalaxySymbol(string tagName)
         {
@@ -14,14 +15,14 @@ namespace GalaxyMerge.Archestra.Entities
         
         public string TagName { get; private set; }
         public XElement Root { get; set; }
-        public IEnumerable<ICustomProperty> CustomProperties { get; set; }
-        public IEnumerable<IPredefinedScript> PredefinedScripts { get; set; }
-        public IEnumerable<INamedScript> NamedScripts { get; set; }
+        public IEnumerable<CustomProperty> CustomProperties { get; set; }
+        public IEnumerable<PredefinedScript> PredefinedScripts { get; set; }
+        public IEnumerable<NamedScript> NamedScripts { get; set; }
         public XElement VisualTree { get; set; }
-        public IEnumerable<IWizardOption> WizardOptions { get; set; }
-        public IEnumerable<IWizardLayer> WizardLayers { get; set; }
+        public IEnumerable<WizardOption> WizardOptions { get; set; }
+        public IEnumerable<WizardLayer> WizardLayers { get; set; }
 
-        public IGalaxySymbol FromXml(XElement element)
+        public GalaxySymbol FromXml(XElement element)
         {
             var root = new XElement(element);
             root.RemoveNodes();

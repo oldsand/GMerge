@@ -21,10 +21,10 @@ namespace GalaxyMerge.Contracts
         IEnumerable<ArchiveEntry> GetArchiveEntries();
 
         [OperationContract]
-        GalaxyObject GetGalaxyObject(int objectId);
+        GalaxyObjectData GetGalaxyObject(int objectId);
         
         [OperationContract]
-        GalaxySymbol GetGalaxySymbol(int objectId);
+        GalaxySymbolData GetGalaxySymbol(int objectId);
 
         [OperationContract]
         IEnumerable<EventSetting> GetEventSettings();

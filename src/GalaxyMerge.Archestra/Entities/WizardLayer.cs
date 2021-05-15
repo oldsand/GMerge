@@ -3,16 +3,17 @@ using System.Linq;
 using System.Xml.Linq;
 using GalaxyMerge.Common.Abstractions;
 using GalaxyMerge.Common.Primitives;
+using GalaxyMerge.Core;
 
 namespace GalaxyMerge.Archestra.Entities
 {
-    public class WizardLayer : IWizardLayer
+    public class WizardLayer : IXmlConvertible<WizardLayer>
     {
         public string Name { get; set; }
         public string Rule { get; set; }
-        public IEnumerable<IWizardAssociation> Associations { get; set; }
+        public IEnumerable<WizardAssociation> Associations { get; set; }
 
-        public IWizardLayer FromXml(XElement element)
+        public WizardLayer FromXml(XElement element)
         {
             Name = element.Attribute(nameof(Name))?.Value;
             Rule = element.Attribute(nameof(Rule))?.Value;

@@ -23,28 +23,32 @@ namespace GalaxyMerge.Services
             return _clientGrSession.Name == galaxyName && _clientGrSession.Connected;
         }
 
-        public GalaxyObject GetObject(int objectId)
+        public GalaxyObjectData GetObjectById(int objectId)
         {
             using var objectRepository = new ObjectRepository(_clientGrSession.Name);
             var tagName = objectRepository.GetTagName(objectId);
-            return (GalaxyObject) _clientGrSession.GetObject(tagName);
+            var galaxyObject = _clientGrSession.GetObject(tagName);
+            return Mapper.Map(galaxyObject);
         }
 
-        public GalaxyObject GetObject(string tagName)
+        public GalaxyObjectData GetObjectByName(string tagName)
         {
-            return (GalaxyObject) _clientGrSession.GetObject(tagName);
+            var galaxyObject = _clientGrSession.GetObject(tagName);
+            return Mapper.Map(galaxyObject);
         }
 
-        public GalaxySymbol GetSymbol(int objectId)
+        public GalaxySymbolData GetSymbolById(int objectId)
         {
             using var objectRepository = new ObjectRepository(_clientGrSession.Name);
             var tagName = objectRepository.GetTagName(objectId);
-            return (GalaxySymbol) _clientGrSession.GetSymbol(tagName);
+            var galaxySymbol = _clientGrSession.GetSymbol(tagName);
+            return Mapper.Map(galaxySymbol);
         }
 
-        public GalaxySymbol GetSymbol(string tagName)
+        public GalaxySymbolData GetSymbolByName(string tagName)
         {
-            return (GalaxySymbol) _clientGrSession.GetSymbol(tagName);
+            var galaxySymbol = _clientGrSession.GetSymbol(tagName);
+            return Mapper.Map(galaxySymbol);
         }
     }
 }

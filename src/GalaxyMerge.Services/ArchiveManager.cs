@@ -47,7 +47,7 @@ namespace GalaxyMerge.Services
             return repo.GetAllEntries();
         }
 
-        public GalaxyObject GetGalaxyObject(int objectId)
+        public GalaxyObjectData GetGalaxyObject(int objectId)
         {
             using var archiveRepository = new ArchiveRepository(_grSession.Name);
 
@@ -61,7 +61,7 @@ namespace GalaxyMerge.Services
             return MaterializeObject(latest);
         }
         
-        public GalaxySymbol GetGalaxySymbol(int objectId)
+        public GalaxySymbolData GetGalaxySymbol(int objectId)
         {
             using var archiveRepository = new ArchiveRepository(_grSession.Name);
             
@@ -117,18 +117,18 @@ namespace GalaxyMerge.Services
             repo.UpdateInclusionSettings(inclusionSettings);
         }
         
-        private static GalaxyObject MaterializeObject(ArchiveEntry latest)
+        private static GalaxyObjectData MaterializeObject(ArchiveEntry latest)
         {
             var xml = XElement.Load(new MemoryStream(latest.CompressedData.Decompress()));
             var galaxyObject = new GalaxyObject().FromXml(xml);
-            return (GalaxyObject) galaxyObject;
+            return Mapper.Map(galaxyObject);
         }
 
-        private static GalaxySymbol MaterializeSymbol(ArchiveEntry latest)
+        private static GalaxySymbolData MaterializeSymbol(ArchiveEntry latest)
         {
             var xml = XElement.Load(new MemoryStream(latest.CompressedData.Decompress()));
             var galaxyObject = new GalaxySymbol("").FromXml(xml); //todo figure out tagname here
-            return (GalaxySymbol) galaxyObject;
+            return Mapper.Map(galaxyObject);
         }
     }
 }

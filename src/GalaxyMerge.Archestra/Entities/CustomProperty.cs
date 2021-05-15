@@ -1,9 +1,10 @@
 using System.Xml.Linq;
 using GalaxyMerge.Common.Abstractions;
+using GalaxyMerge.Core;
 
 namespace GalaxyMerge.Archestra.Entities
 {
-    public class CustomProperty : ICustomProperty
+    public class CustomProperty : IXmlConvertible<CustomProperty>
     {
         public string Name { get; set; }
         public string DataType { get; set; }
@@ -13,7 +14,7 @@ namespace GalaxyMerge.Archestra.Entities
         public string Expression { get; set; }
         public string Description { get; set; }
 
-        public ICustomProperty FromXml(XElement element)
+        public CustomProperty FromXml(XElement element)
         {
             Name = element.Attribute(nameof(Name))?.Value;
             DataType = element.Attribute(nameof(DataType))?.Value;

@@ -91,7 +91,7 @@ namespace GalaxyMerge.Archestra.Extensions
             attribute.SetValue(mxValue);
         }
 
-        public static IGalaxyAttribute AsGalaxyAttribute(this IAttribute attribute)
+        public static GalaxyAttribute AsGalaxyAttribute(this IAttribute attribute)
         {
             return new GalaxyAttribute
             {
@@ -105,20 +105,20 @@ namespace GalaxyMerge.Archestra.Extensions
             };
         }
 
-        public static IEnumerable<IGalaxyAttribute> AsGalaxyAttributes(this IAttributes attributes)
+        public static IEnumerable<GalaxyAttribute> AsGalaxyAttributes(this IAttributes attributes)
         {
             foreach (IAttribute attribute in attributes)
                 yield return attribute.AsGalaxyAttribute();
         }
         
-        public static IEnumerable<IGalaxyAttribute> ByDataType(this IAttributes attributes, DataType dataType)
+        public static IEnumerable<GalaxyAttribute> ByDataType(this IAttributes attributes, DataType dataType)
         {
             foreach (IAttribute attribute in attributes)
                 if (attribute.DataType == dataType.ToMxType())
                     yield return attribute.AsGalaxyAttribute();
         }
         
-        public static IEnumerable<IGalaxyAttribute> ByNameContains(this IAttributes attributes, string name)
+        public static IEnumerable<GalaxyAttribute> ByNameContains(this IAttributes attributes, string name)
         {
             foreach (IAttribute attribute in attributes)
                 if (attribute.Name.Contains(name))

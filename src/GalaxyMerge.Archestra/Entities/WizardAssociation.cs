@@ -2,15 +2,16 @@ using System;
 using System.Xml.Linq;
 using GalaxyMerge.Common.Abstractions;
 using GalaxyMerge.Common.Primitives;
+using GalaxyMerge.Core;
 
 namespace GalaxyMerge.Archestra.Entities
 {
-    public class WizardAssociation : IWizardAssociation
+    public class WizardAssociation : IXmlConvertible<WizardAssociation>
     {
         public string Name { get; set; }
         public WizardAssociationType AssociationType { get; set; }
 
-        public IWizardAssociation FromXml(XElement element)
+        public WizardAssociation FromXml(XElement element)
         {
             Name = element.Attribute(nameof(Name))?.Value;  
             AssociationType = (WizardAssociationType) Enum.Parse(typeof(WizardAssociationType), element.Name.ToString());

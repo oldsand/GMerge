@@ -5,11 +5,11 @@ using System.Xml.Linq;
 using System.Xml.Serialization;
 using GalaxyMerge.Common.Abstractions;
 using GalaxyMerge.Common.Primitives;
+using GalaxyMerge.Core;
 
 namespace GalaxyMerge.Archestra.Entities
 {
-    [XmlRoot]
-    public class GalaxyObject : IGalaxyObject
+    public class GalaxyObject : IXmlConvertible<GalaxyObject>
     {
         public string TagName { get; set; }
         public string ContainedName { get; set; }
@@ -21,9 +21,9 @@ namespace GalaxyMerge.Archestra.Entities
         public string HostName { get; set; }
         public string AreaName { get; set; }
         public string ContainerName { get; set; }
-        public IEnumerable<IGalaxyAttribute> Attributes { get; set; }
+        public IEnumerable<GalaxyAttribute> Attributes { get; set; }
 
-        public IGalaxyObject FromXml(XElement element)
+        public GalaxyObject FromXml(XElement element)
         {
             TagName = element.Attribute(nameof(TagName))?.Value;
             HierarchicalName = element.Attribute(nameof(HierarchicalName))?.Value;

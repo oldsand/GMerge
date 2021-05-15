@@ -4,13 +4,14 @@ using System.Xml;
 using System.Xml.Linq;
 using GalaxyMerge.Common.Abstractions;
 using GalaxyMerge.Common.Primitives;
+using GalaxyMerge.Core;
 
 // Object will be deserialized via xml
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace GalaxyMerge.Archestra.Entities
 {
-    public class NamedScript : INamedScript
+    public class NamedScript : IXmlConvertible<NamedScript>
     {
         public string Name { get; set; }
         public int DeadBand { get; set; }
@@ -19,7 +20,7 @@ namespace GalaxyMerge.Archestra.Entities
         public int TriggerPeriod { get; set; }
         public string Text { get; set; }
 
-        public INamedScript FromXml(XElement element)
+        public NamedScript FromXml(XElement element)
         {
             Name = element.Attribute(nameof(Name))?.Value;
             

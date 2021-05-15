@@ -9,7 +9,7 @@ using GalaxyMerge.Core.Extensions;
 
 namespace GalaxyMerge.Archestra.Entities
 {
-    public class GalaxyAttribute : IGalaxyAttribute
+    public class GalaxyAttribute : IXmlConvertible<GalaxyAttribute>
     {
         public string Name { get; set; }
         public DataType DataType { get; set; }
@@ -19,7 +19,7 @@ namespace GalaxyMerge.Archestra.Entities
         public object Value { get; set; }
         public int ArrayCount { get; set; }
 
-        public IGalaxyAttribute FromXml(XElement element)
+        public GalaxyAttribute FromXml(XElement element)
         {
             Name = element.Attribute(nameof(Name))?.Value;
             DataType = Enumeration.FromName<DataType>(element.Attribute(nameof(DataType))?.Value);

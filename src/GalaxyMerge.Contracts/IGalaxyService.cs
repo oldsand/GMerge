@@ -11,15 +11,15 @@ namespace GalaxyMerge.Contracts
         bool Connect(string galaxyName);
         
         [OperationContract]
-        GalaxyObject GetObject(int objectId);
+        GalaxyObjectData GetObjectById(int objectId);
         
         [OperationContract]
-        GalaxyObject GetObject(string tagName);
+        GalaxyObjectData GetObjectByName(string tagName);
 
         [OperationContract]
-        GalaxySymbol GetSymbol(int objectId);
+        GalaxySymbolData GetSymbolById(int objectId);
         
         [OperationContract]
-        GalaxySymbol GetSymbol(string tagName);
+        GalaxySymbolData GetSymbolByName(string tagName);
     }
 }

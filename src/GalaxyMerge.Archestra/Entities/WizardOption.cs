@@ -4,22 +4,23 @@ using System.Linq;
 using System.Xml.Linq;
 using GalaxyMerge.Common.Abstractions;
 using GalaxyMerge.Common.Primitives;
+using GalaxyMerge.Core;
 
 // Object will be deserialized via xml
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace GalaxyMerge.Archestra.Entities
 {
-    public class WizardOption : IWizardOption
+    public class WizardOption : IXmlConvertible<WizardOption>
     {
         public string Name { get; set; }
         public WizardOptionType OptionType { get; set; }
         public string Rule { get; set; }
         public string Description { get; set; }
         public string DefaultValue { get; set; }
-        public IEnumerable<IWizardChoice> Choices { get; set; }
+        public IEnumerable<WizardChoice> Choices { get; set; }
 
-        public IWizardOption FromXml(XElement element)
+        public WizardOption FromXml(XElement element)
         {
             Name = element.Attribute(nameof(Name))?.Value;
             OptionType = (WizardOptionType) Enum.Parse(typeof(WizardOptionType), element.Name.ToString());

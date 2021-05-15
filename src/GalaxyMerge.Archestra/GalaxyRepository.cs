@@ -86,20 +86,20 @@ namespace GalaxyMerge.Archestra
             return false;
         }
         
-        public IGalaxyObject GetObject(string tagName)
+        public GalaxyObject GetObject(string tagName)
         {
             var gObject = _galaxy.GetObjectByName(tagName);
             return gObject?.AsGalaxyObject();
         }
 
-        public IEnumerable<IGalaxyObject> GetObjects(IEnumerable<string> tagNames)
+        public IEnumerable<GalaxyObject> GetObjects(IEnumerable<string> tagNames)
         {
             var objects = _galaxy.GetObjectsByName(tagNames);
             foreach (IgObject gObject in objects)
                 yield return gObject.AsGalaxyObject();
         }
 
-        public IGalaxySymbol GetSymbol(string tagName)
+        public GalaxySymbol GetSymbol(string tagName)
         {
             using var tempDirectory = new TempDirectory(ApplicationPath.TempSymbol);
             var fileName = Path.Combine(tempDirectory.FullName, $@"{tagName}.xml");
@@ -110,12 +110,12 @@ namespace GalaxyMerge.Archestra
             return new GalaxySymbol(tagName).FromXml(symbol);
         }
 
-        public IEnumerable<IGalaxySymbol> GetSymbols(IEnumerable<string> tagNames)
+        public IEnumerable<GalaxySymbol> GetSymbols(IEnumerable<string> tagNames)
         {
             return tagNames.Select(GetSymbol);
         }
 
-        public void CreateObject(IGalaxyObject galaxyObject)
+        public void CreateObject(GalaxyObject galaxyObject)
         {
             var repositoryObject = _galaxy.CreateObject(galaxyObject.TagName, galaxyObject.DerivedFromName);
             
@@ -143,13 +143,13 @@ namespace GalaxyMerge.Archestra
             }
         }
 
-        public void CreateObjects(IEnumerable<IGalaxyObject> galaxyObjects)
+        public void CreateObjects(IEnumerable<GalaxyObject> galaxyObjects)
         {
             foreach (var galaxyObject in galaxyObjects)
                 CreateObject(galaxyObject);
         }
 
-        public void CreateSymbol(IGalaxySymbol galaxySymbol)
+        public void CreateSymbol(GalaxySymbol galaxySymbol)
         {
             var symbol = galaxySymbol.ToXml();
             var doc = new XDocument(new XDeclaration("1.0", "utf-8", "yes"), symbol);
@@ -164,7 +164,7 @@ namespace GalaxyMerge.Archestra
             //TODO: Can we then set the folder container or no?
         }
 
-        public void CreateSymbols(IEnumerable<IGalaxySymbol> galaxySymbols)
+        public void CreateSymbols(IEnumerable<GalaxySymbol> galaxySymbols)
         {
             foreach (var symbol in galaxySymbols)
                 CreateSymbol(symbol);
@@ -192,7 +192,7 @@ namespace GalaxyMerge.Archestra
             ResultHandler.Handle(objects.CommandResults, _galaxy.Name);
         }
 
-        public void UpdateObject(IGalaxyObject galaxyObject)
+        public void UpdateObject(GalaxyObject galaxyObject)
         {
             var repositoryObject = _galaxy.GetObjectByName(galaxyObject.TagName);
             var original = repositoryObject.AsGalaxyObject();
@@ -222,7 +222,7 @@ namespace GalaxyMerge.Archestra
             }
         }
 
-        public void UpdateSymbol(IGalaxySymbol galaxySymbol)
+        public void UpdateSymbol(GalaxySymbol galaxySymbol)
         {
             throw new NotImplementedException();
         }

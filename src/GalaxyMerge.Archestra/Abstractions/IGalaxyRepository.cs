@@ -2,6 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using GalaxyMerge.Archestra.Entities;
 using GalaxyMerge.Archestra.Options;
 using GalaxyMerge.Common.Abstractions;
 
@@ -23,18 +24,18 @@ namespace GalaxyMerge.Archestra.Abstractions
         Task LoginAsync(string userName, CancellationToken token);
         void Logout();
         bool UserIsAuthorized(string userName);
-        IGalaxyObject GetObject(string tagName);
-        IEnumerable<IGalaxyObject> GetObjects(IEnumerable<string> tagNames);
-        IGalaxySymbol GetSymbol(string tagName);
-        IEnumerable<IGalaxySymbol> GetSymbols(IEnumerable<string> tagNames);
-        void CreateObject(IGalaxyObject galaxyObject);
-        void CreateObjects(IEnumerable<IGalaxyObject> galaxyObjects);
-        void CreateSymbol(IGalaxySymbol galaxySymbol);
-        void CreateSymbols(IEnumerable<IGalaxySymbol> galaxySymbols);
+        GalaxyObject GetObject(string tagName);
+        IEnumerable<GalaxyObject> GetObjects(IEnumerable<string> tagNames);
+        GalaxySymbol GetSymbol(string tagName);
+        IEnumerable<GalaxySymbol> GetSymbols(IEnumerable<string> tagNames);
+        void CreateObject(GalaxyObject galaxyObject);
+        void CreateObjects(IEnumerable<GalaxyObject> galaxyObjects);
+        void CreateSymbol(GalaxySymbol galaxySymbol);
+        void CreateSymbols(IEnumerable<GalaxySymbol> galaxySymbols);
         void DeleteObject(string tagName, bool recursive);
         void DeleteObjects(IEnumerable<string> tagNames, bool recursive);
-        void UpdateObject(IGalaxyObject galaxyObject);
-        void UpdateSymbol(IGalaxySymbol galaxySymbol);
+        void UpdateObject(GalaxyObject galaxyObject);
+        void UpdateSymbol(GalaxySymbol galaxySymbol);
         void Deploy(IEnumerable<string> tagNames, DeploymentOptions options);
         void Undeploy(IEnumerable<string> tagNames, DeploymentOptions options);
         void ExportPkg(string tagName, string fileName);

@@ -80,21 +80,21 @@ namespace GalaxyMerge.Archestra.Extensions
             return names.Select(name => gObject.Attributes[name]);
         }
 
-        public static void SetUserDefinedAttributes(this IgObject gObject, IGalaxyObject source)
+        public static void SetUserDefinedAttributes(this IgObject gObject, GalaxyObject source)
         {
             var sourceUda = source.Attributes.SingleOrDefault(a => a.Name == "UDAs")?.Value.ToString();
             var targetUda = gObject.Attributes["UDAs"];
             targetUda?.SetValue(sourceUda);
         }
 
-        public static void SetFieldAttributes(this IgObject gObject, IGalaxyObject source)
+        public static void SetFieldAttributes(this IgObject gObject, GalaxyObject source)
         {
             var sourceField = source.Attributes.SingleOrDefault(a => a.Name == "UserAttrData")?.Value.ToString();
             var targetField = gObject.Attributes["UserAttrData"];
             targetField?.SetValue(sourceField);
         }
 
-        public static void ConfigureAttribute(this IgObject gObject, IGalaxyAttribute attribute, string description, string units)
+        public static void ConfigureAttribute(this IgObject gObject, GalaxyAttribute attribute, string description, string units)
         {
             var target = gObject.GetAttribute(attribute.Name);
             target.SetValue(attribute.Value);
@@ -108,7 +108,7 @@ namespace GalaxyMerge.Archestra.Extensions
                 target.EngUnits = units;
         }
 
-        public static void ConfigureAttributes(this IgObject gObject, IGalaxyObject source)
+        public static void ConfigureAttributes(this IgObject gObject, GalaxyObject source)
         {
             var udaData = gObject.GetAttribute("UDAs").GetValue<string>();
             var attributeNames =
@@ -128,7 +128,7 @@ namespace GalaxyMerge.Archestra.Extensions
             }
         }
 
-        public static void ConfigureExtension(this IgObject gObject, string primitiveName, ExtensionType extensionType, IGalaxyObject source)
+        public static void ConfigureExtension(this IgObject gObject, string primitiveName, ExtensionType extensionType, GalaxyObject source)
         {
             var configurableAttributes = extensionType.GenerateConfigurableAttributes(primitiveName);
 
@@ -148,7 +148,7 @@ namespace GalaxyMerge.Archestra.Extensions
             }
         }
 
-        public static void ConfigureExtensions(this IgObject gObject, IGalaxyObject source)
+        public static void ConfigureExtensions(this IgObject gObject, GalaxyObject source)
         {
             var sourceExtensions = source.Attributes.SingleOrDefault(a => a.Name == "Extensions")?.Value.ToString();
             if (sourceExtensions == null) return;
@@ -166,7 +166,7 @@ namespace GalaxyMerge.Archestra.Extensions
             }
         }
 
-        public static IGalaxyObject AsGalaxyObject(this IgObject gObject)
+        public static GalaxyObject AsGalaxyObject(this IgObject gObject)
         {
             return new GalaxyObject
             {
@@ -184,12 +184,12 @@ namespace GalaxyMerge.Archestra.Extensions
             };
         }
 
-        public static IGalaxyObject AsGalaxyObject(this ITemplate template)
+        public static GalaxyObject AsGalaxyObject(this ITemplate template)
         {
             return template.AsGObject().AsGalaxyObject();
         }
 
-        public static IGalaxyObject AsGalaxyObject(this IInstance instance)
+        public static GalaxyObject AsGalaxyObject(this IInstance instance)
         {
             return instance.AsGObject().AsGalaxyObject();
         }
