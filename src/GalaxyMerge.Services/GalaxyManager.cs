@@ -28,13 +28,13 @@ namespace GalaxyMerge.Services
             using var objectRepository = new ObjectRepository(_clientGrSession.Name);
             var tagName = objectRepository.GetTagName(objectId);
             var galaxyObject = _clientGrSession.GetObject(tagName);
-            return Mapper.Map(galaxyObject);
+            return DataMapper.Map(galaxyObject);
         }
 
         public GalaxyObjectData GetObjectByName(string tagName)
         {
             var galaxyObject = _clientGrSession.GetObject(tagName);
-            return Mapper.Map(galaxyObject);
+            return DataMapper.Map(galaxyObject);
         }
 
         public GalaxySymbolData GetSymbolById(int objectId)
@@ -42,13 +42,13 @@ namespace GalaxyMerge.Services
             using var objectRepository = new ObjectRepository(_clientGrSession.Name);
             var tagName = objectRepository.GetTagName(objectId);
             var galaxySymbol = _clientGrSession.GetSymbol(tagName);
-            return Mapper.Map(galaxySymbol);
+            return DataMapper.Map(galaxySymbol);
         }
 
         public GalaxySymbolData GetSymbolByName(string tagName)
         {
             var galaxySymbol = _clientGrSession.GetSymbol(tagName);
-            return Mapper.Map(galaxySymbol);
+            return DataMapper.Map(galaxySymbol);
         }
     }
 }

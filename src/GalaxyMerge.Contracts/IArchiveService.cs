@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.ServiceModel;
-using GalaxyMerge.Archestra.Entities;
 using GalaxyMerge.Archive.Entities;
 
 namespace GalaxyMerge.Contracts

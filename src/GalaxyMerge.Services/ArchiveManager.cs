@@ -121,14 +121,14 @@ namespace GalaxyMerge.Services
         {
             var xml = XElement.Load(new MemoryStream(latest.CompressedData.Decompress()));
             var galaxyObject = new GalaxyObject().FromXml(xml);
-            return Mapper.Map(galaxyObject);
+            return DataMapper.Map(galaxyObject);
         }
 
         private static GalaxySymbolData MaterializeSymbol(ArchiveEntry latest)
         {
             var xml = XElement.Load(new MemoryStream(latest.CompressedData.Decompress()));
             var galaxyObject = new GalaxySymbol("").FromXml(xml); //todo figure out tagname here
-            return Mapper.Map(galaxyObject);
+            return DataMapper.Map(galaxyObject);
         }
     }
 }

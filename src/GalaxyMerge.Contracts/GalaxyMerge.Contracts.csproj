@@ -57,10 +57,6 @@
         <Compile Include="WizardOptionData.cs" />
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\GalaxyMerge.Archestra\GalaxyMerge.Archestra.csproj">
-        <Project>{32ea2985-26c5-44b5-b8c1-46c8d4da0979}</Project>
-        <Name>GalaxyMerge.Archestra</Name>
-      </ProjectReference>
       <ProjectReference Include="..\GalaxyMerge.Archive\GalaxyMerge.Archive.csproj">
         <Project>{a5993bff-2469-4b9d-a4cd-be795a13d4f6}</Project>
         <Name>GalaxyMerge.Archive</Name>

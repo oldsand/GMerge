@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using GalaxyMerge.Archestra.Entities;
 using GalaxyMerge.Common.Primitives;
 
 namespace GalaxyMerge.Contracts

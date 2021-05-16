@@ -50,7 +50,7 @@
         <Compile Include="GalaxyRepositoryProvider.cs" />
         <Compile Include="IGalaxyRegistry.cs" />
         <Compile Include="IGalaxyRepositoryProvider.cs" />
-        <Compile Include="Mapper.cs" />
+        <Compile Include="DataMapper.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
     <ItemGroup>
