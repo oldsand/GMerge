@@ -1,6 +1,6 @@
 ﻿using GalaxyMerge.Core;
 
-namespace GalaxyMerge.Common.Primitives
+namespace GalaxyMerge.Primitives
 {
     /// <summary>
     /// Enumeration of all known Archestra attribute lock types.

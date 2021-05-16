@@ -1,4 +1,4 @@
-using GalaxyMerge.Common.Primitives;
+using GalaxyMerge.Primitives;
 
 namespace GalaxyMerge.Contracts
 {

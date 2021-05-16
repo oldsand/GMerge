@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using GalaxyMerge.Core;
 
-namespace GalaxyMerge.Common.Primitives
+namespace GalaxyMerge.Primitives
 {
     public abstract class ExtensionType : Enumeration
     {

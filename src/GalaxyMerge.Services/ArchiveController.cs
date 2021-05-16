@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
-using GalaxyMerge.Common.Primitives;
 using GalaxyMerge.Core;
 using GalaxyMerge.Core.Utilities;
+using GalaxyMerge.Primitives;
 
 namespace GalaxyMerge.Services
 {

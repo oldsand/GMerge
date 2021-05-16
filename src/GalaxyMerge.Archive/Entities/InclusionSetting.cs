@@ -1,5 +1,5 @@
-using GalaxyMerge.Common.Primitives;
 using GalaxyMerge.Core;
+using GalaxyMerge.Primitives;
 
 namespace GalaxyMerge.Archive.Entities
 {

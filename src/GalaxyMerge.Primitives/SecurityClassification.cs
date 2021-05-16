@@ -1,6 +1,6 @@
 ﻿using GalaxyMerge.Core;
 
-namespace GalaxyMerge.Common.Primitives
+namespace GalaxyMerge.Primitives
 {
     public class SecurityClassification : Enumeration
     {

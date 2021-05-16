@@ -1,8 +1,7 @@
 using System;
 using System.Xml.Linq;
-using GalaxyMerge.Common.Abstractions;
-using GalaxyMerge.Common.Primitives;
 using GalaxyMerge.Core;
+using GalaxyMerge.Primitives;
 
 namespace GalaxyMerge.Archestra.Entities
 {

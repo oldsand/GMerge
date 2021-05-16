@@ -23,7 +23,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{62CE6D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{F315C569-1436-4161-A7BA-60BD073E707C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Common", "GalaxyMerge.Common\GalaxyMerge.Common.csproj", "{446FE87C-5122-4344-9DF9-9F641E81A476}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Primitives", "GalaxyMerge.Primitives\GalaxyMerge.Primitives.csproj", "{446FE87C-5122-4344-9DF9-9F641E81A476}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Core", "GalaxyMerge.Core\GalaxyMerge.Core.csproj", "{DD496472-FB15-4FFC-86CA-2AC8F0E6CF3C}"
 EndProject

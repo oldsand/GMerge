@@ -2,9 +2,8 @@ using System;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
-using GalaxyMerge.Common.Abstractions;
-using GalaxyMerge.Common.Primitives;
 using GalaxyMerge.Core;
+using GalaxyMerge.Primitives;
 
 // Object will be deserialized via xml
 // ReSharper disable UnusedAutoPropertyAccessor.Global

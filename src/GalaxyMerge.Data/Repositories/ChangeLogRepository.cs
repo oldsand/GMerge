@@ -1,8 +1,8 @@
 using System.Linq;
-using GalaxyMerge.Common.Primitives;
 using GalaxyMerge.Core.Utilities;
 using GalaxyMerge.Data.Abstractions;
 using GalaxyMerge.Data.Entities;
+using GalaxyMerge.Primitives;
 
 namespace GalaxyMerge.Data.Repositories
 {

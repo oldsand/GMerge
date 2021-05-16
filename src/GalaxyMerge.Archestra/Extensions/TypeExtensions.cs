@@ -1,7 +1,7 @@
 using ArchestrA.GRAccess;
 using GalaxyMerge.Archestra.Options;
-using GalaxyMerge.Common.Primitives;
 using GalaxyMerge.Core;
+using GalaxyMerge.Primitives;
 
 namespace GalaxyMerge.Archestra.Extensions
 {

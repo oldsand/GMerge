@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using GalaxyMerge.Common.Primitives;
+using GalaxyMerge.Primitives;
 
 namespace GalaxyMerge.Archive.Entities
 {

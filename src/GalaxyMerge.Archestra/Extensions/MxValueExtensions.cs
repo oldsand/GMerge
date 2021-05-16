@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using ArchestrA.GRAccess;
-using GalaxyMerge.Common.Primitives;
+using GalaxyMerge.Primitives;
 
 namespace GalaxyMerge.Archestra.Extensions
 {

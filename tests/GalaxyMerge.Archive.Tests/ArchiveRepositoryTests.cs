@@ -4,9 +4,9 @@ using System.Linq;
 using System.Xml.Linq;
 using GalaxyMerge.Archive.Entities;
 using GalaxyMerge.Archive.Repositories;
-using GalaxyMerge.Common.Primitives;
 using GalaxyMerge.Core;
 using GalaxyMerge.Core.Extensions;
+using GalaxyMerge.Primitives;
 using NUnit.Framework;
 
 namespace GalaxyMerge.Archive.Tests

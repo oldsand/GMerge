@@ -2,10 +2,10 @@ using System.IO;
 using GalaxyMerge.Archive;
 using GalaxyMerge.Archive.Entities;
 using GalaxyMerge.Archive.Repositories;
-using GalaxyMerge.Common.Primitives;
 using GalaxyMerge.Core;
 using GalaxyMerge.Core.Utilities;
 using GalaxyMerge.Data.Repositories;
+using GalaxyMerge.Primitives;
 using GalaxyMerge.Testing;
 using NUnit.Framework;
 

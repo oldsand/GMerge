@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using GalaxyMerge.Archive.Entities;
-using GalaxyMerge.Common.Primitives;
 using GalaxyMerge.Core;
 using GalaxyMerge.Core.Utilities;
+using GalaxyMerge.Primitives;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 

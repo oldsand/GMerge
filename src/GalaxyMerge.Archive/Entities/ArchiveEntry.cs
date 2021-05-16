@@ -1,6 +1,7 @@
 using System;
-using GalaxyMerge.Common.Primitives;
 using GalaxyMerge.Core.Extensions;
+using GalaxyMerge.Primitives;
+
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 

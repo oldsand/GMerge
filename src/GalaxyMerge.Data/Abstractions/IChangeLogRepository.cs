@@ -1,5 +1,5 @@
-using GalaxyMerge.Common.Primitives;
 using GalaxyMerge.Data.Entities;
+using GalaxyMerge.Primitives;
 
 namespace GalaxyMerge.Data.Abstractions
 {

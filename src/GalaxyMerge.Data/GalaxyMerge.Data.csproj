@@ -22,7 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\GalaxyMerge.Common\GalaxyMerge.Common.csproj" />
+      <ProjectReference Include="..\GalaxyMerge.Primitives\GalaxyMerge.Primitives.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,5 +1,6 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Local
-using GalaxyMerge.Common.Primitives;
+
+using GalaxyMerge.Primitives;
 
 namespace GalaxyMerge.Archive.Entities
 {

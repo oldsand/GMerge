@@ -1,7 +1,7 @@
 using System;
 using GalaxyMerge.Archive.Repositories;
-using GalaxyMerge.Common.Primitives;
 using GalaxyMerge.Data.Repositories;
+using GalaxyMerge.Primitives;
 
 namespace GalaxyMerge.Services
 {

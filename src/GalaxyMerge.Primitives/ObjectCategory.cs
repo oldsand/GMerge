@@ -1,4 +1,4 @@
-namespace GalaxyMerge.Common.Primitives
+namespace GalaxyMerge.Primitives
 {
     public enum ObjectCategory
     {

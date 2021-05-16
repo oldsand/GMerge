@@ -7,9 +7,9 @@ using GalaxyMerge.Archestra.Abstractions;
 using GalaxyMerge.Archestra.Entities;
 using GalaxyMerge.Archive.Entities;
 using GalaxyMerge.Archive.Repositories;
-using GalaxyMerge.Common.Primitives;
 using GalaxyMerge.Contracts;
 using GalaxyMerge.Core.Extensions;
+using GalaxyMerge.Primitives;
 
 namespace GalaxyMerge.Services
 {

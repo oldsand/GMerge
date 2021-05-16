@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using GalaxyMerge.Common.Primitives;
+using GalaxyMerge.Primitives;
 using NUnit.Framework;
 
 namespace GalaxyMerge.Archive.Tests

@@ -2,8 +2,8 @@ using System;
 using System.Linq;
 using GalaxyMerge.Archestra.Entities;
 using GalaxyMerge.Archestra.Extensions;
-using GalaxyMerge.Common.Primitives;
 using GalaxyMerge.Core.Extensions;
+using GalaxyMerge.Primitives;
 using GalaxyMerge.Testing;
 using NUnit.Framework;
 

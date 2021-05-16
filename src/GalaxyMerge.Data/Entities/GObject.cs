@@ -4,10 +4,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Xml;
-using System.Xml.Schema;
-using GalaxyMerge.Common.Abstractions;
-using GalaxyMerge.Common.Primitives;
 
 namespace GalaxyMerge.Data.Entities
 {

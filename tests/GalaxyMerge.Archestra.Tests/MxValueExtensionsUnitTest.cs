@@ -3,8 +3,8 @@ using System.Collections;
 using System.Linq;
 using ArchestrA.GRAccess;
 using GalaxyMerge.Archestra.Extensions;
-using GalaxyMerge.Common.Primitives;
 using GalaxyMerge.Core.Extensions;
+using GalaxyMerge.Primitives;
 using NUnit.Framework;
 
 namespace GalaxyMerge.Archestra.Tests

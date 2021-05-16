@@ -82,9 +82,9 @@
         <Compile Include="SchemaValidator.cs" />
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\GalaxyMerge.Common\GalaxyMerge.Common.csproj">
+      <ProjectReference Include="..\GalaxyMerge.Primitives\GalaxyMerge.Primitives.csproj">
         <Project>{446fe87c-5122-4344-9df9-9f641e81a476}</Project>
-        <Name>GalaxyMerge.Common</Name>
+        <Name>GalaxyMerge.Primitives</Name>
       </ProjectReference>
       <ProjectReference Include="..\GalaxyMerge.Core\GalaxyMerge.Core.csproj">
         <Project>{dd496472-fb15-4ffc-86ca-2ac8f0e6cf3c}</Project>
