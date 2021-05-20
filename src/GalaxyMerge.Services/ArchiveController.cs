@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
+using GalaxyMerge.Archestra.Abstractions;
 using GalaxyMerge.Core;
 using GalaxyMerge.Core.Utilities;
 using GalaxyMerge.Primitives;
@@ -32,7 +33,10 @@ namespace GalaxyMerge.Services
         public void Stop()
         {
             foreach (var listener in _listeners)
+            {
                 listener.Stop();
+                _listeners.Remove(listener);
+            }
         }
 
         private void InitializeListeners()
@@ -41,15 +45,26 @@ namespace GalaxyMerge.Services
             
             foreach (var galaxy in galaxies)
             {
-                if (!SqlServiceBroker.IsEnabled(galaxy.Name))
-                    SqlServiceBroker.Enable(galaxy.Name);
-                
+                SetupServiceBroker(galaxy.Name);
+
                 var connectionString = ConnectionStringBuilder.BuildGalaxyConnection(galaxy.Name);
                 var listener = new SqlListener(connectionString, galaxy.Name, ChangeLogTableName);
                 listener.TableChanged += OnChangeLogTableUpdated;
                 
                 _listeners.Add(listener);
             }
+        }
+
+        private static void SetupServiceBroker(string databaseName)
+        {
+            if (!SqlServiceBroker.IsUnique(databaseName))
+            {
+                SqlServiceBroker.New(databaseName);
+                return;
+            }
+            
+            if (!SqlServiceBroker.IsEnabled(databaseName))
+                SqlServiceBroker.Enable(databaseName);
         }
 
         private void OnChangeLogTableUpdated(object sender, SqlListener.TableChangedEventArgs e)
