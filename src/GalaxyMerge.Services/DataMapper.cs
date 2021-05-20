@@ -1,5 +1,6 @@
 using System.Linq;
 using GalaxyMerge.Archestra.Entities;
+using GalaxyMerge.Archive.Entities;
 using GalaxyMerge.Contracts;
 
 namespace GalaxyMerge.Services
@@ -15,6 +16,16 @@ namespace GalaxyMerge.Services
         public static GalaxySymbolData Map(GalaxySymbol source)
         {
             return MapGalaxySymbol(source);
+        }
+        
+        public static ArchiveObjectData Map(ArchiveObject source)
+        {
+            return MapArchiveObject(source);
+        }
+        
+        public static ArchiveEntryData Map(ArchiveEntry source)
+        {
+            return MapArchiveEntry(source);
         }
 
         private static GalaxyObjectData MapGalaxyObject(GalaxyObject source)
@@ -138,6 +149,33 @@ namespace GalaxyMerge.Services
             {
                 Name = source.Name,
                 AssociationType = source.AssociationType
+            };
+        }
+
+        private static ArchiveObjectData MapArchiveObject(ArchiveObject source)
+        {
+            return new ArchiveObjectData
+            {
+                ObjectId = source.ObjectId,
+                TagName = source.TagName,
+                Version = source.Version,
+                Template = source.Template,
+                AddedOn = source.AddedOn,
+                ModifiedOn = source.ModifiedOn,
+                Entries = source.Entries.Select(MapArchiveEntry)
+            };
+        }
+
+        private static ArchiveEntryData MapArchiveEntry(ArchiveEntry source)
+        {
+            return new ArchiveEntryData
+            {
+                EntryId = source.EntryId,
+                ObjectId = source.ObjectId,
+                Version = source.Version,
+                ArchivedOn = source.ArchivedOn,
+                Operation = source.Operation,
+                CompressedData = source.CompressedData
             };
         }
     }

@@ -11,13 +11,13 @@ namespace GalaxyMerge.Contracts
         bool Connect(string galaxyName);
         
         [OperationContract]
-        ArchiveObject GetArchiveObject(int objectId);
+        ArchiveObjectData GetArchiveObject(int objectId);
 
         [OperationContract]
-        IEnumerable<ArchiveObject> GetArchiveObjects();
+        IEnumerable<ArchiveObjectData> GetArchiveObjects();
 
         [OperationContract]
-        IEnumerable<ArchiveEntry> GetArchiveEntries();
+        IEnumerable<ArchiveEntryData> GetArchiveEntries();
 
         [OperationContract]
         GalaxyObjectData GetGalaxyObject(int objectId);

@@ -29,22 +29,25 @@ namespace GalaxyMerge.Services
             return _grSession.Name == galaxyName && _grSession.Connected;
         }
         
-        public ArchiveObject GetArchiveObject(int objectId)
+        public ArchiveObjectData GetArchiveObject(int objectId)
         {
             using var repo = new ArchiveRepository(_grSession.Name);
-            return repo.GetObject(objectId);
+            var archiveObject = repo.GetObject(objectId);
+            return DataMapper.Map(archiveObject);
         }
 
-        public IEnumerable<ArchiveObject> GetArchiveObjects()
+        public IEnumerable<ArchiveObjectData> GetArchiveObjects()
         {
             using var repo = new ArchiveRepository(_grSession.Name);
-            return repo.GetAllObjects();
+            var archiveObjects = repo.GetAllObjects();
+            return archiveObjects.Select(DataMapper.Map);
         }
 
-        public IEnumerable<ArchiveEntry> GetArchiveEntries()
+        public IEnumerable<ArchiveEntryData> GetArchiveEntries()
         {
             using var repo = new ArchiveRepository(_grSession.Name);
-            return repo.GetAllEntries();
+            var archiveEntries = repo.GetAllEntries();
+            return archiveEntries.Select(DataMapper.Map);
         }
 
         public GalaxyObjectData GetGalaxyObject(int objectId)
