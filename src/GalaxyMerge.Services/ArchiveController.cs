@@ -33,10 +33,9 @@ namespace GalaxyMerge.Services
         public void Stop()
         {
             foreach (var listener in _listeners)
-            {
                 listener.Stop();
-                _listeners.Remove(listener);
-            }
+            
+            _listeners.Clear();
         }
 
         private void InitializeListeners()
