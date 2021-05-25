@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Abstractions\IArchiveBuilder.cs" />
     <Compile Include="Abstractions\IArchiveRepository.cs" />
+    <Compile Include="Abstractions\ILogQueue.cs" />
     <Compile Include="ArchiveBuilder.cs" />
     <Compile Include="ArchiveConfiguration.cs" />
     <Compile Include="ArchiveConfigurationBuilder.cs" />
@@ -54,12 +55,15 @@
     <Compile Include="Configurations\InclusionSettingConfiguration.cs" />
     <Compile Include="Configurations\GalaxyInfoConfiguration.cs" />
     <Compile Include="Configurations\ArchiveObjectConfiguration.cs" />
+    <Compile Include="Configurations\QueuedLogConfiguration.cs" />
     <Compile Include="Entities\ArchiveEntry.cs" />
     <Compile Include="Entities\IgnoreSettings.cs" />
     <Compile Include="Entities\InclusionSetting.cs" />
     <Compile Include="Entities\GalaxyInfo.cs" />
     <Compile Include="Entities\EventSetting.cs" />
     <Compile Include="Entities\ArchiveObject.cs" />
+    <Compile Include="Entities\LogQueue.cs" />
+    <Compile Include="Entities\QueuedLog.cs" />
     <Compile Include="Migrations\20210510173450_InitialBuild.cs" />
     <Compile Include="Migrations\20210510173450_InitialBuild.designer.cs">
       <DependentUpon>20210510173450_InitialBuild.cs</DependentUpon>

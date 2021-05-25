@@ -2,6 +2,8 @@ using System.Linq;
 using GalaxyMerge.Archestra.Entities;
 using GalaxyMerge.Archive.Entities;
 using GalaxyMerge.Contracts;
+using GalaxyMerge.Data.Entities;
+using TableDependency.SqlClient.Base;
 
 namespace GalaxyMerge.Services
 {
@@ -26,6 +28,16 @@ namespace GalaxyMerge.Services
         public static ArchiveEntryData Map(ArchiveEntry source)
         {
             return MapArchiveEntry(source);
+        }
+
+        public static ModelToTableMapper<ChangeLog> GetChangeLogMapper()
+        {
+            return new ModelToTableMapper<ChangeLog>()
+                .AddMapping(c => c.ChangeLogId, "gobject_change_log_id")
+                .AddMapping(c => c.ObjectId, "gobject_id")
+                .AddMapping(c => c.ChangeDate, "change_date")
+                .AddMapping(c => c.OperationId, "operation_id")
+                .AddMapping(c => c.UserName, "user_profile_name");
         }
 
         private static GalaxyObjectData MapGalaxyObject(GalaxyObject source)
@@ -174,7 +186,7 @@ namespace GalaxyMerge.Services
                 ObjectId = source.ObjectId,
                 Version = source.Version,
                 ArchivedOn = source.ArchivedOn,
-                Operation = source.Operation,
+                ChangeLogId = source.ChangeLogId,
                 CompressedData = source.CompressedData
             };
         }

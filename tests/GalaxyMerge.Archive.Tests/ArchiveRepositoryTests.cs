@@ -115,7 +115,7 @@ namespace GalaxyMerge.Archive.Tests
             SeedArchiveObjects();
 
             var target = repo.GetObjectIncludeEntries(3);
-            target.AddEntry(new byte[1034], Operation.CheckInSuccess);
+            target.AddEntry(new byte[1034]);
             
             repo.UpdateObject(target);
             repo.Save();
@@ -123,7 +123,6 @@ namespace GalaxyMerge.Archive.Tests
             var result = repo.GetObjectIncludeEntries(3);
             
             Assert.IsNotEmpty(result.Entries);
-            Assert.True(result.Entries.Any(x => x.Operation == Operation.CheckInSuccess));
         }
 
         [Test]

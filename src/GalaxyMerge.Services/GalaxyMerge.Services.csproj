@@ -33,18 +33,24 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
+        <Reference Include="mscorlib" />
         <Reference Include="System" />
+        <Reference Include="System.ComponentModel.DataAnnotations" />
         <Reference Include="System.Core" />
         <Reference Include="System.Data" />
         <Reference Include="System.ServiceModel" />
         <Reference Include="System.Xml" />
         <Reference Include="System.Xml.Linq" />
+        <Reference Include="TableDependency.SqlClient, Version=8.5.8.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>..\..\..\..\.nuget\packages\sqltabledependency\8.5.8\lib\net451\TableDependency.SqlClient.dll</HintPath>
+        </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="ArchiveSettingValidator.cs" />
+        <Compile Include="ArchiveQueue.cs" />
+        <Compile Include="ArchiveHelper.cs" />
         <Compile Include="ArchiveManager.cs" />
         <Compile Include="ArchiveProcessor.cs" />
-        <Compile Include="ArchiveController.cs" />
+        <Compile Include="GalaxyWatcher.cs" />
         <Compile Include="GalaxyManager.cs" />
         <Compile Include="GalaxyRegistry.cs" />
         <Compile Include="GalaxyRepositoryProvider.cs" />
@@ -78,6 +84,12 @@
         <Project>{1116a38e-aa67-46e3-9d09-e2de5c2a694e}</Project>
         <Name>GalaxyMerge.Data</Name>
       </ProjectReference>
+    </ItemGroup>
+    <ItemGroup>
+      <PackageReference Include="SqlTableDependency" Version="8.5.8" />
+      <PackageReference Include="System.ComponentModel.Annotations" Version="4.4.0" />
+      <PackageReference Include="System.Data.Common" Version="4.3.0" />
+      <PackageReference Include="System.Data.SqlClient" Version="4.3.0" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

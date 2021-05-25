@@ -42,9 +42,9 @@ namespace GalaxyMerge.Archive.Entities
             ModifiedOn = DateTime.Now;
         }
         
-        public void AddEntry(byte[] data, Operation operation = null)
+        public void AddEntry(byte[] data, int? changeLogId = null)
         {
-            var entry = new ArchiveEntry(this, data, operation);
+            var entry = new ArchiveEntry(this, data, changeLogId);
             _entries.Add(entry);
             ModifiedOn = DateTime.Now;
         }

@@ -10,7 +10,7 @@ namespace GalaxyMerge.Archive.Configurations
     {
         public void Configure(EntityTypeBuilder<ArchiveObject> builder)
         {
-            builder.ToTable("ArchiveObject").HasKey(x => x.ObjectId);
+            builder.ToTable(nameof(ArchiveObject)).HasKey(x => x.ObjectId);
             
             builder.Property(x => x.TagName).IsRequired();
             builder.Property(x => x.Template).IsRequired()

@@ -8,7 +8,7 @@ namespace GalaxyMerge.Archive.Configurations
     {
         public void Configure(EntityTypeBuilder<GalaxyInfo> builder)
         {
-            builder.ToTable("GalaxyInfo").HasKey(x => x.GalaxyName);
+            builder.ToTable(nameof(GalaxyInfo)).HasKey(x => x.GalaxyName);
         }
     }
 }

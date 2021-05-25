@@ -27,31 +27,31 @@ namespace GalaxyMerge.Services
             _galaxyName = _galaxyRepository.Name;
         }
 
-        public void Archive(int objectId, Operation operation = null, bool forceArchive = false)
+        public void Archive(int objectId, int? changeLogId = null, bool forceArchive = false)
         {
             var gObject = GetGObject(objectId);
-            ArchiveObject(gObject, forceArchive, operation);
+            ArchiveObject(gObject, changeLogId, forceArchive);
         }
         
-        public void Archive(string tagName, Operation operation = null, bool forceArchive = false)
+        public void Archive(string tagName, int? changeLogId = null, bool forceArchive = false)
         {
             var gObject = GetGObject(tagName);
-            ArchiveObject(gObject, forceArchive, operation);
+            ArchiveObject(gObject, changeLogId, forceArchive);
         }
 
-        private void ArchiveObject(GObject gObject, bool forceArchive, Operation operation)
+        private void ArchiveObject(GObject gObject, int? changeLogId, bool forceArchive)
         {
             if (Exists(gObject.ObjectId))
             {
                 if (!forceArchive && IsLatest(gObject)) return;
-                UpdateArchiveObject(gObject, operation);
+                UpdateArchiveObject(gObject, changeLogId);
                 return;
             }
             
-            AddArchiveObject(gObject, operation);
+            AddArchiveObject(gObject, changeLogId);
         }
 
-        private void AddArchiveObject(GObject gObject, Operation operation)
+        private void AddArchiveObject(GObject gObject, int? changeLogId)
         {
             using var archiveRepo = new ArchiveRepository(_galaxyName);
             
@@ -61,20 +61,20 @@ namespace GalaxyMerge.Services
             var archiveObject = new ArchiveObject(gObject.ObjectId, gObject.TagName, gObject.ConfigVersion, template);
             
             var data = IsSymbol(gObject) ? GetSymbolData(gObject.TagName) : GetObjectData(gObject.TagName);
-            archiveObject.AddEntry(data, operation);
+            archiveObject.AddEntry(data, changeLogId);
             
             archiveRepo.AddObject(archiveObject);
             archiveRepo.Save();
         }
         
-        private void UpdateArchiveObject(GObject gObject, Operation operation)
+        private void UpdateArchiveObject(GObject gObject, int? changeLogId)
         {
             using var archiveRepo = new ArchiveRepository(_galaxyName);
 
             var archiveObject = archiveRepo.GetObjectIncludeEntries(gObject.ObjectId);
 
             var data = IsSymbol(gObject) ? GetSymbolData(gObject.TagName) : GetObjectData(gObject.TagName);
-            archiveObject.AddEntry(data, operation);
+            archiveObject.AddEntry(data, changeLogId);
             
             if (gObject.TagName != archiveObject.TagName)
                 archiveObject.UpdateTagName(gObject.TagName);

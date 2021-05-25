@@ -1,4 +1,5 @@
-﻿using System.ServiceModel;
+﻿using System.Collections.Generic;
+using System.ServiceModel;
 using Autofac;
 using Autofac.Integration.Wcf;
 using GalaxyMerge.Services;
@@ -13,7 +14,7 @@ namespace GalaxyMerge.Host
     {
         private ServiceHost _galaxyManagerHost;
         private ServiceHost _archiveManagerHost;
-        private ArchiveController _archiveController;
+        private readonly List<GalaxyWatcher> _galaxyWatchers = new List<GalaxyWatcher>();
         private static IContainer _container;
 
         public static void Main(string[] args)
@@ -56,24 +57,33 @@ namespace GalaxyMerge.Host
             _archiveManagerHost.AddDependencyInjectionBehavior(typeof(ArchiveManager), _container);
             _archiveManagerHost.Open();
 
-            _archiveController?.Stop();
-            _archiveController = new ArchiveController(_container.Resolve<IGalaxyRepositoryProvider>());
-            _archiveController.Start();
+            var provider = _container.Resolve<IGalaxyRepositoryProvider>();
+            var serviceGrSessions = provider.GetAllServiceInstances();
+            foreach (var gr in serviceGrSessions)
+                _galaxyWatchers.Add(new GalaxyWatcher(gr));
         }
         
         private void OnStop()
         {
-            if (_galaxyManagerHost == null) return;
-            _galaxyManagerHost.Close();
-            _galaxyManagerHost = null;
+            if (_galaxyManagerHost != null)
+            {
+                _galaxyManagerHost.Close();
+                _galaxyManagerHost = null;    
+            }
             
-            if (_archiveManagerHost == null) return;
-            _archiveManagerHost.Close();
-            _archiveManagerHost = null;
-            
-            if (_archiveController == null) return;
-            _archiveController.Stop();
-            _archiveController = null;
+            if (_archiveManagerHost != null)
+            {
+                _archiveManagerHost.Close();
+                _archiveManagerHost = null;    
+            }
+
+            if (_galaxyWatchers.Count > 0)
+            {
+                foreach (var watcher in _galaxyWatchers)
+                    watcher.Dispose();
+
+                _galaxyWatchers.Clear();
+            }
             
             _container.Dispose();
             _container = null;
