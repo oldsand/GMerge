@@ -32,7 +32,7 @@ namespace GalaxyMerge.Archive
         public DbSet<GalaxyInfo> GalaxyInfo { get; set; }
         public DbSet<InclusionSetting> InclusionSettings { get; set; }
         public DbSet<EventSetting> EventSettings { get; set; }
-        public DbSet<QueuedLog> QueuedLogs { get; set; }
+        public DbSet<QueuedEntry> QueuedEntries { get; set; }
         
     }
 }

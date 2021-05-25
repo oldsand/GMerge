@@ -1,24 +1,28 @@
 using System;
+using System.Linq;
+using GalaxyMerge.Primitives;
 
 namespace GalaxyMerge.Archive.Entities
 {
-    public class QueuedLog
+    public class QueuedEntry
     {
-        private QueuedLog()
+        private QueuedEntry()
         {
         }
         
-        public QueuedLog(int changeLogId, int objectId)
+        public QueuedEntry(int changeLogId, int objectId, int operationId)
         {
             ChangeLogId = changeLogId;
             ObjectId = objectId;
+            OperationId = operationId;
             QueuedOn = DateTime.Now;
-            IsProcessing = false;
+            State = QueueState.New;
         }
         
         public int ChangeLogId { get; private set; }
         public int ObjectId { get; private set; }
+        public int OperationId { get; private set; }
         public DateTime QueuedOn { get; private set; }
-        public bool IsProcessing { get; set; }
+        public QueueState State { get; set; }
     }
 }

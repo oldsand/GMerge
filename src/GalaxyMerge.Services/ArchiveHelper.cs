@@ -1,4 +1,5 @@
 using System;
+using GalaxyMerge.Archive.Entities;
 using GalaxyMerge.Archive.Repositories;
 using GalaxyMerge.Data.Entities;
 using GalaxyMerge.Data.Repositories;
@@ -15,9 +16,9 @@ namespace GalaxyMerge.Services
             _galaxyName = galaxyName;
         }
         
-        public bool IsArchivable(ChangeLog changeLog)
+        public bool IsArchivable(QueuedEntry queuedEntry)
         {
-            return HasValidInclusionOption(changeLog.ObjectId) && IsValidArchiveTrigger(changeLog.OperationId);
+            return HasValidInclusionOption(queuedEntry.ObjectId) && IsValidArchiveTrigger(queuedEntry.OperationId);
         }
         
         private bool HasValidInclusionOption(int objectId)

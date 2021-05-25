@@ -3,8 +3,8 @@ using System.Collections.Concurrent;
 using System.Threading;
 using GalaxyMerge.Archestra.Abstractions;
 using GalaxyMerge.Archive.Entities;
+using GalaxyMerge.Archive.Repositories;
 using GalaxyMerge.Data.Entities;
-using GalaxyMerge.Data.Repositories;
 using NLog;
 
 namespace GalaxyMerge.Services
@@ -12,12 +12,14 @@ namespace GalaxyMerge.Services
     public class ArchiveQueue
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private readonly BlockingCollection<QueuedEntry> _jobQueue = new BlockingCollection<QueuedEntry>();
         private readonly IGalaxyRepository _galaxyRepository;
-        private readonly BlockingCollection<QueuedLog> _jobQueue = new BlockingCollection<QueuedLog>();
+        private readonly ArchiveProcessor _archiveProcessor;
 
         public ArchiveQueue(IGalaxyRepository galaxyRepository)
         {
             _galaxyRepository = galaxyRepository;
+            _archiveProcessor = new ArchiveProcessor(galaxyRepository);
             var thread = new Thread(ProcessJobs) {IsBackground = true};
             thread.Start();
         }
@@ -27,62 +29,63 @@ namespace GalaxyMerge.Services
             Logger.Info("Enqueuing change log '{ChangeLogId}' for object '{ObjectId}'", changeLog.ChangeLogId,
                 changeLog.ObjectId);
             
-            var queuedLog = new QueuedLog(changeLog.ChangeLogId, changeLog.ObjectId);
+            var queuedEntry = new QueuedEntry(changeLog.ChangeLogId, changeLog.ObjectId, changeLog.OperationId);
             
-            using var logQueue = new LogQueue(_galaxyRepository.Name);
-            logQueue.Enqueue(queuedLog);
+            using var queueRepository = new QueueRepository(_galaxyRepository.Name);
+            queueRepository.Add(queuedEntry);
             
-            _jobQueue.Add(queuedLog);
+            _jobQueue.Add(queuedEntry);
         }
 
         private void ProcessJobs()
         {
             ReloadQueue();
             
-            foreach (var log in _jobQueue.GetConsumingEnumerable(CancellationToken.None))
+            foreach (var entry in _jobQueue.GetConsumingEnumerable(CancellationToken.None))
             {
-                using var logQueue = new LogQueue(_galaxyRepository.Name);
+                Logger.Trace("New entry with id '{ChangeLogId}' detected", entry.ChangeLogId);
+                using var queueRepository = new QueueRepository(_galaxyRepository.Name);
                 
-                Console.WriteLine("Validating against queue settings:" + log.ChangeLogId);
-                if (!CanQueue(log))
+                if (!CanProcess(entry))
                 {
-                    Console.WriteLine("Invalid archive operation:" + log.ChangeLogId);
-                    logQueue.Dequeue(log.ChangeLogId);
+                    Logger.Trace("Operation '{OperationId}' for object '{ObjectId}' not valid for processing"
+                        ,entry.OperationId, entry.ObjectId);
+                    queueRepository.Remove(entry.ChangeLogId);
                     continue;
                 }
 
-                Console.WriteLine("Valid archive operation - Marking queued log processing:" + log.ChangeLogId);
-                logQueue.MarkAsProcessing(log.ChangeLogId);
-                
-                Console.WriteLine("Processing object:" + log.ObjectId);
-                var archiver = new ArchiveProcessor(_galaxyRepository);
-                archiver.Archive(log.ObjectId, log.ChangeLogId);
-                
-                Console.WriteLine("Dequeuing log:" + log.ChangeLogId);
-                logQueue.Dequeue(log.ChangeLogId);
-                
-                Console.WriteLine("Processing complete for log:" + log.ChangeLogId);
+                try
+                {
+                    Logger.Info("Archiving entry '{ChangeLogId}' for object '{ObjectId}'"
+                        ,entry.ChangeLogId ,entry.ObjectId);
+                    queueRepository.SetProcessing(entry.ChangeLogId);
+                    _archiveProcessor.Archive(entry.ObjectId, entry.ChangeLogId);
+                    queueRepository.Remove(entry.ChangeLogId);
+                }
+                catch (Exception)
+                {
+                    Logger.Error("Archiving failed for '{ChangeLogId}' on object '{ObjectId}'"
+                        ,entry.ChangeLogId ,entry.ObjectId);
+                    queueRepository.SetFailed(entry.ChangeLogId);
+                }
             }
         }
 
         private void ReloadQueue()
         {
-            Logger.Info("Loading queued logs from database.");
+            Logger.Info("Loading queued logs from database");
             
-            using var logQueue = new LogQueue(_galaxyRepository.Name);
+            using var logQueue = new QueueRepository(_galaxyRepository.Name);
             var queuedLogs = logQueue.GetAll();
 
             foreach (var queuedLog in queuedLogs)
                 _jobQueue.Add(queuedLog);
         }
 
-        private bool CanQueue(QueuedLog queuedLog)
+        private bool CanProcess(QueuedEntry queuedEntry)
         {
-            using var repo = new ChangeLogRepository(_galaxyRepository.Name);
-            var changeLog = repo.Find(x => x.ChangeLogId == queuedLog.ChangeLogId);
-            
             var helper = new ArchiveHelper(_galaxyRepository.Name);
-            return helper.IsArchivable(changeLog);
+            return helper.IsArchivable(queuedEntry);
         }
     }
 }
