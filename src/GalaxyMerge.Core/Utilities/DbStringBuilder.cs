@@ -5,9 +5,9 @@ using Microsoft.Data.Sqlite;
 
 namespace GalaxyMerge.Core.Utilities
 {
-    public static class ConnectionStringBuilder
+    public static class DbStringBuilder
     {
-        public static string BuildGalaxyConnection(string galaxyName)
+        public static string BuildGalaxy(string galaxyName)
         {
             return new SqlConnectionStringBuilder
             {
@@ -17,12 +17,12 @@ namespace GalaxyMerge.Core.Utilities
             }.ConnectionString;
         }
 
-        public static string BuildArchiveConnection(string galaxyName)
+        public static string BuildArchive(string galaxyName)
         {
             if (!Directory.Exists(ApplicationPath.Archives))
                 Directory.CreateDirectory(ApplicationPath.Archives);
             
-            return new SqliteConnectionStringBuilder()
+            return new SqliteConnectionStringBuilder
             {
                 DataSource = Path.Combine(ApplicationPath.Archives, $"{galaxyName}.db")
             }.ConnectionString;

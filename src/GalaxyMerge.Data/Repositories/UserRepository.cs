@@ -8,7 +8,7 @@ namespace GalaxyMerge.Data.Repositories
     public class UserRepository : Repository<UserProfile>, IUserRepository
     {
         public UserRepository(string galaxyName) 
-            : base(GalaxyContext.Create(ConnectionStringBuilder.BuildGalaxyConnection(galaxyName)))
+            : base(GalaxyContext.Create(DbStringBuilder.BuildGalaxy(galaxyName)))
         {
         }
 

@@ -35,7 +35,7 @@ namespace GalaxyMerge.Services
         
         private void InitializeDependency(string databaseName)
         {
-            var connectionString = ConnectionStringBuilder.BuildGalaxyConnection(databaseName);
+            var connectionString = DbStringBuilder.BuildGalaxy(databaseName);
             _dependency = new SqlTableDependency<ChangeLog>(connectionString, ChangeLogTableName,
                 mapper: DataMapper.GetChangeLogMapper(), executeUserPermissionCheck: false);
             _dependency.OnChanged += OnChangeLogTableUpdated;

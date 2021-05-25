@@ -1,7 +1,10 @@
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Autofac;
 using GalaxyMerge.Archive;
 using GalaxyMerge.Archive.Abstractions;
+using GalaxyMerge.Core.Extensions;
 using GalaxyMerge.Services;
 
 namespace GalaxyMerge.Host
@@ -13,7 +16,7 @@ namespace GalaxyMerge.Host
         public void Bootstrap()
         {
             ConfigureContainer();
-            RegisterGalaxies();
+            RegisterGalaxies().Await(RegistrationCompletedCallback, RegistrationErrorCallback);
             EnsureArchivesExist();
         }
 
@@ -34,14 +37,26 @@ namespace GalaxyMerge.Host
             _container = builder.Build();
         }
 
-        private void RegisterGalaxies()
+        private async Task RegisterGalaxies()
         {
             if (_container == null)
                 throw new InvalidOperationException("Container not yet initialized");
 
             var registry = _container.Resolve<IGalaxyRegistry>();
             
-            registry.RegisterAll(); //todo should this be async/parallel?
+            await registry.RegisterAllAsync(CancellationToken.None);
+        }
+        
+        private static void RegistrationErrorCallback(Exception obj)
+        {
+            Console.WriteLine("Well shit...");
+            //todo log errors to event logs, ensure that the service does not start.
+        }
+
+        private static void RegistrationCompletedCallback()
+        {
+            Console.WriteLine("Yay");
+            //todo probably just log here
         }
 
         private void EnsureArchivesExist()

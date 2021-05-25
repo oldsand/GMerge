@@ -61,6 +61,8 @@ namespace GalaxyMerge.Services
         {
             var user = WindowsIdentity.GetCurrent();
             var galaxies = _galaxyFinder.FindAll();
+            
+            
             foreach (var galaxy in galaxies)
                 RegisterGalaxy(galaxy, user.Name);
         }

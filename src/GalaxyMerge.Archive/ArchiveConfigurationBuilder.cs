@@ -36,13 +36,13 @@ namespace GalaxyMerge.Archive
         public ArchiveConfigurationBuilder(string galaxyName) : this()
         {
             UpdateInfo(new GalaxyInfo(galaxyName));
-            UpdateConnectionString(ConnectionStringBuilder.BuildArchiveConnection(galaxyName));
+            UpdateConnectionString(DbStringBuilder.BuildArchive(galaxyName));
         }
 
         public ArchiveConfigurationBuilder(string galaxyName, int? version, string cdiVersion, string isaVersion) : this()
         {
             UpdateInfo(new GalaxyInfo(galaxyName, version, cdiVersion, isaVersion));
-            UpdateConnectionString(ConnectionStringBuilder.BuildArchiveConnection(galaxyName));
+            UpdateConnectionString(DbStringBuilder.BuildArchive(galaxyName));
         }
 
         public static ArchiveConfigurationBuilder Default(string galaxyName, int? version, string cdiVersion, string isaVersion)

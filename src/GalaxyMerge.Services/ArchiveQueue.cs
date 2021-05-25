@@ -16,7 +16,7 @@ namespace GalaxyMerge.Services
         public ArchiveQueue(IGalaxyRepository galaxyRepository)
         {
             _galaxyRepository = galaxyRepository;
-            var thread = new Thread(OnStart) {IsBackground = true};
+            var thread = new Thread(ProcessJobs) {IsBackground = true};
             thread.Start();
         }
  
@@ -32,7 +32,7 @@ namespace GalaxyMerge.Services
             _jobQueue.Add(queuedLog);
         }
 
-        private void OnStart()
+        private void ProcessJobs()
         {
             RefreshQueue();
             

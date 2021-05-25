@@ -14,7 +14,7 @@ namespace GalaxyMerge.Archive.Repositories
         
         public ArchiveRepository(string galaxyName)
         {
-            var connectionString = ConnectionStringBuilder.BuildArchiveConnection(galaxyName);
+            var connectionString = DbStringBuilder.BuildArchive(galaxyName);
             var options = new DbContextOptionsBuilder<ArchiveContext>().UseSqlite(connectionString).Options;
             _context = new ArchiveContext(options);
         }

@@ -15,7 +15,7 @@ namespace GalaxyMerge.Data.Repositories
 
         public LookupRepository(string galaxyName)
         {
-            _context = GalaxyContext.Create(ConnectionStringBuilder.BuildGalaxyConnection(galaxyName));
+            _context = GalaxyContext.Create(DbStringBuilder.BuildGalaxy(galaxyName));
         }
         
         public IEnumerable<ObjectLookup> FindAncestors(int objectId, bool excludeSelf = true)

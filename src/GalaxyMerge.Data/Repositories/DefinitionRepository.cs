@@ -10,7 +10,7 @@ namespace GalaxyMerge.Data.Repositories
     public class DefinitionRepository : Repository<TemplateDefinition>, IDefinitionRepository
     {
         public DefinitionRepository(string galaxyName) 
-            : base(GalaxyContext.Create(ConnectionStringBuilder.BuildGalaxyConnection(galaxyName)))
+            : base(GalaxyContext.Create(DbStringBuilder.BuildGalaxy(galaxyName)))
         {
         }
 
