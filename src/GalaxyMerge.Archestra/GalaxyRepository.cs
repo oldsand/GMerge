@@ -87,12 +87,14 @@ namespace GalaxyMerge.Archestra
         
         public GalaxyObject GetObject(string tagName)
         {
+            _galaxy.SynchronizeClient();
             var gObject = _galaxy.GetObjectByName(tagName);
             return gObject?.AsGalaxyObject();
         }
 
         public IEnumerable<GalaxyObject> GetObjects(IEnumerable<string> tagNames)
         {
+            _galaxy.SynchronizeClient();
             var objects = _galaxy.GetObjectsByName(tagNames);
             foreach (IgObject gObject in objects)
                 yield return gObject.AsGalaxyObject();
@@ -100,6 +102,7 @@ namespace GalaxyMerge.Archestra
 
         public GalaxySymbol GetSymbol(string tagName)
         {
+            _galaxy.SynchronizeClient();
             using var tempDirectory = new TempDirectory(ApplicationPath.TempSymbol);
             var fileName = Path.Combine(tempDirectory.FullName, $@"{tagName}.xml");
             

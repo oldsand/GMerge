@@ -4,6 +4,7 @@ using System.Threading;
 using GalaxyMerge.Archestra.Abstractions;
 using GalaxyMerge.Archive.Entities;
 using GalaxyMerge.Data.Entities;
+using GalaxyMerge.Data.Repositories;
 
 namespace GalaxyMerge.Services
 {
@@ -21,16 +22,14 @@ namespace GalaxyMerge.Services
  
         public void Enqueue(ChangeLog changeLog)
         {
-            if (!CanQueue(changeLog)) return;
-
-            var log = new QueuedLog(changeLog.ChangeLogId, changeLog.ObjectId);
+            var queuedLog = new QueuedLog(changeLog.ChangeLogId, changeLog.ObjectId);
             
-            Console.WriteLine("Persisting log to archive queue:" + log.ChangeLogId);
+            Console.WriteLine("Saving log to queue:" + queuedLog.ChangeLogId);
             using var logQueue = new LogQueue(_galaxyRepository.Name);
-            logQueue.Enqueue(log);
+            logQueue.Enqueue(queuedLog);
             
-            Console.WriteLine("Adding Log to job queue:" + log.ChangeLogId);
-            _jobQueue.Add(log);
+            Console.WriteLine("Adding log to job queue:" + queuedLog.ChangeLogId);
+            _jobQueue.Add(queuedLog);
         }
 
         private void OnStart()
@@ -39,16 +38,27 @@ namespace GalaxyMerge.Services
             
             foreach (var log in _jobQueue.GetConsumingEnumerable(CancellationToken.None))
             {
-                Console.WriteLine("Marking queued log processing:" + log.ChangeLogId);
-                using var queue = new LogQueue(_galaxyRepository.Name);
-                queue.MarkAsProcessing(log.ChangeLogId);
+                using var logQueue = new LogQueue(_galaxyRepository.Name);
+                
+                Console.WriteLine("Validating against queue settings:" + log.ChangeLogId);
+                if (!CanQueue(log))
+                {
+                    Console.WriteLine("Invalid archive operation:" + log.ChangeLogId);
+                    logQueue.Dequeue(log.ChangeLogId);
+                    continue;
+                }
+
+                Console.WriteLine("Valid archive operation - Marking queued log processing:" + log.ChangeLogId);
+                logQueue.MarkAsProcessing(log.ChangeLogId);
                 
                 Console.WriteLine("Processing object:" + log.ObjectId);
                 var archiver = new ArchiveProcessor(_galaxyRepository);
                 archiver.Archive(log.ObjectId, log.ChangeLogId);
                 
                 Console.WriteLine("Dequeuing log:" + log.ChangeLogId);
-                queue.Dequeue(log.ChangeLogId);
+                logQueue.Dequeue(log.ChangeLogId);
+                
+                Console.WriteLine("Processing complete for log:" + log.ChangeLogId);
             }
         }
 
@@ -61,8 +71,11 @@ namespace GalaxyMerge.Services
                 _jobQueue.Add(queuedLog);
         }
 
-        private bool CanQueue(ChangeLog changeLog)
+        private bool CanQueue(QueuedLog queuedLog)
         {
+            using var repo = new ChangeLogRepository(_galaxyRepository.Name);
+            var changeLog = repo.Find(x => x.ChangeLogId == queuedLog.ChangeLogId);
+            
             var helper = new ArchiveHelper(_galaxyRepository.Name);
             return helper.IsArchivable(changeLog);
         }

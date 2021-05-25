@@ -73,15 +73,15 @@ namespace GalaxyMerge.Services
 
             var archiveObject = archiveRepo.GetObjectIncludeEntries(gObject.ObjectId);
 
-            var data = IsSymbol(gObject) ? GetSymbolData(gObject.TagName) : GetObjectData(gObject.TagName);
-            archiveObject.AddEntry(data, changeLogId);
-            
             if (gObject.TagName != archiveObject.TagName)
                 archiveObject.UpdateTagName(gObject.TagName);
             
             if (gObject.ConfigVersion != archiveObject.Version)
                 archiveObject.UpdateVersion(gObject.ConfigVersion);
             
+            var data = IsSymbol(gObject) ? GetSymbolData(gObject.TagName) : GetObjectData(gObject.TagName);
+            archiveObject.AddEntry(data, changeLogId);
+
             archiveRepo.UpdateObject(archiveObject);
             archiveRepo.Save();
         }
