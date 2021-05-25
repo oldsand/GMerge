@@ -62,7 +62,6 @@ namespace GalaxyMerge.Services
             var user = WindowsIdentity.GetCurrent();
             var galaxies = _galaxyFinder.FindAll();
             
-            
             foreach (var galaxy in galaxies)
                 RegisterGalaxy(galaxy, user.Name);
         }
@@ -72,6 +71,20 @@ namespace GalaxyMerge.Services
             var galaxies = _galaxyFinder.FindAll();
             foreach (var galaxy in galaxies)
                 RegisterGalaxy(galaxy, userName);
+        }
+        
+        public void RegisterParallel()
+        {
+            var user = WindowsIdentity.GetCurrent();
+            var unregisteredGalaxies = _galaxyFinder.FindAll().Where(g => !IsRegistered(g, user.Name)).ToList();
+
+            Parallel.ForEach(unregisteredGalaxies, galaxy =>
+            {
+                var galaxyRepository = _repositoryFactory.Create(galaxy);
+                galaxyRepository.Login(user.Name);
+                galaxyRepository.SynchronizeClient();
+                _galaxies.Add(galaxyRepository);
+            });
         }
 
         public Task RegisterAsync(string galaxyName, CancellationToken token)

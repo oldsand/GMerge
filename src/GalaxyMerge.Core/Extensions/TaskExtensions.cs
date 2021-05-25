@@ -68,7 +68,7 @@ namespace GalaxyMerge.Core.Extensions
         /// <param name="completedCallback">The action to perform when the task is complete.</param>
         /// <param name="errorCallback">The action to perform when an error occurs executing the task.</param>
         /// <param name="configureAwait">Configures an awaiter used to await this task</param>
-        private static async void Await(this Task task, Action completedCallback, Action<Exception> errorCallback, bool configureAwait)
+        private static void Await(this Task task, Action completedCallback, Action<Exception> errorCallback, bool configureAwait)
         {
             task.AwaitInternal(completedCallback, errorCallback, configureAwait);
         }

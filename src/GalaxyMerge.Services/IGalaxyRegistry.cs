@@ -16,6 +16,7 @@ namespace GalaxyMerge.Services
         void Register(string galaxyName, string userName);
         void RegisterAll();
         void RegisterAll(string userName);
+        void RegisterParallel();
         Task RegisterAsync(string galaxyName, CancellationToken token);
         Task RegisterAsync(string galaxyName, string userName, CancellationToken token);
         Task RegisterAllAsync(CancellationToken token);
