@@ -19,6 +19,11 @@ namespace GalaxyMerge.Archive.Repositories
             _context = new ArchiveContext(options);
         }
 
+        public QueuedEntry Get(int changeLogId)
+        {
+            return _context.QueuedEntries.Find(changeLogId);
+        }
+
         public IEnumerable<QueuedEntry> GetAll()
         {
             return _context.QueuedEntries.ToList();

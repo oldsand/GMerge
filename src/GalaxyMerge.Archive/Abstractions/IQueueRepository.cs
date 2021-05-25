@@ -6,6 +6,7 @@ namespace GalaxyMerge.Archive.Abstractions
 {
     public interface IQueueRepository : IDisposable
     {
+        QueuedEntry Get(int changeLogId);
         IEnumerable<QueuedEntry> GetAll();
         void Add(QueuedEntry queuedEntry);
         void Remove(int changeLogId);
