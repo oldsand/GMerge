@@ -5,11 +5,13 @@ using GalaxyMerge.Archestra.Abstractions;
 using GalaxyMerge.Archive.Entities;
 using GalaxyMerge.Data.Entities;
 using GalaxyMerge.Data.Repositories;
+using NLog;
 
 namespace GalaxyMerge.Services
 {
     public class ArchiveQueue
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly IGalaxyRepository _galaxyRepository;
         private readonly BlockingCollection<QueuedLog> _jobQueue = new BlockingCollection<QueuedLog>();
 
@@ -22,19 +24,20 @@ namespace GalaxyMerge.Services
  
         public void Enqueue(ChangeLog changeLog)
         {
+            Logger.Info("Enqueuing change log '{ChangeLogId}' for object '{ObjectId}'", changeLog.ChangeLogId,
+                changeLog.ObjectId);
+            
             var queuedLog = new QueuedLog(changeLog.ChangeLogId, changeLog.ObjectId);
             
-            Console.WriteLine("Saving log to queue:" + queuedLog.ChangeLogId);
             using var logQueue = new LogQueue(_galaxyRepository.Name);
             logQueue.Enqueue(queuedLog);
             
-            Console.WriteLine("Adding log to job queue:" + queuedLog.ChangeLogId);
             _jobQueue.Add(queuedLog);
         }
 
         private void ProcessJobs()
         {
-            RefreshQueue();
+            ReloadQueue();
             
             foreach (var log in _jobQueue.GetConsumingEnumerable(CancellationToken.None))
             {
@@ -62,8 +65,10 @@ namespace GalaxyMerge.Services
             }
         }
 
-        private void RefreshQueue()
+        private void ReloadQueue()
         {
+            Logger.Info("Loading queued logs from database.");
+            
             using var logQueue = new LogQueue(_galaxyRepository.Name);
             var queuedLogs = logQueue.GetAll();
 

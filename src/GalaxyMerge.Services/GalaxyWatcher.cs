@@ -10,7 +10,7 @@ namespace GalaxyMerge.Services
 {
     public class GalaxyWatcher : IDisposable
     {
-        private SqlTableDependency<ChangeLog> _dependency;
+        private SqlTableDependency<ChangeLog> _changeLogDependency;
         private readonly ArchiveQueue _archiveQueue;
         private const string ChangeLogTableName = "gobject_change_log";
 
@@ -36,13 +36,13 @@ namespace GalaxyMerge.Services
         private void InitializeDependency(string databaseName)
         {
             var connectionString = DbStringBuilder.BuildGalaxy(databaseName);
-            _dependency = new SqlTableDependency<ChangeLog>(connectionString, ChangeLogTableName,
+            _changeLogDependency = new SqlTableDependency<ChangeLog>(connectionString, ChangeLogTableName,
                 mapper: DataMapper.GetChangeLogMapper(), executeUserPermissionCheck: false);
-            _dependency.OnChanged += OnChangeLogTableUpdated;
-            _dependency.Start();
+            _changeLogDependency.OnChanged += OnChangeLogTableChanged;
+            _changeLogDependency.Start();
         }
         
-        private void OnChangeLogTableUpdated(object sender, RecordChangedEventArgs<ChangeLog> e)
+        private void OnChangeLogTableChanged(object sender, RecordChangedEventArgs<ChangeLog> e)
         {
             if (e.ChangeType != ChangeType.Insert) return;
             var changeLog = e.Entity;
@@ -51,8 +51,7 @@ namespace GalaxyMerge.Services
 
         public void Dispose()
         {
-            _dependency?.Stop();
-            _dependency?.Dispose();
+            _changeLogDependency?.Stop();
         }
     }
 }

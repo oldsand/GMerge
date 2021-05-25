@@ -69,7 +69,5 @@ namespace GalaxyMerge.Services
             
             _galaxyRegistry.Register(galaxyName, userName);
         }
-
-        
     }
 }
