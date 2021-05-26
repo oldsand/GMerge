@@ -76,13 +76,17 @@ namespace GalaxyMerge.Services
         public void RegisterParallel()
         {
             var user = WindowsIdentity.GetCurrent();
-            var unregisteredGalaxies = _galaxyFinder.FindAll().Where(g => !IsRegistered(g, user.Name)).ToList();
+            var galaxyRepositories = _repositoryFactory.CreateAll();
 
-            Parallel.ForEach(unregisteredGalaxies, galaxy =>
+            Parallel.ForEach(galaxyRepositories, galaxyRepository =>
             {
-                var galaxyRepository = _repositoryFactory.Create(galaxy);
+                if (IsRegistered(galaxyRepository.Name, user.Name))
+                {
+                    galaxyRepository.SynchronizeClient();
+                    return;
+                }
+                
                 galaxyRepository.Login(user.Name);
-                galaxyRepository.SynchronizeClient();
                 _galaxies.Add(galaxyRepository);
             });
         }

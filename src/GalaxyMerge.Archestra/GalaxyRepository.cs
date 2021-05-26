@@ -35,6 +35,13 @@ namespace GalaxyMerge.Archestra
                     new GalaxyCommandResult(result));
         }
 
+        internal GalaxyRepository(GRAccessAppClass grAccessApp, IGalaxy galaxy)
+        {
+            _grAccessApp = grAccessApp ?? throw new ArgumentNullException(nameof(grAccessApp), "Value cannot be null");
+            _galaxy = galaxy ?? throw new ArgumentNullException(nameof(grAccessApp), "Value cannot be null");
+            _graphicAccess = new GraphicAccess();
+        }
+
         public string Name => _galaxy.Name;
         public string Host => Environment.MachineName;
         public bool Connected { get; private set; }
@@ -119,6 +126,7 @@ namespace GalaxyMerge.Archestra
 
         public void CreateObject(GalaxyObject galaxyObject)
         {
+            _galaxy.SynchronizeClient();
             var repositoryObject = _galaxy.CreateObject(galaxyObject.TagName, galaxyObject.DerivedFromName);
             
             try
@@ -153,6 +161,8 @@ namespace GalaxyMerge.Archestra
 
         public void CreateSymbol(GalaxySymbol galaxySymbol)
         {
+            _galaxy.SynchronizeClient();
+            
             var symbol = galaxySymbol.ToXml();
             var doc = new XDocument(new XDeclaration("1.0", "utf-8", "yes"), symbol);
             SchemaValidator.ValidateSymbol(doc);
@@ -174,6 +184,8 @@ namespace GalaxyMerge.Archestra
 
         public void DeleteObject(string tagName, bool recursive)
         {
+            _galaxy.SynchronizeClient();
+            
             if (recursive)
             {
                 _galaxy.DeepDelete(tagName);
@@ -196,6 +208,8 @@ namespace GalaxyMerge.Archestra
 
         public void UpdateObject(GalaxyObject galaxyObject)
         {
+            _galaxy.SynchronizeClient();
+            
             var repositoryObject = _galaxy.GetObjectByName(galaxyObject.TagName);
             var original = repositoryObject.AsGalaxyObject();
             
@@ -232,6 +246,8 @@ namespace GalaxyMerge.Archestra
         public void Deploy(IEnumerable<string> tagNames, DeploymentOptions options)
         {
             if (options == null) throw new ArgumentException("Value cannot be null");
+            
+            _galaxy.SynchronizeClient();
 
             var deployedOption = options.DeployedOption.ToMxType();
             var skipUnDeployed = options.SkipUnDeployed
@@ -260,6 +276,8 @@ namespace GalaxyMerge.Archestra
 
         public void ExportPkg(string tagName, string fileName)
         {
+            _galaxy.SynchronizeClient();
+            
             var collection = _galaxy.CreategObjectCollection();
             var item = _galaxy.GetObjectByName(tagName);
             collection.Add(item);
@@ -270,6 +288,8 @@ namespace GalaxyMerge.Archestra
 
         public void ExportPkg(IEnumerable<string> tagNames, string fileName)
         {
+            _galaxy.SynchronizeClient();
+            
             var collection = _galaxy.GetObjectsByName(tagNames);
             collection.ExportObjects(EExportType.exportAsPDF, fileName);
             ResultHandler.Handle(collection.CommandResults, _galaxy.Name);
@@ -277,6 +297,8 @@ namespace GalaxyMerge.Archestra
 
         public void ExportCsv(string tagName, string fileName)
         {
+            _galaxy.SynchronizeClient();
+            
             var collection = _galaxy.CreategObjectCollection();
             var item = _galaxy.GetObjectByName(tagName);
             collection.Add(item);
@@ -287,6 +309,8 @@ namespace GalaxyMerge.Archestra
 
         public void ExportCsv(IEnumerable<string> tagNames, string fileName)
         {
+            _galaxy.SynchronizeClient();
+            
             var collection = _galaxy.GetObjectsByName(tagNames);
             collection.ExportObjects(EExportType.exportAsCSV, fileName);
             ResultHandler.Handle(collection.CommandResults, _galaxy.Name);
@@ -294,12 +318,16 @@ namespace GalaxyMerge.Archestra
 
         public void ExportSymbol(string tagName, string fileName)
         {
+            _galaxy.SynchronizeClient();
+            
             var result = _graphicAccess.ExportGraphicToXml(_galaxy, tagName, fileName);
             ResultHandler.Handle(result, tagName);
         }
 
         public void ExportSymbol(IEnumerable<string> tagNames, string destination)
         {
+            _galaxy.SynchronizeClient();
+            
             foreach (var tagName in tagNames)
             {
                 var fileName = Path.Combine(destination, $"{tagName}.xml");
@@ -310,18 +338,24 @@ namespace GalaxyMerge.Archestra
 
         public void ImportPkg(string fileName, bool overwrite)
         {
+            _galaxy.SynchronizeClient();
+            
             _galaxy.ImportObjects(fileName, overwrite);
             ResultHandler.Handle(_galaxy.CommandResults, _galaxy.Name);
         }
 
         public void ImportCsv(string fileName)
         {
+            _galaxy.SynchronizeClient();
+            
             _galaxy.GRLoad(fileName, GRLoadMode.GRLoadModeUpdate);
             ResultHandler.Handle(_galaxy.CommandResults, _galaxy.Name);
         }
 
         public void ImportSymbol(string fileName, string tagName, bool overwrite)
         {
+            _galaxy.SynchronizeClient();
+            
             var result = _graphicAccess.ImportGraphicFromXml(_galaxy, tagName, fileName, overwrite);
             ResultHandler.Handle(result, tagName);
         }

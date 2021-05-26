@@ -1,17 +1,21 @@
 using System;
+using System.Diagnostics;
 using Autofac;
 using GalaxyMerge.Archive;
 using GalaxyMerge.Archive.Abstractions;
 using GalaxyMerge.Services;
+using NLog;
 
 namespace GalaxyMerge.Host
 {
     public class Bootstrapper
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private IContainer _container;
         
         public void Bootstrap()
         {
+            Logger.Trace("Starting service bootstrap");
             ConfigureContainer();
             RegisterGalaxies();
             EnsureArchivesExist();
@@ -24,6 +28,7 @@ namespace GalaxyMerge.Host
 
         private void ConfigureContainer()
         {
+            Logger.Trace("Configuring DI container");
             var builder = new ContainerBuilder();
             builder.RegisterType<GalaxyMergeService>().AsSelf();
             builder.RegisterType<GalaxyRegistry>().AsSelf().AsImplementedInterfaces().SingleInstance();
@@ -36,27 +41,31 @@ namespace GalaxyMerge.Host
 
         private void RegisterGalaxies()
         {
+            Logger.Trace("Registering Galaxies");
             if (_container == null)
                 throw new InvalidOperationException("Container not yet initialized");
 
             try
             {
+                var stopwatch = new Stopwatch();
+                stopwatch.Start();
                 var registry = _container.Resolve<IGalaxyRegistry>();
                 registry.RegisterParallel();
-                Console.WriteLine("Yay");
-                //todo probably just log here
+                stopwatch.Stop();
+                Console.WriteLine($"Registration complete in {stopwatch.Elapsed}");
+                Logger.Info("Galaxy registration complete. Ellapsed time: {Time}", stopwatch.Elapsed);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                Console.WriteLine("Well shit...");
-                //todo log errors to event logs, ensure that the service does not start.
-                Console.WriteLine(e);
+                Console.WriteLine("Registration failed");
+                Logger.Error("Registration failed");
                 throw;
             }
         }
 
         private void EnsureArchivesExist()
         {
+            Logger.Trace("Building Archives");
             if (_container == null)
                 throw new InvalidOperationException("Container not yet initialized");
 
