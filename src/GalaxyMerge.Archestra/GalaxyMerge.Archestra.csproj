@@ -43,8 +43,13 @@
         </Reference>
         <Reference Include="Microsoft.CSharp" />
         <Reference Include="System" />
+        <Reference Include="System.Configuration" />
         <Reference Include="System.Core" />
         <Reference Include="System.Data" />
+        <Reference Include="System.IO.Compression" />
+        <Reference Include="System.Runtime.Serialization" />
+        <Reference Include="System.ServiceModel" />
+        <Reference Include="System.Transactions" />
         <Reference Include="System.Xml" />
         <Reference Include="System.Xml.Linq" />
     </ItemGroup>
@@ -93,6 +98,9 @@
     </ItemGroup>
     <ItemGroup>
       <EmbeddedResource Include="Schemas\aaGraphics.xsd" />
+    </ItemGroup>
+    <ItemGroup>
+      <PackageReference Include="NLog" Version="4.7.10" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

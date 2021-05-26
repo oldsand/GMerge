@@ -1,11 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ServiceModel;
 using Autofac;
 using Autofac.Integration.Wcf;
+using GalaxyMerge.Host.Configurations;
 using GalaxyMerge.Services;
+using NLog;
 using Topshelf;
 using Topshelf.Autofac;
 using Topshelf.HostConfigurators;
+using Topshelf.Runtime;
+
 // ReSharper disable ClassNeverInstantiated.Global
 
 namespace GalaxyMerge.Host
@@ -19,17 +24,21 @@ namespace GalaxyMerge.Host
 
         public static void Main(string[] args)
         {
+            LoggerConfiguration.Apply();
+            
             var bootstrapper = new Bootstrapper();
             bootstrapper.Bootstrap();
             _container = bootstrapper.GetContainer();
 
-            HostFactory.Run(ServiceConfiguration);
+            HostFactory.Run(GalaxyMergeConfiguration);
         }
 
-        private static void ServiceConfiguration(HostConfigurator config)
+        private static void GalaxyMergeConfiguration(HostConfigurator config)
         {
             config.UseAutofacContainer(_container);
-            
+            config.UseNLog();
+
+
             config.Service<GalaxyMergeService>(instance =>
             {
                 instance.ConstructUsingAutofacContainer();
@@ -38,10 +47,14 @@ namespace GalaxyMerge.Host
             });
             
             config.SetServiceName("gmerge");
+            config.SetInstanceName("gmerge");
             config.SetDisplayName("Galaxy Merge");
             config.SetDescription(@"Service host for the Galaxy Merge application.
                                   This service provides retrieval, archiving, and modification of System Platform
                                   Archestra objects and graphics hosted on this machine's galaxy repositories.");
+            config.SetStartTimeout(new TimeSpan(120));
+            config.SetStopTimeout(new TimeSpan(30));
+            config.RunAsLocalSystem();
             config.StartAutomatically();
         }
 

@@ -12,11 +12,13 @@ using GalaxyMerge.Archestra.Abstractions;
 using GalaxyMerge.Archestra.Entities;
 using GalaxyMerge.Archestra.Options;
 using GalaxyMerge.Core.Utilities;
+using NLog;
 
 namespace GalaxyMerge.Archestra
 {
     public class GalaxyRepository : IGalaxyRepository
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         // ReSharper disable PrivateFieldCanBeConvertedToLocalVariable because this has to be in memory for operations to work (according to documentation)
         private readonly GRAccessAppClass _grAccessApp;
         private readonly GraphicAccess _graphicAccess;
@@ -58,8 +60,11 @@ namespace GalaxyMerge.Archestra
 
         public void Login(string userName)
         {
+            Logger.Debug("Logging into galaxy {Galaxy} with user name {User}", Name, userName);
+            
             _galaxy.Login(userName, string.Empty);
             ResultHandler.Handle(_galaxy.CommandResult, _galaxy.Name);
+            
             Connected = true;
             ConnectedUser = userName;
         }
@@ -75,14 +80,20 @@ namespace GalaxyMerge.Archestra
 
         public void Logout()
         {
+            Logger.Debug("User {User} logging out of galaxy {Galaxy}", ConnectedUser, Name);
+            
             _galaxy.Logout();
             ResultHandler.Handle(_galaxy.CommandResult, _galaxy.Name);
+            
             Connected = false;
             ConnectedUser = string.Empty;
         }
 
         public bool UserIsAuthorized(string userName)
         {
+            Logger.Debug("Authorizing {User} against {Galaxy} current security settings", ConnectedUser, Name);
+            
+            _galaxy.SynchronizeClient();
             var security = _galaxy.GetReadOnlySecurity();
             
             foreach (IGalaxyUser user in security.UsersAvailable)
@@ -110,7 +121,7 @@ namespace GalaxyMerge.Archestra
         public GalaxySymbol GetSymbol(string tagName)
         {
             _galaxy.SynchronizeClient();
-            using var tempDirectory = new TempDirectory(ApplicationPath.TempSymbol);
+            using var tempDirectory = new TempDirectory(ApplicationPath.TempSymbolSubPath);
             var fileName = Path.Combine(tempDirectory.FullName, $@"{tagName}.xml");
             
             ExportSymbol(tagName, fileName);
@@ -167,7 +178,7 @@ namespace GalaxyMerge.Archestra
             var doc = new XDocument(new XDeclaration("1.0", "utf-8", "yes"), symbol);
             SchemaValidator.ValidateSymbol(doc);
 
-            using var tempDirectory = new TempDirectory(ApplicationPath.TempSymbol);
+            using var tempDirectory = new TempDirectory(ApplicationPath.TempSymbolSubPath);
             var fileName = Path.Combine(tempDirectory.FullName, $"{galaxySymbol.TagName}.xml");
             doc.Save(fileName);
             

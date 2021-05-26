@@ -6,11 +6,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using GalaxyMerge.Archestra;
 using GalaxyMerge.Archestra.Abstractions;
+using NLog;
 
 namespace GalaxyMerge.Services
 {
     public class GalaxyRegistry : IGalaxyRegistry
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly IGalaxyRepositoryFactory _repositoryFactory;
         private readonly IGalaxyFinder _galaxyFinder;
         private readonly List<IGalaxyRepository> _galaxies = new List<IGalaxyRepository>();
@@ -83,11 +85,14 @@ namespace GalaxyMerge.Services
                 if (IsRegistered(galaxyRepository.Name, user.Name))
                 {
                     galaxyRepository.SynchronizeClient();
+                    Logger.Debug("Galaxy {Galaxy} already registered to user {User}", galaxyRepository.Name, user.Name);
                     return;
                 }
                 
                 galaxyRepository.Login(user.Name);
                 _galaxies.Add(galaxyRepository);
+                
+                Logger.Debug("Galaxy {Galaxy} successfully registered to {User}", galaxyRepository.Name, user.Name);
             });
         }
 
@@ -153,12 +158,20 @@ namespace GalaxyMerge.Services
 
             if (userName == null)
                 throw new ArgumentException("Value cannot be null", nameof(userName));
-
-            if (IsRegistered(galaxyName, userName)) return;
-
+            
+            Logger.Trace("Registering galaxy {Galaxy} to user {User}", galaxyName, userName);
+            
+            if (IsRegistered(galaxyName, userName))
+            {
+                Logger.Trace("Galaxy {Galaxy} already registered to user {User}", galaxyName, userName);
+                return;
+            }
+            
             var galaxy = _repositoryFactory.Create(galaxyName);
             galaxy.Login(userName);
             _galaxies.Add(galaxy);
+            
+            Logger.Debug("Galaxy {Galaxy} successfully registered to {User}", galaxyName, userName);
         }
 
         private async Task RegisterGalaxyAsync(string galaxyName, string userName, CancellationToken token)
@@ -176,6 +189,7 @@ namespace GalaxyMerge.Services
             _galaxies.Add(galaxy);
         }
 
+        //todo add logging
         private void UnregisterGalaxy(string galaxyName, string userName)
         {
             if (string.IsNullOrEmpty(galaxyName))
