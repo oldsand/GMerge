@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using GalaxyMerge.Archive.Abstractions;
 using GalaxyMerge.Archive.Entities;
 using GalaxyMerge.Core.Utilities;
@@ -27,6 +29,11 @@ namespace GalaxyMerge.Archive.Repositories
         public IEnumerable<QueuedEntry> GetAll()
         {
             return _context.QueuedEntries.ToList();
+        }
+
+        public IEnumerable<QueuedEntry> Find(Expression<Func<QueuedEntry,bool>> predicate)
+        {
+            return _context.QueuedEntries.Where(predicate).ToList();
         }
 
         public void Add(QueuedEntry queuedEntry)

@@ -56,7 +56,7 @@ namespace GalaxyMerge.Services
         {
             if (e.ChangeType != ChangeType.Insert) return;
             
-            Logger.Trace("Change Log Table Insert Event Detected. Details: {@ChangeLog}", e.Entity);
+            Logger.Debug("Change Log Table Insert Event Detected. Details: {@ChangeLog}", e.Entity);
             var changeLog = e.Entity;
             
             _archiveQueue.Enqueue(changeLog);
@@ -72,7 +72,7 @@ namespace GalaxyMerge.Services
         
         private static void OnDependencyStatusChanges(object sender, StatusChangedEventArgs e)
         {
-            Logger.Info("Depepndency status changed to {Status} for galaxy {Galaxy}", e.Status, e.Database);
+            Logger.Debug("Depepndency status changed to {Status} for galaxy {Galaxy}", e.Status, e.Database);
         }
 
         public void Dispose()

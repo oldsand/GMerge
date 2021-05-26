@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Concurrent;
+using System.Linq;
 using System.Threading;
 using GalaxyMerge.Archestra.Abstractions;
 using GalaxyMerge.Archive.Entities;
 using GalaxyMerge.Archive.Repositories;
 using GalaxyMerge.Data.Entities;
+using GalaxyMerge.Primitives;
 using NLog;
 
 namespace GalaxyMerge.Services
@@ -26,7 +28,7 @@ namespace GalaxyMerge.Services
  
         public void Enqueue(ChangeLog changeLog)
         {
-            Logger.Info("Enqueuing change log '{ChangeLogId}' for object '{ObjectId}'", changeLog.ChangeLogId,
+            Logger.Debug("Enqueuing change log {ChangeLogId} for object {ObjectId}", changeLog.ChangeLogId,
                 changeLog.ObjectId);
             
             var queuedEntry = new QueuedEntry(changeLog.ChangeLogId, changeLog.ObjectId, changeLog.OperationId);
@@ -43,12 +45,12 @@ namespace GalaxyMerge.Services
             
             foreach (var entry in _jobQueue.GetConsumingEnumerable(CancellationToken.None))
             {
-                Logger.Trace("New entry with id '{ChangeLogId}' detected", entry.ChangeLogId);
+                Logger.Trace("Starting processing for {ChangeLogId}", entry.ChangeLogId);
                 using var queueRepository = new QueueRepository(_galaxyRepository.Name);
                 
                 if (!CanProcess(entry))
                 {
-                    Logger.Trace("Operation '{OperationId}' for object '{ObjectId}' not valid for processing"
+                    Logger.Trace("Operation {OperationId} for object {ObjectId} not valid for processing"
                         ,entry.OperationId, entry.ObjectId);
                     queueRepository.Remove(entry.ChangeLogId);
                     continue;
@@ -56,8 +58,7 @@ namespace GalaxyMerge.Services
 
                 try
                 {
-                    Logger.Info("Archiving entry '{ChangeLogId}' for object '{ObjectId}'"
-                        ,entry.ChangeLogId ,entry.ObjectId);
+                    Logger.Debug("Archiving entry '{ChangeLogId}' for object '{ObjectId}'",entry.ChangeLogId ,entry.ObjectId);
                     queueRepository.SetProcessing(entry.ChangeLogId);
                     _archiveProcessor.Archive(entry.ObjectId, entry.ChangeLogId);
                     queueRepository.Remove(entry.ChangeLogId);
@@ -73,11 +74,11 @@ namespace GalaxyMerge.Services
 
         private void ReloadQueue()
         {
-            Logger.Info("Loading queued logs from database");
-            
             using var logQueue = new QueueRepository(_galaxyRepository.Name);
-            var queuedLogs = logQueue.GetAll();
+            var queuedLogs = logQueue.Find(x => x.State == QueueState.New || x.State == QueueState.Processing).ToList();
 
+            Logger.Debug("Found {QueuedLogCount} queued items for processing", queuedLogs.Count);
+            
             foreach (var queuedLog in queuedLogs)
                 _jobQueue.Add(queuedLog);
         }

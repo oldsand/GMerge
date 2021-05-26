@@ -15,7 +15,7 @@ namespace GalaxyMerge.Host
         
         public void Bootstrap()
         {
-            Logger.Trace("Starting service bootstrap");
+            Logger.Debug("Running Service Bootstrapper");
             ConfigureContainer();
             RegisterGalaxies();
             EnsureArchivesExist();
@@ -28,7 +28,7 @@ namespace GalaxyMerge.Host
 
         private void ConfigureContainer()
         {
-            Logger.Trace("Configuring DI container");
+            Logger.Trace("Configuring DI Container");
             var builder = new ContainerBuilder();
             builder.RegisterType<GalaxyMergeService>().AsSelf();
             builder.RegisterType<GalaxyRegistry>().AsSelf().AsImplementedInterfaces().SingleInstance();
@@ -49,15 +49,15 @@ namespace GalaxyMerge.Host
             {
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
+                
                 var registry = _container.Resolve<IGalaxyRegistry>();
                 registry.RegisterParallel();
+                
                 stopwatch.Stop();
-                Console.WriteLine($"Registration complete in {stopwatch.Elapsed}");
-                Logger.Info("Galaxy registration complete. Ellapsed time: {Time}", stopwatch.Elapsed);
+                Logger.Debug("Galaxy registration complete. Ellapsed time: {Time}", stopwatch.Elapsed);
             }
             catch (Exception)
             {
-                Console.WriteLine("Registration failed");
                 Logger.Error("Registration failed");
                 throw;
             }
