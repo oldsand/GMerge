@@ -10,6 +10,8 @@ using ArchestrA.Visualization.GraphicAccess;
 using GalaxyMerge.Archestra.Extensions;
 using GalaxyMerge.Archestra.Abstractions;
 using GalaxyMerge.Archestra.Entities;
+using GalaxyMerge.Archestra.Exceptions;
+using GalaxyMerge.Archestra.Helpers;
 using GalaxyMerge.Archestra.Options;
 using GalaxyMerge.Core.Utilities;
 using NLog;
@@ -33,8 +35,7 @@ namespace GalaxyMerge.Archestra
             var result = _grAccessApp.CommandResult;
             if (!result.Successful || _galaxy == null)
                 throw new GalaxyException(
-                    $"Unable to load galaxy {galaxyName} on {Environment.MachineName}. Failed on {result.ID}. {result.CustomMessage}",
-                    new GalaxyCommandResult(result));
+                    $"Unable to load galaxy {galaxyName} on {Environment.MachineName}. Failed on {result.ID}. {result.CustomMessage}");
         }
 
         internal GalaxyRepository(GRAccessAppClass grAccessApp, IGalaxy galaxy)
@@ -55,15 +56,15 @@ namespace GalaxyMerge.Archestra
         public void SynchronizeClient()
         {
             _galaxy.SynchronizeClient();
-            ResultHandler.Handle(_galaxy.CommandResult, _galaxy.Name);
+            _galaxy.CommandResult.Process();
         }
 
         public void Login(string userName)
         {
-            Logger.Debug("Logging into galaxy {Galaxy} with user name {User}", Name, userName);
+            Logger.Trace("Logging into galaxy {Galaxy} with user name {User}", Name, userName);
             
             _galaxy.Login(userName, string.Empty);
-            ResultHandler.Handle(_galaxy.CommandResult, _galaxy.Name);
+            _galaxy.CommandResult.Process();
             
             Connected = true;
             ConnectedUser = userName;
@@ -80,10 +81,10 @@ namespace GalaxyMerge.Archestra
 
         public void Logout()
         {
-            Logger.Debug("User {User} logging out of galaxy {Galaxy}", ConnectedUser, Name);
+            Logger.Trace("User {User} logging out of galaxy {Galaxy}", ConnectedUser, Name);
             
             _galaxy.Logout();
-            ResultHandler.Handle(_galaxy.CommandResult, _galaxy.Name);
+            _galaxy.CommandResult.Process();
             
             Connected = false;
             ConnectedUser = string.Empty;
@@ -91,10 +92,11 @@ namespace GalaxyMerge.Archestra
 
         public bool UserIsAuthorized(string userName)
         {
-            Logger.Debug("Authorizing {User} against {Galaxy} current security settings", ConnectedUser, Name);
+            Logger.Trace("Authorizing {User} against {Galaxy} current security settings", ConnectedUser, Name);
             
             _galaxy.SynchronizeClient();
             var security = _galaxy.GetReadOnlySecurity();
+            _galaxy.CommandResult.Process();
             
             foreach (IGalaxyUser user in security.UsersAvailable)
                 if (user.UserName == userName)
@@ -107,7 +109,7 @@ namespace GalaxyMerge.Archestra
         {
             _galaxy.SynchronizeClient();
             var gObject = _galaxy.GetObjectByName(tagName);
-            return gObject?.AsGalaxyObject();
+            return gObject?.Map();
         }
 
         public IEnumerable<GalaxyObject> GetObjects(IEnumerable<string> tagNames)
@@ -115,7 +117,7 @@ namespace GalaxyMerge.Archestra
             _galaxy.SynchronizeClient();
             var objects = _galaxy.GetObjectsByName(tagNames);
             foreach (IgObject gObject in objects)
-                yield return gObject.AsGalaxyObject();
+                yield return gObject.Map();
         }
 
         public GalaxySymbol GetSymbol(string tagName)
@@ -214,7 +216,7 @@ namespace GalaxyMerge.Archestra
             foreach (IgObject gObject in objects)
                 DeleteObject(gObject.Tagname, recursive);
             
-            ResultHandler.Handle(objects.CommandResults, _galaxy.Name);
+            objects.CommandResults.Process();
         }
 
         public void UpdateObject(GalaxyObject galaxyObject)
@@ -222,7 +224,7 @@ namespace GalaxyMerge.Archestra
             _galaxy.SynchronizeClient();
             
             var repositoryObject = _galaxy.GetObjectByName(galaxyObject.TagName);
-            var original = repositoryObject.AsGalaxyObject();
+            var original = repositoryObject.Map();
             
             try
             {
@@ -275,14 +277,14 @@ namespace GalaxyMerge.Archestra
 
             instances.Deploy(deployedOption, skipUnDeployed, deployOnScan, forceOffScan,
                 options.MarkAsDeployOnStatusMismatch);
-            ResultHandler.Handle(_galaxy.CommandResults, _galaxy.Name);
+            _galaxy.CommandResults.Process();
         }
 
         public void Undeploy(IEnumerable<string> tagNames, DeploymentOptions options = null)
         {
             var instances = _galaxy.GetInstancesByName(tagNames);
             instances.Undeploy();
-            ResultHandler.Handle(_galaxy.CommandResults, _galaxy.Name);
+            _galaxy.CommandResults.Process();
         }
 
         public void ExportPkg(string tagName, string fileName)
@@ -294,7 +296,7 @@ namespace GalaxyMerge.Archestra
             collection.Add(item);
 
             collection.ExportObjects(EExportType.exportAsPDF, fileName);
-            ResultHandler.Handle(collection.CommandResults, _galaxy.Name);
+            collection.CommandResults.Process();
         }
 
         public void ExportPkg(IEnumerable<string> tagNames, string fileName)
@@ -303,7 +305,7 @@ namespace GalaxyMerge.Archestra
             
             var collection = _galaxy.GetObjectsByName(tagNames);
             collection.ExportObjects(EExportType.exportAsPDF, fileName);
-            ResultHandler.Handle(collection.CommandResults, _galaxy.Name);
+            collection.CommandResults.Process();
         }
 
         public void ExportCsv(string tagName, string fileName)
@@ -315,7 +317,7 @@ namespace GalaxyMerge.Archestra
             collection.Add(item);
 
             collection.ExportObjects(EExportType.exportAsCSV, fileName);
-            ResultHandler.Handle(collection.CommandResults, _galaxy.Name);
+            collection.CommandResults.Process();
         }
 
         public void ExportCsv(IEnumerable<string> tagNames, string fileName)
@@ -324,7 +326,7 @@ namespace GalaxyMerge.Archestra
             
             var collection = _galaxy.GetObjectsByName(tagNames);
             collection.ExportObjects(EExportType.exportAsCSV, fileName);
-            ResultHandler.Handle(collection.CommandResults, _galaxy.Name);
+            collection.CommandResults.Process();
         }
 
         public void ExportSymbol(string tagName, string fileName)
@@ -332,7 +334,7 @@ namespace GalaxyMerge.Archestra
             _galaxy.SynchronizeClient();
             
             var result = _graphicAccess.ExportGraphicToXml(_galaxy, tagName, fileName);
-            ResultHandler.Handle(result, tagName);
+            result.Process();
         }
 
         public void ExportSymbol(IEnumerable<string> tagNames, string destination)
@@ -343,7 +345,7 @@ namespace GalaxyMerge.Archestra
             {
                 var fileName = Path.Combine(destination, $"{tagName}.xml");
                 var result = _graphicAccess.ExportGraphicToXml(_galaxy, tagName, fileName);
-                ResultHandler.Handle(result, tagName);
+                result.Process();
             }
         }
 
@@ -352,7 +354,7 @@ namespace GalaxyMerge.Archestra
             _galaxy.SynchronizeClient();
             
             _galaxy.ImportObjects(fileName, overwrite);
-            ResultHandler.Handle(_galaxy.CommandResults, _galaxy.Name);
+            _galaxy.CommandResults.Process();
         }
 
         public void ImportCsv(string fileName)
@@ -360,7 +362,7 @@ namespace GalaxyMerge.Archestra
             _galaxy.SynchronizeClient();
             
             _galaxy.GRLoad(fileName, GRLoadMode.GRLoadModeUpdate);
-            ResultHandler.Handle(_galaxy.CommandResults, _galaxy.Name);
+            _galaxy.CommandResults.Process();
         }
 
         public void ImportSymbol(string fileName, string tagName, bool overwrite)
@@ -368,7 +370,7 @@ namespace GalaxyMerge.Archestra
             _galaxy.SynchronizeClient();
             
             var result = _graphicAccess.ImportGraphicFromXml(_galaxy, tagName, fileName, overwrite);
-            ResultHandler.Handle(result, tagName);
+            result.Process();
         }
 
         internal IGalaxy GetGalaxy()

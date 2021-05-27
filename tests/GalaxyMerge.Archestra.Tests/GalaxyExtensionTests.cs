@@ -255,7 +255,7 @@ namespace GalaxyMerge.Archestra.Tests
             var templates = _galaxy.GetDerivedTemplates("$UserDefined");
             foreach (IgObject template in templates)
             {
-                var galaxyObject = template.AsGalaxyObject();
+                var galaxyObject = template.Map();
                 Assert.NotNull(galaxyObject);
             }
         }
@@ -267,7 +267,7 @@ namespace GalaxyMerge.Archestra.Tests
 
             foreach (IgObject result in results)
             {
-                var galaxyObject = result.AsGalaxyObject();
+                var galaxyObject = result.Map();
                 Assert.NotNull(galaxyObject);
             }
         }

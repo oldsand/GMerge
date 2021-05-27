@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ArchestrA.GRAccess;
 using GalaxyMerge.Archestra.Abstractions;
+using GalaxyMerge.Archestra.Extensions;
 using NLog;
 
 namespace GalaxyMerge.Archestra
@@ -31,13 +32,13 @@ namespace GalaxyMerge.Archestra
             var host = Environment.MachineName;
             var grAccess = new GRAccessAppClass();
             
-            Logger.Debug("Querying for galaxies not host {Host}", host);
+            Logger.Debug("Querying for galaxies on {Host}", host);
             var galaxies = grAccess.QueryGalaxies(host);
-            ResultHandler.Handle(grAccess.CommandResult, Environment.MachineName);
+            grAccess.CommandResult.Process();
 
             foreach (IGalaxy galaxy in galaxies)
             {
-                Logger.Debug("Creating repository instance for galaxy '{Galaxy}'", galaxy.Name);
+                Logger.Debug("Creating repository instance for {Galaxy}", galaxy.Name);
                 yield return new GalaxyRepository(grAccess, galaxy);
             }
         }

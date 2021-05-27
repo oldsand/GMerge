@@ -55,13 +55,13 @@ namespace GalaxyMerge.Archestra.Extensions
         {
             if (gObject.IsTemplate())
             {
-                gObject.AsTemplate().DeleteTemplate();
-                ResultHandler.Handle(gObject.CommandResult, gObject.Tagname);
+                gObject.As<ITemplate>().DeleteTemplate();
+                gObject.CommandResult.Process();
                 return;
             }
             
-            gObject.AsInstance().DeleteInstance();
-            ResultHandler.Handle(gObject.CommandResult, gObject.Tagname);
+            gObject.As<IInstance>().DeleteInstance();
+            gObject.CommandResult.Process();
         }
 
         public static IAttribute GetAttribute(this IgObject gObject, string name)
@@ -165,7 +165,7 @@ namespace GalaxyMerge.Archestra.Extensions
             }
         }
 
-        public static GalaxyObject AsGalaxyObject(this IgObject gObject)
+        public static GalaxyObject Map(this IgObject gObject)
         {
             return new GalaxyObject
             {
@@ -183,34 +183,29 @@ namespace GalaxyMerge.Archestra.Extensions
             };
         }
 
-        public static GalaxyObject AsGalaxyObject(this ITemplate template)
+        public static GalaxyObject Map(this ITemplate template)
         {
-            return template.AsGObject().AsGalaxyObject();
+            return template.AsObject().Map();
         }
 
-        public static GalaxyObject AsGalaxyObject(this IInstance instance)
+        public static GalaxyObject Map(this IInstance instance)
         {
-            return instance.AsGObject().AsGalaxyObject();
+            return instance.AsObject().Map();
         }
 
-        public static IgObject AsGObject(this ITemplate template)
+        public static IgObject AsObject(this ITemplate template)
         {
             return (IgObject) template;
         }
         
-        public static IgObject AsGObject(this IInstance instance)
+        public static IgObject AsObject(this IInstance instance)
         {
             return (IgObject) instance;
         }
 
-        public static ITemplate AsTemplate(this IgObject gObject)
+        public static T As<T>(this IgObject gObject)
         {
-            return (ITemplate) gObject;
-        }
-
-        public static IInstance AsInstance(this IgObject gObject)
-        {
-            return (IInstance) gObject;
+            return (T) gObject;
         }
     }
 }

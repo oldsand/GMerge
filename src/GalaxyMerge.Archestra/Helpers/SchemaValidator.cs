@@ -2,7 +2,7 @@ using System.Xml.Linq;
 using System.Xml.Schema;
 using GalaxyMerge.Core.Utilities;
 
-namespace GalaxyMerge.Archestra
+namespace GalaxyMerge.Archestra.Helpers
 {
     internal static class SchemaValidator
     {

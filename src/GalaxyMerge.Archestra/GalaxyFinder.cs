@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ArchestrA.GRAccess;
 using GalaxyMerge.Archestra.Abstractions;
+using GalaxyMerge.Archestra.Extensions;
 
 namespace GalaxyMerge.Archestra
 {
@@ -31,8 +32,8 @@ namespace GalaxyMerge.Archestra
             var grAccess = new GRAccessAppClass();
             
             var galaxies = grAccess.QueryGalaxies(host);
-            ResultHandler.Handle(grAccess.CommandResult, Environment.MachineName);
-            
+            grAccess.CommandResult.Process();
+
             foreach (IGalaxy galaxy in galaxies)
                 yield return galaxy.Name;
         }

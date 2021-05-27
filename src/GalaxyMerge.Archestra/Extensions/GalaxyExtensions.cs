@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ArchestrA.GRAccess;
+using GalaxyMerge.Archestra.Exceptions;
 
 namespace GalaxyMerge.Archestra.Extensions
 {
@@ -59,10 +60,10 @@ namespace GalaxyMerge.Archestra.Extensions
             if (tagName == null) throw new ArgumentNullException(nameof(tagName), "Value cannot be null");
 
             var template = galaxy.GetTemplateByName(tagName);
-            if (template != null) return template.AsGObject();
+            if (template != null) return template.AsObject();
 
             var instance = galaxy.GetInstanceByName(tagName);
-            return instance.AsGObject();
+            return instance.AsObject();
         }
 
         /// <summary>
@@ -107,8 +108,8 @@ namespace GalaxyMerge.Archestra.Extensions
 
             var template =
                 galaxy.QueryObjectsByName(EgObjectIsTemplateOrInstance.gObjectIsTemplate, new[] {tagName})[tagName];
-            ResultHandler.Handle(galaxy.CommandResult, galaxy.Name);
-            return template.AsTemplate();
+            galaxy.CommandResult.Process();
+            return template.As<ITemplate>();
         }
 
         /// <summary>
@@ -127,7 +128,7 @@ namespace GalaxyMerge.Archestra.Extensions
 
             var templates =
                 galaxy.QueryObjectsByName(EgObjectIsTemplateOrInstance.gObjectIsTemplate, tagNames.ToArray());
-            ResultHandler.Handle(galaxy.CommandResult, galaxy.Name);
+            galaxy.CommandResult.Process();
             return templates;
         }
 
@@ -147,8 +148,8 @@ namespace GalaxyMerge.Archestra.Extensions
 
             var instance =
                 galaxy.QueryObjectsByName(EgObjectIsTemplateOrInstance.gObjectIsInstance, new[] {tagName})[tagName];
-            ResultHandler.Handle(galaxy.CommandResult, galaxy.Name);
-            return instance.AsInstance();
+            galaxy.CommandResult.Process();
+            return instance.As<IInstance>();
         }
 
         /// <summary>
@@ -167,7 +168,7 @@ namespace GalaxyMerge.Archestra.Extensions
 
             var instances =
                 galaxy.QueryObjectsByName(EgObjectIsTemplateOrInstance.gObjectIsInstance, tagNames.ToArray());
-            ResultHandler.Handle(galaxy.CommandResult, galaxy.Name);
+            galaxy.CommandResult.Process();
             return instances;
         }
 
@@ -212,7 +213,7 @@ namespace GalaxyMerge.Archestra.Extensions
 
             var templates = galaxy.QueryObjects(EgObjectIsTemplateOrInstance.gObjectIsTemplate,
                 EConditionType.derivedOrInstantiatedFrom, templateName);
-            ResultHandler.Handle(galaxy.CommandResult, galaxy.Name);
+            galaxy.CommandResult.Process();
 
             return templates;
         }
@@ -233,7 +234,7 @@ namespace GalaxyMerge.Archestra.Extensions
 
             var instances = galaxy.QueryObjects(EgObjectIsTemplateOrInstance.gObjectIsInstance,
                 EConditionType.derivedOrInstantiatedFrom, templateName);
-            ResultHandler.Handle(galaxy.CommandResult, galaxy.Name);
+            galaxy.CommandResult.Process();
 
             return instances;
         }
@@ -301,8 +302,8 @@ namespace GalaxyMerge.Archestra.Extensions
         public static IgObject CreateObject(this IGalaxy galaxy, string tagName, string templateName)
         {
             return tagName.StartsWith("$")
-                ? galaxy.CreateTemplate(tagName, templateName).AsGObject()
-                : galaxy.CreateInstance(tagName, templateName).AsGObject();
+                ? galaxy.CreateTemplate(tagName, templateName).AsObject()
+                : galaxy.CreateInstance(tagName, templateName).AsObject();
         }
 
         /// <summary>
@@ -327,7 +328,7 @@ namespace GalaxyMerge.Archestra.Extensions
                 throw new InvalidOperationException($"Could not find template object with name '{templateName}'");
 
             var derived = parent.CreateTemplate(tagName);
-            ResultHandler.Handle(parent.CommandResult, parent.Tagname);
+            parent.CommandResult.Process();
             
             return derived;
         }
@@ -350,7 +351,7 @@ namespace GalaxyMerge.Archestra.Extensions
                 throw new InvalidOperationException($"Could not find template object with name '{templateName}'");
 
             var derived = parent.CreateInstance(tagName);
-            ResultHandler.Handle(parent.CommandResult, parent.Tagname);
+            parent.CommandResult.Process();
 
             return derived;
         }
@@ -377,7 +378,7 @@ namespace GalaxyMerge.Archestra.Extensions
         {
             var instances = galaxy.GetInstancesByName(tagNames);
             instances.Host = hostName;
-            ResultHandler.Handle(instances.CommandResults, galaxy.Name);
+            instances.CommandResults.Process();
         }
 
         public static void AssignToArea(this IGalaxy galaxy, IEnumerable<string> tagNames, string areaName)
@@ -385,25 +386,25 @@ namespace GalaxyMerge.Archestra.Extensions
             var instances = galaxy.GetInstancesByName(tagNames);
             instances.Area = string.Empty;
             instances.Area = areaName;
-            ResultHandler.Handle(instances.CommandResults, galaxy.Name);
+            instances.CommandResults.Process();
         }
 
         public static void AssignToContainer(this IGalaxy galaxy, IEnumerable<string> tagNames, string containerName)
         {
             var instances = galaxy.GetInstancesByName(tagNames);
             instances.Container = containerName;
-            ResultHandler.Handle(instances.CommandResults, galaxy.Name);
+            instances.CommandResults.Process();
         }
 
         public static void Unassign(this IGalaxy galaxy, IEnumerable<string> tagNames)
         {
             var instances = galaxy.GetInstancesByName(tagNames);
             instances.Host = string.Empty;
-            ResultHandler.Handle(instances.CommandResults, galaxy.Name);
+            instances.CommandResults.Process();
             instances.Area = string.Empty;
-            ResultHandler.Handle(instances.CommandResults, galaxy.Name);
+            instances.CommandResults.Process();
             instances.Container = string.Empty;
-            ResultHandler.Handle(instances.CommandResults, galaxy.Name);
+            instances.CommandResults.Process();
         }
         
         /// <summary>
@@ -424,7 +425,7 @@ namespace GalaxyMerge.Archestra.Extensions
             if (!gObject.IsCheckedOut()) return;
             
             gObject.CheckIn();
-            ResultHandler.Handle(gObject.CommandResult, gObject.Tagname);
+            gObject.CommandResult.Process();
         }
         
         /// <summary>
