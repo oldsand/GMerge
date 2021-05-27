@@ -76,7 +76,7 @@ namespace GalaxyMerge.Archive.Repositories
 
         public InclusionSetting GetInclusionSetting(int templateId)
         {
-            return _context.InclusionSettings.SingleOrDefault(x => x.TemplateId == templateId);
+            return _context.InclusionSettings.SingleOrDefault(x => x.Template.Id == templateId);
         }
 
         public IEnumerable<InclusionSetting> GetInclusionSettings()

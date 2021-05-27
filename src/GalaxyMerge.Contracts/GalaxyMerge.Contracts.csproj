@@ -45,11 +45,13 @@
         <Compile Include="ArchiveEntryData.cs" />
         <Compile Include="ArchiveObjectData.cs" />
         <Compile Include="CustomPropertyData.cs" />
+        <Compile Include="EventSettingData.cs" />
         <Compile Include="GalaxyAttributeData.cs" />
         <Compile Include="GalaxyObjectData.cs" />
         <Compile Include="GalaxySymbolData.cs" />
         <Compile Include="IArchiveService.cs" />
         <Compile Include="IGalaxyService.cs" />
+        <Compile Include="InclusionSettingData.cs" />
         <Compile Include="NamedScriptData.cs" />
         <Compile Include="PredefinedScriptData.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />

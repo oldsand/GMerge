@@ -1,7 +1,7 @@
 using System;
 using GalaxyMerge.Primitives;
 
-namespace GalaxyMerge.Contracts
+namespace GalaxyMerge.Client.Contracts
 {
     public class ArchiveEntryData
     {
@@ -10,6 +10,7 @@ namespace GalaxyMerge.Contracts
         public int Version { get; set; }
         public int? ChangeLogId { get; set; }
         public DateTime ArchivedOn { get; set; }
+        public Operation Operation { get; set; }
         public byte[] CompressedData { get; set; }
     }
 }

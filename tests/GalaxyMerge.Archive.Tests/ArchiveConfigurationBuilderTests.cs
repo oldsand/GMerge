@@ -35,10 +35,9 @@ namespace GalaxyMerge.Archive.Tests
             Assert.IsNotEmpty(config.EventSettings);
             Assert.IsNotEmpty(config.InclusionSettings);
             
-            Assert.True(config.EventSettings.All(x => x.EventId >= 0));
-            Assert.True(config.EventSettings.All(x => x.OperationName != ""));
-            Assert.True(config.InclusionSettings.All(x => x.TemplateId > 0));
-            Assert.True(config.InclusionSettings.All(x => x.TemplateName != ""));
+            Assert.True(config.EventSettings.All(x => x.Operation.Name != ""));
+            Assert.True(config.InclusionSettings.All(x => x.Template.Id > 0));
+            Assert.True(config.InclusionSettings.All(x => x.Template.Name != ""));
         }
 
         [Test]

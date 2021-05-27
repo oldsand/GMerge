@@ -40,15 +40,14 @@ namespace GalaxyMerge.Services
             if (galaxyRepository == null)
                 throw new InvalidOperationException(
                     $"Cannot find registered galaxy with name '{galaxyName}' for current service user '{serviceUser.Name}'");
-
-            galaxyRepository.SynchronizeClient();
+            
             return galaxyRepository;
         }
         
         private IGalaxyRepository GetClientGr(string galaxyName)
         {
             var clientUserName = ServiceSecurityContext.Current.PrimaryIdentity.Name;
-            
+
             if (!_galaxyRegistry.IsRegistered(galaxyName, clientUserName))
                 RegisterGalaxyToClient(galaxyName, clientUserName);
             
@@ -57,7 +56,6 @@ namespace GalaxyMerge.Services
                 throw new InvalidOperationException(
                     $"Cannot find registered galaxy with name '{galaxyName}' for current client user '{clientUserName}'");
             
-            galaxyRepository.SynchronizeClient();
             return galaxyRepository;
         }
 

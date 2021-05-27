@@ -35,7 +35,7 @@ namespace GalaxyMerge.Archive
         
         public bool HasValidInclusionOption(int objectId, int templateId, bool isTemplate)
         {
-            var inclusionSetting = InclusionSettings.Single(x => x.TemplateId == templateId);
+            var inclusionSetting = InclusionSettings.Single(x => x.Template.Id == templateId);
 
             if (inclusionSetting.InclusionOption == InclusionOption.None) return false;
             
