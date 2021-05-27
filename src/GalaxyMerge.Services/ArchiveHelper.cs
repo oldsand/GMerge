@@ -32,7 +32,7 @@ namespace GalaxyMerge.Services
             if (inclusionSetting.InclusionOption == InclusionOption.None) return false;
             
             if (inclusionSetting.InclusionOption == InclusionOption.All)
-                return gObject.IsTemplate || inclusionSetting.IncludesInstances;
+                return gObject.IsTemplate || inclusionSetting.IncludeInstances;
 
             if (inclusionSetting.InclusionOption == InclusionOption.Select)
                 return archiveRepository.ObjectExists(gObject.ObjectId);

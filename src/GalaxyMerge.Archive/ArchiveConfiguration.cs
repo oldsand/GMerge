@@ -40,7 +40,7 @@ namespace GalaxyMerge.Archive
             if (inclusionSetting.InclusionOption == InclusionOption.None) return false;
             
             if (inclusionSetting.InclusionOption == InclusionOption.All)
-                return isTemplate || inclusionSetting.IncludesInstances;
+                return isTemplate || inclusionSetting.IncludeInstances;
 
             if (inclusionSetting.InclusionOption != InclusionOption.Select) return false;
             

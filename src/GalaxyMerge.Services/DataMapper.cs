@@ -29,6 +29,26 @@ namespace GalaxyMerge.Services
         {
             return MapArchiveEntry(source);
         }
+        
+        public static EventSettingData Map(EventSetting source)
+        {
+            return new EventSettingData
+            {
+                Operation = source.Operation,
+                OperationType = source.OperationType,
+                IsArchiveTrigger = source.IsArchiveTrigger
+            };
+        }
+        
+        public static InclusionSettingData Map(InclusionSetting source)
+        {
+            return new InclusionSettingData
+            {
+                Template = source.Template,
+                InclusionOption = source.InclusionOption,
+                IncludeInstances = source.IncludeInstances
+            };
+        }
 
         public static ModelToTableMapper<ChangeLog> GetChangeLogMapper()
         {

@@ -138,7 +138,7 @@ namespace GalaxyMerge.Archive.Tests
             
             var result = config.InclusionSettings.Single(x => x.Template == Template.Area);
             Assert.AreEqual(result.InclusionOption, InclusionOption.All);
-            Assert.False(result.IncludesInstances);
+            Assert.False(result.IncludeInstances);
         }
         
         [Test]
@@ -175,7 +175,7 @@ namespace GalaxyMerge.Archive.Tests
             config = config.SetInclusion(Template.UserDefined, InclusionOption.All, true);
             
             var result = config.InclusionSettings.Single(x => x.Template == Template.UserDefined);
-            Assert.True(result.IncludesInstances);
+            Assert.True(result.IncludeInstances);
         }
         
         [Test]
@@ -194,9 +194,9 @@ namespace GalaxyMerge.Archive.Tests
             Assert.AreEqual(galaxy.InclusionOption, InclusionOption.None);
             Assert.AreEqual(appEngine.InclusionOption, InclusionOption.Select);
             Assert.AreEqual(viewEngine.InclusionOption, InclusionOption.All);
-            Assert.True(galaxy.IncludesInstances);
-            Assert.True(appEngine.IncludesInstances);
-            Assert.True(viewEngine.IncludesInstances);
+            Assert.True(galaxy.IncludeInstances);
+            Assert.True(appEngine.IncludeInstances);
+            Assert.True(viewEngine.IncludeInstances);
         }
     }
 }
