@@ -45,9 +45,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Client.Contract
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Client.Proxies", "GalaxyMerge.Client.Proxies\GalaxyMerge.Client.Proxies.csproj", "{C080B539-439D-4C9E-BDF4-7578E215F34D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Client.Shell", "GalaxyMerge.Client.Shell\GalaxyMerge.Client.Shell.csproj", "{99018ACB-CC66-4563-93E3-64C59E164C1B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Client.Application", "GalaxyMerge.Client.Application\GalaxyMerge.Client.Application.csproj", "{99018ACB-CC66-4563-93E3-64C59E164C1B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Client.Core", "GalaxyMerge.Client.Core\GalaxyMerge.Client.Core.csproj", "{36E1A48D-B1B1-4760-B426-827622FC56C1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Client.Converters", "GalaxyMerge.Client.Converters\GalaxyMerge.Client.Converters.csproj", "{66F81B6D-4846-4A8C-BDCB-3DFBAE3F8557}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -131,6 +133,10 @@ Global
 		{36E1A48D-B1B1-4760-B426-827622FC56C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36E1A48D-B1B1-4760-B426-827622FC56C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{36E1A48D-B1B1-4760-B426-827622FC56C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66F81B6D-4846-4A8C-BDCB-3DFBAE3F8557}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66F81B6D-4846-4A8C-BDCB-3DFBAE3F8557}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66F81B6D-4846-4A8C-BDCB-3DFBAE3F8557}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66F81B6D-4846-4A8C-BDCB-3DFBAE3F8557}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -158,5 +164,6 @@ Global
 		{C080B539-439D-4C9E-BDF4-7578E215F34D} = {62CE6D9C-8204-479F-B8EF-A11609AB4273}
 		{99018ACB-CC66-4563-93E3-64C59E164C1B} = {62CE6D9C-8204-479F-B8EF-A11609AB4273}
 		{36E1A48D-B1B1-4760-B426-827622FC56C1} = {62CE6D9C-8204-479F-B8EF-A11609AB4273}
+		{66F81B6D-4846-4A8C-BDCB-3DFBAE3F8557} = {62CE6D9C-8204-479F-B8EF-A11609AB4273}
 	EndGlobalSection
 EndGlobal
