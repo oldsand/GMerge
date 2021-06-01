@@ -1,4 +1,4 @@
-﻿namespace GalaxyMerge.Client.Core.Themes
+﻿namespace GalaxyMerge.Client.Core
 {
     public enum ThemeResourceKey
     {

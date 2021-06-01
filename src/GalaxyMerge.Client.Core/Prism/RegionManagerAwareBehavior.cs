@@ -52,7 +52,7 @@ namespace GalaxyMerge.Client.Core.Prism
                     break;
                 case FrameworkElement frameworkElement:
                 {
-                    if (!(frameworkElement.DataContext is IRegionManagerAware regionManagerAwareDataContext)) return;
+                    if (frameworkElement.DataContext is not IRegionManagerAware regionManagerAwareDataContext) return;
                 
                     // If a view doesn't have a data context (view model) it will inherit the data context from the parent view.
                     // The following check is done to avoid setting the RegionManager property in the view model of the parent view by mistake. 

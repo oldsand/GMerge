@@ -1,22 +1,21 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:core="clr-namespace:GalaxyMerge.Client.Core"
-                    xmlns:themes="clr-namespace:GalaxyMerge.Client.Core.Themes">
+                    xmlns:core="clr-namespace:GalaxyMerge.Client.Core">
   
   <Style x:Key="Label.Standard" TargetType="{x:Type Label}">
-    <Setter Property="Foreground" Value="{themes:ThemeResource ResourceKey=ContentForeground}"/>
+    <Setter Property="Foreground" Value="{core:ThemeResource ResourceKey=ContentForeground}"/>
     <Setter Property="FontSize" Value="11"/>
     <Setter Property="FontWeight" Value="Regular"/>
   </Style>
   
   <Style x:Key="Label.Title" TargetType="{x:Type Label}">
-    <Setter Property="Foreground" Value="{themes:ThemeResource ResourceKey=ContentForeground}"/>
+    <Setter Property="Foreground" Value="{core:ThemeResource ResourceKey=ContentForeground}"/>
     <Setter Property="FontSize" Value="14"/>
     <Setter Property="FontWeight" Value="Bold"/>
   </Style>
   
   <Style x:Key="Label.Caption" TargetType="{x:Type Label}">
-    <Setter Property="Foreground" Value="{themes:ThemeResource ResourceKey=ContentForeground}"/>
+    <Setter Property="Foreground" Value="{core:ThemeResource ResourceKey=ContentForeground}"/>
     <Setter Property="FontSize" Value="10"/>
   </Style>
 </ResourceDictionary>

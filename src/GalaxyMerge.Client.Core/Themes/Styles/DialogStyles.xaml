@@ -3,11 +3,10 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:prism="http://prismlibrary.com/"
                     xmlns:core="clr-namespace:GalaxyMerge.Client.Core"
-                    xmlns:controls="clr-namespace:GalaxyMerge.Client.Core.Controls"
-                    xmlns:themes="clr-namespace:GalaxyMerge.Client.Core.Themes">
+                    xmlns:controls="clr-namespace:GalaxyMerge.Client.Core.Controls">
   <ControlTemplate x:Key="DialogTemplate" TargetType="{x:Type Window}">
     <Border x:Name="RootBorder"
-            BorderBrush="{themes:ThemeResource ResourceKey=WindowBorder}"
+            BorderBrush="{core:ThemeResource ResourceKey=WindowBorder}"
             BorderThickness="1">
       <Grid>
         <Grid.RowDefinitions>
@@ -17,7 +16,7 @@
         <Grid Grid.Row="0">
           <Rectangle
             Height="30"
-            Fill="{themes:ThemeResource ResourceKey=PrimaryBackground}" />
+            Fill="{core:ThemeResource ResourceKey=PrimaryBackground}" />
           <DockPanel LastChildFill="False">
             <controls:Icon
               Margin="8,0,0,0"
@@ -30,7 +29,7 @@
               Margin="8,0,0,0"
               VerticalAlignment="Center"
               DockPanel.Dock="Left"
-              Foreground="{themes:ThemeResource ResourceKey=PrimaryForeground}"
+              Foreground="{core:ThemeResource ResourceKey=PrimaryForeground}"
               Text="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Title}" />
             <Button x:Name="CloseButton"
                     Click="OnCloseClick"
@@ -58,8 +57,8 @@
 
   <Style x:Key="DialogStyle" TargetType="{x:Type Window}">
     <Setter Property="UseLayoutRounding" Value="True" />
-    <Setter Property="Background" Value="{themes:ThemeResource ResourceKey=PrimaryBackground}" />
-    <Setter Property="Foreground" Value="{themes:ThemeResource ResourceKey=PrimaryForeground}" />
+    <Setter Property="Background" Value="{core:ThemeResource ResourceKey=PrimaryBackground}" />
+    <Setter Property="Foreground" Value="{core:ThemeResource ResourceKey=PrimaryForeground}" />
     <Setter Property="BorderThickness" Value="0" />
     <Setter Property="TextOptions.TextFormattingMode" Value="Ideal" />
     <Setter Property="TextOptions.TextRenderingMode" Value="ClearType" />

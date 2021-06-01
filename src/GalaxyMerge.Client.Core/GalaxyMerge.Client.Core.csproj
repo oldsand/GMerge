@@ -1,14 +1,143 @@
-<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
-
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
     <PropertyGroup>
-        <TargetFramework>netcoreapp3.1</TargetFramework>
-        <UseWPF>true</UseWPF>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+        <ProjectGuid>{A52FAD8F-28B0-4527-9937-AD3885EECCC9}</ProjectGuid>
+        <OutputType>Library</OutputType>
+        <RootNamespace>GalaxyMerge.Client.Core</RootNamespace>
+        <AssemblyName>GalaxyMerge.Client.Core</AssemblyName>
+        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+        <FileAlignment>512</FileAlignment>
+        <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+        <WarningLevel>4</WarningLevel>
+        <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+        <LangVersion>default</LangVersion>
     </PropertyGroup>
-
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>bin\Debug\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>bin\Release\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="System" />
+        <Reference Include="System.Core" />
+        <Reference Include="System.Data" />
+        <Reference Include="System.Xml" />
+        <Reference Include="System.Xaml">
+            <RequiredTargetFramework>4.0</RequiredTargetFramework>
+        </Reference>
+        <Reference Include="WindowsBase" />
+        <Reference Include="PresentationCore" />
+        <Reference Include="PresentationFramework" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="AttachedProperties\ButtonProperties.cs" />
+        <Compile Include="Behaviors\BehaviorsCollection.cs" />
+        <Compile Include="Behaviors\CloseTabAction.cs" />
+        <Compile Include="Behaviors\HandlingEventTrigger.cs" />
+        <Compile Include="Behaviors\Interactions.cs" />
+        <Compile Include="Behaviors\TreeViewMultipleSelectionBehavior.cs" />
+        <Compile Include="Behaviors\TriggersCollection.cs" />
+        <Compile Include="Common\BindingProxy.cs" />
+        <Compile Include="Common\ResourceFinder.cs" />
+        <Compile Include="Controls\Arc.cs" />
+        <Compile Include="Controls\Icon.cs" />
+        <Compile Include="Converters\BooleanBrushConverter.cs" />
+        <Compile Include="Converters\BooleanInverterConverter.cs" />
+        <Compile Include="Converters\BooleanVisibilityConverter.cs" />
+        <Compile Include="Converters\CompositeCollectionConverter.cs" />
+        <Compile Include="Converters\EnumResourceConverter.cs" />
+        <Compile Include="Converters\EnumStringConverter.cs" />
+        <Compile Include="Converters\EnumVisibilityConverter.cs" />
+        <Compile Include="Converters\LeftMarginMultiplierConverter.cs" />
+        <Compile Include="Extensions\CollapsibleColumnDefinition.cs" />
+        <Compile Include="Extensions\ColorExtensions.cs" />
+        <Compile Include="Extensions\DependencyObjectExtensions.cs" />
+        <Compile Include="Extensions\EnumBindingSourceExtension.cs" />
+        <Compile Include="Extensions\TreeViewItemExtensions.cs" />
+        <Compile Include="Mappings\EnumResourceMapping.cs" />
+        <Compile Include="Mvvm\DialogViewModelBase.cs" />
+        <Compile Include="Mvvm\ModelAdapter.cs" />
+        <Compile Include="Mvvm\ModelWrapper.cs" />
+        <Compile Include="Mvvm\NavigationViewModelBase.cs" />
+        <Compile Include="Mvvm\Observable.cs" />
+        <Compile Include="Mvvm\RegionName.cs" />
+        <Compile Include="Mvvm\ViewModelBase.cs" />
+        <Compile Include="Prism\ICreateScopedRegionManager.cs" />
+        <Compile Include="Prism\IRegionManagerAware.cs" />
+        <Compile Include="Prism\RegionManagerAwareBehavior.cs" />
+        <Compile Include="Prism\ScopedRegionNavigationContentLoader.cs" />
+        <Compile Include="Properties\AssemblyInfo.cs">
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Include="Properties\Resources.Designer.cs">
+            <AutoGen>True</AutoGen>
+            <DesignTime>True</DesignTime>
+            <DependentUpon>Resources.resx</DependentUpon>
+        </Compile>
+        <Compile Include="Theme.cs" />
+        <Compile Include="ThemeResourceDictionary.cs" />
+        <Compile Include="ThemeResourceExtension.cs" />
+        <Compile Include="ThemeResourceKey.cs" />
+        <Compile Include="Themes\Styles\DialogStyles.xaml.cs">
+          <DependentUpon>DialogStyles.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Themes\Styles\Temp.xaml.cs">
+          <DependentUpon>Temp.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Themes\Styles\WindowStyles.xaml.cs" />
+        <Compile Include="ThemeType.cs" />
+        <EmbeddedResource Include="Properties\Resources.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+    </ItemGroup>
+    <ItemGroup>
+      <Page Include="Themes\GalaxyMerge.UI.xaml" />
+      <Page Include="Themes\Resources\Icons.xaml" />
+      <Page Include="Themes\Styles\ButtonStyles.xaml" />
+      <Page Include="Themes\Styles\CheckBoxStyles.xaml" />
+      <Page Include="Themes\Styles\ComboBoxStyles.xaml" />
+      <Page Include="Themes\Styles\DialogStyles.xaml" />
+      <Page Include="Themes\Styles\GroupBoxStyles.xaml" />
+      <Page Include="Themes\Styles\IconStyles.xaml" />
+      <Page Include="Themes\Styles\LabelStyles.xaml" />
+      <Page Include="Themes\Styles\ListBoxItemStyles.xaml" />
+      <Page Include="Themes\Styles\ListBoxStyles.xaml" />
+      <Page Include="Themes\Styles\ListViewItemStyles.xaml" />
+      <Page Include="Themes\Styles\ListViewStyles.xaml" />
+      <Page Include="Themes\Styles\TabControlStyles.xaml" />
+      <Page Include="Themes\Styles\TabItemStyles.xaml" />
+      <Page Include="Themes\Styles\Temp.xaml">
+        <SubType>Designer</SubType>
+        <Generator>MSBuild:Compile</Generator>
+      </Page>
+      <Page Include="Themes\Styles\TextBoxStyles.xaml" />
+      <Page Include="Themes\Styles\ToolTipStyles.xaml" />
+      <Page Include="Themes\Styles\TreeViewItemStyles.xaml" />
+      <Page Include="Themes\Styles\WindowStyles.xaml" />
+      <Page Include="Themes\System.Windows.xaml" />
+    </ItemGroup>
     <ItemGroup>
       <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.31" />
       <PackageReference Include="Prism.Core" Version="8.1.97" />
       <PackageReference Include="Prism.Wpf" Version="8.1.97" />
     </ItemGroup>
-
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

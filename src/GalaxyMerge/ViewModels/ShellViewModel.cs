@@ -1,4 +1,4 @@
-namespace GalaxyMerge.Client.Application.ViewModels
+namespace GalaxyMerge.ViewModels
 {
     public class ShellViewModel
     {

@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:themes="clr-namespace:GalaxyMerge.Client.Core.Themes">
+                    xmlns:core="clr-namespace:GalaxyMerge.Client.Core">
   
   <ControlTemplate x:Key="GroupBoxTemplate" TargetType="{x:Type GroupBox}">
     <Grid>
@@ -22,7 +22,7 @@
           RecognizesAccessKey="True"
           TextBlock.FontSize="14"
           TextBlock.FontWeight="SemiBold"
-          TextBlock.Foreground="{themes:ThemeResource ResourceKey=GroupBoxHeaderForeground}" />
+          TextBlock.Foreground="{core:ThemeResource ResourceKey=GroupBoxHeaderForeground}" />
       </Border>
       <ContentPresenter x:Name="Content"
                         Grid.Row="1"
@@ -30,14 +30,14 @@
     </Grid>
     <ControlTemplate.Triggers>
       <Trigger Property="IsEnabled" Value="False">
-        <Setter Property="Opacity" Value="{themes:ThemeResource ResourceKey=ControlDisabledOpacity}" />
+        <Setter Property="Opacity" Value="{core:ThemeResource ResourceKey=ControlDisabledOpacity}" />
       </Trigger>
     </ControlTemplate.Triggers>
   </ControlTemplate>
 
   <Style x:Key="GroupBoxStyle" TargetType="{x:Type GroupBox}">
-    <Setter Property="Foreground" Value="{themes:ThemeResource ResourceKey=ContentForeground}" />
-    <Setter Property="BorderBrush" Value="{themes:ThemeResource ResourceKey=GroupBoxHeaderBorder}" />
+    <Setter Property="Foreground" Value="{core:ThemeResource ResourceKey=ContentForeground}" />
+    <Setter Property="BorderBrush" Value="{core:ThemeResource ResourceKey=GroupBoxHeaderBorder}" />
     <Setter Property="BorderThickness" Value="0,0,0,1" />
     <Setter Property="Padding" Value="8,16,8,8" />
     <Setter Property="Template" Value="{StaticResource GroupBoxTemplate}" />

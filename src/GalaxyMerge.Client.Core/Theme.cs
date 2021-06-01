@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Media;
 
-namespace GalaxyMerge.Client.Core.Themes
+namespace GalaxyMerge.Client.Core
 {
     public sealed class Theme
     {
