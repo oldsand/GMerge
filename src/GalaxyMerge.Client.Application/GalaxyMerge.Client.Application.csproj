@@ -8,10 +8,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="ViewModels" />
-    </ItemGroup>
-
-    <ItemGroup>
       <PackageReference Include="Prism.Core" Version="8.1.97" />
       <PackageReference Include="Prism.DryIoc" Version="8.1.97" />
     </ItemGroup>
@@ -21,6 +17,11 @@
       <ProjectReference Include="..\GalaxyMerge.Client.Converters\GalaxyMerge.Client.Converters.csproj" />
       <ProjectReference Include="..\GalaxyMerge.Client.Core\GalaxyMerge.Client.Core.csproj" />
       <ProjectReference Include="..\GalaxyMerge.Client.Proxies\GalaxyMerge.Client.Proxies.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Configurations" />
+      <Folder Include="Design" />
     </ItemGroup>
 
 </Project>
