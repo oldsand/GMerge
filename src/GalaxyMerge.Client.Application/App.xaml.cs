@@ -1,11 +1,11 @@
 ﻿using System.Windows;
+using GalaxyMerge.Client.Application.Views;
 using GalaxyMerge.Client.Core.Prism;
-using GalaxyMerge.Views;
 using Prism.Ioc;
 using Prism.Modularity;
 using Prism.Regions;
 
-namespace GalaxyMerge
+namespace GalaxyMerge.Client.Application
 {
     public partial class App
     {

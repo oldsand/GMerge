@@ -45,7 +45,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Client.Contract
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Client.Proxies", "GalaxyMerge.Client.Proxies\GalaxyMerge.Client.Proxies.csproj", "{C080B539-439D-4C9E-BDF4-7578E215F34D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge", "GalaxyMerge\GalaxyMerge.csproj", "{B4C6341B-0A12-461D-9E4C-A188D1B770B8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Client.Application", "GalaxyMerge.Client.Application\GalaxyMerge.Client.Application.csproj", "{B4C6341B-0A12-461D-9E4C-A188D1B770B8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Client.Core", "GalaxyMerge.Client.Core\GalaxyMerge.Client.Core.csproj", "{A52FAD8F-28B0-4527-9937-AD3885EECCC9}"
 EndProject

@@ -1,9 +1,9 @@
+using GalaxyMerge.Client.Application.Views;
 using GalaxyMerge.Client.Core.Mvvm;
-using GalaxyMerge.Views;
 using Prism.Mvvm;
 using Prism.Regions;
 
-namespace GalaxyMerge.ViewModels
+namespace GalaxyMerge.Client.Application.ViewModels
 {
     public class ShellViewModel : BindableBase
     {

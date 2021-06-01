@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace GalaxyMerge.Views
+namespace GalaxyMerge.Client.Application.Views
 {
     public partial class Shell : Window
     {
