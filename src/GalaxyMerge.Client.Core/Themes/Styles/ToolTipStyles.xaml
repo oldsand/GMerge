@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:core="clr-namespace:GalaxyMerge.Client.Core">
+                    xmlns:themes="clr-namespace:GalaxyMerge.Client.Core.Themes">
 
   <ControlTemplate x:Key="ToolTipTemplate" TargetType="ToolTip">
     <Border Name="Border"
@@ -25,9 +25,9 @@
     <Setter Property="OverridesDefaultStyle" Value="true" />
     <Setter Property="HasDropShadow" Value="True" />
     <Setter Property="Margin" Value="7" />
-    <Setter Property="Background" Value="{core:ThemeResource ResourceKey=PrimaryBackground}" />
-    <Setter Property="Foreground" Value="{core:ThemeResource ResourceKey=PrimaryForeground}" />
-    <Setter Property="BorderBrush" Value="{core:ThemeResource ResourceKey=PrimaryBorder}" />
+    <Setter Property="Background" Value="{themes:ThemeResource ResourceKey=PrimaryBackground}" />
+    <Setter Property="Foreground" Value="{themes:ThemeResource ResourceKey=PrimaryForeground}" />
+    <Setter Property="BorderBrush" Value="{themes:ThemeResource ResourceKey=PrimaryBorder}" />
     <Setter Property="BorderThickness" Value="2" />
     <Setter Property="Template" Value="{StaticResource ToolTipTemplate}" />
   </Style>

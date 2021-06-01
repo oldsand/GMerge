@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:core="clr-namespace:GalaxyMerge.Client.Core">
+                    xmlns:themes="clr-namespace:GalaxyMerge.Client.Core.Themes">
   <ControlTemplate x:Key="ComboBoxItemTemplate" TargetType="{x:Type ComboBoxItem}">
         <Grid>
             <Border x:Name="Bd"
@@ -15,22 +15,22 @@
                     SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
             </Border>
             <Border x:Name="FocusBorder"
-                BorderBrush="{core:ThemeResource ResourceKey=ControlFocusBorder}"
+                BorderBrush="{themes:ThemeResource ResourceKey=ControlFocusBorder}"
                 BorderThickness="1"
                 Visibility="Collapsed" />
         </Grid>
         <ControlTemplate.Triggers>
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Opacity" Value="{core:ThemeResource ResourceKey=ControlDisabledOpacity}" />
+                <Setter Property="Opacity" Value="{themes:ThemeResource ResourceKey=ControlDisabledOpacity}" />
             </Trigger>
             <Trigger Property="IsSelected" Value="true">
-                <Setter TargetName="Bd" Property="Background" Value="{core:ThemeResource ResourceKey=ListSelectedBackground}" />
-                <Setter TargetName="Bd" Property="BorderBrush" Value="{core:ThemeResource ResourceKey=ListSelectedBorder}" />
-                <Setter Property="Foreground" Value="{core:ThemeResource ResourceKey=ListSelectedForeground}" />
+                <Setter TargetName="Bd" Property="Background" Value="{themes:ThemeResource ResourceKey=ListSelectedBackground}" />
+                <Setter TargetName="Bd" Property="BorderBrush" Value="{themes:ThemeResource ResourceKey=ListSelectedBorder}" />
+                <Setter Property="Foreground" Value="{themes:ThemeResource ResourceKey=ListSelectedForeground}" />
             </Trigger>
             <Trigger Property="IsMouseOver" Value="true">
-                <Setter TargetName="Bd" Property="Background" Value="{core:ThemeResource ResourceKey=ListMouseOverBackground}" />
-                <Setter TargetName="Bd" Property="BorderBrush" Value="{core:ThemeResource ResourceKey=ListMouseOverBorder}" />
+                <Setter TargetName="Bd" Property="Background" Value="{themes:ThemeResource ResourceKey=ListMouseOverBackground}" />
+                <Setter TargetName="Bd" Property="BorderBrush" Value="{themes:ThemeResource ResourceKey=ListMouseOverBorder}" />
             </Trigger>
             <MultiTrigger>
                 <MultiTrigger.Conditions>
@@ -38,8 +38,8 @@
                     <Condition Property="IsMouseOver" Value="False" />
                     <Condition Property="IsKeyboardFocused" Value="True" />
                 </MultiTrigger.Conditions>
-                <Setter TargetName="Bd" Property="Background" Value="{core:ThemeResource ResourceKey=ListMouseOverBackground}" />
-                <Setter TargetName="Bd" Property="BorderBrush" Value="{core:ThemeResource ResourceKey=ListMouseOverBorder}" />
+                <Setter TargetName="Bd" Property="Background" Value="{themes:ThemeResource ResourceKey=ListMouseOverBackground}" />
+                <Setter TargetName="Bd" Property="BorderBrush" Value="{themes:ThemeResource ResourceKey=ListMouseOverBorder}" />
             </MultiTrigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
@@ -73,20 +73,20 @@
                 <Rectangle
                     Width="10"
                     Height="10"
-                    Fill="{core:ThemeResource ResourceKey=GlyphForeground}"/>
+                    Fill="{themes:ThemeResource ResourceKey=GlyphForeground}"/>
             </Border>
         </Border>
         <ControlTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="true">
-                <Setter TargetName="templateRoot" Property="Background" Value="{core:ThemeResource ResourceKey=ControlMouseOverBackground}" />
-                <Setter TargetName="templateRoot" Property="BorderBrush" Value="{core:ThemeResource ResourceKey=ControlMouseOverBorder}" />
+                <Setter TargetName="templateRoot" Property="Background" Value="{themes:ThemeResource ResourceKey=ControlMouseOverBackground}" />
+                <Setter TargetName="templateRoot" Property="BorderBrush" Value="{themes:ThemeResource ResourceKey=ControlMouseOverBorder}" />
             </Trigger>
             <Trigger Property="IsPressed" Value="true">
-                <Setter TargetName="templateRoot" Property="Background" Value="{core:ThemeResource ResourceKey=ControlPressedBackground}" />
-                <Setter TargetName="templateRoot" Property="BorderBrush" Value="{core:ThemeResource ResourceKey=ControlPressedBorder}" />
+                <Setter TargetName="templateRoot" Property="Background" Value="{themes:ThemeResource ResourceKey=ControlPressedBackground}" />
+                <Setter TargetName="templateRoot" Property="BorderBrush" Value="{themes:ThemeResource ResourceKey=ControlPressedBorder}" />
             </Trigger>
             <Trigger Property="IsEnabled" Value="false">
-                <Setter Property="Opacity" Value="{core:ThemeResource ResourceKey=ControlDisabledOpacity}" />
+                <Setter Property="Opacity" Value="{themes:ThemeResource ResourceKey=ControlDisabledOpacity}" />
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
@@ -119,8 +119,8 @@
                 <Border x:Name="dropDownBorder"
                     MinWidth="{Binding ActualWidth, ElementName=templateRoot}"
                     MaxHeight="{TemplateBinding MaxDropDownHeight}"
-                    Background="{core:ThemeResource ResourceKey=ContentBackground}"
-                    BorderBrush="{core:ThemeResource ResourceKey=ControlBorder}"
+                    Background="{themes:ThemeResource ResourceKey=ContentBackground}"
+                    BorderBrush="{themes:ThemeResource ResourceKey=ControlBorder}"
                     BorderThickness="1">
                     <ScrollViewer x:Name="DropDownScrollViewer">
                         <Grid x:Name="grid"
@@ -164,7 +164,7 @@
             <Border x:Name="FocusBorder"
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
-                BorderBrush="{core:ThemeResource ResourceKey=ControlFocusBorder}"
+                BorderBrush="{themes:ThemeResource ResourceKey=ControlFocusBorder}"
                 BorderThickness="1"
                 Visibility="Collapsed" />
         </Grid>
@@ -184,7 +184,7 @@
                 <Setter TargetName="opaqueRect" Property="Canvas.Left" Value="{Binding HorizontalOffset, ElementName=DropDownScrollViewer}" />
             </Trigger>
             <Trigger Property="IsEnabled" Value="false">
-                <Setter TargetName="contentPresenter" Property="Opacity" Value="{core:ThemeResource ResourceKey=ControlDisabledOpacity}" />
+                <Setter TargetName="contentPresenter" Property="Opacity" Value="{themes:ThemeResource ResourceKey=ControlDisabledOpacity}" />
             </Trigger>
             <Trigger Property="IsFocused" Value="true">
                 <Setter TargetName="FocusBorder" Property="Visibility" Value="Visible" />
@@ -196,8 +196,8 @@
 
     <Style x:Key="ComboBoxEditableTextBox" TargetType="{x:Type TextBox}">
         <Setter Property="OverridesDefaultStyle" Value="true" />
-        <Setter Property="CaretBrush" Value="{core:ThemeResource ResourceKey=ControlForeground}" />
-        <Setter Property="SelectionBrush" Value="{core:ThemeResource ResourceKey=ControlHighlightBackground}" />
+        <Setter Property="CaretBrush" Value="{themes:ThemeResource ResourceKey=ControlForeground}" />
+        <Setter Property="SelectionBrush" Value="{themes:ThemeResource ResourceKey=ControlHighlightBackground}" />
         <Setter Property="AllowDrop" Value="true" />
         <Setter Property="MinWidth" Value="0" />
         <Setter Property="MinHeight" Value="0" />
@@ -236,8 +236,8 @@
                 <Border x:Name="dropDownBorder"
                     MinWidth="{Binding ActualWidth, ElementName=templateRoot}"
                     MaxHeight="{TemplateBinding MaxDropDownHeight}"
-                    Background="{core:ThemeResource ResourceKey=ContentBackground}"
-                    BorderBrush="{core:ThemeResource ResourceKey=ControlBorder}"
+                    Background="{themes:ThemeResource ResourceKey=ContentBackground}"
+                    BorderBrush="{themes:ThemeResource ResourceKey=ControlBorder}"
                     BorderThickness="1">
                     <ScrollViewer x:Name="DropDownScrollViewer">
                         <Grid x:Name="grid"
@@ -270,7 +270,7 @@
             <Border x:Name="border"
                 Grid.Column="0"
                 Margin="{TemplateBinding BorderThickness}"
-                Background="{core:ThemeResource ResourceKey=ControlContentBackground}">
+                Background="{themes:ThemeResource ResourceKey=ControlContentBackground}">
                 <TextBox x:Name="PART_EditableTextBox"
                     Margin="{TemplateBinding Padding}"
                     HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
@@ -281,16 +281,16 @@
             <Border x:Name="FocusBorder"
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
-                BorderBrush="{core:ThemeResource ResourceKey=ControlFocusBorder}"
+                BorderBrush="{themes:ThemeResource ResourceKey=ControlFocusBorder}"
                 BorderThickness="1"
                 Visibility="Collapsed" />
         </Grid>
         <ControlTemplate.Triggers>
             <Trigger Property="IsEnabled" Value="false">
-                <Setter TargetName="border" Property="Opacity" Value="{core:ThemeResource ResourceKey=ControlDisabledOpacity}" />
+                <Setter TargetName="border" Property="Opacity" Value="{themes:ThemeResource ResourceKey=ControlDisabledOpacity}" />
             </Trigger>
             <Trigger Property="IsKeyboardFocusWithin" Value="true">
-                <Setter Property="Foreground" Value="{core:ThemeResource ResourceKey=ControlForeground}" />
+                <Setter Property="Foreground" Value="{themes:ThemeResource ResourceKey=ControlForeground}" />
             </Trigger>
             <Trigger Property="HasItems" Value="false">
                 <Setter TargetName="dropDownBorder" Property="Height" Value="95" />
@@ -314,9 +314,9 @@
 
     <Style x:Key="ComboBoxStyle" TargetType="{x:Type ComboBox}">
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-        <Setter Property="Background" Value="{core:ThemeResource ResourceKey=ControlBackground}" />
-        <Setter Property="BorderBrush" Value="{core:ThemeResource ResourceKey=ControlBorder}" />
-        <Setter Property="Foreground" Value="{core:ThemeResource ResourceKey=ControlForeground}" />
+        <Setter Property="Background" Value="{themes:ThemeResource ResourceKey=ControlBackground}" />
+        <Setter Property="BorderBrush" Value="{themes:ThemeResource ResourceKey=ControlBorder}" />
+        <Setter Property="Foreground" Value="{themes:ThemeResource ResourceKey=ControlForeground}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />

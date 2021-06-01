@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 
-namespace GalaxyMerge.Client.Core
+namespace GalaxyMerge.Client.Core.Themes
 {
     public sealed class ThemeResourceExtension : DynamicResourceExtension
     {

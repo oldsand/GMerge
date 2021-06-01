@@ -6,7 +6,7 @@
     <Application.Resources>
       <ResourceDictionary>
         <ResourceDictionary.MergedDictionaries>
-          <ResourceDictionary Source="/aaVCS.UI.Core;component/Themes/aaVCS.UI.Core.xaml" />
+          <ResourceDictionary Source="/GalaxyMerge.Client.Core;component/Themes/GalaxyMerge.UI.xaml" />
         </ResourceDictionary.MergedDictionaries>
       </ResourceDictionary>
     </Application.Resources>

@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:ap="clr-namespace:GalaxyMerge.Client.Core.AttachedProperties"
-                    xmlns:core="clr-namespace:GalaxyMerge.Client.Core">
+                    xmlns:themes="clr-namespace:GalaxyMerge.Client.Core.Themes">
       
     <ControlTemplate x:Key="ButtonTemplate" TargetType="{x:Type Button}">
         <Grid SnapsToDevicePixels="true">
@@ -26,30 +26,30 @@
         </Grid>
         <ControlTemplate.Triggers>
             <Trigger Property="IsDefaulted" Value="true">
-                <Setter TargetName="border" Property="BorderBrush" Value="{core:ThemeResource ResourceKey=ControlDefaultBorder}" />
+                <Setter TargetName="border" Property="BorderBrush" Value="{themes:ThemeResource ResourceKey=ControlDefaultBorder}" />
             </Trigger>
             <!--<Trigger Property="IsMouseOver" Value="true">
                 <Setter TargetName="border" Property="Background" Value="{core:ThemeResource ResourceKey=ControlMouseOverBackground}" />
                 <Setter TargetName="border" Property="BorderBrush" Value="{core:ThemeResource ResourceKey=ControlMouseOverBorder}" />
             </Trigger>-->
             <Trigger Property="IsPressed" Value="true">
-                <Setter TargetName="border" Property="Background" Value="{core:ThemeResource ResourceKey=ControlPressedBackground}" />
-                <Setter TargetName="border" Property="BorderBrush" Value="{core:ThemeResource ResourceKey=ControlPressedBorder}" />
+                <Setter TargetName="border" Property="Background" Value="{themes:ThemeResource ResourceKey=ControlPressedBackground}" />
+                <Setter TargetName="border" Property="BorderBrush" Value="{themes:ThemeResource ResourceKey=ControlPressedBorder}" />
             </Trigger>
             <!--<Trigger Property="IsFocused" Value="true">
                 <Setter TargetName="FocusBorder" Property="Visibility" Value="Visible" />
             </Trigger>-->
             <Trigger Property="IsEnabled" Value="false">
-                <Setter Property="Opacity" Value="{core:ThemeResource ResourceKey=ControlDisabledOpacity}" />
+                <Setter Property="Opacity" Value="{themes:ThemeResource ResourceKey=ControlDisabledOpacity}" />
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
     <Style x:Key="ButtonStyle.Default" TargetType="{x:Type Button}">
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-        <Setter Property="Background" Value="{core:ThemeResource ResourceKey=ControlBackground}" />
-        <Setter Property="BorderBrush" Value="{core:ThemeResource ResourceKey=ControlBorder}" />
-        <Setter Property="Foreground" Value="{core:ThemeResource ResourceKey=ControlForeground}" />
+        <Setter Property="Background" Value="{themes:ThemeResource ResourceKey=ControlBackground}" />
+        <Setter Property="BorderBrush" Value="{themes:ThemeResource ResourceKey=ControlBorder}" />
+        <Setter Property="Foreground" Value="{themes:ThemeResource ResourceKey=ControlForeground}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -63,9 +63,9 @@
     
     <Style x:Key="ButtonStyle.Primary" TargetType="{x:Type Button}">
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-        <Setter Property="Background" Value="{core:ThemeResource ResourceKey=ControlBackground}" />
-        <Setter Property="BorderBrush" Value="{core:ThemeResource ResourceKey=ControlBorder}" />
-        <Setter Property="Foreground" Value="{core:ThemeResource ResourceKey=ControlForeground}" />
+        <Setter Property="Background" Value="{themes:ThemeResource ResourceKey=ControlBackground}" />
+        <Setter Property="BorderBrush" Value="{themes:ThemeResource ResourceKey=ControlBorder}" />
+        <Setter Property="Foreground" Value="{themes:ThemeResource ResourceKey=ControlForeground}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -80,7 +80,7 @@
     <ControlTemplate x:Key="ButtonTemplate.Window" TargetType="{x:Type Button}">
         <Grid Background="Transparent">
             <Border x:Name="MouseOverBorder"
-                Background="{core:ThemeResource ResourceKey=WindowControlMouseOverBackground}"
+                Background="{themes:ThemeResource ResourceKey=WindowControlMouseOverBackground}"
                 Opacity="0" />
             <ContentPresenter x:Name="contentPresenter"
                 Margin="{TemplateBinding Padding}"
@@ -166,13 +166,13 @@
                 <Setter TargetName="border" Property="BorderThickness" Value="0" />
             </Trigger>
             <Trigger Property="IsMouseOver" Value="true">
-                <Setter TargetName="border" Property="Background" Value="{core:ThemeResource ResourceKey=ControlMouseOverBackground}" />
+                <Setter TargetName="border" Property="Background" Value="{themes:ThemeResource ResourceKey=ControlMouseOverBackground}" />
             </Trigger>
             <Trigger Property="IsPressed" Value="true">
-                <Setter TargetName="border" Property="BorderBrush" Value="{core:ThemeResource ResourceKey=ControlPressedBorder}" />
+                <Setter TargetName="border" Property="BorderBrush" Value="{themes:ThemeResource ResourceKey=ControlPressedBorder}" />
             </Trigger>
             <Trigger Property="IsEnabled" Value="false">
-                <Setter Property="Opacity" Value="{core:ThemeResource ResourceKey=ControlDisabledOpacity}" />
+                <Setter Property="Opacity" Value="{themes:ThemeResource ResourceKey=ControlDisabledOpacity}" />
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
@@ -180,7 +180,7 @@
     <Style x:Key="ButtonStyle.Icon" TargetType="{x:Type Button}">
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Foreground" Value="{core:ThemeResource ResourceKey=IconForeground}" />
+        <Setter Property="Foreground" Value="{themes:ThemeResource ResourceKey=IconForeground}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Height" Value="20" />
         <Setter Property="Width" Value="20" />
