@@ -1,0 +1,35 @@
+<UserControl x:Class="GalaxyMerge.Views.ShellFooterView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:ui="http://gmerge.com/ui/wpf"
+             xmlns:viewModels="clr-namespace:GalaxyMerge.ViewModels"
+             xmlns:converters="clr-namespace:GalaxyMerge.Client.Converters;assembly=GalaxyMerge.Client.Converters"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             d:DataContext="{d:DesignInstance Type=viewModels:ShellFooterViewModel}"
+             mc:Ignorable="d"
+             d:DesignHeight="20" d:DesignWidth="1000">
+  <Grid Background="{ui:ThemeResource ResourceKey=PrimaryBackground}">
+    <Border x:Name="RootBorder" BorderThickness="0 1 0 0" BorderBrush="{ui:ThemeResource ResourceKey=PrimaryBorder}">
+      <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 10 0">
+        <TextBlock Text="{Binding CurrentProcessMessage}" 
+                   FontSize="11"
+                   Foreground="DimGray"
+                   Margin="10 0" VerticalAlignment="Center" />
+        <ProgressBar Visibility="{Binding TaskProcessing, Converter={ui:BooleanVisibilityConverter}}"
+                     Width="100" Height="10" Margin="5 0" IsIndeterminate="True"/>
+        <Button Command="{Binding CancelCurrentTaskCommand}"
+                Margin="5 0" 
+                Style="{StaticResource ButtonStyle.Icon}"
+                Visibility="{Binding TaskProcessing, Converter={ui:BooleanVisibilityConverter}}">
+          <ui:Icon Template="{StaticResource Icon.Close.Tab.Filled}" />
+        </Button>
+        <Button Style="{StaticResource ButtonStyle.Icon}">
+          <ui:Icon Template="{DynamicResource Icon.Notification}" />
+        </Button>
+      </StackPanel>
+    </Border>
+  </Grid>
+</UserControl>
