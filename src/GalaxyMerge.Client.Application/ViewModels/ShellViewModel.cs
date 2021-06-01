@@ -14,6 +14,7 @@ namespace GalaxyMerge.Client.Application.ViewModels
         public ShellViewModel(IRegionManager regionManager)
         {
             regionManager.RegisterViewWithRegion(RegionName.ShellHeaderRegion, typeof(ShellHeaderView));
+            regionManager.RegisterViewWithRegion(RegionName.ShellFooterRegion, typeof(ShellFooterView));
         }
     }
 }

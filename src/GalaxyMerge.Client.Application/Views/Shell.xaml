@@ -10,7 +10,7 @@
         Title="GMerge" Height="800" Width="1400"
         WindowStartupLocation="CenterScreen"
         Style="{DynamicResource ShellStyle}">
-  <Grid Background="{ui:ThemeResource}">
+  <Grid Background="{ui:ThemeResource ResourceKey=PrimaryBackground}">
     <Grid.RowDefinitions>
       <RowDefinition Height="40" />
       <RowDefinition />

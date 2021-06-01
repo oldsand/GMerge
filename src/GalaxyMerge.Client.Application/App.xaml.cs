@@ -23,19 +23,10 @@ namespace GalaxyMerge.Client.Application
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            /*containerRegistry.RegisterSingleton<IGalaxyConnectionRegistry, GalaxyConnectionRegistry>();
-            containerRegistry.RegisterSingleton<ITaskProcessor, TaskProcessor>();
-            containerRegistry.Register<IGalaxyViewManager, GalaxyViewManager>();
-            containerRegistry.Register<IGalaxyDatabaseInspector, GalaxyDatabaseInspector>();
-            containerRegistry.Register<IGalaxyDataProviderFactory, GalaxyDataProviderFactory>();
-            containerRegistry.Register<IConnectionRepository, ConnectionRepository>();
-            containerRegistry.RegisterInstance<DbContext>(new VcsContext());*/
         }
 
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
         {
-            /*moduleCatalog.AddModule<ConnectionModule>();
-            moduleCatalog.AddModule<RepositoryModule>();*/
         }
 
         protected override void ConfigureDefaultRegionBehaviors(IRegionBehaviorFactory regionBehaviors)

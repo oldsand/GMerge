@@ -16,8 +16,8 @@ namespace GalaxyMerge.Client.Application.ViewModels
 
         public ShellFooterViewModel()
         {
-            var logTarget = LogManager.Configuration.FindTargetByName<MemoryEventTarget>("NotificationTarget");
-            logTarget.EventReceived += LogEventReceived;
+            /*var logTarget = LogManager.Configuration.FindTargetByName<MemoryEventTarget>("NotificationTarget");
+            logTarget.EventReceived += LogEventReceived;*/
         }
 
         private CancellationTokenSource CurrentCancellationTokenSource { get; set; }
