@@ -1,6 +1,8 @@
 ﻿using System.Windows;
+using GalaxyMerge.Client.Application.Configurations;
 using GalaxyMerge.Client.Application.Views;
 using GalaxyMerge.Client.Core.Prism;
+using GalaxyMerge.Client.Dialogs;
 using Prism.Ioc;
 using Prism.Modularity;
 using Prism.Regions;
@@ -11,7 +13,7 @@ namespace GalaxyMerge.Client.Application
     {
         protected override Window CreateShell()
         {
-            //LoggerConfig.Run();
+            LoggerConfiguration.Apply();
             return Container.Resolve<Shell>();
         }
 
@@ -27,6 +29,7 @@ namespace GalaxyMerge.Client.Application
 
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
         {
+            moduleCatalog.AddModule<DialogModule>();
         }
 
         protected override void ConfigureDefaultRegionBehaviors(IRegionBehaviorFactory regionBehaviors)

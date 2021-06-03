@@ -4,10 +4,10 @@
     <PropertyGroup>
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
         <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-        <ProjectGuid>{B4C6341B-0A12-461D-9E4C-A188D1B770B8}</ProjectGuid>
-        <OutputType>WinExe</OutputType>
-        <RootNamespace>GalaxyMerge.Client.Application</RootNamespace>
-        <AssemblyName>GalaxyMerge.Client.Application</AssemblyName>
+        <ProjectGuid>{9A11B5E3-17BF-4B60-9558-E1982C172B25}</ProjectGuid>
+        <OutputType>Library</OutputType>
+        <RootNamespace>GalaxyMerge.Client.Dialogs</RootNamespace>
+        <AssemblyName>GalaxyMerge.Client.Dialogs</AssemblyName>
         <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
         <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -47,53 +47,31 @@
         <Reference Include="PresentationFramework" />
     </ItemGroup>
     <ItemGroup>
-        <ApplicationDefinition Include="App.xaml">
-            <Generator>MSBuild:Compile</Generator>
-            <SubType>Designer</SubType>
-        </ApplicationDefinition>
-        <Compile Include="Configurations\LoggerConfiguration.cs" />
-        <Compile Include="Properties\Resources.Designer.cs">
-          <DesignTime>True</DesignTime>
-          <AutoGen>True</AutoGen>
-          <DependentUpon>Resources.resx</DependentUpon>
-        </Compile>
-        <Compile Include="ViewModels\ShellFooterViewModel.cs" />
-        <Compile Include="ViewModels\ShellHeaderViewModel.cs" />
-        <Compile Include="ViewModels\ShellViewModel.cs" />
-        <Compile Include="Views\ShellHeaderView.xaml.cs">
-          <DependentUpon>ShellHeaderView.xaml</DependentUpon>
-        </Compile>
-        <Compile Include="Views\Shell.xaml.cs" />
-        <Compile Include="App.xaml.cs">
-            <DependentUpon>App.xaml</DependentUpon>
-            <SubType>Code</SubType>
-        </Compile>
-        <Compile Include="Views\ShellFooterView.xaml.cs">
-          <DependentUpon>ShellFooterView.xaml</DependentUpon>
-        </Compile>
-        <Page Include="Views\ShellHeaderView.xaml" />
-        <Page Include="Views\Shell.xaml">
-          <Generator>MSBuild:Compile</Generator>
-          <XamlRuntime>Wpf</XamlRuntime>
-        </Page>
-        <Page Include="Views\ShellFooterView.xaml" />
-    </ItemGroup>
-    <ItemGroup>
+        <Compile Include="DialogModule.cs" />
         <Compile Include="Properties\AssemblyInfo.cs">
             <SubType>Code</SubType>
         </Compile>
-    </ItemGroup>
-    <ItemGroup>
-        <None Include="App.config" />
-    </ItemGroup>
-    <ItemGroup>
-      <Folder Include="Design" />
+        <Compile Include="Properties\Resources.Designer.cs">
+            <AutoGen>True</AutoGen>
+            <DesignTime>True</DesignTime>
+            <DependentUpon>Resources.resx</DependentUpon>
+        </Compile>
+        <Compile Include="ViewModels\AddResourceViewModel.cs" />
+        <Compile Include="Views\AddResourceView.xaml.cs">
+          <DependentUpon>AddResourceView.xaml</DependentUpon>
+        </Compile>
+        <EmbeddedResource Include="Properties\Resources.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
     </ItemGroup>
     <ItemGroup>
       <PackageReference Include="NLog" Version="4.7.10" />
       <PackageReference Include="Prism.Core" Version="8.1.97" />
-      <PackageReference Include="Prism.DryIoc" Version="8.1.97" />
       <PackageReference Include="Prism.Wpf" Version="8.1.97" />
+    </ItemGroup>
+    <ItemGroup>
+      <Page Include="Views\AddResourceView.xaml" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\GalaxyMerge.Client.Contracts\GalaxyMerge.Client.Contracts.csproj">
@@ -108,32 +86,14 @@
         <Project>{a52fad8f-28b0-4527-9937-ad3885eeccc9}</Project>
         <Name>GalaxyMerge.Client.Core</Name>
       </ProjectReference>
-      <ProjectReference Include="..\GalaxyMerge.Client.Dialogs\GalaxyMerge.Client.Dialogs.csproj">
-        <Project>{9a11b5e3-17bf-4b60-9558-e1982c172b25}</Project>
-        <Name>GalaxyMerge.Client.Dialogs</Name>
+      <ProjectReference Include="..\GalaxyMerge.Client.Data\GalaxyMerge.Client.Data.csproj">
+        <Project>{04b42b6e-dd66-49a8-84e8-bb2743293330}</Project>
+        <Name>GalaxyMerge.Client.Data</Name>
       </ProjectReference>
       <ProjectReference Include="..\GalaxyMerge.Client.Proxies\GalaxyMerge.Client.Proxies.csproj">
         <Project>{c080b539-439d-4c9e-bdf4-7578e215f34d}</Project>
         <Name>GalaxyMerge.Client.Proxies</Name>
       </ProjectReference>
-      <ProjectReference Include="..\GalaxyMerge.Core\GalaxyMerge.Core.csproj">
-        <Project>{dd496472-fb15-4ffc-86ca-2ac8f0e6cf3c}</Project>
-        <Name>GalaxyMerge.Core</Name>
-      </ProjectReference>
-      <ProjectReference Include="..\GalaxyMerge.Data\GalaxyMerge.Data.csproj">
-        <Project>{1116a38e-aa67-46e3-9d09-e2de5c2a694e}</Project>
-        <Name>GalaxyMerge.Data</Name>
-      </ProjectReference>
-      <ProjectReference Include="..\GalaxyMerge.Primitives\GalaxyMerge.Primitives.csproj">
-        <Project>{446fe87c-5122-4344-9df9-9f641e81a476}</Project>
-        <Name>GalaxyMerge.Primitives</Name>
-      </ProjectReference>
-    </ItemGroup>
-    <ItemGroup>
-      <EmbeddedResource Include="Properties\Resources.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
