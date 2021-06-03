@@ -88,9 +88,9 @@
     <ItemGroup>
       <PackageReference Include="NLog" Version="4.7.10" />
       <PackageReference Include="SqlTableDependency" Version="8.5.8" />
-      <PackageReference Include="System.ComponentModel.Annotations" Version="4.4.0" />
+      <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
       <PackageReference Include="System.Data.Common" Version="4.3.0" />
-      <PackageReference Include="System.Data.SqlClient" Version="4.3.0" />
+      <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

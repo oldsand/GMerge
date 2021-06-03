@@ -3,10 +3,28 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:GalaxyMerge.Client.Dialogs.Views"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:ui="http://gmerge.com/ui/wpf"
+             xmlns:design="clr-namespace:GalaxyMerge.Client.Dialogs.Design"
+             prism:Dialog.WindowStyle="{DynamicResource LocalDialogStyle}"
+             prism:ViewModelLocator.AutoWireViewModel="True"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
-  <Grid>
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/GalaxyMerge.Client.Core;component/Themes/GalaxyMerge.UI.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+      <design:DesignViewModels x:Key="DesignViewModels" />
+      <Style x:Key="LocalDialogStyle" BasedOn="{StaticResource DialogStyle}" TargetType="{x:Type Window}">
+        <Setter Property="Height" Value="300" />
+        <Setter Property="Width" Value="300" />
+        <Setter Property="Title" Value="Select New Resource" />
+      </Style>
+    </ResourceDictionary>
+  </UserControl.Resources>
+  
+  <Grid Background="{ui:ThemeResource ResourceKey=ButtonDefaultForeground}">
     
   </Grid>
 </UserControl>

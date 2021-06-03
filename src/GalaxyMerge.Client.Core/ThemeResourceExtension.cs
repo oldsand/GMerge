@@ -5,6 +5,14 @@ namespace GalaxyMerge.Client.Core
 {
     public sealed class ThemeResourceExtension : DynamicResourceExtension
     {
+        public ThemeResourceExtension()
+        {
+        }
+        
+        public ThemeResourceExtension(ThemeResourceKey resourceKey) : base(resourceKey)
+        {
+        }
+        
         public new ThemeResourceKey ResourceKey
         {
             get

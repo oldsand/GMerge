@@ -2,6 +2,7 @@
 {
     public enum ThemeResourceKey
     {
+        Default,
         PrimaryBackground,
         PrimaryForeground,
         PrimaryBorder,
