@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Markup;
-using GalaxyMerge.Client.Core.Mappings;
+using GalaxyMerge.Client.Core.Utilities;
 
 namespace GalaxyMerge.Client.Core.Converters
 {

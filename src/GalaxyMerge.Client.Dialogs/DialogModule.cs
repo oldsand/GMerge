@@ -1,3 +1,4 @@
+using GalaxyMerge.Client.Core.Mvvm;
 using GalaxyMerge.Client.Dialogs.ViewModels;
 using GalaxyMerge.Client.Dialogs.Views;
 using Prism.Ioc;

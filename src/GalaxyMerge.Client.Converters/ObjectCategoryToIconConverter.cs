@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Markup;
-using GalaxyMerge.Client.Core.Common;
+using GalaxyMerge.Client.Core.Utilities;
 using GalaxyMerge.Primitives;
 
 namespace GalaxyMerge.Client.Converters

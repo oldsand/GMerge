@@ -1,4 +1,6 @@
 ﻿using System.Reflection;
+using System.Resources;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Markup;
@@ -6,11 +8,11 @@ using System.Windows.Markup;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("GalaxyMerge.Client.Core")]
+[assembly: AssemblyTitle("GalaxyMerge.Client.Resources")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("GalaxyMerge.Client.Core")]
+[assembly: AssemblyProduct("GalaxyMerge.Client.Resources")]
 [assembly: AssemblyCopyright("Copyright ©  2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -54,12 +56,8 @@ using System.Windows.Markup;
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
 //XAML/CLR Namespacing mapping 
-[assembly: XmlnsDefinition("http://gmerge.com/ui/wpf", "GalaxyMerge.Client.Core")]
-[assembly: XmlnsDefinition("http://gmerge.com/ui/wpf", "GalaxyMerge.Client.Core.AttachedProperties")]
-[assembly: XmlnsDefinition("http://gmerge.com/ui/wpf", "GalaxyMerge.Client.Core.Behaviors")]
-[assembly: XmlnsDefinition("http://gmerge.com/ui/wpf", "GalaxyMerge.Client.Core.Converters")]
-[assembly: XmlnsDefinition("http://gmerge.com/ui/wpf", "GalaxyMerge.Client.Core.Extensions")]
-[assembly: XmlnsDefinition("http://gmerge.com/ui/wpf", "GalaxyMerge.Client.Core.Mvvm")]
-[assembly: XmlnsDefinition("http://gmerge.com/ui/wpf", "GalaxyMerge.Client.Core.Utilities")]
+[assembly: XmlnsDefinition("http://gmerge.com/ui/wpf", "GalaxyMerge.Client.Resources")]
+[assembly: XmlnsDefinition("http://gmerge.com/ui/wpf", "GalaxyMerge.Client.Resources.Controls")]
+[assembly: XmlnsDefinition("http://gmerge.com/ui/wpf", "GalaxyMerge.Client.Resources.Theming")]
 
 [assembly: XmlnsPrefix("http://gmerge.com/ui/wpf", "ui")]

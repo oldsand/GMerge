@@ -5,7 +5,7 @@
   <Application.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/GalaxyMerge.Client.Core;component/Themes/GalaxyMerge.UI.xaml" />
+        <ResourceDictionary Source="/GalaxyMerge.Client.Resources;component/Resources.xaml" />
       </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>
   </Application.Resources>

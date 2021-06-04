@@ -5,5 +5,9 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
     public class AddResourceViewModel : DialogViewModelBase
     {
         
+
+        public AddResourceViewModel()
+        {
+        }
     }
 }

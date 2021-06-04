@@ -59,6 +59,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Client.Data", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Client.Dialogs", "GalaxyMerge.Client.Dialogs\GalaxyMerge.Client.Dialogs.csproj", "{9A11B5E3-17BF-4B60-9558-E1982C172B25}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Client.Resources", "GalaxyMerge.Client.Resources\GalaxyMerge.Client.Resources.csproj", "{0DB6D056-EEE8-49E1-8FF5-C6EDCE7C48FC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -157,6 +159,10 @@ Global
 		{9A11B5E3-17BF-4B60-9558-E1982C172B25}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9A11B5E3-17BF-4B60-9558-E1982C172B25}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9A11B5E3-17BF-4B60-9558-E1982C172B25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DB6D056-EEE8-49E1-8FF5-C6EDCE7C48FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DB6D056-EEE8-49E1-8FF5-C6EDCE7C48FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DB6D056-EEE8-49E1-8FF5-C6EDCE7C48FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DB6D056-EEE8-49E1-8FF5-C6EDCE7C48FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -189,5 +195,6 @@ Global
 		{A269B225-3BF3-4407-8F25-402F484B24B5} = {62CE6D9C-8204-479F-B8EF-A11609AB4273}
 		{04B42B6E-DD66-49A8-84E8-BB2743293330} = {62CE6D9C-8204-479F-B8EF-A11609AB4273}
 		{9A11B5E3-17BF-4B60-9558-E1982C172B25} = {A269B225-3BF3-4407-8F25-402F484B24B5}
+		{0DB6D056-EEE8-49E1-8FF5-C6EDCE7C48FC} = {62CE6D9C-8204-479F-B8EF-A11609AB4273}
 	EndGlobalSection
 EndGlobal

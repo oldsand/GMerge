@@ -10,6 +10,7 @@
              d:DataContext="{d:DesignInstance Type=viewModels:ShellFooterViewModel}"
              mc:Ignorable="d"
              d:DesignHeight="20" d:DesignWidth="1000">
+  
   <Grid Background="{ui:ThemeResource ResourceKey=PrimaryBackground}">
     <Border x:Name="RootBorder" BorderThickness="0 1 0 0" BorderBrush="{ui:ThemeResource ResourceKey=PrimaryBorder}">
       <StackPanel Orientation="Horizontal">

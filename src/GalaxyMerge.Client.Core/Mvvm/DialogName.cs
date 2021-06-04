@@ -1,4 +1,4 @@
-namespace GalaxyMerge.Client.Dialogs
+namespace GalaxyMerge.Client.Core.Mvvm
 {
     public static class DialogName
     {

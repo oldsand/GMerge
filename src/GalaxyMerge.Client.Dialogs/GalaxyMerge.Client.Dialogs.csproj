@@ -95,6 +95,10 @@
         <Project>{c080b539-439d-4c9e-bdf4-7578e215f34d}</Project>
         <Name>GalaxyMerge.Client.Proxies</Name>
       </ProjectReference>
+      <ProjectReference Include="..\GalaxyMerge.Client.Resources\GalaxyMerge.Client.Resources.csproj">
+        <Project>{0db6d056-eee8-49e1-8ff5-c6edce7c48fc}</Project>
+        <Name>GalaxyMerge.Client.Resources</Name>
+      </ProjectReference>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

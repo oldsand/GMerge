@@ -1,19 +1,28 @@
 using GalaxyMerge.Client.Core.Mvvm;
+using GalaxyMerge.Client.Dialogs;
 using Prism.Commands;
 using Prism.Events;
+using Prism.Services.Dialogs;
 
 namespace GalaxyMerge.Client.Application.ViewModels
 {
     public class ShellHeaderViewModel : ViewModelBase
     {
         private readonly IEventAggregator _eventAggregator;
+        private readonly IDialogService _dialogService;
         private int _selectedResource;
         private DelegateCommand _addResourceCommand;
         private DelegateCommand _deleteResourceCommand;
 
-        public ShellHeaderViewModel(IEventAggregator eventAggregator)
+        public ShellHeaderViewModel()
+        {
+            
+        }
+
+        public ShellHeaderViewModel(IEventAggregator eventAggregator, IDialogService dialogService) 
         {
             _eventAggregator = eventAggregator;
+            _dialogService = dialogService;
         }
 
         public int SelectedResource
@@ -29,7 +38,7 @@ namespace GalaxyMerge.Client.Application.ViewModels
 
         private void ExecuteAddResource()
         {
-            //todo
+            _dialogService.Show(DialogName.AddResourceDialog, result => { });
         }
 
         private void ExecuteDeleteResource()
