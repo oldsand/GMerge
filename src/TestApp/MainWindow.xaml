@@ -6,7 +6,8 @@
         xmlns:ui="http://gmerge.com/ui/wpf"
         mc:Ignorable="d"
         Title="MainWindow" Height="800" Width="1200"
-        Style="{DynamicResource ShellStyle}">
+        Style="{DynamicResource ShellStyle}"
+        WindowStartupLocation="CenterScreen">
 
   <Grid Background="{ui:ThemeResource ResourceKey=PrimaryBackground}">
     <Grid.RowDefinitions>
@@ -18,18 +19,32 @@
             Background="{ui:ThemeResource ResourceKey=PanelBackground}"
             BorderBrush="{ui:ThemeResource ResourceKey=PrimaryBorder}"
             BorderThickness="0 1">
-      <StackPanel 
-                  Orientation="Horizontal"
-                  Margin="10">
+      <StackPanel
+        Orientation="Horizontal"
+        Margin="10">
         <CheckBox x:Name="EnabledInput"
                   VerticalAlignment="Center"
                   Margin="10 0"
                   Content="IsEnabled"
-                  IsChecked="True" 
-                  Foreground="{ui:ThemeResource ResourceKey=PrimaryForeground}"/>
-      </StackPanel>  
+                  IsChecked="True"
+                  Foreground="{ui:ThemeResource ResourceKey=PrimaryForeground}" />
+        <Button
+          Margin="10 0"
+          Height="26" Width="26"
+          Style="{StaticResource Style.Button.Transparent}"
+          IsEnabled="{Binding ElementName=EnabledInput, Path=IsChecked}">
+          <ui:Icon Template="{StaticResource Icon.Cog}" />
+        </Button>
+        <Button
+          Margin="10 0"
+          Height="26" Width="26"
+          Style="{StaticResource Style.Button.Transparent}"
+          IsEnabled="{Binding ElementName=EnabledInput, Path=IsChecked}">
+          <ui:Icon Template="{StaticResource Icon.Cube}" />
+        </Button>
+      </StackPanel>
     </Border>
-    
+
 
     <TabControl Grid.Row="1" BorderThickness="0 1 0 0"
                 TabStripPlacement="Top">
@@ -39,35 +54,64 @@
             <ColumnDefinition />
             <ColumnDefinition />
             <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
           </Grid.ColumnDefinitions>
 
-          <Grid Grid.Column="0">
-            <Grid.ColumnDefinitions>
-              <ColumnDefinition />
-              <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-            
-            <StackPanel Grid.Column="0">
-              <Button
-                Margin="10"
-                Height="30" Width="100"
-                Content="Default" />
-              <Button
-                Margin="10"
-                Height="30" Width="100"
-                Content="Primary" />
-              <Button
-                Margin="10"
-                Height="30" Width="100">
-                <StackPanel Orientation="Horizontal">
-                  <ui:Icon Template="{StaticResource Icon.Connection}"
-                           Margin="0 0 5 0"/>
-                  <TextBlock Text="Connection" />  
-                </StackPanel>
-              </Button>
-            </StackPanel>
-          </Grid>
 
+          <StackPanel Grid.Column="0">
+            <Button
+              Margin="10"
+              Height="30" Width="100"
+              Content="Primary"
+              HorizontalAlignment="Left"
+              IsEnabled="{Binding ElementName=EnabledInput, Path=IsChecked}" />
+            <Button
+              Margin="10"
+              Height="30" Width="100"
+              Content="Secondary"
+              HorizontalAlignment="Left"
+              Style="{StaticResource Style.Button.Secondary}"
+              IsEnabled="{Binding ElementName=EnabledInput, Path=IsChecked}" />
+            <Button
+              Margin="10"
+              Height="30" Width="100"
+              Content="Ternary"
+              HorizontalAlignment="Left"
+              Style="{StaticResource Style.Button.Ternary}"
+              IsEnabled="{Binding ElementName=EnabledInput, Path=IsChecked}"/>
+            
+            <CheckBox
+              Margin="10"
+              Height="30"
+              Content="Some Setting"
+              IsEnabled="{Binding ElementName=EnabledInput, Path=IsChecked}" />
+            <CheckBox
+              Margin="10"
+              Height="30"
+              Content="Some Other Setting"
+              IsEnabled="{Binding ElementName=EnabledInput, Path=IsChecked}" />
+            <CheckBox
+              Margin="10"
+              Height="30"
+              Content="Yet Another Setting"
+              IsEnabled="{Binding ElementName=EnabledInput, Path=IsChecked}" />
+          </StackPanel>
+          
+          <StackPanel Grid.Column="1">
+            <ComboBox Margin="10" >
+              <ComboBoxItem Content="Item1"/>
+              <ComboBoxItem Content="Item2"/>
+              <ComboBoxItem Content="Item3"/>
+            </ComboBox>
+            <TextBox Margin="10" ui:TextBoxProperties.DefaultText="First Name"
+                     IsEnabled="{Binding ElementName=EnabledInput, Path=IsChecked}" />
+            <TextBox Margin="10" ui:TextBoxProperties.DefaultText="Middle Name"
+                     IsEnabled="{Binding ElementName=EnabledInput, Path=IsChecked}" />
+            <TextBox Margin="10" ui:TextBoxProperties.DefaultText="Last Name"
+                     IsEnabled="{Binding ElementName=EnabledInput, Path=IsChecked}"/>
+          </StackPanel>
         </Grid>
 
       </TabItem>

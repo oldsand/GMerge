@@ -13,7 +13,7 @@
   
   <Grid Background="{ui:ThemeResource ResourceKey=PrimaryBackground}">
     <Grid.RowDefinitions>
-      <RowDefinition Height="40" />
+      <RowDefinition Height="50" />
       <RowDefinition />
       <RowDefinition Height="30" />
     </Grid.RowDefinitions>

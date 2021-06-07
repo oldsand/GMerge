@@ -5,7 +5,7 @@ using System.Windows.Markup;
 
 namespace GalaxyMerge.Client.Core.Converters
 {
-    internal abstract class BaseConverter : MarkupExtension, IValueConverter
+    public abstract class BaseConverter : MarkupExtension, IValueConverter
     {
         public abstract object Convert(object value, Type targetType, object parameter, CultureInfo culture);
 

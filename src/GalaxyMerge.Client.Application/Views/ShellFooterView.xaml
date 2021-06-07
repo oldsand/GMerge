@@ -14,7 +14,7 @@
   <Grid Background="{ui:ThemeResource ResourceKey=PrimaryBackground}">
     <Border x:Name="RootBorder" BorderThickness="0 1 0 0" BorderBrush="{ui:ThemeResource ResourceKey=PrimaryBorder}">
       <StackPanel Orientation="Horizontal">
-        <Button Style="{StaticResource ButtonStyle.Icon}"
+        <Button Style="{StaticResource Style.Button.Transparent}"
                 Command="{Binding ShowHideEventLogCommand}">
           <ui:Icon Template="{DynamicResource Icon.Notification}" />
         </Button>

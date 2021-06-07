@@ -29,5 +29,7 @@ namespace GalaxyMerge.Client.Core.AttachedProperties
         {
             obj.SetValue(CornerRadiusProperty, value);
         }
+        
+        
     }
 }

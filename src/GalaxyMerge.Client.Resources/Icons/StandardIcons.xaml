@@ -12,6 +12,28 @@
         Data="M7.729,3.521L2,9.199l1.407,1.42l5.729-5.779c1.206-1.217,3.116-1.217,4.221,0l2.814,2.839c1.206,1.217,1.206,3.143,0,4.259 l-2.814,2.839c-0.402,0.406-1.005,0.406-1.407,0c-0.402-0.406-0.402-1.014,0-1.42l1.407-1.42c1.206-1.217,1.206-3.143,0-4.259 s-3.116-1.217-4.221,0l-2.814,2.839c-1.91,1.926-1.91,5.171,0,7.199l2.814,2.839c1.91,1.926,5.126,1.926,7.136,0L22,14.776 l-1.407-1.42l-5.829,5.881c-1.206,1.217-3.116,1.217-4.221,0l-2.814-2.839c-1.206-1.217-1.206-3.143,0-4.259L10.543,9.3 c0.402-0.406,1.005-0.406,1.407,0c0.402,0.406,0.402,1.014,0,1.42l-1.407,1.42c-1.206,1.217-1.206,3.143,0,4.259 s3.116,1.217,4.221,0l2.814-2.839c1.91-1.926,1.91-5.171,0-7.199l-2.814-2.839C12.854,1.493,9.638,1.493,7.729,3.521z" />
     </Viewbox>
   </ControlTemplate>
+  
+  <ControlTemplate x:Key="Icon.Check" TargetType="{x:Type controls:Icon}">
+    <Viewbox>
+      <Path
+        Fill="{TemplateBinding Foreground}"
+        Stretch="Uniform"
+        SnapsToDevicePixels="True"
+        UseLayoutRounding="True"
+        Data="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z" />
+    </Viewbox>
+  </ControlTemplate>
+  
+  <ControlTemplate x:Key="Icon.Check.Thick" TargetType="{x:Type controls:Icon}">
+    <Viewbox>
+      <Path
+        Fill="{TemplateBinding Foreground}"
+        Stretch="Uniform"
+        SnapsToDevicePixels="True"
+        UseLayoutRounding="True"
+        Data="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z" />
+    </Viewbox>
+  </ControlTemplate>
 
   <ControlTemplate x:Key="Icon.Loading" TargetType="{x:Type controls:Icon}">
     <Viewbox VerticalAlignment="Center" HorizontalAlignment="Center" Height="20" Width="20" Stretch="Fill">

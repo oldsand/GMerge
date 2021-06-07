@@ -36,7 +36,7 @@
   </ControlTemplate>
 
   <Style x:Key="GroupBoxStyle" TargetType="{x:Type GroupBox}">
-    <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=ContentForeground}" />
+    <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=PrimaryBackground}" />
     <Setter Property="BorderBrush" Value="{t:ThemeResource ResourceKey=GroupBoxHeaderBorder}" />
     <Setter Property="BorderThickness" Value="0,0,0,1" />
     <Setter Property="Padding" Value="8,16,8,8" />

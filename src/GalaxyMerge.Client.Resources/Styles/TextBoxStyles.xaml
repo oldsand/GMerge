@@ -1,49 +1,68 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:t="clr-namespace:GalaxyMerge.Client.Resources.Theming">
+                    xmlns:t="clr-namespace:GalaxyMerge.Client.Resources.Theming"
+                    xmlns:ui="http://gmerge.com/ui/wpf">
 
-  <ControlTemplate x:Key="TextBoxTemplate" TargetType="{x:Type TextBox}">
+  <ControlTemplate x:Key="Template.TextBox" TargetType="{x:Type TextBox}">
     <Grid SnapsToDevicePixels="true">
-      <Border x:Name="FocusBorder"
-              BorderBrush="{t:ThemeResource ResourceKey=ControlFocusBorder}"
-              BorderThickness="1"
-              Margin="-1"
-              Visibility="Collapsed">
-        <Border.Effect>
-          <DropShadowEffect BlurRadius="10"
-                            ShadowDepth="0"
-                            Color="Black"
-                            Opacity="0.3" />
-        </Border.Effect>
-      </Border>
-      <Border x:Name="border"
+      <Border x:Name="TextBoxBorder"
               Background="{TemplateBinding Background}"
               BorderBrush="{TemplateBinding BorderBrush}"
-              BorderThickness="{TemplateBinding BorderThickness}"
+              BorderThickness="1"
+              CornerRadius="2"
               SnapsToDevicePixels="True">
-        <ScrollViewer x:Name="PART_ContentHost"
-                      Focusable="false"
-                      HorizontalScrollBarVisibility="Hidden"
-                      VerticalScrollBarVisibility="Hidden" />
+        <Grid>
+          <TextBlock x:Name="DefaultText" 
+                     HorizontalAlignment="Left"
+                     VerticalAlignment="Center"
+                     Margin="10,0"
+                     Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(ui:TextBoxProperties.DefaultText)}"
+                     Foreground="{TemplateBinding Foreground}"
+                     IsHitTestVisible="False"
+                     Visibility="Hidden"/>
+          <ScrollViewer x:Name="PART_ContentHost"
+                        Margin="9,0"
+                        Focusable="false"
+                        HorizontalScrollBarVisibility="Hidden"
+                        VerticalScrollBarVisibility="Hidden" />
+        </Grid>
+      </Border>
+      <Border x:Name="FocusBorder"
+              BorderBrush="{t:ThemeResource ResourceKey=ControlFocusBorder}"
+              CornerRadius="2"
+              BorderThickness="2"
+              Visibility="Collapsed">
       </Border>
     </Grid>
     <ControlTemplate.Triggers>
       <Trigger Property="IsEnabled" Value="false">
-        <Setter TargetName="border" Property="Opacity" Value="{t:ThemeResource ResourceKey=ControlDisabledOpacity}" />
+        <Setter TargetName="TextBoxBorder" Property="Opacity" Value="{t:ThemeResource ResourceKey=ControlDisabledOpacity}" />
       </Trigger>
       <Trigger Property="IsKeyboardFocused" Value="true">
         <Setter TargetName="FocusBorder" Property="Visibility" Value="Visible" />
+        <Setter TargetName="TextBoxBorder" Property="Background" Value="{t:ThemeResource ResourceKey=PrimaryBackground}" />
       </Trigger>
+      <Trigger Property="Text" Value="">
+        <Setter TargetName="DefaultText" Property="Visibility" Value="Visible"/>
+        <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=ControlDefaultForeground}"/>
+      </Trigger>
+      <MultiTrigger>
+        <MultiTrigger.Conditions>
+          <Condition Property="Text" Value=""/>
+          <Condition Property="IsKeyboardFocusWithin" Value="False"/>
+        </MultiTrigger.Conditions>
+        <Setter TargetName="TextBoxBorder" Property="Background" Value="{t:ThemeResource ResourceKey=ControlBackground}" />
+        <Setter TargetName="TextBoxBorder" Property="BorderThickness" Value="0" />
+      </MultiTrigger>
     </ControlTemplate.Triggers>
   </ControlTemplate>
 
-  <Style x:Key="TextBoxStyle" TargetType="{x:Type TextBox}">
-    <Setter Property="Background" Value="{t:ThemeResource ResourceKey=ControlBackground}" />
+  <Style x:Key="Style.TextBox" TargetType="{x:Type TextBox}">
+    <Setter Property="Background" Value="{t:ThemeResource ResourceKey=PrimaryBackground}" />
     <Setter Property="BorderBrush" Value="{t:ThemeResource ResourceKey=ControlBorder}" />
     <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=ControlForeground}" />
     <Setter Property="SelectionBrush" Value="{t:ThemeResource ResourceKey=ControlHighlightBackground}" />
-    <Setter Property="CaretBrush" Value="{t:ThemeResource ResourceKey=ControlForeground}" />
-    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CaretBrush" Value="{t:ThemeResource ResourceKey=ControlBorder}" />
     <Setter Property="Height" Value="24" />
     <Setter Property="KeyboardNavigation.TabNavigation" Value="None" />
     <Setter Property="HorizontalContentAlignment" Value="Left" />
@@ -52,7 +71,7 @@
     <Setter Property="AllowDrop" Value="true" />
     <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst" />
     <Setter Property="Stylus.IsFlicksEnabled" Value="False" />
-    <Setter Property="Template" Value="{StaticResource TextBoxTemplate}" />
+    <Setter Property="Template" Value="{StaticResource Template.TextBox}" />
   </Style>
-  <Style BasedOn="{StaticResource TextBoxStyle}" TargetType="{x:Type TextBox}" />
+  <Style BasedOn="{StaticResource Style.TextBox}" TargetType="{x:Type TextBox}" />
 </ResourceDictionary>

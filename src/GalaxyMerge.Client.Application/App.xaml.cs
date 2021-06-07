@@ -13,7 +13,7 @@ namespace GalaxyMerge.Client.Application
     {
         protected override Window CreateShell()
         {
-            LoggerConfiguration.Apply();
+            //LoggerConfiguration.Apply();
             return Container.Resolve<Shell>();
         }
 

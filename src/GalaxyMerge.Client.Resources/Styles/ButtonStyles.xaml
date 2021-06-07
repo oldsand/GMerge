@@ -2,189 +2,183 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:t="clr-namespace:GalaxyMerge.Client.Resources.Theming"
                     xmlns:ui="http://gmerge.com/ui/wpf">
-      
-    <ControlTemplate x:Key="Template.Button" TargetType="{x:Type Button}">
-        <Grid SnapsToDevicePixels="true">
-            <Border x:Name="border"
-                Background="{TemplateBinding Background}"
-                BorderBrush="{TemplateBinding BorderBrush}"
-                BorderThickness="{TemplateBinding BorderThickness}"
-                CornerRadius="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(ui:ButtonProperties.CornerRadius)}">
-                <ContentPresenter x:Name="contentPresenter"
-                    Margin="{TemplateBinding Padding}"
-                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                    Focusable="False"
-                    RecognizesAccessKey="True"
-                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-            </Border>
-            <!--<Border x:Name="FocusBorder"
-                BorderBrush="{core:ThemeResource ResourceKey=ControlFocusBorder}"
-                BorderThickness="1"
-                CornerRadius="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(ap:ButtonProperties.CornerRadius)}"
-                Visibility="Collapsed" />-->
-        </Grid>
-        <ControlTemplate.Triggers>
-            <Trigger Property="IsDefaulted" Value="true">
-                <Setter TargetName="border" Property="BorderBrush" Value="{t:ThemeResource ResourceKey=ControlDefaultBorder}" />
-            </Trigger>
-            <Trigger Property="IsPressed" Value="true">
-                <Setter TargetName="border" Property="Background" Value="{t:ThemeResource ResourceKey=ControlPressedBackground}" />
-                <Setter TargetName="border" Property="BorderBrush" Value="{t:ThemeResource ResourceKey=ControlPressedBorder}" />
-            </Trigger>
-            <Trigger Property="IsEnabled" Value="false">
-                <Setter Property="Opacity" Value="{t:ThemeResource ResourceKey=ControlDisabledOpacity}" />
-            </Trigger>
-        </ControlTemplate.Triggers>
-    </ControlTemplate>
 
-    <Style x:Key="Style.Button.Default" TargetType="{x:Type Button}">
-        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-        <Setter Property="Background" Value="{t:ThemeResource ResourceKey=ControlBackground}" />
-        <Setter Property="BorderBrush" Value="{t:ThemeResource ResourceKey=ControlBorder}" />
-        <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=ControlForeground}" />
-        <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="HorizontalContentAlignment" Value="Center" />
-        <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="UseLayoutRounding" Value="False" />
-        <Setter Property="SnapsToDevicePixels" Value="True" />
-        <Setter Property="Padding" Value="2" />
-        <Setter Property="ui:ButtonProperties.CornerRadius" Value="4" />
-        <Setter Property="Template" Value="{StaticResource Template.Button}" />
-    </Style>
-    <Style BasedOn="{StaticResource Style.Button.Default}" TargetType="{x:Type Button}" />
-    
-    <Style x:Key="Style.Button.Primary" TargetType="{x:Type Button}">
-        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-        <Setter Property="Background" Value="{t:ThemeResource ResourceKey=ControlBackground}" />
-        <Setter Property="BorderBrush" Value="{t:ThemeResource ResourceKey=ControlBorder}" />
-        <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=ControlForeground}" />
-        <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="HorizontalContentAlignment" Value="Center" />
-        <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="UseLayoutRounding" Value="False" />
-        <Setter Property="SnapsToDevicePixels" Value="True" />
-        <Setter Property="Padding" Value="2" />
-        <Setter Property="FontWeight" Value="DemiBold" />
-        <Setter Property="ui:ButtonProperties.CornerRadius" Value="4" />
-        <Setter Property="Template" Value="{StaticResource Template.Button}" />
-    </Style>
+  <ControlTemplate x:Key="Template.Button" TargetType="{x:Type Button}">
+    <Grid SnapsToDevicePixels="true">
+      <Border x:Name="PressedBorder"
+              BorderBrush="{TemplateBinding BorderBrush}"
+              BorderThickness="1"
+              CornerRadius="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(ui:ButtonProperties.CornerRadius)}"
+              Visibility="Collapsed">
+        <Border.Effect>
+          <DropShadowEffect ShadowDepth="0"
+                            Color="{Binding ElementName=PressedBorder, Path=BorderBrush, Converter={ui:BrushToColorConverter}}"
+                            Opacity="1"
+                            BlurRadius="10" />
+        </Border.Effect>
+      </Border>
+      <Border x:Name="MainBorder"
+              Background="{TemplateBinding Background}"
+              BorderBrush="{TemplateBinding BorderBrush}"
+              BorderThickness="{TemplateBinding BorderThickness}"
+              CornerRadius="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(ui:ButtonProperties.CornerRadius)}">
+        <ContentPresenter x:Name="ContentPresenter"
+                          Margin="{TemplateBinding Padding}"
+                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                          Focusable="False"
+                          RecognizesAccessKey="True"
+                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+      </Border>
+      <Border x:Name="MouseOverBorder"
+              Background="Black"
+              Opacity="0.1"
+              CornerRadius="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(ui:ButtonProperties.CornerRadius)}"
+              Visibility="Collapsed" />
+    </Grid>
+    <ControlTemplate.Triggers>
+      <Trigger Property="IsMouseOver" Value="true">
+        <Setter TargetName="MouseOverBorder" Property="Visibility" Value="Visible" />
+      </Trigger>
+      <Trigger Property="IsPressed" Value="true">
+        <Setter TargetName="PressedBorder" Property="Visibility" Value="Visible" />
+      </Trigger>
+      <Trigger Property="IsEnabled" Value="false">
+        <Setter Property="Opacity" Value="{t:ThemeResource ResourceKey=ControlDisabledOpacity}" />
+      </Trigger>
+    </ControlTemplate.Triggers>
+  </ControlTemplate>
 
-    <ControlTemplate x:Key="Template.Button.Icon" TargetType="{x:Type Button}">
-        <Grid SnapsToDevicePixels="true">
-            <Border x:Name="border"
-                Background="{TemplateBinding Background}"
-                BorderBrush="{TemplateBinding BorderBrush}"
-                BorderThickness="{TemplateBinding BorderThickness}"
-                CornerRadius="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(ui:ButtonProperties.CornerRadius)}">
-                <ContentPresenter x:Name="contentPresenter"
-                    Margin="{TemplateBinding Padding}"
-                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                    Focusable="False"
-                    RecognizesAccessKey="True"
-                    SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-            </Border>
-        </Grid>
-        <ControlTemplate.Triggers>
-            <Trigger Property="IsDefaulted" Value="true">
-                <Setter TargetName="border" Property="BorderBrush" Value="Transparent" />
-                <Setter TargetName="border" Property="BorderThickness" Value="0" />
-            </Trigger>
-            <Trigger Property="IsMouseOver" Value="true">
-                <Setter TargetName="border" Property="Background" Value="{t:ThemeResource ResourceKey=ControlMouseOverBackground}" />
-            </Trigger>
-            <Trigger Property="IsPressed" Value="true">
-                <Setter TargetName="border" Property="BorderBrush" Value="{t:ThemeResource ResourceKey=ControlPressedBorder}" />
-            </Trigger>
-            <Trigger Property="IsEnabled" Value="false">
-                <Setter Property="Opacity" Value="{t:ThemeResource ResourceKey=ControlDisabledOpacity}" />
-            </Trigger>
-        </ControlTemplate.Triggers>
-    </ControlTemplate>
-    
-    <Style x:Key="Style.Button.Icon" TargetType="{x:Type Button}">
-        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=IconForeground}" />
-        <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="Height" Value="20" />
-        <Setter Property="Width" Value="20" />
-        <Setter Property="HorizontalContentAlignment" Value="Center" />
-        <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="Margin" Value="0" />
-        <Setter Property="Padding" Value="0" />
-        <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
-        <Setter Property="IsTabStop" Value="False" />
-        <Setter Property="Focusable" Value="False" />
-        <Setter Property="Template" Value="{StaticResource Template.Button.Icon}" />
-    </Style>
-    
-    <ControlTemplate x:Key="Template.Button.Window" TargetType="{x:Type Button}">
-        <Grid Background="Transparent">
-            <Border x:Name="MouseOverBorder"
-                Background="{t:ThemeResource ResourceKey=WindowControlMouseOverBackgroundStandard}"
-                Opacity="0" />
-            <ContentPresenter x:Name="contentPresenter"
-                Margin="{TemplateBinding Padding}"
-                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                Content="{TemplateBinding Content}"
-                ContentTemplate="{TemplateBinding ContentTemplate}" />
-        </Grid>
-        <ControlTemplate.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter TargetName="MouseOverBorder" Property="Opacity" Value="1" />
-            </Trigger>
-        </ControlTemplate.Triggers>
-    </ControlTemplate>
+  <Style x:Key="Style.Button.Primary" TargetType="{x:Type Button}">
+    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+    <Setter Property="Background" Value="{t:ThemeResource ResourceKey=ButtonPrimaryBackground}" />
+    <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=ButtonPrimaryForeground}" />
+    <Setter Property="BorderBrush" Value="{t:ThemeResource ResourceKey=ButtonPrimaryBorder}" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="HorizontalContentAlignment" Value="Center" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="UseLayoutRounding" Value="False" />
+    <Setter Property="SnapsToDevicePixels" Value="True" />
+    <Setter Property="Padding" Value="2" />
+    <Setter Property="ui:ButtonProperties.CornerRadius" Value="5" />
+    <Setter Property="IsTabStop" Value="False" />
+    <Setter Property="Template" Value="{StaticResource Template.Button}" />
+  </Style>
+  <Style BasedOn="{StaticResource Style.Button.Primary}" TargetType="{x:Type Button}" />
 
-    <Style x:Key="Style.Button.WindowStandard" TargetType="{x:Type Button}">
-        <Setter Property="HorizontalContentAlignment" Value="Center" />
-        <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=WindowHeaderForeground}" />
-        <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
-        <Setter Property="Width" Value="48" />
-        <Setter Property="Padding" Value="0" />
-        <Setter Property="Margin" Value="0" />
-        <Setter Property="IsTabStop" Value="False" />
-        <Setter Property="Focusable" Value="False" />
-        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-        <Setter Property="Template" Value="{StaticResource Template.Button.Window}" />
-    </Style>
-    
-    <ControlTemplate x:Key="Template.Button.WindowClose" TargetType="{x:Type Button}">
-        <Grid Background="Transparent">
-            <Border x:Name="MouseOverBorder"
-                    Background="{t:ThemeResource ResourceKey=WindowControlMouseOverBackgroundClose}"
-                    Opacity="0" />
-            <ContentPresenter x:Name="contentPresenter"
-                              Margin="{TemplateBinding Padding}"
-                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                              Content="{TemplateBinding Content}"
-                              ContentTemplate="{TemplateBinding ContentTemplate}" />
-        </Grid>
-        <ControlTemplate.Triggers>
-            <Trigger Property="IsMouseOver" Value="true">
-                <Setter TargetName="MouseOverBorder" Property="Opacity" Value="1" />
-                <Setter Property="Foreground" Value="White" />
-            </Trigger>
-        </ControlTemplate.Triggers>
-    </ControlTemplate>
+  <Style x:Key="Style.Button.Secondary" TargetType="{x:Type Button}">
+    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+    <Setter Property="Background" Value="{t:ThemeResource ResourceKey=ButtonSecondaryBackground}" />
+    <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=ButtonSecondaryForeground}" />
+    <Setter Property="BorderBrush" Value="{t:ThemeResource ResourceKey=ButtonSecondaryBorder}" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="HorizontalContentAlignment" Value="Center" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="UseLayoutRounding" Value="False" />
+    <Setter Property="SnapsToDevicePixels" Value="True" />
+    <Setter Property="Padding" Value="2" />
+    <Setter Property="ui:ButtonProperties.CornerRadius" Value="5" />
+    <Setter Property="IsTabStop" Value="False" />
+    <Setter Property="Template" Value="{StaticResource Template.Button}" />
+  </Style>
 
-    <Style x:Key="Style.Button.WindowClose" TargetType="{x:Type Button}">
-        <Setter Property="HorizontalContentAlignment" Value="Center" />
-        <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=WindowHeaderForeground}" />
-        <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
-        <Setter Property="Width" Value="48" />
-        <Setter Property="Padding" Value="0" />
-        <Setter Property="Margin" Value="0" />
-        <Setter Property="IsTabStop" Value="False" />
-        <Setter Property="Focusable" Value="False" />
-        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-        <Setter Property="Template" Value="{StaticResource Template.Button.WindowClose}" />
-    </Style>
+  <Style x:Key="Style.Button.Ternary" TargetType="{x:Type Button}">
+    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+    <Setter Property="Background" Value="{t:ThemeResource ResourceKey=ButtonTernaryBackground}" />
+    <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=ButtonTernaryForeground}" />
+    <Setter Property="BorderBrush" Value="{t:ThemeResource ResourceKey=ButtonTernaryBorder}" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="HorizontalContentAlignment" Value="Center" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="UseLayoutRounding" Value="False" />
+    <Setter Property="SnapsToDevicePixels" Value="True" />
+    <Setter Property="Padding" Value="2" />
+    <Setter Property="ui:ButtonProperties.CornerRadius" Value="5" />
+    <Setter Property="IsTabStop" Value="False" />
+    <Setter Property="Template" Value="{StaticResource Template.Button}" />
+  </Style>
+
+  <Style x:Key="Style.Button.Transparent" TargetType="{x:Type Button}">
+    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="Transparent"/>
+    <Setter Property="BorderBrush" Value="LightGray"/>
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="HorizontalContentAlignment" Value="Center" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="UseLayoutRounding" Value="False" />
+    <Setter Property="SnapsToDevicePixels" Value="True" />
+    <Setter Property="Padding" Value="2" />
+    <Setter Property="ui:ButtonProperties.CornerRadius" Value="5" />
+    <Setter Property="IsTabStop" Value="False" />
+    <Setter Property="Template" Value="{StaticResource Template.Button}" />
+  </Style>
+
+  <ControlTemplate x:Key="Template.Button.Window" TargetType="{x:Type Button}">
+    <Grid Background="Transparent">
+      <Border x:Name="MouseOverBorder"
+              Background="{t:ThemeResource ResourceKey=WindowControlMouseOverBackgroundStandard}"
+              Opacity="0" />
+      <ContentPresenter x:Name="contentPresenter"
+                        Margin="{TemplateBinding Padding}"
+                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                        Content="{TemplateBinding Content}"
+                        ContentTemplate="{TemplateBinding ContentTemplate}" />
+    </Grid>
+    <ControlTemplate.Triggers>
+      <Trigger Property="IsMouseOver" Value="True">
+        <Setter TargetName="MouseOverBorder" Property="Opacity" Value="1" />
+      </Trigger>
+    </ControlTemplate.Triggers>
+  </ControlTemplate>
+
+  <Style x:Key="Style.Button.WindowStandard" TargetType="{x:Type Button}">
+    <Setter Property="HorizontalContentAlignment" Value="Center" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=WindowHeaderForeground}" />
+    <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
+    <Setter Property="Width" Value="48" />
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="Margin" Value="0" />
+    <Setter Property="IsTabStop" Value="False" />
+    <Setter Property="Focusable" Value="False" />
+    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+    <Setter Property="Template" Value="{StaticResource Template.Button.Window}" />
+  </Style>
+
+  <ControlTemplate x:Key="Template.Button.WindowClose" TargetType="{x:Type Button}">
+    <Grid Background="Transparent">
+      <Border x:Name="MouseOverBorder"
+              Background="{t:ThemeResource ResourceKey=WindowControlMouseOverBackgroundClose}"
+              Opacity="0" />
+      <ContentPresenter x:Name="contentPresenter"
+                        Margin="{TemplateBinding Padding}"
+                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                        Content="{TemplateBinding Content}"
+                        ContentTemplate="{TemplateBinding ContentTemplate}" />
+    </Grid>
+    <ControlTemplate.Triggers>
+      <Trigger Property="IsMouseOver" Value="true">
+        <Setter TargetName="MouseOverBorder" Property="Opacity" Value="1" />
+        <Setter Property="Foreground" Value="White" />
+      </Trigger>
+    </ControlTemplate.Triggers>
+  </ControlTemplate>
+
+  <Style x:Key="Style.Button.WindowClose" TargetType="{x:Type Button}">
+    <Setter Property="HorizontalContentAlignment" Value="Center" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=WindowHeaderForeground}" />
+    <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
+    <Setter Property="Width" Value="48" />
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="Margin" Value="0" />
+    <Setter Property="IsTabStop" Value="False" />
+    <Setter Property="Focusable" Value="False" />
+    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+    <Setter Property="Template" Value="{StaticResource Template.Button.WindowClose}" />
+  </Style>
 
 </ResourceDictionary>

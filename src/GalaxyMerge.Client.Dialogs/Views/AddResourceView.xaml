@@ -31,7 +31,7 @@
 
   <Grid x:Name="RootGrid"
         d:DataContext="{Binding Source={StaticResource DesignViewModels}, Path=AddResourceViewModel}"
-        Background="{ui:ThemeResource ResourceKey=ContentBackground}">
+        Background="{ui:ThemeResource ResourceKey=PrimaryBackground}">
     <Grid.RowDefinitions>
       <RowDefinition />
       <RowDefinition Height="40" />

@@ -17,40 +17,47 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid d:DataContext="{Binding ShellHeaderViewModel, Source={StaticResource DesignViewModels}}">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition />
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
-        <StackPanel Grid.Column="0" Margin="5,0" Orientation="Horizontal">
-            <Button Margin="0,0,5,0" Command="{Binding AddResourceCommand}"
-                    Background="DodgerBlue" Width="60" Height="30">
+    <Border Background="{ui:ThemeResource ResourceKey=PanelBackground}"
+            BorderBrush="{ui:ThemeResource ResourceKey=PrimaryBorder}"
+            BorderThickness="0 1 0 1"
+            d:DataContext="{Binding ShellHeaderViewModel, Source={StaticResource DesignViewModels}}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            
+            <Button Grid.Column="0" Margin="10,0"
+                    Width="60" Height="26"
+                    Command="{Binding AddResourceCommand}">
                 <StackPanel Orientation="Horizontal">
                     <ui:Icon Template="{DynamicResource Icon.Add}"
-                             Foreground="WhiteSmoke" 
+                             Foreground="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}" 
                              Margin="0 0 5 0"/>
                     <TextBlock Text="New" 
-                               Foreground="WhiteSmoke" />
+                               Foreground="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"/>
                 </StackPanel>
             </Button>
-        </StackPanel>
-        <Border Grid.Column="1"
-                Height="16"
-                Margin="5,0"
-                BorderBrush="Black"
-                BorderThickness="1,0,0,0" />
-        <StackPanel Grid.Column="2" Margin="5,0" HorizontalAlignment="Left" Orientation="Horizontal">
-            <ui:Icon Margin="0,0,5,0" VerticalAlignment="Center" Template="{DynamicResource Icon.Galaxy}" />
-            <TextBlock Width="150"
-                       VerticalAlignment="Center"
-                       FontWeight="SemiBold"
-                       Text="SOME_GALAXY"
-                       TextTrimming="CharacterEllipsis"/>
-            <ui:Icon Margin="0,0,5,0" VerticalAlignment="Center" Template="{DynamicResource Icon.Arrow.Down}" />
-        </StackPanel>
-        <TextBox Grid.Column="3" MinWidth="100" MaxWidth="400" />
-    </Grid>
+            
+            <Border Grid.Column="1"
+                    Height="16"
+                    Margin="5,0"
+                    BorderBrush="{ui:ThemeResource ResourceKey=PrimaryBorder}"
+                    BorderThickness="1,0,0,0" />
+            <StackPanel Grid.Column="2" Margin="5,0" HorizontalAlignment="Left" Orientation="Horizontal">
+                <ui:Icon Margin="0,0,5,0" VerticalAlignment="Center" Template="{DynamicResource Icon.Galaxy}" />
+                <TextBlock Width="150"
+                           VerticalAlignment="Center"
+                           FontWeight="SemiBold"
+                           Text="SOME_GALAXY"
+                           TextTrimming="CharacterEllipsis"/>
+                <ui:Icon Margin="0,0,5,0" VerticalAlignment="Center" Template="{DynamicResource Icon.Arrow.Down}" />
+            </StackPanel>
+            <TextBox Grid.Column="3" MinWidth="100" MaxWidth="400" />
+        </Grid>
+    </Border>
+    
 </UserControl>

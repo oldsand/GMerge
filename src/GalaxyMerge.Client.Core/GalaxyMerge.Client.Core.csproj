@@ -48,6 +48,7 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="AttachedProperties\ButtonProperties.cs" />
+        <Compile Include="AttachedProperties\TextBoxProperties.cs" />
         <Compile Include="Behaviors\BehaviorsCollection.cs" />
         <Compile Include="Behaviors\CloseTabAction.cs" />
         <Compile Include="Behaviors\HandlingEventTrigger.cs" />
@@ -58,6 +59,8 @@
         <Compile Include="Converters\BooleanBrushConverter.cs" />
         <Compile Include="Converters\BooleanInverterConverter.cs" />
         <Compile Include="Converters\BooleanVisibilityConverter.cs" />
+        <Compile Include="Converters\BrushToColorConverter.cs" />
+        <Compile Include="Converters\ColorToBrushConverter.cs" />
         <Compile Include="Converters\CompositeCollectionConverter.cs" />
         <Compile Include="Converters\EnumResourceConverter.cs" />
         <Compile Include="Converters\EnumStringConverter.cs" />
