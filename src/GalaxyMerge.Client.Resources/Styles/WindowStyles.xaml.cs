@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using GalaxyMerge.Client.Resources.Theming;
 
 namespace GalaxyMerge.Client.Resources.Styles
 {
@@ -35,6 +36,12 @@ namespace GalaxyMerge.Client.Resources.Styles
             var window = (Window)((FrameworkElement)sender).TemplatedParent;
 
             window.WindowState = WindowState.Minimized;
+        }
+        
+        private void OnThemeClick(object sender, RoutedEventArgs e)
+        {
+            var theme = Theme.ThemeType == ThemeType.Light ? ThemeType.Dark : ThemeType.Light;
+            Theme.LoadThemeType(theme);
         }
     }
 }

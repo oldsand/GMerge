@@ -1,0 +1,78 @@
+﻿<Window x:Class="TestApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ui="http://gmerge.com/ui/wpf"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="800" Width="1200"
+        Style="{DynamicResource ShellStyle}">
+
+  <Grid Background="{ui:ThemeResource ResourceKey=PrimaryBackground}">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="60" />
+      <RowDefinition />
+    </Grid.RowDefinitions>
+
+    <Border Grid.Row="0"
+            Background="{ui:ThemeResource ResourceKey=PanelBackground}"
+            BorderBrush="{ui:ThemeResource ResourceKey=PrimaryBorder}"
+            BorderThickness="0 1">
+      <StackPanel 
+                  Orientation="Horizontal"
+                  Margin="10">
+        <CheckBox x:Name="EnabledInput"
+                  VerticalAlignment="Center"
+                  Margin="10 0"
+                  Content="IsEnabled"
+                  IsChecked="True" 
+                  Foreground="{ui:ThemeResource ResourceKey=PrimaryForeground}"/>
+      </StackPanel>  
+    </Border>
+    
+
+    <TabControl Grid.Row="1" BorderThickness="0 1 0 0"
+                TabStripPlacement="Top">
+      <TabItem Height="30" Width="80" Header="Controls">
+        <Grid Margin="20">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+          </Grid.ColumnDefinitions>
+
+          <Grid Grid.Column="0">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition />
+              <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            
+            <StackPanel Grid.Column="0">
+              <Button
+                Margin="10"
+                Height="30" Width="100"
+                Content="Default" />
+              <Button
+                Margin="10"
+                Height="30" Width="100"
+                Content="Primary" />
+              <Button
+                Margin="10"
+                Height="30" Width="100">
+                <StackPanel Orientation="Horizontal">
+                  <ui:Icon Template="{StaticResource Icon.Connection}"
+                           Margin="0 0 5 0"/>
+                  <TextBlock Text="Connection" />  
+                </StackPanel>
+              </Button>
+            </StackPanel>
+          </Grid>
+
+        </Grid>
+
+      </TabItem>
+      <TabItem Height="30" Width="80" Header="Lists" />
+      <TabItem Height="30" Width="80" Header="DataGrid" />
+    </TabControl>
+  </Grid>
+</Window>

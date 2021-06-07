@@ -6,58 +6,68 @@
   
   <ControlTemplate x:Key="ShellTemplate" TargetType="{x:Type Window}">
     <Border x:Name="RootBorder"
-            BorderBrush="{t:ThemeResource ResourceKey=PrimaryBorder}"
-            BorderThickness="0">
+            BorderBrush="{t:ThemeResource ResourceKey=WindowBorder}"
+            BorderThickness="1">
       <Grid>
         <Grid.RowDefinitions>
           <RowDefinition Height="Auto" />
           <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+        
         <Grid Grid.Row="0">
           <Rectangle
             Height="30"
-            Fill="{t:ThemeResource ResourceKey=PrimaryBackground}" />
+            Fill="{t:ThemeResource ResourceKey=WindowHeaderBackground}" />
           <DockPanel LastChildFill="False">
             <controls:Icon
               Margin="8,0,0,0"
               DockPanel.Dock="Left"
               Template="{DynamicResource Icon.App}"
-              Foreground="#FF6AB16F"
+              Foreground="{t:ThemeResource ResourceKey=WindowHeaderForeground}"
               Height="16" Width="16"
               WindowChrome.IsHitTestVisibleInChrome="True" />
             <TextBlock
               Margin="8,0,0,0"
               VerticalAlignment="Center"
               DockPanel.Dock="Left"
-              Foreground="{t:ThemeResource ResourceKey=PrimaryForeground}"
+              Foreground="{t:ThemeResource ResourceKey=WindowHeaderForeground}"
               Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Title}" />
             <Button x:Name="CloseButton"
                     Click="OnCloseClick"
                     DockPanel.Dock="Right"
-                    Style="{DynamicResource ButtonStyle.WindowClose}">
-              <controls:Icon Template="{DynamicResource Icon.Close}"
+                    Style="{DynamicResource Style.Button.WindowClose}">
+              <controls:Icon Template="{DynamicResource Icon.Window.Close}"
                              Height="10" Width="10"
                              Foreground="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"/>
             </Button>
             <Button x:Name="MaximizeRestoreButton"
                     Click="OnMaximizeRestoreClick"
                     DockPanel.Dock="Right"
-                    Style="{DynamicResource ButtonStyle.Window}">
+                    Style="{DynamicResource Style.Button.WindowStandard}">
               <controls:Icon x:Name="MaximizeRestoreIcon"
-                             Template="{DynamicResource Icon.Maximize}"
+                             Template="{DynamicResource Icon.Window.Maximize}"
                              Height="10" Width="10"
                              Foreground="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"/>
             </Button>
             <Button x:Name="MinimizeButton"
                     Click="OnMinimizeClick"
                     DockPanel.Dock="Right"
-                    Style="{DynamicResource ButtonStyle.Window}">
-              <controls:Icon Template="{DynamicResource Icon.Minimize}"
+                    Style="{DynamicResource Style.Button.WindowStandard}">
+              <controls:Icon Template="{DynamicResource Icon.Window.Minimize}"
                              Height="10" Width="10"
+                             Foreground="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"/>
+            </Button>
+            <Button x:Name="ThemeButton"
+                    Click="OnThemeClick"
+                    DockPanel.Dock="Right"
+                    Style="{DynamicResource Style.Button.WindowStandard}">
+              <controls:Icon Template="{DynamicResource Icon.Window.Theme}"
+                             Height="16" Width="16"
                              Foreground="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"/>
             </Button>
           </DockPanel>
         </Grid>
+        
         <Grid Grid.Row="1">
           <Border
             Background="{TemplateBinding Background}"
@@ -74,7 +84,7 @@
       <Trigger Property="WindowState" Value="Maximized">
         <Setter TargetName="RootBorder" Property="BorderThickness" Value="8" />
         <Setter TargetName="RootBorder" Property="BorderBrush" Value="Transparent" />
-        <Setter TargetName="MaximizeRestoreIcon" Property="Template" Value="{DynamicResource Icon.Restore}" />
+        <Setter TargetName="MaximizeRestoreIcon" Property="Template" Value="{DynamicResource Icon.Window.Restore}" />
       </Trigger>
     </ControlTemplate.Triggers>
   </ControlTemplate>

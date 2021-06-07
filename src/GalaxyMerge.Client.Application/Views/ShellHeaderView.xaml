@@ -26,17 +26,15 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Column="0" Margin="5,0" Orientation="Horizontal">
-            <Button Margin="0,0,5,0" Command="{Binding AddResourceCommand}" Style="{StaticResource ButtonStyle.Icon}">
-                <ui:Icon Template="{DynamicResource Icon.Add}" />
-            </Button>
-            <Button Margin="0,0,5,0" Style="{StaticResource ButtonStyle.Icon}">
-                <ui:Icon Template="{DynamicResource Icon.Delete}" />
-            </Button>
-            <Button Margin="0,0,5,0" Style="{StaticResource ButtonStyle.Icon}">
-                <ui:Icon Template="{DynamicResource Icon.Cog}" />
-            </Button>
-            <Button Style="{StaticResource ButtonStyle.Icon}">
-                <ui:Icon Template="{DynamicResource Icon.Refresh}" />
+            <Button Margin="0,0,5,0" Command="{Binding AddResourceCommand}"
+                    Background="DodgerBlue" Width="60" Height="30">
+                <StackPanel Orientation="Horizontal">
+                    <ui:Icon Template="{DynamicResource Icon.Add}"
+                             Foreground="WhiteSmoke" 
+                             Margin="0 0 5 0"/>
+                    <TextBlock Text="New" 
+                               Foreground="WhiteSmoke" />
+                </StackPanel>
             </Button>
         </StackPanel>
         <Border Grid.Column="1"
@@ -50,7 +48,7 @@
                        VerticalAlignment="Center"
                        FontWeight="SemiBold"
                        Text="SOME_GALAXY"
-                       TextTrimming="CharacterEllipsis" />
+                       TextTrimming="CharacterEllipsis"/>
             <ui:Icon Margin="0,0,5,0" VerticalAlignment="Center" Template="{DynamicResource Icon.Arrow.Down}" />
         </StackPanel>
         <TextBox Grid.Column="3" MinWidth="100" MaxWidth="400" />

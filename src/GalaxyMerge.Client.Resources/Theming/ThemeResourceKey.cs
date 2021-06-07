@@ -3,9 +3,15 @@
     public enum ThemeResourceKey
     {
         Default,
+        WindowHeaderBackground,
+        WindowHeaderForeground,
+        WindowBorder,
+        WindowControlMouseOverBackgroundStandard,
+        WindowControlMouseOverBackgroundClose,
         PrimaryBackground,
         PrimaryForeground,
         PrimaryBorder,
+        PanelBackground,
         ContentBackground,
         ContentForeground,
         CaptionForeground,
@@ -45,10 +51,7 @@
         ListItemSelectedInactiveBackground,
         TabItemMouseOverBackground,
         TabItemSelectedBackground,
-        TabItemSelectedForeground,
-        WindowBorder,
-        WindowControlMouseOverBackground,
-        WindowHeaderBackground,
-        WindowHeaderForeground
+        TabItemSelectedForeground
+        
     }
 }

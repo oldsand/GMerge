@@ -76,7 +76,9 @@
         </EmbeddedResource>
     </ItemGroup>
     <ItemGroup>
+      <Page Include="Icons\GalaxyIcons.xaml" />
       <Page Include="Icons\StandardIcons.xaml" />
+      <Page Include="Icons\WindowIcons.xaml" />
       <Page Include="Styles\ButtonStyles.xaml" />
       <Page Include="Styles\CheckBoxStyles.xaml" />
       <Page Include="Styles\ComboBoxStyles.xaml" />
@@ -108,7 +110,10 @@
       </ProjectReference>
     </ItemGroup>
     <ItemGroup>
-      <Resource Include="Fonts\Limeligh.ttf" />
+      <Resource Include="Fonts\Limelight.ttf" />
+    </ItemGroup>
+    <ItemGroup>
+      <Resource Include="Fonts\Rubik.ttf" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

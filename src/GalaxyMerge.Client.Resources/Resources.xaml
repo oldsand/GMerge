@@ -5,6 +5,8 @@
     <t:ThemeResourceDictionary />
     <!--Icons-->
     <ResourceDictionary Source="Icons/StandardIcons.xaml" />
+    <ResourceDictionary Source="Icons/WindowIcons.xaml" />
+    <ResourceDictionary Source="Icons/GalaxyIcons.xaml" />
     <!--Controls-->
     <ResourceDictionary Source="Styles/IconStyles.xaml" />
     <!--Other-->

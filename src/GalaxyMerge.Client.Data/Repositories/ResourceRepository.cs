@@ -13,6 +13,7 @@ namespace GalaxyMerge.Client.Data.Repositories
         public ResourceRepository()
         {
             _context = new ClientContext();
+            _context.Database.EnsureCreated();
         }
         
         public void Dispose()
