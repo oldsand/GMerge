@@ -59,22 +59,34 @@ namespace GalaxyMerge.Client.Resources.Theming
                     SetResource(ThemeResourceKey.ControlDefaultForeground.ToString(), new SolidColorBrush(ColorFromHex("#FFB1B4B9")));
                     SetResource(ThemeResourceKey.ControlFocusBorder.ToString(), new SolidColorBrush(ColorFromHex("#FF48A0F8")));
                     SetResource(ThemeResourceKey.ControlHighlightBackground.ToString(), new SolidColorBrush(ColorFromHex("#BB9FAFCB")));
-                    SetResource(ThemeResourceKey.ControlMouseOverBackground.ToString(), new SolidColorBrush(ColorFromHex("#FFF9F9F9")));
+                    /*SetResource(ThemeResourceKey.ControlMouseOverBackground.ToString(), new SolidColorBrush(ColorFromHex("#FFF9F9F9")));
                     SetResource(ThemeResourceKey.ControlMouseOverBorder.ToString(), new SolidColorBrush(ColorFromHex("#FFA53289")));
                     SetResource(ThemeResourceKey.ControlPressedBackground.ToString(), new SolidColorBrush(ColorFromHex("#FFF9F9F9")));
-                    SetResource(ThemeResourceKey.ControlPressedBorder.ToString(), new SolidColorBrush(ColorFromHex("#FF3A414D")));
+                    SetResource(ThemeResourceKey.ControlPressedBorder.ToString(), new SolidColorBrush(ColorFromHex("#FF3A414D")));*/
 
                     //Control Specific
                     //Buttons
                     SetResource(ThemeResourceKey.ButtonPrimaryBackground.ToString(), new SolidColorBrush(ColorFromHex("#FF7398D8")));
-                    SetResource(ThemeResourceKey.ButtonPrimaryForeground.ToString(), new SolidColorBrush(ColorFromHex("#FFEEF4FC")));
-                    SetResource(ThemeResourceKey.ButtonPrimaryBorder.ToString(), new SolidColorBrush(ColorFromHex("#FF6484BC")));
-                    SetResource(ThemeResourceKey.ButtonSecondaryBackground.ToString(), new SolidColorBrush(ColorFromHex("#FFCDD2D8")));
-                    SetResource(ThemeResourceKey.ButtonSecondaryForeground.ToString(), new SolidColorBrush(ColorFromHex("#FF7D8084")));
-                    SetResource(ThemeResourceKey.ButtonSecondaryBorder.ToString(), new SolidColorBrush(ColorFromHex("#FFC0C3C9")));
+                    SetResource(ThemeResourceKey.ButtonPrimaryForeground.ToString(), new SolidColorBrush(ColorFromHex("#FFF2F7FF")));
+                    SetResource(ThemeResourceKey.ButtonPrimaryPressedBackground.ToString(), new SolidColorBrush(ColorFromHex("#FFA0C3F9")));
+                    SetResource(ThemeResourceKey.ButtonPrimaryPressedForeground.ToString(), new SolidColorBrush(ColorFromHex("#FF637CA7")));
+                    SetResource(ThemeResourceKey.ButtonPrimaryPressedBorder.ToString(), new SolidColorBrush(ColorFromHex("#FF637CA7")));
+                    SetResource(ThemeResourceKey.ButtonPrimaryMouseOverBackground.ToString(), new SolidColorBrush(ColorFromHex("#FF6282BB")));
+                    SetResource(ThemeResourceKey.ButtonSecondaryBackground.ToString(), new SolidColorBrush(ColorFromHex("#FFCDD4DB")));
+                    SetResource(ThemeResourceKey.ButtonSecondaryForeground.ToString(), new SolidColorBrush(ColorFromHex("#FF83868E")));
+                    SetResource(ThemeResourceKey.ButtonSecondaryPressedBackground.ToString(), new SolidColorBrush(ColorFromHex("#FFDCE7F2")));
+                    SetResource(ThemeResourceKey.ButtonSecondaryPressedForeground.ToString(), new SolidColorBrush(ColorFromHex("#FF83868E")));
+                    SetResource(ThemeResourceKey.ButtonSecondaryPressedBorder.ToString(), new SolidColorBrush(ColorFromHex("#FF83868E")));
+                    SetResource(ThemeResourceKey.ButtonSecondaryMouseOverBackground.ToString(), new SolidColorBrush(ColorFromHex("#FFB4BAC1")));
                     SetResource(ThemeResourceKey.ButtonTernaryBackground.ToString(), new SolidColorBrush(ColorFromHex("#FFE58585")));
-                    SetResource(ThemeResourceKey.ButtonTernaryForeground.ToString(), new SolidColorBrush(ColorFromHex("#FFE9E5E5")));
-                    SetResource(ThemeResourceKey.ButtonTernaryBorder.ToString(), new SolidColorBrush(ColorFromHex("#FFC77474")));
+                    SetResource(ThemeResourceKey.ButtonTernaryForeground.ToString(), new SolidColorBrush(ColorFromHex("#FFFFF9F9")));
+                    SetResource(ThemeResourceKey.ButtonTernaryPressedBackground.ToString(), new SolidColorBrush(ColorFromHex("#FFF9AEAE")));
+                    SetResource(ThemeResourceKey.ButtonTernaryPressedForeground.ToString(), new SolidColorBrush(ColorFromHex("#FF9B5A5A")));
+                    SetResource(ThemeResourceKey.ButtonTernaryPressedBorder.ToString(), new SolidColorBrush(ColorFromHex("#FF9B5A5A")));
+                    SetResource(ThemeResourceKey.ButtonTernaryMouseOverBackground.ToString(), new SolidColorBrush(ColorFromHex("#FFC57171")));
+                    SetResource(ThemeResourceKey.ButtonTransparentPressedBackground.ToString(), new SolidColorBrush(ColorFromHex("#FFD3D6DB")));
+                    SetResource(ThemeResourceKey.ButtonTransparentPressedBorder.ToString(), new SolidColorBrush(ColorFromHex("#FFC0C1C8")));
+                    SetResource(ThemeResourceKey.ButtonTransparentMouseOverBackground.ToString(), new SolidColorBrush(ColorFromHex("#FFD3D6DB")));
                     //Check Box
                     SetResource(ThemeResourceKey.CheckBoxChecked.ToString(), new SolidColorBrush(ColorFromHex("#FF7398D8")));
                     SetResource(ThemeResourceKey.GlyphForeground.ToString(), new SolidColorBrush(ColorFromHex("#FFF1F6FF")));
@@ -102,30 +114,52 @@ namespace GalaxyMerge.Client.Resources.Theming
                     //Primary
                     SetResource(ThemeResourceKey.PrimaryBackground.ToString(), new SolidColorBrush(ColorFromHex("#FF222529")));
                     SetResource(ThemeResourceKey.PrimaryForeground.ToString(), new SolidColorBrush(ColorFromHex("#FFC6D0DB")));
-                    SetResource(ThemeResourceKey.PrimaryBorder.ToString(), new SolidColorBrush(ColorFromHex("#FF1A1D20")));
+                    SetResource(ThemeResourceKey.PrimaryBorder.ToString(), new SolidColorBrush(ColorFromHex("#FF121517")));
                     
                     //Generic
-                    SetResource(ThemeResourceKey.PanelBackground.ToString(), new SolidColorBrush(ColorFromHex("#FF292D31")));
-                    SetResource(ThemeResourceKey.IconForeground.ToString(), new SolidColorBrush(ColorFromHex("#FF616A7A")));
+                    SetResource(ThemeResourceKey.PanelBackground.ToString(), new SolidColorBrush(ColorFromHex("#FF34383B")));
+                    SetResource(ThemeResourceKey.IconForeground.ToString(), new SolidColorBrush(ColorFromHex("#FF969DAB")));
                     SetResource(ThemeResourceKey.CaptionForeground.ToString(), new SolidColorBrush(ColorFromHex("#FFB1B4B9")));
+                    
+                    //Control Generic
+                    SetResource(ThemeResourceKey.ControlBackground.ToString(), new SolidColorBrush(ColorFromHex("#FF15191C")));
+                    SetResource(ThemeResourceKey.ControlForeground.ToString(), new SolidColorBrush(ColorFromHex("#FFEAEFF9")));
+                    SetResource(ThemeResourceKey.ControlBorder.ToString(), new SolidColorBrush(ColorFromHex("#FF626A71")));
+                    SetResource(ThemeResourceKey.ControlDisabledOpacity.ToString(), 0.6d);
+                    SetResource(ThemeResourceKey.ControlDefaultForeground.ToString(), new SolidColorBrush(ColorFromHex("#FF535860")));
+                    SetResource(ThemeResourceKey.ControlFocusBorder.ToString(), new SolidColorBrush(ColorFromHex("#FF68B1FB")));
+                    SetResource(ThemeResourceKey.ControlHighlightBackground.ToString(), new SolidColorBrush(ColorFromHex("#BB377AF1")));
+                    /*SetResource(ThemeResourceKey.ControlMouseOverBackground.ToString(), new SolidColorBrush(ColorFromHex("#FFF9F9F9")));
+                    SetResource(ThemeResourceKey.ControlMouseOverBorder.ToString(), new SolidColorBrush(ColorFromHex("#FFA53289")));
+                    SetResource(ThemeResourceKey.ControlPressedBackground.ToString(), new SolidColorBrush(ColorFromHex("#FFF9F9F9")));
+                    SetResource(ThemeResourceKey.ControlPressedBorder.ToString(), new SolidColorBrush(ColorFromHex("#FF3A414D")));*/
                     
                     //Control Specific
                     //Buttons
-                    SetResource(ThemeResourceKey.ButtonPrimaryBackground.ToString(), new SolidColorBrush(ColorFromHex("#FF7398D8")));
-                    SetResource(ThemeResourceKey.ButtonPrimaryForeground.ToString(), new SolidColorBrush(ColorFromHex("#FFEEF4FC")));
-                    SetResource(ThemeResourceKey.ButtonPrimaryBorder.ToString(), new SolidColorBrush(ColorFromHex("#FF6484BC")));
-                    SetResource(ThemeResourceKey.ButtonSecondaryBackground.ToString(), new SolidColorBrush(ColorFromHex("#FFCDD2D8")));
-                    SetResource(ThemeResourceKey.ButtonSecondaryForeground.ToString(), new SolidColorBrush(ColorFromHex("#FF7D8084")));
-                    SetResource(ThemeResourceKey.ButtonSecondaryBorder.ToString(), new SolidColorBrush(ColorFromHex("#FFC0C3C9")));
-                    SetResource(ThemeResourceKey.ButtonTernaryBackground.ToString(), new SolidColorBrush(ColorFromHex("#FFE58585")));
-                    SetResource(ThemeResourceKey.ButtonTernaryForeground.ToString(), new SolidColorBrush(ColorFromHex("#FFE9E5E5")));
-                    SetResource(ThemeResourceKey.ButtonTernaryBorder.ToString(), new SolidColorBrush(ColorFromHex("#FFC77474")));
+                    SetResource(ThemeResourceKey.ButtonPrimaryBackground.ToString(), new SolidColorBrush(ColorFromHex("#FF3D83C8")));
+                    SetResource(ThemeResourceKey.ButtonPrimaryForeground.ToString(), new SolidColorBrush(ColorFromHex("#FFEEF1F5")));
+                    SetResource(ThemeResourceKey.ButtonPrimaryPressedBackground.ToString(), new SolidColorBrush(ColorFromHex("#FF18324D")));
+                    SetResource(ThemeResourceKey.ButtonPrimaryPressedForeground.ToString(), new SolidColorBrush(ColorFromHex("#FF4D9EEE")));
+                    SetResource(ThemeResourceKey.ButtonPrimaryPressedBorder.ToString(), new SolidColorBrush(ColorFromHex("#FF4D9EEE")));
+                    SetResource(ThemeResourceKey.ButtonPrimaryMouseOverBackground.ToString(), new SolidColorBrush(ColorFromHex("#FF2E6397")));
+                    SetResource(ThemeResourceKey.ButtonSecondaryBackground.ToString(), new SolidColorBrush(ColorFromHex("#FF51575A")));
+                    SetResource(ThemeResourceKey.ButtonSecondaryForeground.ToString(), new SolidColorBrush(ColorFromHex("#FFB8BDBF")));
+                    SetResource(ThemeResourceKey.ButtonSecondaryPressedBackground.ToString(), new SolidColorBrush(ColorFromHex("#FF333739")));
+                    SetResource(ThemeResourceKey.ButtonSecondaryPressedForeground.ToString(), new SolidColorBrush(ColorFromHex("#FF98A1A7")));
+                    SetResource(ThemeResourceKey.ButtonSecondaryPressedBorder.ToString(), new SolidColorBrush(ColorFromHex("#FF98A1A7")));
+                    SetResource(ThemeResourceKey.ButtonSecondaryMouseOverBackground.ToString(), new SolidColorBrush(ColorFromHex("#FF35383A")));
+                    SetResource(ThemeResourceKey.ButtonTernaryBackground.ToString(), new SolidColorBrush(ColorFromHex("#FFDF5555")));
+                    SetResource(ThemeResourceKey.ButtonTernaryForeground.ToString(), new SolidColorBrush(ColorFromHex("#FFF8F2F2")));
+                    SetResource(ThemeResourceKey.ButtonTernaryPressedBackground.ToString(), new SolidColorBrush(ColorFromHex("#FF6D2929")));
+                    SetResource(ThemeResourceKey.ButtonTernaryPressedForeground.ToString(), new SolidColorBrush(ColorFromHex("#FFEE5A5A")));
+                    SetResource(ThemeResourceKey.ButtonTernaryPressedBorder.ToString(), new SolidColorBrush(ColorFromHex("#FFEE5A5A")));
+                    SetResource(ThemeResourceKey.ButtonTernaryMouseOverBackground.ToString(), new SolidColorBrush(ColorFromHex("#FFA83F3F")));
+                    SetResource(ThemeResourceKey.ButtonTransparentPressedBackground.ToString(), new SolidColorBrush(ColorFromHex("#FF2B2C2D")));
+                    SetResource(ThemeResourceKey.ButtonTransparentPressedBorder.ToString(), new SolidColorBrush(ColorFromHex("#FF1D1E20")));
+                    SetResource(ThemeResourceKey.ButtonTransparentMouseOverBackground.ToString(), new SolidColorBrush(ColorFromHex("#FF2B2C2D")));
                     //Check Box
-                    SetResource(ThemeResourceKey.CheckBoxChecked.ToString(), new SolidColorBrush(ColorFromHex("#FF7398D8")));
+                    SetResource(ThemeResourceKey.CheckBoxChecked.ToString(), new SolidColorBrush(ColorFromHex("#FF3D83C8")));
                     SetResource(ThemeResourceKey.GlyphForeground.ToString(), new SolidColorBrush(ColorFromHex("#FFF1F6FF")));
-                    //Group Box
-                    SetResource(ThemeResourceKey.GroupBoxHeaderBorder.ToString(), new SolidColorBrush(ColorFromHex("#FFA53289")));
-                    SetResource(ThemeResourceKey.GroupBoxHeaderForeground.ToString(), new SolidColorBrush(ColorFromHex("#FFA53289")));
                     break;
                 }
             }

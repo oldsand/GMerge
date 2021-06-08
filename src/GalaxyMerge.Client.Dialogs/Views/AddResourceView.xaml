@@ -312,7 +312,7 @@
     <Border Grid.Row="1"
             BorderThickness="0 1 0 0"
             BorderBrush="{ui:ThemeResource ResourceKey=PrimaryBorder}"
-            Background="{ui:ThemeResource ResourceKey=PrimaryBackground}">
+            Background="{ui:ThemeResource ResourceKey=PanelBackground}">
       <Grid>
         <StackPanel 
           Margin="0,0,10,0"
@@ -328,7 +328,8 @@
                   Height="22"
                   Margin="5 0 0 0"
                   Content="Cancel"
-                  Command="{Binding CloseDialogCommand}" />
+                  Command="{Binding CloseDialogCommand}"
+                  Style="{StaticResource Style.Button.Secondary}"/>
         </StackPanel>
         
         <StackPanel 
@@ -345,7 +346,8 @@
                   Height="22"
                   Margin="5 0 0 0"
                   Content="Cancel"
-                  Command="{Binding CloseDialogCommand}" />
+                  Command="{Binding CloseDialogCommand}"
+                  Style="{StaticResource Style.Button.Secondary}"/>
         </StackPanel>
       </Grid>
      

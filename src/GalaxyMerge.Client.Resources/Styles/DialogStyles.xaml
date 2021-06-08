@@ -13,29 +13,30 @@
           <RowDefinition Height="Auto" />
           <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+        
         <Grid Grid.Row="0">
           <Rectangle
             Height="30"
-            Fill="{t:ThemeResource ResourceKey=PrimaryBackground}" />
+            Fill="{t:ThemeResource ResourceKey=WindowHeaderBackground}" />
           <DockPanel LastChildFill="False">
             <controls:Icon
               Margin="8,0,0,0"
               DockPanel.Dock="Left"
               Template="{DynamicResource Icon.App}"
-              Foreground="#FF6AB16F"
+              Foreground="{t:ThemeResource ResourceKey=WindowHeaderForeground}"
               Height="16" Width="16"
               WindowChrome.IsHitTestVisibleInChrome="True" />
             <TextBlock
               Margin="8,0,0,0"
               VerticalAlignment="Center"
               DockPanel.Dock="Left"
-              Foreground="{t:ThemeResource ResourceKey=PrimaryForeground}"
+              Foreground="{t:ThemeResource ResourceKey=WindowHeaderForeground}"
               Text="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Title}" />
             <Button x:Name="CloseButton"
                     Click="OnCloseClick"
                     DockPanel.Dock="Right"
-                    Style="{DynamicResource ButtonStyle.WindowClose}">
-              <controls:Icon Template="{DynamicResource Icon.Close}"
+                    Style="{DynamicResource Style.Button.WindowClose}">
+              <controls:Icon Template="{DynamicResource Icon.Window.Close}"
                              Height="10" Width="10"
                              Foreground="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"/>
             </Button>

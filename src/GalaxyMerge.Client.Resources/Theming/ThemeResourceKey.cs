@@ -29,17 +29,28 @@
         ControlPressedBackground,
         ControlPressedBorder,
         
-        
         ButtonPrimaryBackground,
         ButtonPrimaryForeground,
-        ButtonPrimaryBorder,
+        ButtonPrimaryPressedBackground,
+        ButtonPrimaryPressedForeground,
+        ButtonPrimaryPressedBorder,
+        ButtonPrimaryMouseOverBackground,
         ButtonSecondaryBackground,
         ButtonSecondaryForeground,
-        ButtonSecondaryBorder,
+        ButtonSecondaryPressedBackground,
+        ButtonSecondaryPressedForeground,
+        ButtonSecondaryPressedBorder,
+        ButtonSecondaryMouseOverBackground,
         ButtonTernaryBackground,
         ButtonTernaryForeground,
-        ButtonTernaryBorder,
-        
+        ButtonTernaryPressedBackground,
+        ButtonTernaryPressedForeground,
+        ButtonTernaryPressedBorder,
+        ButtonTernaryMouseOverBackground,
+        ButtonTransparentPressedBackground,
+        ButtonTransparentPressedBorder,
+        ButtonTransparentMouseOverBackground,
+
         CheckBoxChecked,
         GlyphForeground,
         

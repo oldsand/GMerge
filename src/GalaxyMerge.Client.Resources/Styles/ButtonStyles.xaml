@@ -5,18 +5,6 @@
 
   <ControlTemplate x:Key="Template.Button" TargetType="{x:Type Button}">
     <Grid SnapsToDevicePixels="true">
-      <Border x:Name="PressedBorder"
-              BorderBrush="{TemplateBinding BorderBrush}"
-              BorderThickness="1"
-              CornerRadius="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(ui:ButtonProperties.CornerRadius)}"
-              Visibility="Collapsed">
-        <Border.Effect>
-          <DropShadowEffect ShadowDepth="0"
-                            Color="{Binding ElementName=PressedBorder, Path=BorderBrush, Converter={ui:BrushToColorConverter}}"
-                            Opacity="1"
-                            BlurRadius="10" />
-        </Border.Effect>
-      </Border>
       <Border x:Name="MainBorder"
               Background="{TemplateBinding Background}"
               BorderBrush="{TemplateBinding BorderBrush}"
@@ -30,18 +18,20 @@
                           RecognizesAccessKey="True"
                           SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
       </Border>
-      <Border x:Name="MouseOverBorder"
-              Background="Black"
-              Opacity="0.1"
-              CornerRadius="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(ui:ButtonProperties.CornerRadius)}"
-              Visibility="Collapsed" />
     </Grid>
     <ControlTemplate.Triggers>
       <Trigger Property="IsMouseOver" Value="true">
-        <Setter TargetName="MouseOverBorder" Property="Visibility" Value="Visible" />
+        <Setter Property="Background" TargetName="MainBorder" 
+                Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(ui:BrushProperties.MouseOverBackgroundBrush)}" />
+        <Setter Property="BorderBrush" TargetName="MainBorder" 
+                Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(ui:BrushProperties.MouseOverBorderBrush)}" />
       </Trigger>
       <Trigger Property="IsPressed" Value="true">
-        <Setter TargetName="PressedBorder" Property="Visibility" Value="Visible" />
+        <Setter Property="Background" TargetName="MainBorder" 
+                Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(ui:BrushProperties.PressedBackgroundBrush)}" />
+        <Setter Property="BorderBrush" TargetName="MainBorder" 
+                Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(ui:BrushProperties.PressedBorderBrush)}" />
+        <Setter TargetName="MainBorder" Property="BorderThickness" Value="2" />
       </Trigger>
       <Trigger Property="IsEnabled" Value="false">
         <Setter Property="Opacity" Value="{t:ThemeResource ResourceKey=ControlDisabledOpacity}" />
@@ -50,10 +40,18 @@
   </ControlTemplate>
 
   <Style x:Key="Style.Button.Primary" TargetType="{x:Type Button}">
+    <Style.Triggers>
+      <Trigger Property="IsPressed" Value="true">
+        <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=ButtonPrimaryPressedForeground}"/>
+      </Trigger>
+    </Style.Triggers>
     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+    <Setter Property="FontWeight" Value="SemiBold" />
     <Setter Property="Background" Value="{t:ThemeResource ResourceKey=ButtonPrimaryBackground}" />
     <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=ButtonPrimaryForeground}" />
-    <Setter Property="BorderBrush" Value="{t:ThemeResource ResourceKey=ButtonPrimaryBorder}" />
+    <Setter Property="ui:BrushProperties.MouseOverBackgroundBrush" Value="{t:ThemeResource ResourceKey=ButtonPrimaryMouseOverBackground}" />
+    <Setter Property="ui:BrushProperties.PressedBackgroundBrush" Value="{t:ThemeResource ResourceKey=ButtonPrimaryPressedBackground}" />
+    <Setter Property="ui:BrushProperties.PressedBorderBrush" Value="{t:ThemeResource ResourceKey=ButtonPrimaryPressedBorder}" />
     <Setter Property="BorderThickness" Value="0" />
     <Setter Property="HorizontalContentAlignment" Value="Center" />
     <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -67,10 +65,18 @@
   <Style BasedOn="{StaticResource Style.Button.Primary}" TargetType="{x:Type Button}" />
 
   <Style x:Key="Style.Button.Secondary" TargetType="{x:Type Button}">
+    <Style.Triggers>
+      <Trigger Property="IsPressed" Value="true">
+        <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=ButtonSecondaryPressedForeground}"/>
+      </Trigger>
+    </Style.Triggers>
     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+    <Setter Property="FontWeight" Value="SemiBold" />
     <Setter Property="Background" Value="{t:ThemeResource ResourceKey=ButtonSecondaryBackground}" />
     <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=ButtonSecondaryForeground}" />
-    <Setter Property="BorderBrush" Value="{t:ThemeResource ResourceKey=ButtonSecondaryBorder}" />
+    <Setter Property="ui:BrushProperties.MouseOverBackgroundBrush" Value="{t:ThemeResource ResourceKey=ButtonSecondaryMouseOverBackground}" />
+    <Setter Property="ui:BrushProperties.PressedBackgroundBrush" Value="{t:ThemeResource ResourceKey=ButtonSecondaryPressedBackground}" />
+    <Setter Property="ui:BrushProperties.PressedBorderBrush" Value="{t:ThemeResource ResourceKey=ButtonSecondaryPressedBorder}" />
     <Setter Property="BorderThickness" Value="0" />
     <Setter Property="HorizontalContentAlignment" Value="Center" />
     <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -83,10 +89,18 @@
   </Style>
 
   <Style x:Key="Style.Button.Ternary" TargetType="{x:Type Button}">
+    <Style.Triggers>
+      <Trigger Property="IsPressed" Value="true">
+        <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=ButtonTernaryPressedForeground}"/>
+      </Trigger>
+    </Style.Triggers>
     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+    <Setter Property="FontWeight" Value="SemiBold" />
     <Setter Property="Background" Value="{t:ThemeResource ResourceKey=ButtonTernaryBackground}" />
     <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=ButtonTernaryForeground}" />
-    <Setter Property="BorderBrush" Value="{t:ThemeResource ResourceKey=ButtonTernaryBorder}" />
+    <Setter Property="ui:BrushProperties.MouseOverBackgroundBrush" Value="{t:ThemeResource ResourceKey=ButtonTernaryMouseOverBackground}" />
+    <Setter Property="ui:BrushProperties.PressedBackgroundBrush" Value="{t:ThemeResource ResourceKey=ButtonTernaryPressedBackground}" />
+    <Setter Property="ui:BrushProperties.PressedBorderBrush" Value="{t:ThemeResource ResourceKey=ButtonTernaryPressedBorder}" />
     <Setter Property="BorderThickness" Value="0" />
     <Setter Property="HorizontalContentAlignment" Value="Center" />
     <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -102,7 +116,9 @@
     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
     <Setter Property="Background" Value="Transparent" />
     <Setter Property="Foreground" Value="Transparent"/>
-    <Setter Property="BorderBrush" Value="LightGray"/>
+    <Setter Property="ui:BrushProperties.MouseOverBackgroundBrush" Value="{t:ThemeResource ResourceKey=ButtonTransparentMouseOverBackground}" />
+    <Setter Property="ui:BrushProperties.PressedBackgroundBrush" Value="{t:ThemeResource ResourceKey=ButtonTransparentPressedBackground}" />
+    <Setter Property="ui:BrushProperties.PressedBorderBrush" Value="{t:ThemeResource ResourceKey=ButtonTransparentPressedBorder}" />
     <Setter Property="BorderThickness" Value="0" />
     <Setter Property="HorizontalContentAlignment" Value="Center" />
     <Setter Property="VerticalContentAlignment" Value="Center" />

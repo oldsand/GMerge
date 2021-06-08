@@ -10,17 +10,22 @@
              d:DataContext="{d:DesignInstance Type=viewModels:ShellFooterViewModel}"
              mc:Ignorable="d"
              d:DesignHeight="20" d:DesignWidth="1000">
-  
-  <Grid Background="{ui:ThemeResource ResourceKey=PrimaryBackground}">
-    <Border x:Name="RootBorder" BorderThickness="0 1 0 0" BorderBrush="{ui:ThemeResource ResourceKey=PrimaryBorder}">
-      <StackPanel Orientation="Horizontal">
+
+  <Grid Background="{ui:ThemeResource ResourceKey=PanelBackground}">
+    <Border x:Name="RootBorder" BorderThickness="0 1 0 0"
+            BorderBrush="{ui:ThemeResource ResourceKey=PrimaryBorder}">
+      <StackPanel Orientation="Horizontal"
+                  HorizontalAlignment="Left"
+                  Margin="10 0">
         <Button Style="{StaticResource Style.Button.Transparent}"
-                Command="{Binding ShowHideEventLogCommand}">
-          <ui:Icon Template="{DynamicResource Icon.Notification}" />
+                Command="{Binding ShowHideEventLogCommand}"
+                Width="24" Height="24">
+          <ui:Icon Template="{DynamicResource Icon.Notification}"/>
         </Button>
-        <TextBlock Text="{Binding PreviousLogMessage}" 
-                   VerticalAlignment="Center" Margin="5 0 0 0" 
-                   FontSize="10"/>
+        <TextBlock Text="{Binding PreviousLogMessage}"
+                   VerticalAlignment="Center"
+                   Margin="5 0 0 0"
+                   FontSize="10" />
       </StackPanel>
     </Border>
   </Grid>

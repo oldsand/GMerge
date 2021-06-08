@@ -91,6 +91,8 @@
 
   <Style x:Key="ShellStyle" TargetType="{x:Type Window}">
     <Setter Property="UseLayoutRounding" Value="True" />
+    <Setter Property="Background" Value="{t:ThemeResource ResourceKey=PrimaryBackground}" />
+    <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=PrimaryForeground}" />
     <Setter Property="TextOptions.TextFormattingMode" Value="Ideal" />
     <Setter Property="TextOptions.TextRenderingMode" Value="ClearType" />
     <Setter Property="WindowChrome.WindowChrome">
