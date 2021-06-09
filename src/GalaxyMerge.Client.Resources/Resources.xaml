@@ -10,6 +10,7 @@
     <!--Controls-->
     <ResourceDictionary Source="Styles/IconStyles.xaml" />
     <!--Other-->
+    <ResourceDictionary Source="Styles/ContentControlStyles.xaml" />
     <ResourceDictionary Source="Styles/FontStyles.xaml" />
     <!--Windows-->
     <ResourceDictionary Source="Styles/LabelStyles.xaml" />

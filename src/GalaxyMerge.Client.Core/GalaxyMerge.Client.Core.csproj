@@ -67,6 +67,7 @@
         <Compile Include="Converters\EnumStringConverter.cs" />
         <Compile Include="Converters\EnumVisibilityConverter.cs" />
         <Compile Include="Converters\LeftMarginMultiplierConverter.cs" />
+        <Compile Include="Converters\WidthHeightExtender.cs" />
         <Compile Include="Extensions\CollapsibleColumnDefinition.cs" />
         <Compile Include="Extensions\ColorExtensions.cs" />
         <Compile Include="Extensions\DependencyObjectExtensions.cs" />

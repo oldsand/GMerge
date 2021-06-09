@@ -1,0 +1,23 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:ui="http://gmerge.com/ui/wpf">
+
+  <ControlTemplate x:Key="Template.ContentControl.Shadow" TargetType="{x:Type ContentControl}">
+    <Border x:Name="ShadowBorder"
+            Background="Transparent"
+            Width="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Width, Mode=OneWay, Converter={ui:WidthHeightExtender Length=8}}"
+            Height="{Binding RelativeSource={RelativeSource AncestorType=Panel}, Path=Height, Mode=OneWay, Converter={ui:WidthHeightExtender Length=8}}">
+      <Border.Effect>
+        <DropShadowEffect BlurRadius="8"
+                          Opacity="0.5"
+                          Direction="-90"
+                          ShadowDepth="2" />
+      </Border.Effect>
+      <ContentPresenter/>
+    </Border>
+  </ControlTemplate>
+
+  <Style x:Key="Style.ContentControl.Shadow" TargetType="ContentControl">
+    <Setter Property="Template" Value="{StaticResource Template.ContentControl.Shadow}" />
+  </Style>
+</ResourceDictionary>

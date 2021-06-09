@@ -22,7 +22,7 @@
             <controls:Icon
               Margin="8,0,0,0"
               DockPanel.Dock="Left"
-              Template="{DynamicResource Icon.App}"
+              Template="{DynamicResource Icon.Standard.App}"
               Foreground="{t:ThemeResource ResourceKey=WindowHeaderForeground}"
               Height="16" Width="16"
               WindowChrome.IsHitTestVisibleInChrome="True" />
@@ -35,7 +35,7 @@
             <Button x:Name="CloseButton"
                     Click="OnCloseClick"
                     DockPanel.Dock="Right"
-                    Style="{DynamicResource Style.Button.WindowClose}">
+                    Style="{DynamicResource Style.Button.Window.Close}">
               <controls:Icon Template="{DynamicResource Icon.Window.Close}"
                              Height="10" Width="10"
                              Foreground="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"/>
@@ -43,7 +43,7 @@
             <Button x:Name="MaximizeRestoreButton"
                     Click="OnMaximizeRestoreClick"
                     DockPanel.Dock="Right"
-                    Style="{DynamicResource Style.Button.WindowStandard}">
+                    Style="{DynamicResource Style.Button.Window.Standard}">
               <controls:Icon x:Name="MaximizeRestoreIcon"
                              Template="{DynamicResource Icon.Window.Maximize}"
                              Height="10" Width="10"
@@ -52,7 +52,7 @@
             <Button x:Name="MinimizeButton"
                     Click="OnMinimizeClick"
                     DockPanel.Dock="Right"
-                    Style="{DynamicResource Style.Button.WindowStandard}">
+                    Style="{DynamicResource Style.Button.Window.Standard}">
               <controls:Icon Template="{DynamicResource Icon.Window.Minimize}"
                              Height="10" Width="10"
                              Foreground="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"/>
@@ -60,7 +60,7 @@
             <Button x:Name="ThemeButton"
                     Click="OnThemeClick"
                     DockPanel.Dock="Right"
-                    Style="{DynamicResource Style.Button.WindowStandard}">
+                    Style="{DynamicResource Style.Button.Window.Standard}">
               <controls:Icon Template="{DynamicResource Icon.Window.Theme}"
                              Height="16" Width="16"
                              Foreground="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"/>

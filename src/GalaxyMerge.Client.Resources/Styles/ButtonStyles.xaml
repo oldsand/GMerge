@@ -31,7 +31,6 @@
                 Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(ui:BrushProperties.PressedBackgroundBrush)}" />
         <Setter Property="BorderBrush" TargetName="MainBorder" 
                 Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(ui:BrushProperties.PressedBorderBrush)}" />
-        <Setter TargetName="MainBorder" Property="BorderThickness" Value="2" />
       </Trigger>
       <Trigger Property="IsEnabled" Value="false">
         <Setter Property="Opacity" Value="{t:ThemeResource ResourceKey=ControlDisabledOpacity}" />
@@ -43,6 +42,7 @@
     <Style.Triggers>
       <Trigger Property="IsPressed" Value="true">
         <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=ButtonPrimaryPressedForeground}"/>
+        <Setter Property="BorderThickness" Value="1"/>
       </Trigger>
     </Style.Triggers>
     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
@@ -129,72 +129,47 @@
     <Setter Property="IsTabStop" Value="False" />
     <Setter Property="Template" Value="{StaticResource Template.Button}" />
   </Style>
-
-  <ControlTemplate x:Key="Template.Button.Window" TargetType="{x:Type Button}">
-    <Grid Background="Transparent">
-      <Border x:Name="MouseOverBorder"
-              Background="{t:ThemeResource ResourceKey=WindowControlMouseOverBackgroundStandard}"
-              Opacity="0" />
-      <ContentPresenter x:Name="contentPresenter"
-                        Margin="{TemplateBinding Padding}"
-                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                        Content="{TemplateBinding Content}"
-                        ContentTemplate="{TemplateBinding ContentTemplate}" />
-    </Grid>
-    <ControlTemplate.Triggers>
-      <Trigger Property="IsMouseOver" Value="True">
-        <Setter TargetName="MouseOverBorder" Property="Opacity" Value="1" />
-      </Trigger>
-    </ControlTemplate.Triggers>
-  </ControlTemplate>
-
-  <Style x:Key="Style.Button.WindowStandard" TargetType="{x:Type Button}">
+  
+  <Style x:Key="Style.Button.Window.Standard" TargetType="{x:Type Button}">
+    <Setter Property="UseLayoutRounding" Value="True" />
+    <Setter Property="SnapsToDevicePixels" Value="True" />
+    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+    <Setter Property="Focusable" Value="False" />
+    <Setter Property="IsTabStop" Value="False" />
+    <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
+    <Setter Property="Background" Value="{t:ThemeResource ResourceKey=WindowHeaderBackground}" />
+    <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=WindowHeaderForeground}" />
+    <Setter Property="ui:BrushProperties.MouseOverBackgroundBrush" Value="{t:ThemeResource ResourceKey=WindowControlMouseOverBackgroundStandard}" />
     <Setter Property="HorizontalContentAlignment" Value="Center" />
     <Setter Property="VerticalContentAlignment" Value="Center" />
-    <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=WindowHeaderForeground}" />
-    <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
+    <Setter Property="BorderThickness" Value="0" />
     <Setter Property="Width" Value="48" />
     <Setter Property="Padding" Value="0" />
     <Setter Property="Margin" Value="0" />
-    <Setter Property="IsTabStop" Value="False" />
-    <Setter Property="Focusable" Value="False" />
-    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-    <Setter Property="Template" Value="{StaticResource Template.Button.Window}" />
+    <Setter Property="Template" Value="{StaticResource Template.Button}" />
   </Style>
-
-  <ControlTemplate x:Key="Template.Button.WindowClose" TargetType="{x:Type Button}">
-    <Grid Background="Transparent">
-      <Border x:Name="MouseOverBorder"
-              Background="{t:ThemeResource ResourceKey=WindowControlMouseOverBackgroundClose}"
-              Opacity="0" />
-      <ContentPresenter x:Name="contentPresenter"
-                        Margin="{TemplateBinding Padding}"
-                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                        Content="{TemplateBinding Content}"
-                        ContentTemplate="{TemplateBinding ContentTemplate}" />
-    </Grid>
-    <ControlTemplate.Triggers>
-      <Trigger Property="IsMouseOver" Value="true">
-        <Setter TargetName="MouseOverBorder" Property="Opacity" Value="1" />
+  
+  <Style x:Key="Style.Button.Window.Close" TargetType="{x:Type Button}">
+    <Style.Triggers>
+      <Trigger Property="IsMouseOver" Value="True">
         <Setter Property="Foreground" Value="White" />
       </Trigger>
-    </ControlTemplate.Triggers>
-  </ControlTemplate>
-
-  <Style x:Key="Style.Button.WindowClose" TargetType="{x:Type Button}">
+    </Style.Triggers>
+    <Setter Property="UseLayoutRounding" Value="True" />
+    <Setter Property="SnapsToDevicePixels" Value="True" />
+    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+    <Setter Property="Focusable" Value="False" />
+    <Setter Property="IsTabStop" Value="False" />
+    <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
+    <Setter Property="Background" Value="{t:ThemeResource ResourceKey=WindowHeaderBackground}" />
+    <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=WindowHeaderForeground}" />
+    <Setter Property="ui:BrushProperties.MouseOverBackgroundBrush" Value="{t:ThemeResource ResourceKey=WindowControlMouseOverBackgroundClose}" />
     <Setter Property="HorizontalContentAlignment" Value="Center" />
     <Setter Property="VerticalContentAlignment" Value="Center" />
-    <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=WindowHeaderForeground}" />
-    <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
+    <Setter Property="BorderThickness" Value="0" />
     <Setter Property="Width" Value="48" />
     <Setter Property="Padding" Value="0" />
     <Setter Property="Margin" Value="0" />
-    <Setter Property="IsTabStop" Value="False" />
-    <Setter Property="Focusable" Value="False" />
-    <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-    <Setter Property="Template" Value="{StaticResource Template.Button.WindowClose}" />
+    <Setter Property="Template" Value="{StaticResource Template.Button}" />
   </Style>
-
 </ResourceDictionary>

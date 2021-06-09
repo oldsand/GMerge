@@ -54,15 +54,11 @@ namespace GalaxyMerge.Client.Resources.Theming
                     //Control Generic
                     SetResource(ThemeResourceKey.ControlBackground.ToString(), new SolidColorBrush(ColorFromHex("#FFFBFBFC")));
                     SetResource(ThemeResourceKey.ControlForeground.ToString(), new SolidColorBrush(ColorFromHex("#FF242E40")));
-                    SetResource(ThemeResourceKey.ControlBorder.ToString(), new SolidColorBrush(ColorFromHex("#FF42607A")));
+                    SetResource(ThemeResourceKey.ControlBorder.ToString(), new SolidColorBrush(ColorFromHex("#FF8A93A2")));
                     SetResource(ThemeResourceKey.ControlDisabledOpacity.ToString(), 0.6d);
                     SetResource(ThemeResourceKey.ControlDefaultForeground.ToString(), new SolidColorBrush(ColorFromHex("#FFB1B4B9")));
                     SetResource(ThemeResourceKey.ControlFocusBorder.ToString(), new SolidColorBrush(ColorFromHex("#FF48A0F8")));
                     SetResource(ThemeResourceKey.ControlHighlightBackground.ToString(), new SolidColorBrush(ColorFromHex("#BB9FAFCB")));
-                    /*SetResource(ThemeResourceKey.ControlMouseOverBackground.ToString(), new SolidColorBrush(ColorFromHex("#FFF9F9F9")));
-                    SetResource(ThemeResourceKey.ControlMouseOverBorder.ToString(), new SolidColorBrush(ColorFromHex("#FFA53289")));
-                    SetResource(ThemeResourceKey.ControlPressedBackground.ToString(), new SolidColorBrush(ColorFromHex("#FFF9F9F9")));
-                    SetResource(ThemeResourceKey.ControlPressedBorder.ToString(), new SolidColorBrush(ColorFromHex("#FF3A414D")));*/
 
                     //Control Specific
                     //Buttons
@@ -95,11 +91,10 @@ namespace GalaxyMerge.Client.Resources.Theming
                     SetResource(ThemeResourceKey.GroupBoxHeaderForeground.ToString(), new SolidColorBrush(ColorFromHex("#FFA53289")));
                     
                     //Items Controls
-                    SetResource(ThemeResourceKey.ListMouseOverBackground.ToString(), new SolidColorBrush(ColorFromHex("#22D9EDFF")));
-                    SetResource(ThemeResourceKey.ListMouseOverBorder.ToString(), new SolidColorBrush(ColorFromHex("#FFD9EDFF")));
-                    SetResource(ThemeResourceKey.ListSelectedBackground.ToString(), new SolidColorBrush(ColorFromHex("#FFFFFFFF")));
-                    SetResource(ThemeResourceKey.ListSelectedBorder.ToString(), new SolidColorBrush(ColorFromHex("#FF7FB2F0")));
-                    SetResource(ThemeResourceKey.ListSelectedForeground.ToString(), new SolidColorBrush(ColorFromHex("#FFFFFFFF")));
+                    SetResource(ThemeResourceKey.ListMouseOverBackground.ToString(), new SolidColorBrush(ColorFromHex("#FFDDE4EB")));
+                    SetResource(ThemeResourceKey.ListMouseOverForeground.ToString(), new SolidColorBrush(ColorFromHex("#FFFBFBFC")));
+                    SetResource(ThemeResourceKey.ListSelectedBackground.ToString(), new SolidColorBrush(ColorFromHex("#FF48A0F8")));
+                    SetResource(ThemeResourceKey.ListSelectedForeground.ToString(), new SolidColorBrush(ColorFromHex("#FFFBFBFC")));
                     SetResource(ThemeResourceKey.ListItemMouseOverBackground.ToString(), new SolidColorBrush(ColorFromHex("#FFFFFFFF")));
                     SetResource(ThemeResourceKey.ListItemSelectedActiveBackground.ToString(), new SolidColorBrush(ColorFromHex("#FFD1E6FF")));
                     SetResource(ThemeResourceKey.ListItemSelectedInactiveBackground.ToString(), new SolidColorBrush(ColorFromHex("#FFE8EAEE")));
@@ -129,11 +124,7 @@ namespace GalaxyMerge.Client.Resources.Theming
                     SetResource(ThemeResourceKey.ControlDefaultForeground.ToString(), new SolidColorBrush(ColorFromHex("#FF535860")));
                     SetResource(ThemeResourceKey.ControlFocusBorder.ToString(), new SolidColorBrush(ColorFromHex("#FF68B1FB")));
                     SetResource(ThemeResourceKey.ControlHighlightBackground.ToString(), new SolidColorBrush(ColorFromHex("#BB377AF1")));
-                    /*SetResource(ThemeResourceKey.ControlMouseOverBackground.ToString(), new SolidColorBrush(ColorFromHex("#FFF9F9F9")));
-                    SetResource(ThemeResourceKey.ControlMouseOverBorder.ToString(), new SolidColorBrush(ColorFromHex("#FFA53289")));
-                    SetResource(ThemeResourceKey.ControlPressedBackground.ToString(), new SolidColorBrush(ColorFromHex("#FFF9F9F9")));
-                    SetResource(ThemeResourceKey.ControlPressedBorder.ToString(), new SolidColorBrush(ColorFromHex("#FF3A414D")));*/
-                    
+
                     //Control Specific
                     //Buttons
                     SetResource(ThemeResourceKey.ButtonPrimaryBackground.ToString(), new SolidColorBrush(ColorFromHex("#FF3D83C8")));
@@ -160,6 +151,11 @@ namespace GalaxyMerge.Client.Resources.Theming
                     //Check Box
                     SetResource(ThemeResourceKey.CheckBoxChecked.ToString(), new SolidColorBrush(ColorFromHex("#FF3D83C8")));
                     SetResource(ThemeResourceKey.GlyphForeground.ToString(), new SolidColorBrush(ColorFromHex("#FFF1F6FF")));
+                    
+                    //Items Controls
+                    SetResource(ThemeResourceKey.ListMouseOverBackground.ToString(), new SolidColorBrush(ColorFromHex("#FF0F1317")));
+                    SetResource(ThemeResourceKey.ListSelectedBackground.ToString(), new SolidColorBrush(ColorFromHex("#FF48A0F8")));
+                    SetResource(ThemeResourceKey.ListSelectedForeground.ToString(), new SolidColorBrush(ColorFromHex("#FFE3EAF8")));
                     break;
                 }
             }

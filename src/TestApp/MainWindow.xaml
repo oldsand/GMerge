@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ui="http://gmerge.com/ui/wpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="800" Width="1200"
+        Title="GMerge Test App" Height="800" Width="1200"
         Style="{DynamicResource ShellStyle}"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterOwner">
 
   <Grid Background="{ui:ThemeResource ResourceKey=PrimaryBackground}">
     <Grid.RowDefinitions>
@@ -80,8 +80,8 @@
               Content="Ternary"
               HorizontalAlignment="Left"
               Style="{StaticResource Style.Button.Ternary}"
-              IsEnabled="{Binding ElementName=EnabledInput, Path=IsChecked}"/>
-            
+              IsEnabled="{Binding ElementName=EnabledInput, Path=IsChecked}" />
+
             <CheckBox
               Margin="10"
               Height="30"
@@ -98,25 +98,95 @@
               Content="Yet Another Setting"
               IsEnabled="{Binding ElementName=EnabledInput, Path=IsChecked}" />
           </StackPanel>
-          
+
           <StackPanel Grid.Column="1">
-            <ComboBox Margin="10" >
-              <ComboBoxItem Content="Item1"/>
-              <ComboBoxItem Content="Item2"/>
-              <ComboBoxItem Content="Item3"/>
+            <ComboBox Margin="10"
+                      Height="30"
+                      IsEnabled="{Binding ElementName=EnabledInput, Path=IsChecked}"
+                      ui:TextBoxProperties.DefaultText="Select An Item">
+              <ComboBoxItem Content="Item1" />
+              <ComboBoxItem Content="Item2" />
+              <ComboBoxItem Content="Item3" />
+              <ComboBoxItem Content="Item3" />
+              <ComboBoxItem Content="Item3" />
+              <ComboBoxItem Content="Item3" />
+              <ComboBoxItem Content="Item3" />
+              <ComboBoxItem Content="Item3" />
+
             </ComboBox>
+            
             <TextBox Margin="10" ui:TextBoxProperties.DefaultText="First Name"
-                     IsEnabled="{Binding ElementName=EnabledInput, Path=IsChecked}" />
+                     IsEnabled="{Binding ElementName=EnabledInput, Path=IsChecked}"
+                     Height="30" />
             <TextBox Margin="10" ui:TextBoxProperties.DefaultText="Middle Name"
-                     IsEnabled="{Binding ElementName=EnabledInput, Path=IsChecked}" />
+                     IsEnabled="{Binding ElementName=EnabledInput, Path=IsChecked}"
+                     Height="30" />
             <TextBox Margin="10" ui:TextBoxProperties.DefaultText="Last Name"
-                     IsEnabled="{Binding ElementName=EnabledInput, Path=IsChecked}"/>
+                     IsEnabled="{Binding ElementName=EnabledInput, Path=IsChecked}"
+                     Height="30" />
+
+            <!--<ToggleButton x:Name="Button"
+                          Height="20"
+                          Width="100">
+              <Grid>
+                <TextBlock Text="Test Popup" />
+                <Popup
+                  Margin="20"
+                  AllowsTransparency="true"
+                  IsOpen="{Binding ElementName=Button, Path=IsChecked}"
+                  Placement="Bottom"
+                  PopupAnimation="Scroll"
+                  VerticalOffset="10">
+                  <Grid>
+                    <Border
+                        Width="400"
+                        Height="400"
+                        BorderThickness="1"
+                        BorderBrush="Black"
+                        Background="Transparent"
+                        CornerRadius="2">
+                        <Border.Effect>
+                          <DropShadowEffect BlurRadius="8"
+                                            Opacity="0.5"
+                                            Direction="-90"
+                                            ShadowDepth="2" />
+                        </Border.Effect>
+                      </Border>
+                    <Border Width="400"
+                            Height="400"
+                            Margin="10"
+                            Background="WhiteSmoke"
+                            CornerRadius="2"
+                            BorderThickness="1"
+                            BorderBrush="WhiteSmoke">
+                      <TextBlock Text="This is the popup" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                    </Border>
+                  </Grid>
+
+                </Popup>
+              </Grid>
+
+
+            </ToggleButton>-->
+            
+            <ContentControl Style="{StaticResource Style.ContentControl.Shadow}">
+              <Border BorderBrush="LightSteelBlue" BorderThickness="1"
+                      Background="Cornsilk"
+                      Margin="10"
+                      Height="30" >
+                <TextBlock Text="This is a test"  HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>  
+              </Border>
+            </ContentControl>
+            
           </StackPanel>
         </Grid>
 
       </TabItem>
       <TabItem Height="30" Width="80" Header="Lists" />
       <TabItem Height="30" Width="80" Header="DataGrid" />
+
+
     </TabControl>
   </Grid>
 </Window>

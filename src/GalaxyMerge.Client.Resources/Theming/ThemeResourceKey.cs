@@ -24,11 +24,7 @@
         ControlDisabledOpacity,
         ControlFocusBorder,
         ControlHighlightBackground,
-        ControlMouseOverBackground,
-        ControlMouseOverBorder,
-        ControlPressedBackground,
-        ControlPressedBorder,
-        
+
         ButtonPrimaryBackground,
         ButtonPrimaryForeground,
         ButtonPrimaryPressedBackground,
@@ -58,6 +54,7 @@
         GroupBoxHeaderForeground,
         
         ListMouseOverBackground,
+        ListMouseOverForeground,
         ListMouseOverBorder,
         ListSelectedBackground,
         ListSelectedBorder,
