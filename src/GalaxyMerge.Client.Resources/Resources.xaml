@@ -3,17 +3,18 @@
                     xmlns:t="clr-namespace:GalaxyMerge.Client.Resources.Theming">
   <ResourceDictionary.MergedDictionaries>
     <t:ThemeResourceDictionary />
+    <!--General-->
+    <ResourceDictionary Source="Styles/ContentControlStyles.xaml" />
+    <ResourceDictionary Source="Styles/ScrollBarStyles.xaml" />
+    <ResourceDictionary Source="Styles/ScrollViewerStyles.xaml" />
+    <ResourceDictionary Source="Styles/FontStyles.xaml" />
     <!--Icons-->
     <ResourceDictionary Source="Icons/StandardIcons.xaml" />
     <ResourceDictionary Source="Icons/WindowIcons.xaml" />
     <ResourceDictionary Source="Icons/GalaxyIcons.xaml" />
     <!--Controls-->
     <ResourceDictionary Source="Styles/IconStyles.xaml" />
-    <!--Other-->
-    <ResourceDictionary Source="Styles/ContentControlStyles.xaml" />
-    <ResourceDictionary Source="Styles/FontStyles.xaml" />
     <!--Windows-->
-    <ResourceDictionary Source="Styles/LabelStyles.xaml" />
     <ResourceDictionary Source="Styles/ButtonStyles.xaml" />
     <ResourceDictionary Source="Styles/CheckBoxStyles.xaml" />
     <ResourceDictionary Source="Styles/ComboBoxStyles.xaml" />

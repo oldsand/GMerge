@@ -47,8 +47,8 @@
         <Reference Include="PresentationFramework" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="AttachedProperties\BrushProperties.cs" />
         <Compile Include="AttachedProperties\ButtonProperties.cs" />
+        <Compile Include="AttachedProperties\TabControlProperties.cs" />
         <Compile Include="AttachedProperties\TextBoxProperties.cs" />
         <Compile Include="Behaviors\BehaviorsCollection.cs" />
         <Compile Include="Behaviors\CloseTabAction.cs" />

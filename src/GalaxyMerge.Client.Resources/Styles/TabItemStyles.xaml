@@ -2,13 +2,13 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:t="clr-namespace:GalaxyMerge.Client.Resources.Theming">
 
-  <ControlTemplate x:Key="TabItemTemplate.SelectedBorder" TargetType="{x:Type TabItem}">
+  <ControlTemplate x:Key="Template.TabItem.SelectedBorder" TargetType="{x:Type TabItem}">
     <Grid x:Name="templateRoot" SnapsToDevicePixels="true">
       <Border
         x:Name="border"
         Background="{TemplateBinding Background}"
         BorderBrush="{TemplateBinding BorderBrush}"
-        BorderThickness="0">
+        BorderThickness="{TemplateBinding BorderThickness}">
         <ContentPresenter
           x:Name="contentPresenter"
           Margin="{TemplateBinding Padding}"
@@ -21,21 +21,20 @@
           SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
       </Border>
       <Border x:Name="SelectedBorder"
-              BorderBrush="{t:ThemeResource ResourceKey=TabItemSelectedForeground}"
+              BorderBrush="{t:ThemeResource ResourceKey=ControlFocusBorder}"
               Margin="-1"
               Visibility="Collapsed" />
     </Grid>
     <ControlTemplate.Triggers>
+      <Trigger Property="IsEnabled" Value="False">
+        <Setter Property="Opacity" Value="{t:ThemeResource ResourceKey=ControlDisabledOpacity}" />
+      </Trigger>
       <Trigger SourceName="border" Property="IsMouseOver" Value="True">
-        <Setter TargetName="border" Property="Background"
-                Value="{t:ThemeResource ResourceKey=TabItemMouseOverBackground}" />
+        <Setter Property="Background" Value="{t:ThemeResource ResourceKey=ControlMouseOverBackground}" />
       </Trigger>
       <Trigger Property="IsSelected" Value="True">
         <Setter TargetName="SelectedBorder" Property="Visibility" Value="Visible" />
-        <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=TabItemSelectedForeground}" />
-      </Trigger>
-      <Trigger Property="IsEnabled" Value="false">
-        <Setter Property="Opacity" Value="{t:ThemeResource ResourceKey=ControlDisabledOpacity}" />
+        <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=ControlForeground}" />
       </Trigger>
       <Trigger Property="TabStripPlacement" Value="Bottom">
         <Setter TargetName="SelectedBorder" Property="BorderThickness" Value="0 3 0 0" />
@@ -52,18 +51,16 @@
     </ControlTemplate.Triggers>
   </ControlTemplate>
 
-  <Style x:Key="TabItemStyle.SelectedBorder" TargetType="{x:Type TabItem}">
-    <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=PrimaryForeground}" />
-    <Setter Property="Background" Value="Transparent" />
-    <Setter Property="Margin" Value="0" />
+  <Style x:Key="Style.TabItem.SelectedBorder" TargetType="{x:Type TabItem}">
+    <Setter Property="Background" Value="{t:ThemeResource ResourceKey=PrimaryBackground}" />
+    <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=ControlDefaultForeground}" />
     <Setter Property="BorderThickness" Value="0" />
     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
     <Setter Property="VerticalContentAlignment" Value="Stretch" />
     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-    <Setter Property="Template" Value="{StaticResource TabItemTemplate.SelectedBorder}" />
+    <Setter Property="Template" Value="{StaticResource Template.TabItem.SelectedBorder}" />
   </Style>
-
-  <Style BasedOn="{StaticResource TabItemStyle.SelectedBorder}" TargetType="{x:Type TabItem}" />
+  <Style BasedOn="{StaticResource Style.TabItem.SelectedBorder}" TargetType="{x:Type TabItem}" />
 
   <ControlTemplate x:Key="TabItemTemplate.SelectedBackground" TargetType="{x:Type TabItem}">
     <Grid x:Name="templateRoot" SnapsToDevicePixels="true">
@@ -107,7 +104,7 @@
   </ControlTemplate>
 
   <Style x:Key="TabItemStyle.SelectedBackground" TargetType="{x:Type TabItem}">
-    <Setter Property="Foreground" Value="#4C5767" />
+    <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=ControlDefaultForeground}" />
     <Setter Property="Background" Value="{t:ThemeResource ResourceKey=PrimaryBackground}" />
     <Setter Property="Margin" Value="0" />
     <Setter Property="Padding" Value="0" />

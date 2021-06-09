@@ -4,7 +4,7 @@
                     xmlns:ui="http://gmerge.com/ui/wpf">
 
   <ControlTemplate x:Key="Template.Button" TargetType="{x:Type Button}">
-    <Grid SnapsToDevicePixels="true">
+    <Grid SnapsToDevicePixels="True">
       <Border x:Name="MainBorder"
               Background="{TemplateBinding Background}"
               BorderBrush="{TemplateBinding BorderBrush}"
@@ -20,19 +20,7 @@
       </Border>
     </Grid>
     <ControlTemplate.Triggers>
-      <Trigger Property="IsMouseOver" Value="true">
-        <Setter Property="Background" TargetName="MainBorder" 
-                Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(ui:BrushProperties.MouseOverBackgroundBrush)}" />
-        <Setter Property="BorderBrush" TargetName="MainBorder" 
-                Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(ui:BrushProperties.MouseOverBorderBrush)}" />
-      </Trigger>
-      <Trigger Property="IsPressed" Value="true">
-        <Setter Property="Background" TargetName="MainBorder" 
-                Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(ui:BrushProperties.PressedBackgroundBrush)}" />
-        <Setter Property="BorderBrush" TargetName="MainBorder" 
-                Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(ui:BrushProperties.PressedBorderBrush)}" />
-      </Trigger>
-      <Trigger Property="IsEnabled" Value="false">
+      <Trigger Property="IsEnabled" Value="False">
         <Setter Property="Opacity" Value="{t:ThemeResource ResourceKey=ControlDisabledOpacity}" />
       </Trigger>
     </ControlTemplate.Triggers>
@@ -40,18 +28,19 @@
 
   <Style x:Key="Style.Button.Primary" TargetType="{x:Type Button}">
     <Style.Triggers>
+      <Trigger Property="IsMouseOver" Value="true">
+        <Setter Property="Background" Value="{t:ThemeResource ResourceKey=ButtonPrimaryActiveBackground}"/>
+      </Trigger>
       <Trigger Property="IsPressed" Value="true">
-        <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=ButtonPrimaryPressedForeground}"/>
-        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Background" Value="{t:ThemeResource ResourceKey=ButtonPrimaryActiveBackground}" />
+        <Setter Property="BorderThickness" Value="2" />
       </Trigger>
     </Style.Triggers>
     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
     <Setter Property="FontWeight" Value="SemiBold" />
     <Setter Property="Background" Value="{t:ThemeResource ResourceKey=ButtonPrimaryBackground}" />
     <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=ButtonPrimaryForeground}" />
-    <Setter Property="ui:BrushProperties.MouseOverBackgroundBrush" Value="{t:ThemeResource ResourceKey=ButtonPrimaryMouseOverBackground}" />
-    <Setter Property="ui:BrushProperties.PressedBackgroundBrush" Value="{t:ThemeResource ResourceKey=ButtonPrimaryPressedBackground}" />
-    <Setter Property="ui:BrushProperties.PressedBorderBrush" Value="{t:ThemeResource ResourceKey=ButtonPrimaryPressedBorder}" />
+    <Setter Property="BorderBrush" Value="{t:ThemeResource ResourceKey=ButtonPrimaryBorder}" />
     <Setter Property="BorderThickness" Value="0" />
     <Setter Property="HorizontalContentAlignment" Value="Center" />
     <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -66,17 +55,19 @@
 
   <Style x:Key="Style.Button.Secondary" TargetType="{x:Type Button}">
     <Style.Triggers>
+      <Trigger Property="IsMouseOver" Value="true">
+        <Setter Property="Background" Value="{t:ThemeResource ResourceKey=ButtonSecondaryActiveBackground}"/>
+      </Trigger>
       <Trigger Property="IsPressed" Value="true">
-        <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=ButtonSecondaryPressedForeground}"/>
+        <Setter Property="Background" Value="{t:ThemeResource ResourceKey=ButtonSecondaryActiveBackground}" />
+        <Setter Property="BorderThickness" Value="2" />
       </Trigger>
     </Style.Triggers>
     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
     <Setter Property="FontWeight" Value="SemiBold" />
     <Setter Property="Background" Value="{t:ThemeResource ResourceKey=ButtonSecondaryBackground}" />
     <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=ButtonSecondaryForeground}" />
-    <Setter Property="ui:BrushProperties.MouseOverBackgroundBrush" Value="{t:ThemeResource ResourceKey=ButtonSecondaryMouseOverBackground}" />
-    <Setter Property="ui:BrushProperties.PressedBackgroundBrush" Value="{t:ThemeResource ResourceKey=ButtonSecondaryPressedBackground}" />
-    <Setter Property="ui:BrushProperties.PressedBorderBrush" Value="{t:ThemeResource ResourceKey=ButtonSecondaryPressedBorder}" />
+    <Setter Property="BorderBrush" Value="{t:ThemeResource ResourceKey=ButtonSecondaryBorder}" />
     <Setter Property="BorderThickness" Value="0" />
     <Setter Property="HorizontalContentAlignment" Value="Center" />
     <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -90,17 +81,19 @@
 
   <Style x:Key="Style.Button.Ternary" TargetType="{x:Type Button}">
     <Style.Triggers>
+      <Trigger Property="IsMouseOver" Value="true">
+        <Setter Property="Background" Value="{t:ThemeResource ResourceKey=ButtonTernaryActiveBackground}"/>
+      </Trigger>
       <Trigger Property="IsPressed" Value="true">
-        <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=ButtonTernaryPressedForeground}"/>
+        <Setter Property="Background" Value="{t:ThemeResource ResourceKey=ButtonTernaryActiveBackground}" />
+        <Setter Property="BorderThickness" Value="2" />
       </Trigger>
     </Style.Triggers>
     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
     <Setter Property="FontWeight" Value="SemiBold" />
     <Setter Property="Background" Value="{t:ThemeResource ResourceKey=ButtonTernaryBackground}" />
     <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=ButtonTernaryForeground}" />
-    <Setter Property="ui:BrushProperties.MouseOverBackgroundBrush" Value="{t:ThemeResource ResourceKey=ButtonTernaryMouseOverBackground}" />
-    <Setter Property="ui:BrushProperties.PressedBackgroundBrush" Value="{t:ThemeResource ResourceKey=ButtonTernaryPressedBackground}" />
-    <Setter Property="ui:BrushProperties.PressedBorderBrush" Value="{t:ThemeResource ResourceKey=ButtonTernaryPressedBorder}" />
+    <Setter Property="BorderBrush" Value="{t:ThemeResource ResourceKey=ButtonTernaryBorder}" />
     <Setter Property="BorderThickness" Value="0" />
     <Setter Property="HorizontalContentAlignment" Value="Center" />
     <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -113,12 +106,19 @@
   </Style>
 
   <Style x:Key="Style.Button.Transparent" TargetType="{x:Type Button}">
+    <Style.Triggers>
+      <Trigger Property="IsMouseOver" Value="true">
+        <Setter Property="Background" Value="{t:ThemeResource ResourceKey=ButtonTransparentActiveBackground}"/>
+      </Trigger>
+      <Trigger Property="IsPressed" Value="true">
+        <Setter Property="Background" Value="{t:ThemeResource ResourceKey=ButtonTransparentActiveBackground}" />
+        <Setter Property="BorderThickness" Value="2" />
+      </Trigger>
+    </Style.Triggers>
     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
     <Setter Property="Background" Value="Transparent" />
     <Setter Property="Foreground" Value="Transparent"/>
-    <Setter Property="ui:BrushProperties.MouseOverBackgroundBrush" Value="{t:ThemeResource ResourceKey=ButtonTransparentMouseOverBackground}" />
-    <Setter Property="ui:BrushProperties.PressedBackgroundBrush" Value="{t:ThemeResource ResourceKey=ButtonTransparentPressedBackground}" />
-    <Setter Property="ui:BrushProperties.PressedBorderBrush" Value="{t:ThemeResource ResourceKey=ButtonTransparentPressedBorder}" />
+    <Setter Property="BorderBrush" Value="{t:ThemeResource ResourceKey=ButtonTransparentBorder}" />
     <Setter Property="BorderThickness" Value="0" />
     <Setter Property="HorizontalContentAlignment" Value="Center" />
     <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -131,6 +131,11 @@
   </Style>
   
   <Style x:Key="Style.Button.Window.Standard" TargetType="{x:Type Button}">
+    <Style.Triggers>
+      <Trigger Property="IsMouseOver" Value="true">
+        <Setter Property="Background" Value="{t:ThemeResource ResourceKey=WindowControlMouseOverBackgroundStandard}"/>
+      </Trigger>
+    </Style.Triggers>
     <Setter Property="UseLayoutRounding" Value="True" />
     <Setter Property="SnapsToDevicePixels" Value="True" />
     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
@@ -139,7 +144,6 @@
     <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
     <Setter Property="Background" Value="{t:ThemeResource ResourceKey=WindowHeaderBackground}" />
     <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=WindowHeaderForeground}" />
-    <Setter Property="ui:BrushProperties.MouseOverBackgroundBrush" Value="{t:ThemeResource ResourceKey=WindowControlMouseOverBackgroundStandard}" />
     <Setter Property="HorizontalContentAlignment" Value="Center" />
     <Setter Property="VerticalContentAlignment" Value="Center" />
     <Setter Property="BorderThickness" Value="0" />
@@ -152,6 +156,7 @@
   <Style x:Key="Style.Button.Window.Close" TargetType="{x:Type Button}">
     <Style.Triggers>
       <Trigger Property="IsMouseOver" Value="True">
+        <Setter Property="Background" Value="{t:ThemeResource ResourceKey=WindowControlMouseOverBackgroundClose}"/>
         <Setter Property="Foreground" Value="White" />
       </Trigger>
     </Style.Triggers>
@@ -163,7 +168,6 @@
     <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
     <Setter Property="Background" Value="{t:ThemeResource ResourceKey=WindowHeaderBackground}" />
     <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=WindowHeaderForeground}" />
-    <Setter Property="ui:BrushProperties.MouseOverBackgroundBrush" Value="{t:ThemeResource ResourceKey=WindowControlMouseOverBackgroundClose}" />
     <Setter Property="HorizontalContentAlignment" Value="Center" />
     <Setter Property="VerticalContentAlignment" Value="Center" />
     <Setter Property="BorderThickness" Value="0" />

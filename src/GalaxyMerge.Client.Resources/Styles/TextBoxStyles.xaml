@@ -40,7 +40,6 @@
       </Trigger>
       <Trigger Property="IsKeyboardFocused" Value="true">
         <Setter TargetName="FocusBorder" Property="Visibility" Value="Visible" />
-        <Setter TargetName="TextBoxBorder" Property="Background" Value="{t:ThemeResource ResourceKey=PrimaryBackground}" />
       </Trigger>
       <Trigger Property="Text" Value="">
         <Setter TargetName="DefaultText" Property="Visibility" Value="Visible"/>
@@ -51,19 +50,18 @@
           <Condition Property="Text" Value=""/>
           <Condition Property="IsKeyboardFocusWithin" Value="False"/>
         </MultiTrigger.Conditions>
-        <Setter TargetName="TextBoxBorder" Property="Background" Value="{t:ThemeResource ResourceKey=ControlBackground}" />
         <Setter TargetName="TextBoxBorder" Property="BorderThickness" Value="0" />
       </MultiTrigger>
     </ControlTemplate.Triggers>
   </ControlTemplate>
 
   <Style x:Key="Style.TextBox" TargetType="{x:Type TextBox}">
-    <Setter Property="Background" Value="{t:ThemeResource ResourceKey=PrimaryBackground}" />
-    <Setter Property="BorderBrush" Value="{t:ThemeResource ResourceKey=ControlBorder}" />
+    <Setter Property="Background" Value="{t:ThemeResource ResourceKey=ControlBackground}" />
     <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=ControlForeground}" />
+    <Setter Property="BorderBrush" Value="{t:ThemeResource ResourceKey=ControlBorder}" />
     <Setter Property="SelectionBrush" Value="{t:ThemeResource ResourceKey=ControlHighlightBackground}" />
     <Setter Property="CaretBrush" Value="{t:ThemeResource ResourceKey=ControlBorder}" />
-    <Setter Property="Height" Value="24" />
+    <Setter Property="Height" Value="26" />
     <Setter Property="KeyboardNavigation.TabNavigation" Value="None" />
     <Setter Property="HorizontalContentAlignment" Value="Left" />
     <Setter Property="VerticalContentAlignment" Value="Center" />

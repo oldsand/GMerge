@@ -187,8 +187,7 @@
 
         <TextBlock Grid.Row="0"
                    VerticalAlignment="Center"
-                   Text="Input the following information:"
-                   Style="{StaticResource Text.Rubik}" />
+                   Text="Input the following information:"/>
 
         <Grid Grid.Row="1">
           <Grid.RowDefinitions>
@@ -237,8 +236,7 @@
 
         <TextBlock Grid.Row="0"
                    VerticalAlignment="Center"
-                   Text="Input the following information:"
-                   Style="{StaticResource Text.Rubik}" />
+                   Text="Input the following information:"/>
 
         <Grid Grid.Row="1">
           <Grid.RowDefinitions>
@@ -278,8 +276,7 @@
 
         <TextBlock Grid.Row="0"
                    VerticalAlignment="Center"
-                   Text="Input the following information:"
-                   Style="{StaticResource Text.Rubik}" />
+                   Text="Input the following information:"/>
 
         <Grid Grid.Row="1">
           <Grid.RowDefinitions>

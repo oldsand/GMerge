@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:t="clr-namespace:GalaxyMerge.Client.Resources.Theming">
 
-  <ControlTemplate x:Key="ToolTipTemplate" TargetType="ToolTip">
+  <ControlTemplate x:Key="Template.ToolTip" TargetType="ToolTip">
     <Border Name="Border"
             Background="{TemplateBinding Background}"
             BorderThickness="{TemplateBinding BorderThickness}"
@@ -21,7 +21,7 @@
     </ControlTemplate.Triggers>
   </ControlTemplate>
 
-  <Style x:Key="ToolTipStyle" TargetType="ToolTip">
+  <Style x:Key="Style.ToolTip" TargetType="ToolTip">
     <Setter Property="OverridesDefaultStyle" Value="true" />
     <Setter Property="HasDropShadow" Value="True" />
     <Setter Property="Margin" Value="7" />
@@ -29,8 +29,8 @@
     <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=PrimaryForeground}" />
     <Setter Property="BorderBrush" Value="{t:ThemeResource ResourceKey=PrimaryBorder}" />
     <Setter Property="BorderThickness" Value="2" />
-    <Setter Property="Template" Value="{StaticResource ToolTipTemplate}" />
+    <Setter Property="Template" Value="{StaticResource Template.ToolTip}" />
   </Style>
   
-  <Style TargetType="{x:Type ToolTip}" BasedOn="{StaticResource ToolTipStyle}" />
+  <Style TargetType="{x:Type ToolTip}" BasedOn="{StaticResource Style.ToolTip}" />
 </ResourceDictionary>

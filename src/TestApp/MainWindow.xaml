@@ -46,8 +46,10 @@
     </Border>
 
 
-    <TabControl Grid.Row="1" BorderThickness="0 1 0 0"
-                TabStripPlacement="Top">
+    <TabControl Grid.Row="1" 
+                BorderThickness="0 1 0 0"
+                TabStripPlacement="Top"
+                ui:TabControlProperties.HeaderPadding="20 0 0 0">
       <TabItem Height="30" Width="80" Header="Controls">
         <Grid Margin="20">
           <Grid.ColumnDefinitions>
@@ -112,7 +114,19 @@
               <ComboBoxItem Content="Item3" />
               <ComboBoxItem Content="Item3" />
               <ComboBoxItem Content="Item3" />
-
+              <ComboBoxItem Content="Item1" />
+              <ComboBoxItem Content="Item2" />
+              <ComboBoxItem Content="Item3" />
+              <ComboBoxItem Content="Item3" />
+              <ComboBoxItem Content="Item3" />
+              <ComboBoxItem Content="Item3" />
+              <ComboBoxItem Content="Item3" />
+              <ComboBoxItem Content="Item3" />
+              <ComboBoxItem Content="Item3" />
+              <ComboBoxItem Content="Item3" />
+              <ComboBoxItem Content="Item3" />
+              <ComboBoxItem Content="Item1" />
+              <ComboBoxItem Content="Item2" />
             </ComboBox>
             
             <TextBox Margin="10" ui:TextBoxProperties.DefaultText="First Name"
@@ -124,60 +138,6 @@
             <TextBox Margin="10" ui:TextBoxProperties.DefaultText="Last Name"
                      IsEnabled="{Binding ElementName=EnabledInput, Path=IsChecked}"
                      Height="30" />
-
-            <!--<ToggleButton x:Name="Button"
-                          Height="20"
-                          Width="100">
-              <Grid>
-                <TextBlock Text="Test Popup" />
-                <Popup
-                  Margin="20"
-                  AllowsTransparency="true"
-                  IsOpen="{Binding ElementName=Button, Path=IsChecked}"
-                  Placement="Bottom"
-                  PopupAnimation="Scroll"
-                  VerticalOffset="10">
-                  <Grid>
-                    <Border
-                        Width="400"
-                        Height="400"
-                        BorderThickness="1"
-                        BorderBrush="Black"
-                        Background="Transparent"
-                        CornerRadius="2">
-                        <Border.Effect>
-                          <DropShadowEffect BlurRadius="8"
-                                            Opacity="0.5"
-                                            Direction="-90"
-                                            ShadowDepth="2" />
-                        </Border.Effect>
-                      </Border>
-                    <Border Width="400"
-                            Height="400"
-                            Margin="10"
-                            Background="WhiteSmoke"
-                            CornerRadius="2"
-                            BorderThickness="1"
-                            BorderBrush="WhiteSmoke">
-                      <TextBlock Text="This is the popup" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                    </Border>
-                  </Grid>
-
-                </Popup>
-              </Grid>
-
-
-            </ToggleButton>-->
-            
-            <ContentControl Style="{StaticResource Style.ContentControl.Shadow}">
-              <Border BorderBrush="LightSteelBlue" BorderThickness="1"
-                      Background="Cornsilk"
-                      Margin="10"
-                      Height="30" >
-                <TextBlock Text="This is a test"  HorizontalAlignment="Center"
-                           VerticalAlignment="Center"/>  
-              </Border>
-            </ContentControl>
             
           </StackPanel>
         </Grid>
@@ -185,7 +145,6 @@
       </TabItem>
       <TabItem Height="30" Width="80" Header="Lists" />
       <TabItem Height="30" Width="80" Header="DataGrid" />
-
 
     </TabControl>
   </Grid>

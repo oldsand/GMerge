@@ -4,7 +4,7 @@
                     xmlns:controls="clr-namespace:GalaxyMerge.Client.Resources.Controls"
                     xmlns:ui="http://gmerge.com/ui/wpf">
 
-  <ControlTemplate x:Key="ComboBoxItemTemplate" TargetType="{x:Type ComboBoxItem}">
+  <ControlTemplate x:Key="Template.ComboBoxItem" TargetType="{x:Type ComboBoxItem}">
     <Grid>
       <Border x:Name="Bd"
               Padding="{TemplateBinding Padding}"
@@ -25,15 +25,15 @@
         <Setter Property="Opacity" Value="{t:ThemeResource ResourceKey=ControlDisabledOpacity}" />
       </Trigger>
       <Trigger Property="IsSelected" Value="true">
-        <Setter TargetName="Bd" Property="Background" Value="{t:ThemeResource ResourceKey=ListSelectedBackground}" />
-        <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=ListSelectedForeground}" />
+        <Setter Property="Background" Value="{t:ThemeResource ResourceKey=ControlSelectedBackground}" />
+        <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=ControlSelectedForeground}" />
       </Trigger>
       <MultiTrigger>
         <MultiTrigger.Conditions>
           <Condition Property="IsSelected" Value="False" />
           <Condition Property="IsMouseOver" Value="True" />
         </MultiTrigger.Conditions>
-        <Setter TargetName="Bd" Property="Background" Value="{t:ThemeResource ResourceKey=ListMouseOverBackground}" />
+        <Setter Property="Background" Value="{t:ThemeResource ResourceKey=ControlMouseOverBackground}" />
         <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=ControlForeground}" />
       </MultiTrigger>
       <MultiTrigger>
@@ -42,13 +42,13 @@
           <Condition Property="IsMouseOver" Value="False" />
           <Condition Property="IsKeyboardFocused" Value="True" />
         </MultiTrigger.Conditions>
-        <Setter TargetName="Bd" Property="Background" Value="{t:ThemeResource ResourceKey=ListMouseOverBackground}" />
+        <Setter Property="Background" Value="{t:ThemeResource ResourceKey=ControlMouseOverBackground}" />
         <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=ControlForeground}" />
       </MultiTrigger>
     </ControlTemplate.Triggers>
   </ControlTemplate>
 
-  <Style x:Key="ComboBoxItemStyle" TargetType="{x:Type ComboBoxItem}">
+  <Style x:Key="Style.ComboBoxItem" TargetType="{x:Type ComboBoxItem}">
     <Setter Property="SnapsToDevicePixels" Value="True" />
     <Setter Property="Padding" Value="4,1" />
     <Setter Property="HorizontalContentAlignment"
@@ -59,9 +59,9 @@
     <Setter Property="BorderBrush" Value="Transparent" />
     <Setter Property="BorderThickness" Value="1" />
     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-    <Setter Property="Template" Value="{StaticResource ComboBoxItemTemplate}" />
+    <Setter Property="Template" Value="{StaticResource Template.ComboBoxItem}" />
   </Style>
-  <Style BasedOn="{StaticResource ComboBoxItemStyle}" TargetType="{x:Type ComboBoxItem}" />
+  <Style BasedOn="{StaticResource Style.ComboBoxItem}" TargetType="{x:Type ComboBoxItem}" />
 
   <ControlTemplate x:Key="Template.ComboBox.ToggleButton" TargetType="{x:Type ToggleButton}">
     <Border x:Name="templateRoot"
@@ -203,7 +203,6 @@
       </Trigger>
       <Trigger Property="SelectedItem" Value="{x:Null}">
         <Setter TargetName="DefaultText" Property="Visibility" Value="Visible" />
-        <Setter Property="Background" Value="{t:ThemeResource ResourceKey=ControlBackground}" />
         <Setter Property="BorderThickness" Value="0" />
       </Trigger>
       <Trigger Property="IsKeyboardFocused" Value="true">
@@ -240,7 +239,7 @@
     </Setter>
   </Style>
 
-  <ControlTemplate x:Key="ComboBoxEditableTemplate" TargetType="{x:Type ComboBox}">
+  <ControlTemplate x:Key="Template.ComboBox.Editable" TargetType="{x:Type ComboBox}">
     <Grid x:Name="templateRoot"
           SnapsToDevicePixels="true">
       <Grid.ColumnDefinitions>
@@ -337,11 +336,11 @@
     </ControlTemplate.Triggers>
   </ControlTemplate>
 
-  <Style x:Key="ComboBoxStyle" TargetType="{x:Type ComboBox}">
+  <Style x:Key="Style.ComboBox" TargetType="{x:Type ComboBox}">
     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-    <Setter Property="Background" Value="{t:ThemeResource ResourceKey=PrimaryBackground}" />
-    <Setter Property="BorderBrush" Value="{t:ThemeResource ResourceKey=ControlBorder}" />
+    <Setter Property="Background" Value="{t:ThemeResource ResourceKey=ControlBackground}" />
     <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=ControlForeground}" />
+    <Setter Property="BorderBrush" Value="{t:ThemeResource ResourceKey=ControlBorder}" />
     <Setter Property="BorderThickness" Value="1" />
     <Setter Property="ui:ButtonProperties.CornerRadius" Value="2" />
     <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -356,9 +355,9 @@
       <Trigger Property="IsEditable" Value="true">
         <Setter Property="IsTabStop" Value="false" />
         <Setter Property="Padding" Value="2" />
-        <Setter Property="Template" Value="{StaticResource ComboBoxEditableTemplate}" />
+        <Setter Property="Template" Value="{StaticResource Template.ComboBox.Editable}" />
       </Trigger>
     </Style.Triggers>
   </Style>
-  <Style BasedOn="{StaticResource ComboBoxStyle}" TargetType="{x:Type ComboBox}" />
+  <Style BasedOn="{StaticResource Style.ComboBox}" TargetType="{x:Type ComboBox}" />
 </ResourceDictionary>

@@ -59,9 +59,6 @@
         <Compile Include="Styles\DialogStyles.xaml.cs">
           <DependentUpon>DialogStyles.xaml</DependentUpon>
         </Compile>
-        <Compile Include="Styles\Temp.xaml.cs">
-          <DependentUpon>Temp.xaml</DependentUpon>
-        </Compile>
         <Compile Include="Styles\WindowStyles.xaml.cs">
           <DependentUpon>WindowStyles.xaml</DependentUpon>
         </Compile>
@@ -90,17 +87,14 @@
       <Page Include="Styles\FontStyles.xaml" />
       <Page Include="Styles\GroupBoxStyles.xaml" />
       <Page Include="Styles\IconStyles.xaml" />
-      <Page Include="Styles\LabelStyles.xaml" />
       <Page Include="Styles\ListBoxItemStyles.xaml" />
       <Page Include="Styles\ListBoxStyles.xaml" />
       <Page Include="Styles\ListViewItemStyles.xaml" />
       <Page Include="Styles\ListViewStyles.xaml" />
+      <Page Include="Styles\ScrollBarStyles.xaml" />
+      <Page Include="Styles\ScrollViewerStyles.xaml" />
       <Page Include="Styles\TabControlStyles.xaml" />
       <Page Include="Styles\TabItemStyles.xaml" />
-      <Page Include="Styles\Temp.xaml">
-        <SubType>Designer</SubType>
-        <Generator>MSBuild:Compile</Generator>
-      </Page>
       <Page Include="Styles\TextBoxStyles.xaml" />
       <Page Include="Styles\ToolTipStyles.xaml" />
       <Page Include="Styles\TreeViewItemStyles.xaml" />
