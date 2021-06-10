@@ -1,3 +1,4 @@
+using System;
 using GalaxyMerge.Client.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -10,7 +11,8 @@ namespace GalaxyMerge.Client.Data.Configurations
         {
             builder.ToTable("Resource").HasKey(x => x.ResourceId);
             builder.Property(x => x.ResourceName).IsRequired();
-            builder.Property(x => x.ResourceType).IsRequired();
+            builder.Property(x => x.ResourceType).IsRequired()
+                .HasConversion(x => x.ToString(), x => (ResourceType) Enum.Parse(typeof(ResourceType), x));
         }
     }
 }

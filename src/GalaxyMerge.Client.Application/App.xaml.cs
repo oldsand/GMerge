@@ -3,6 +3,7 @@ using GalaxyMerge.Client.Application.Configurations;
 using GalaxyMerge.Client.Application.Views;
 using GalaxyMerge.Client.Core.Prism;
 using GalaxyMerge.Client.Dialogs;
+using NLog;
 using Prism.Ioc;
 using Prism.Modularity;
 using Prism.Regions;
@@ -11,9 +12,12 @@ namespace GalaxyMerge.Client.Application
 {
     public partial class App
     {
+        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+        
         protected override Window CreateShell()
         {
-            //LoggerConfiguration.Apply();
+            LoggerConfiguration.Apply();
+            Logger.Debug("Log Configuration Applied - Creating new Application Shell");
             return Container.Resolve<Shell>();
         }
 

@@ -32,7 +32,7 @@
             
             <Button Grid.Column="0" Margin="10,0"
                     Width="60" Height="26"
-                    Command="{Binding AddResourceCommand}">
+                    Command="{Binding NewResourceCommand}">
                 <StackPanel Orientation="Horizontal">
                     <ui:Icon Template="{DynamicResource Icon.Add}"
                              Foreground="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}" 

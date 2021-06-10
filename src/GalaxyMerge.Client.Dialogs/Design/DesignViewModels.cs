@@ -4,6 +4,6 @@ namespace GalaxyMerge.Client.Dialogs.Design
 {
     public class DesignViewModels
     {
-        public static AddResourceViewModel AddResourceViewModel => new();
+        public static NewResourceViewModel NewResourceViewModel => new();
     }
 }

@@ -2,12 +2,14 @@ using System;
 using GalaxyMerge.Client.Core.Mvvm;
 using GalaxyMerge.Client.Data.Abstractions;
 using GalaxyMerge.Client.Data.Entities;
+using NLog;
 using Prism.Commands;
 
 namespace GalaxyMerge.Client.Dialogs.ViewModels
 {
-    public class AddResourceViewModel : DialogViewModelBase
+    public class NewResourceViewModel : DialogViewModelBase
     {
+        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
         private readonly IResourceRepository _resourceRepository;
         private int _selectedResourceIndex;
         private string _resourceName;
@@ -22,18 +24,26 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
         private bool _showArchiveResource;
         private bool _showFileResource;
 
-
-        public AddResourceViewModel()
+        public NewResourceViewModel()
         {
             _currentStep = 0;
             ProcessCurrentStep(_currentStep);
         }
 
-        public AddResourceViewModel(IResourceRepository resourceRepository)
+        public NewResourceViewModel(IResourceRepository resourceRepository)
         {
+            if (resourceRepository == null)
+                throw new ArgumentNullException();
+            
+            Logger.Trace("Initializing New Resource Dialog");
             _resourceRepository = resourceRepository;
             _currentStep = 0;
             ProcessCurrentStep(_currentStep);
+        }
+
+        public override void OnDialogClosed()
+        {
+            _resourceRepository.Dispose();
         }
 
         public int SelectedResourceIndex
@@ -116,19 +126,9 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
         public DelegateCommand NextStepCommand =>
             _nextStepCommand ??= new DelegateCommand(ExecuteNextStepCommand, CanExecuteNextStepCommand);
 
-        private DelegateCommand _previousStepCommand;
-
-        public DelegateCommand PreviousStepCommand =>
-            _previousStepCommand ??= new DelegateCommand(ExecutePreviousStepCommand);
-
-        private void ExecutePreviousStepCommand()
-        {
-            _currentStep--;
-            ProcessCurrentStep(_currentStep);
-        }
-
         private void ExecuteNextStepCommand()
         {
+            Logger.Trace("Executing Next Step Command");
             _currentStep++;
             ProcessCurrentStep(_currentStep);
             CanExecuteNextStepCommand();
@@ -136,6 +136,7 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
 
         private void ProcessCurrentStep(int currentStep)
         {
+            Logger.Debug("Processing Current Step {CurrentStep}", currentStep);
             ShowResourceSelection = _currentStep == 0;
             ShowConnectionResource = _currentStep == 1 && SelectedResourceIndex == 0;
             ShowArchiveResource = _currentStep == 1 && SelectedResourceIndex == 1;
@@ -144,6 +145,7 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
 
         private bool CanExecuteNextStepCommand()
         {
+            Logger.Trace("Processing Can Execute Next Step Commnad");
             if (_currentStep == 0)
                 return SelectedResourceIndex >= 0;
 
@@ -158,10 +160,20 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
 
         private void ExecuteSaveResourceCommand()
         {
+            Logger.Trace("Executing Save New Resource Command");
             var resourceType = (ResourceType) _selectedResourceIndex;
             var galaxyResource = new GalaxyResource(_resourceName, resourceType, _nodeName, _galaxyName, _fileName);
-            _resourceRepository.Add(galaxyResource);
-            _resourceRepository.Save();
+            
+            try
+            {
+                _resourceRepository.Add(galaxyResource);
+                _resourceRepository.Save();
+                Logger.Info("Added new {ResourceType} resource named {ResourceName}", resourceType, _resourceName);
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e, "Failed to add new {ResourceType} resource named {ResourceName}", resourceType, _resourceName);
+            }
         }
 
         private bool CanExecuteSaveResourceCommand()

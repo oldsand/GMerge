@@ -16,26 +16,31 @@ namespace GalaxyMerge.Client.Application.Configurations
 
             var config = new LoggingConfiguration();
 
-            var notificationTarget = new MemoryEventTarget("NotificationTarget");
+            var notificationTarget = new MemoryEventTarget(LoggerName.NotificationTarget);
             config.AddTarget(notificationTarget);
-            config.LoggingRules.Add(new LoggingRule(LoggerName.NotificationLogger, LogLevel.Info, notificationTarget));
+            config.LoggingRules.Add(new LoggingRule("*", LogLevel.Info, notificationTarget));
 
-            var databaseTarget = new DatabaseTarget("DatabaseTarget")
+            var databaseTarget = new DatabaseTarget(LoggerName.DatabaseTarget)
             {
                 DBProvider = "Microsoft.Data.Sqlite.SqliteConnection, Microsoft.Data.Sqlite",
-                ConnectionString = $"Data Source={Path.Combine(ApplicationPath.Logging, "ClientLog.db")}",
+                ConnectionString = $"Data Source={ApplicationPath.ProgramData}\\app.db",
                 IsolationLevel = IsolationLevel.ReadCommitted,
-                CommandText = @"insert into Log (MachineName, Logged, Level, Message, Logger, Properties, Callsite, Identity, Exception)
-                        values (@MachineName, @Logged, @Level, @Message, @Logger, @Properties, @Callsite, @Identity, @Exception)",
+                CommandText =
+                    @"insert into Log (Logged, LevelId, Level, Message, Logger, Properties, Callsite, FileName, LineNumber, Stacktrace, MachineName, Identity, Exception)
+                        values (@Logged, @LevelId, @Level, @Message, @Logger, @Properties, @Callsite, @FileName, @LineNumber, @Stacktrace, @MachineName, @Identity, @Exception)",
                 Parameters =
                 {
-                    new DatabaseParameterInfo("@MachineName", "${machinename}"),
                     new DatabaseParameterInfo("@Logged", "${date}"),
-                    new DatabaseParameterInfo("@Level", "${level}"),
+                    new DatabaseParameterInfo("@LevelId", "${level:format=Ordinal}"),
+                    new DatabaseParameterInfo("@Level", "${level:uppercase=true}"),
                     new DatabaseParameterInfo("@Message", "${message}"),
                     new DatabaseParameterInfo("@Logger", "${logger}"),
                     new DatabaseParameterInfo("@Properties", "${all-event-properties:separator=|}"),
                     new DatabaseParameterInfo("@Callsite", "${callsite}"),
+                    new DatabaseParameterInfo("@FileName", "${callsite-filename}"),
+                    new DatabaseParameterInfo("@LineNumber", "${callsite-linenumber}"),
+                    new DatabaseParameterInfo("@Stacktrace", "${stacktrace}"),
+                    new DatabaseParameterInfo("@MachineName", "${machinename}"),
                     new DatabaseParameterInfo("@Identity", "${windows-identity}"),
                     new DatabaseParameterInfo("@Exception", "${exception:tostring}")
                 }
@@ -44,6 +49,7 @@ namespace GalaxyMerge.Client.Application.Configurations
             config.AddTarget(databaseTarget);
             config.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, databaseTarget));
 
+            LogManager.ThrowExceptions = true;
             LogManager.Configuration = config;
         }
     }

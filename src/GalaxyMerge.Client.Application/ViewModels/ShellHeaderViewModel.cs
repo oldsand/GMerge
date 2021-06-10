@@ -1,5 +1,5 @@
 using GalaxyMerge.Client.Core.Mvvm;
-using GalaxyMerge.Client.Dialogs;
+using NLog;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Services.Dialogs;
@@ -8,6 +8,7 @@ namespace GalaxyMerge.Client.Application.ViewModels
 {
     public class ShellHeaderViewModel : ViewModelBase
     {
+        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
         private readonly IEventAggregator _eventAggregator;
         private readonly IDialogService _dialogService;
         private int _selectedResource;
@@ -21,6 +22,7 @@ namespace GalaxyMerge.Client.Application.ViewModels
 
         public ShellHeaderViewModel(IEventAggregator eventAggregator, IDialogService dialogService) 
         {
+            Logger.Trace("Initializing Shell Header ViewModel");
             _eventAggregator = eventAggregator;
             _dialogService = dialogService;
         }
@@ -31,14 +33,15 @@ namespace GalaxyMerge.Client.Application.ViewModels
             set => SetProperty(ref _selectedResource, value);
         }
 
-        public DelegateCommand AddResourceCommand => _addResourceCommand ??= new DelegateCommand(ExecuteAddResource);
+        public DelegateCommand NewResourceCommand => _addResourceCommand ??= new DelegateCommand(ExecuteAddResource);
         
         public DelegateCommand DeleteResourceCommand =>
             _deleteResourceCommand ??= new DelegateCommand(ExecuteDeleteResource, CanExecuteDeleteResource);
 
         private void ExecuteAddResource()
         {
-            _dialogService.Show(DialogName.AddResourceDialog, result => { });
+            Logger.Trace("Executing New Resource Command. Showing Dialog {DialogName}", DialogName.NewResourceDialog);
+            _dialogService.Show(DialogName.NewResourceDialog, result => { });
         }
 
         private void ExecuteDeleteResource()

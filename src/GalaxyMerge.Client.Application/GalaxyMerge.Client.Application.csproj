@@ -93,6 +93,7 @@
     <PackageReference Include="Prism.Core" Version="8.1.97" />
     <PackageReference Include="Prism.DryIoc" Version="8.1.97" />
     <PackageReference Include="Prism.Wpf" Version="8.1.97" />
+    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="2.0.4" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GalaxyMerge.Client.Contracts\GalaxyMerge.Client.Contracts.csproj">
@@ -106,6 +107,10 @@
     <ProjectReference Include="..\GalaxyMerge.Client.Core\GalaxyMerge.Client.Core.csproj">
       <Project>{a52fad8f-28b0-4527-9937-ad3885eeccc9}</Project>
       <Name>GalaxyMerge.Client.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GalaxyMerge.Client.Data\GalaxyMerge.Client.Data.csproj">
+      <Project>{04b42b6e-dd66-49a8-84e8-bb2743293330}</Project>
+      <Name>GalaxyMerge.Client.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\GalaxyMerge.Client.Dialogs\GalaxyMerge.Client.Dialogs.csproj">
       <Project>{9a11b5e3-17bf-4b60-9558-e1982c172b25}</Project>

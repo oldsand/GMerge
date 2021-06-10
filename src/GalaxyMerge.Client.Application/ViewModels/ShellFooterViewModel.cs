@@ -1,4 +1,3 @@
-using System.Threading;
 using GalaxyMerge.Client.Core.Mvvm;
 using GalaxyMerge.Core.Logging;
 using NLog;
@@ -12,16 +11,19 @@ namespace GalaxyMerge.Client.Application.ViewModels
         private string _previousLogMessage;
         private bool _showEventLog;
         private DelegateCommand _showHideEventLogCommand;
+        private readonly MemoryEventTarget _logTarget;
 
 
         public ShellFooterViewModel()
         {
-            /*var logTarget = LogManager.Configuration.FindTargetByName<MemoryEventTarget>("NotificationTarget");
-            logTarget.EventReceived += LogEventReceived;*/
+            _logTarget = LogManager.Configuration.FindTargetByName<MemoryEventTarget>("NotificationTarget");
+            _logTarget.EventReceived += LogEventReceived;
         }
 
-        private CancellationTokenSource CurrentCancellationTokenSource { get; set; }
-
+        public override void Destroy()
+        {
+            _logTarget.EventReceived -= LogEventReceived;
+        }
 
         public string PreviousLogMessage
         {

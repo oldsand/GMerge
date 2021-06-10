@@ -3,9 +3,9 @@ using System.Windows.Controls;
 
 namespace GalaxyMerge.Client.Dialogs.Views
 {
-    public partial class AddResourceView : UserControl
+    public partial class NewResourceView : UserControl
     {
-        public AddResourceView()
+        public NewResourceView()
         {
             InitializeComponent();
         }

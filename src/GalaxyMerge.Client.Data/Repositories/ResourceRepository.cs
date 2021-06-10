@@ -8,12 +8,11 @@ namespace GalaxyMerge.Client.Data.Repositories
 {
     public class ResourceRepository : IResourceRepository
     {
-        private readonly ClientContext _context;
+        private readonly AppContext _context;
 
         public ResourceRepository()
         {
-            _context = new ClientContext();
-            _context.Database.EnsureCreated();
+            _context = new AppContext();
         }
         
         public void Dispose()

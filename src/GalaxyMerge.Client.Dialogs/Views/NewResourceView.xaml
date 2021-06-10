@@ -1,4 +1,4 @@
-<UserControl x:Class="GalaxyMerge.Client.Dialogs.Views.AddResourceView"
+<UserControl x:Class="GalaxyMerge.Client.Dialogs.Views.NewResourceView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -30,7 +30,7 @@
   </UserControl.Resources>
 
   <Grid x:Name="RootGrid"
-        d:DataContext="{Binding Source={StaticResource DesignViewModels}, Path=AddResourceViewModel}"
+        d:DataContext="{Binding Source={StaticResource DesignViewModels}, Path=NewResourceViewModel}"
         Background="{ui:ThemeResource ResourceKey=PrimaryBackground}">
     <Grid.RowDefinitions>
       <RowDefinition />
