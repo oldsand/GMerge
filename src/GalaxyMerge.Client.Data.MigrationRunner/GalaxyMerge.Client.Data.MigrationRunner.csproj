@@ -28,4 +28,10 @@
       <ProjectReference Include="..\GalaxyMerge.Client.Data\GalaxyMerge.Client.Data.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <EmbeddedResource Include="Scripts\001_InitialBuildDown.sql" />
+      <None Remove="Scripts\AppDbInitialBuild.sql" />
+      <EmbeddedResource Include="Scripts\001_InitialBuildUp.sql" />
+    </ItemGroup>
+
 </Project>

@@ -1,12 +1,13 @@
 ﻿using System;
 using FluentMigrator.Runner;
+using FluentMigrator.Runner.Initialization;
 using GalaxyMerge.Client.Data.MigrationRunner.Migrations;
 using GalaxyMerge.Core.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace GalaxyMerge.Client.Data.MigrationRunner
 {
-    internal class AppDbMigrator
+    internal class Migrator
     {
         private static void Main(string[] args)
         {
@@ -15,9 +16,6 @@ namespace GalaxyMerge.Client.Data.MigrationRunner
             UpdateDatabase(scope.ServiceProvider);
         }
         
-        /// <summary>
-        /// Configure the dependency injection services
-        /// </summary>
         private static IServiceProvider CreateServices()
         {
             return new ServiceCollection()
@@ -25,14 +23,13 @@ namespace GalaxyMerge.Client.Data.MigrationRunner
                 .ConfigureRunner(rb => rb
                     .AddSQLite()
                     .WithGlobalConnectionString($"Data Source={ApplicationPath.ProgramData}\\app.db")
-                    .ScanIn(typeof(UpdateResourceTypeConversion).Assembly).For.Migrations())
+                    .ScanIn(typeof(InitialBuild).Assembly)
+                        .For.Migrations()
+                        .For.EmbeddedResources())
                 .AddLogging(lb => lb.AddFluentMigratorConsole())
                 .BuildServiceProvider(false);
         }
         
-        /// <summary>
-        /// Update the database
-        /// </summary>
         private static void UpdateDatabase(IServiceProvider serviceProvider)
         {
             var runner = serviceProvider.GetRequiredService<IMigrationRunner>();
