@@ -2,8 +2,10 @@ using System;
 using GalaxyMerge.Client.Core.Mvvm;
 using GalaxyMerge.Client.Data.Abstractions;
 using GalaxyMerge.Client.Data.Entities;
+using GalaxyMerge.Client.Events;
 using NLog;
 using Prism.Commands;
+using Prism.Events;
 
 namespace GalaxyMerge.Client.Dialogs.ViewModels
 {
@@ -11,34 +13,29 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
     {
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
         private readonly IResourceRepository _resourceRepository;
-        private int _selectedResourceIndex;
+        private readonly IEventAggregator _eventAggregator;
+        private ResourceType _selectedResourceType;
         private string _resourceName;
+        private string _resourceDescription;
         private string _nodeName;
         private string _galaxyName;
         private string _fileName;
-        private int _currentStep;
+        private DelegateCommand<string> _resourceTypeSelectedCommand;
+        private DelegateCommand _backCommand;
         private DelegateCommand _saveResourceCommand;
-        private DelegateCommand _nextStepCommand;
-        private bool _showResourceSelection;
-        private bool _showConnectionResource;
-        private bool _showArchiveResource;
-        private bool _showFileResource;
 
         public NewResourceViewModel()
         {
-            _currentStep = 0;
-            ProcessCurrentStep(_currentStep);
         }
 
-        public NewResourceViewModel(IResourceRepository resourceRepository)
+        public NewResourceViewModel(IResourceRepository resourceRepository, IEventAggregator eventAggregator)
         {
             if (resourceRepository == null)
                 throw new ArgumentNullException();
-            
+
             Logger.Trace("Initializing New Resource Dialog");
             _resourceRepository = resourceRepository;
-            _currentStep = 0;
-            ProcessCurrentStep(_currentStep);
+            _eventAggregator = eventAggregator;
         }
 
         public override void OnDialogClosed()
@@ -46,133 +43,91 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
             _resourceRepository.Dispose();
         }
 
-        public int SelectedResourceIndex
+        public ResourceType SelectedResourceType
         {
-            get => _selectedResourceIndex;
+            get => _selectedResourceType;
             set
             {
-                SetProperty(ref _selectedResourceIndex, value);
-                CanExecuteNextStepCommand();
+                SetProperty(ref _selectedResourceType, value);
+                CanExecuteBackCommand();
             }
         }
 
         public string ResourceName
         {
             get => _resourceName;
-            set
-            {
-                SetProperty(ref _resourceName, value);
-                CanExecuteNextStepCommand();
-            }
+            set => SetProperty(ref _resourceName, value);
+        }
+
+        public string ResourceDescription
+        {
+            get => _resourceDescription;
+            set => SetProperty(ref _resourceDescription, value);
         }
 
         public string NodeName
         {
             get => _nodeName;
-            set
-            {
-                SetProperty(ref _nodeName, value);
-                CanExecuteNextStepCommand();
-            }
+            set => SetProperty(ref _nodeName, value);
         }
 
         public string GalaxyName
         {
             get => _galaxyName;
-            set
-            {
-                SetProperty(ref _galaxyName, value);
-                CanExecuteNextStepCommand();
-            }
+            set => SetProperty(ref _galaxyName, value);
         }
 
         public string FileName
         {
             get => _fileName;
-            set
-            {
-                SetProperty(ref _fileName, value);
-                CanExecuteNextStepCommand();
-            }
+            set => SetProperty(ref _fileName, value);
         }
 
-        public bool ShowResourceSelection
+        public DelegateCommand<string> ResourceTypeSelectedCommand =>
+            _resourceTypeSelectedCommand ??= new DelegateCommand<string>(ExecuteResourceTypeSelectedCommand);
+        
+        private void ExecuteResourceTypeSelectedCommand(string resourceTypeName)
         {
-            get => _showResourceSelection;
-            set => SetProperty(ref _showResourceSelection, value);
+            SelectedResourceType = (ResourceType) Enum.Parse(typeof(ResourceType), resourceTypeName);
         }
 
-        public bool ShowConnectionResource
+        public DelegateCommand BackCommand =>
+            _backCommand ??= new DelegateCommand(ExecuteBackCommand, CanExecuteBackCommand);
+
+        private void ExecuteBackCommand()
         {
-            get => _showConnectionResource;
-            set => SetProperty(ref _showConnectionResource, value);
+            SelectedResourceType = ResourceType.None;
         }
 
-        public bool ShowArchiveResource
+        private bool CanExecuteBackCommand()
         {
-            get => _showArchiveResource;
-            set => SetProperty(ref _showArchiveResource, value);
-        }
-
-        public bool ShowFileResource
-        {
-            get => _showFileResource;
-            set => SetProperty(ref _showFileResource, value);
+            return SelectedResourceType != ResourceType.None;
         }
 
         public DelegateCommand SaveResourceCommand =>
             _saveResourceCommand ??= new DelegateCommand(ExecuteSaveResourceCommand, CanExecuteSaveResourceCommand);
 
-        public DelegateCommand NextStepCommand =>
-            _nextStepCommand ??= new DelegateCommand(ExecuteNextStepCommand, CanExecuteNextStepCommand);
-
-        private void ExecuteNextStepCommand()
-        {
-            Logger.Trace("Executing Next Step Command");
-            _currentStep++;
-            ProcessCurrentStep(_currentStep);
-            CanExecuteNextStepCommand();
-        }
-
-        private void ProcessCurrentStep(int currentStep)
-        {
-            Logger.Debug("Processing Current Step {CurrentStep}", currentStep);
-            ShowResourceSelection = _currentStep == 0;
-            ShowConnectionResource = _currentStep == 1 && SelectedResourceIndex == 0;
-            ShowArchiveResource = _currentStep == 1 && SelectedResourceIndex == 1;
-            ShowFileResource = _currentStep == 1 && SelectedResourceIndex == 2;
-        }
-
-        private bool CanExecuteNextStepCommand()
-        {
-            Logger.Trace("Processing Can Execute Next Step Commnad");
-            if (_currentStep == 0)
-                return SelectedResourceIndex >= 0;
-
-            if (_currentStep == 1)
-            {
-                return !string.IsNullOrEmpty(ResourceName) && ((!string.IsNullOrEmpty(NodeName) && !string.IsNullOrEmpty(GalaxyName))
-                       || !string.IsNullOrEmpty(FileName));
-            }
-
-            return false;
-        }
-
         private void ExecuteSaveResourceCommand()
         {
             Logger.Trace("Executing Save New Resource Command");
-            var resourceType = (ResourceType) _selectedResourceIndex;
-            var galaxyResource = new GalaxyResource(_resourceName, resourceType, _nodeName, _galaxyName, _fileName);
-            
+
+            var galaxyResource = new ResourceEntry(_resourceName, _selectedResourceType);
+
             try
             {
                 _resourceRepository.Add(galaxyResource);
                 _resourceRepository.Save();
-                Logger.Info("Added new {ResourceType} resource named {ResourceName}", resourceType, _resourceName);
+                Logger.Info("Added new {ResourceType} resource named {ResourceName}", _selectedResourceType,
+                    _resourceName);
+
+                _eventAggregator.GetEvent<RefreshResourcesEvent>().Publish();
+
+                ExecuteCloseDialog();
             }
             catch (Exception e)
             {
-                Logger.Error(e, "Failed to add new {ResourceType} resource named {ResourceName}", resourceType, _resourceName);
+                Logger.Error(e, "Failed to add new {ResourceType} resource named {ResourceName}", _selectedResourceType,
+                    _resourceName);
             }
         }
 

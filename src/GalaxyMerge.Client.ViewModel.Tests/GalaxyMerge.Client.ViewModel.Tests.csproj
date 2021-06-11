@@ -4,11 +4,12 @@
     <PropertyGroup>
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
         <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-        <ProjectGuid>{60790AC9-6ADD-444F-A812-22129782FA81}</ProjectGuid>
+        <ProjectGuid>{955E823D-6B1A-4FD3-B237-858EC469307B}</ProjectGuid>
+        <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
         <OutputType>Library</OutputType>
         <AppDesignerFolder>Properties</AppDesignerFolder>
-        <RootNamespace>GalaxyMerge.Client.Events</RootNamespace>
-        <AssemblyName>GalaxyMerge.Client.Events</AssemblyName>
+        <RootNamespace>GalaxyMerge.Client.ViewModel.Tests</RootNamespace>
+        <AssemblyName>GalaxyMerge.Client.ViewModel.Tests</AssemblyName>
         <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
     </PropertyGroup>
@@ -36,13 +37,13 @@
         <Reference Include="System.Core" />
         <Reference Include="System.Data" />
         <Reference Include="System.Xml" />
+        <Reference Include="nunit.framework, Version=3.5.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb">
+            <HintPath>..\packages\NUnit.3.5.0\lib\net45\nunit.framework.dll</HintPath>
+        </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="ShellHeaderViewModelTests.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
-        <Compile Include="RefreshResourcesEvent.cs" />
-    </ItemGroup>
-    <ItemGroup>
-      <PackageReference Include="Prism.Core" Version="8.1.97" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

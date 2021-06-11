@@ -8,20 +8,19 @@
       <Border x:Name="TextBoxBorder"
               Background="{TemplateBinding Background}"
               BorderBrush="{TemplateBinding BorderBrush}"
-              BorderThickness="1"
-              CornerRadius="2"
+              BorderThickness="{TemplateBinding BorderThickness}"
+              CornerRadius="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(ui:ButtonProperties.CornerRadius)}"
               SnapsToDevicePixels="True">
         <Grid>
           <TextBlock x:Name="DefaultText" 
-                     HorizontalAlignment="Left"
-                     VerticalAlignment="Center"
-                     Margin="10,0"
+                     HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                     VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                     Margin="{TemplateBinding Padding, Converter={ui:ThicknessAdjuster Adjustment=1 0 0 0}}"
                      Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(ui:TextBoxProperties.DefaultText)}"
                      Foreground="{TemplateBinding Foreground}"
                      IsHitTestVisible="False"
                      Visibility="Hidden"/>
           <ScrollViewer x:Name="PART_ContentHost"
-                        Margin="9,0"
                         Focusable="false"
                         HorizontalScrollBarVisibility="Hidden"
                         VerticalScrollBarVisibility="Hidden" />
@@ -61,7 +60,10 @@
     <Setter Property="BorderBrush" Value="{t:ThemeResource ResourceKey=ControlBorder}" />
     <Setter Property="SelectionBrush" Value="{t:ThemeResource ResourceKey=ControlHighlightBackground}" />
     <Setter Property="CaretBrush" Value="{t:ThemeResource ResourceKey=ControlBorder}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="ui:ButtonProperties.CornerRadius" Value="2" />
     <Setter Property="Height" Value="26" />
+    <Setter Property="Padding" Value="10 0 0 0" />
     <Setter Property="KeyboardNavigation.TabNavigation" Value="None" />
     <Setter Property="HorizontalContentAlignment" Value="Left" />
     <Setter Property="VerticalContentAlignment" Value="Center" />

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 [assembly: InternalsVisibleTo("GalaxyMerge.Client.Data.Tests")]
 namespace GalaxyMerge.Client.Data
 {
-    internal class AppContext : DbContext
+    public class AppContext : DbContext
     {
         public AppContext()
         {
@@ -27,7 +27,7 @@ namespace GalaxyMerge.Client.Data
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppContext).Assembly);
         }
         
-        public DbSet<GalaxyResource> Resources { get; set; }
+        public DbSet<ResourceEntry> Resources { get; set; }
         public DbSet<LogEntry> Logs { get; set; }
         
     }

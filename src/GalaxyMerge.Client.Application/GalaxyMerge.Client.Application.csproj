@@ -116,6 +116,10 @@
       <Project>{9a11b5e3-17bf-4b60-9558-e1982c172b25}</Project>
       <Name>GalaxyMerge.Client.Dialogs</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GalaxyMerge.Client.Events\GalaxyMerge.Client.Events.csproj">
+      <Project>{af4bd15a-bc5c-4f2f-9ef9-778e20e381e0}</Project>
+      <Name>GalaxyMerge.Client.Events</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GalaxyMerge.Client.Proxies\GalaxyMerge.Client.Proxies.csproj">
       <Project>{c080b539-439d-4c9e-bdf4-7578e215f34d}</Project>
       <Name>GalaxyMerge.Client.Proxies</Name>

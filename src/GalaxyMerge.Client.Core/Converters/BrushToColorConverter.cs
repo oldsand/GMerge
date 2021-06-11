@@ -4,7 +4,7 @@ using System.Windows.Media;
 
 namespace GalaxyMerge.Client.Core.Converters
 {
-    public class BrushToColorConverter : BaseConverter
+    public class BrushToColorConverter : ValueConverter
     {
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

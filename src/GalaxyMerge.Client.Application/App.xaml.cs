@@ -2,6 +2,8 @@
 using GalaxyMerge.Client.Application.Configurations;
 using GalaxyMerge.Client.Application.Views;
 using GalaxyMerge.Client.Core.Prism;
+using GalaxyMerge.Client.Data.Abstractions;
+using GalaxyMerge.Client.Data.Repositories;
 using GalaxyMerge.Client.Dialogs;
 using NLog;
 using Prism.Ioc;
@@ -29,6 +31,8 @@ namespace GalaxyMerge.Client.Application
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
+            containerRegistry.Register<IResourceRepository, ResourceRepository>();
+            containerRegistry.Register<ILogRepository, LogRepository>();
         }
 
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)

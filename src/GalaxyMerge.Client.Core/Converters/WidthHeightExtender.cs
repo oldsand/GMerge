@@ -3,15 +3,15 @@ using System.Globalization;
 
 namespace GalaxyMerge.Client.Core.Converters
 {
-    public class WidthHeightExtender : BaseConverter
+    public class WidthHeightExtender : ValueConverter
     {
         public WidthHeightExtender()
         {
             Length = 0;
-            Operator = ExtendOperator.Plus;
+            Operator = Operator.Plus;
         }
         public int Length { get; set; }
-        public ExtendOperator Operator { get; set; }
+        public Operator Operator { get; set; }
         
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -19,7 +19,7 @@ namespace GalaxyMerge.Client.Core.Converters
                 throw new ArgumentException(@"Value must be of type double to convert the width or height",
                     nameof(value));
 
-            if (Operator == ExtendOperator.Minus)
+            if (Operator == Operator.Minus)
                 return current - Length;
 
             return current + Length;
@@ -28,12 +28,6 @@ namespace GalaxyMerge.Client.Core.Converters
         public override object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
-        }
-        
-        public enum ExtendOperator
-        {
-            Plus,
-            Minus
         }
     }
 }

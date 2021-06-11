@@ -56,7 +56,9 @@
         <Compile Include="Behaviors\Interactions.cs" />
         <Compile Include="Behaviors\TreeViewMultipleSelectionBehavior.cs" />
         <Compile Include="Behaviors\TriggersCollection.cs" />
-        <Compile Include="Converters\BaseConverter.cs" />
+        <Compile Include="Converters\Operator.cs" />
+        <Compile Include="Converters\ThicknessAdjuster.cs" />
+        <Compile Include="Converters\ValueConverter.cs" />
         <Compile Include="Converters\BooleanBrushConverter.cs" />
         <Compile Include="Converters\BooleanInverterConverter.cs" />
         <Compile Include="Converters\BooleanVisibilityConverter.cs" />
@@ -64,6 +66,7 @@
         <Compile Include="Converters\ColorToBrushConverter.cs" />
         <Compile Include="Converters\CompositeCollectionConverter.cs" />
         <Compile Include="Converters\EnumResourceConverter.cs" />
+        <Compile Include="Converters\EnumResourceMapping.cs" />
         <Compile Include="Converters\EnumStringConverter.cs" />
         <Compile Include="Converters\EnumVisibilityConverter.cs" />
         <Compile Include="Converters\LeftMarginMultiplierConverter.cs" />
@@ -94,7 +97,6 @@
             <DependentUpon>Resources.resx</DependentUpon>
         </Compile>
         <Compile Include="Utilities\BindingProxy.cs" />
-        <Compile Include="Utilities\EnumResourceMapping.cs" />
         <Compile Include="Utilities\ResourceFinder.cs" />
         <EmbeddedResource Include="Properties\Resources.resx">
             <Generator>ResXFileCodeGenerator</Generator>

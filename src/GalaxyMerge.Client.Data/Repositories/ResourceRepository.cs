@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
+using System.Threading.Tasks;
 using GalaxyMerge.Client.Data.Abstractions;
 using GalaxyMerge.Client.Data.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -15,39 +17,56 @@ namespace GalaxyMerge.Client.Data.Repositories
             _context = new AppContext();
         }
         
+        public ResourceRepository(string dataSource)
+        {
+            var options = new DbContextOptionsBuilder<AppContext>().UseSqlite(dataSource).Options;
+            _context = new AppContext(options);
+        }
+        
+        public ResourceRepository(DbConnection connection)
+        {
+            var options = new DbContextOptionsBuilder<AppContext>().UseSqlite(connection).Options;
+            _context = new AppContext(options);
+        }
+        
         public void Dispose()
         {
             _context.Dispose();
         }
 
-        public GalaxyResource Get(int id)
+        public ResourceEntry Get(int id)
         {
-            return _context.Set<GalaxyResource>().Find(id);
+            return _context.Set<ResourceEntry>().Find(id);
         }
 
-        public GalaxyResource Get(string name)
+        public ResourceEntry Get(string name)
         {
-            return _context.Set<GalaxyResource>().FirstOrDefault(x => x.ResourceName == name);
+            return _context.Set<ResourceEntry>().FirstOrDefault(x => x.ResourceName == name);
         }
 
-        public IEnumerable<GalaxyResource> GetAll()
+        public IEnumerable<ResourceEntry> GetAll()
         {
-            return _context.Set<GalaxyResource>().ToList();
+            return _context.Set<ResourceEntry>().ToList();
         }
 
-        public void Add(GalaxyResource resource)
+        public async Task<IEnumerable<ResourceEntry>> GetAllAsync()
         {
-            _context.Set<GalaxyResource>().Add(resource);
+            return await _context.Set<ResourceEntry>().ToListAsync();
         }
 
-        public void Remove(GalaxyResource resource)
+        public void Add(ResourceEntry resourceEntry)
         {
-            _context.Set<GalaxyResource>().Remove(resource);
+            _context.Set<ResourceEntry>().Add(resourceEntry);
         }
 
-        public void Update(GalaxyResource resource)
+        public void Remove(ResourceEntry resourceEntry)
         {
-            _context.Set<GalaxyResource>().Update(resource);
+            _context.Set<ResourceEntry>().Remove(resourceEntry);
+        }
+
+        public void Update(ResourceEntry resourceEntry)
+        {
+            _context.Set<ResourceEntry>().Update(resourceEntry);
         }
 
         public void Save()

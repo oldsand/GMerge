@@ -56,6 +56,7 @@
             <DesignTime>True</DesignTime>
             <DependentUpon>Resources.resx</DependentUpon>
         </Compile>
+        <Compile Include="ResourceTypeIconConverter.cs" />
         <EmbeddedResource Include="Properties\Resources.resx">
             <Generator>ResXFileCodeGenerator</Generator>
             <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -65,6 +66,10 @@
       <ProjectReference Include="..\GalaxyMerge.Client.Core\GalaxyMerge.Client.Core.csproj">
         <Project>{a52fad8f-28b0-4527-9937-ad3885eeccc9}</Project>
         <Name>GalaxyMerge.Client.Core</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\GalaxyMerge.Client.Data\GalaxyMerge.Client.Data.csproj">
+        <Project>{04b42b6e-dd66-49a8-84e8-bb2743293330}</Project>
+        <Name>GalaxyMerge.Client.Data</Name>
       </ProjectReference>
       <ProjectReference Include="..\GalaxyMerge.Primitives\GalaxyMerge.Primitives.csproj">
         <Project>{446fe87c-5122-4344-9df9-9f641e81a476}</Project>

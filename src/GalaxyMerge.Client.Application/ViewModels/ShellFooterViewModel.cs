@@ -1,5 +1,6 @@
 using GalaxyMerge.Client.Core.Mvvm;
 using GalaxyMerge.Core.Logging;
+using ImTools;
 using NLog;
 using Prism.Commands;
 
@@ -49,7 +50,7 @@ namespace GalaxyMerge.Client.Application.ViewModels
         private void LogEventReceived(LogEventInfo logInfo)
         {
             PreviousLogEventInfo = logInfo;
-            PreviousLogMessage = logInfo.FormattedMessage;
+            PreviousLogMessage = $"{logInfo.FormattedMessage} at {logInfo.TimeStamp.ToLongTimeString()}";
         }
 
         private void ExecuteShowHideEventLogCommand()

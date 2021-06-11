@@ -1,13 +1,12 @@
 ﻿using System;
 using FluentMigrator.Runner;
-using FluentMigrator.Runner.Initialization;
-using GalaxyMerge.Client.Data.MigrationRunner.Migrations;
+using GalaxyMerge.Client.Data.Migrator.Migrations;
 using GalaxyMerge.Core.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace GalaxyMerge.Client.Data.MigrationRunner
+namespace GalaxyMerge.Client.Data.Migrator
 {
-    internal class Migrator
+    internal class Runner
     {
         private static void Main(string[] args)
         {
@@ -23,9 +22,7 @@ namespace GalaxyMerge.Client.Data.MigrationRunner
                 .ConfigureRunner(rb => rb
                     .AddSQLite()
                     .WithGlobalConnectionString($"Data Source={ApplicationPath.ProgramData}\\app.db")
-                    .ScanIn(typeof(InitialBuild).Assembly)
-                        .For.Migrations()
-                        .For.EmbeddedResources())
+                    .ScanIn(typeof(_001_InitialBuild).Assembly).For.Migrations())
                 .AddLogging(lb => lb.AddFluentMigratorConsole())
                 .BuildServiceProvider(false);
         }

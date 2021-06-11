@@ -7,57 +7,72 @@
              xmlns:ui="http://gmerge.com/ui/wpf"
              xmlns:design="clr-namespace:GalaxyMerge.Client.Application.Design"
              prism:ViewModelLocator.AutoWireViewModel="True"
-             d:DesignHeight="40"
+             d:DesignHeight="50"
              d:DesignWidth="1200"
              mc:Ignorable="d">
-    
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <design:DesignViewModels x:Key="DesignViewModels" />
-        </ResourceDictionary>
-    </UserControl.Resources>
 
-    <Border Background="{ui:ThemeResource ResourceKey=PanelBackground}"
-            BorderBrush="{ui:ThemeResource ResourceKey=PrimaryBorder}"
-            BorderThickness="0 1 0 1"
-            d:DataContext="{Binding ShellHeaderViewModel, Source={StaticResource DesignViewModels}}">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition />
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-            
-            <Button Grid.Column="0" Margin="10,0"
-                    Width="60" Height="26"
-                    Command="{Binding NewResourceCommand}">
-                <StackPanel Orientation="Horizontal">
-                    <ui:Icon Template="{DynamicResource Icon.Add}"
-                             Foreground="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}" 
-                             Margin="0 0 5 0"/>
-                    <TextBlock Text="New" 
-                               Foreground="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"/>
-                </StackPanel>
-            </Button>
-            
-            <Border Grid.Column="1"
-                    Height="16"
-                    Margin="5,0"
-                    BorderBrush="{ui:ThemeResource ResourceKey=PrimaryBorder}"
-                    BorderThickness="1,0,0,0" />
-            <StackPanel Grid.Column="2" Margin="5,0" HorizontalAlignment="Left" Orientation="Horizontal">
-                <ui:Icon Margin="0,0,5,0" VerticalAlignment="Center" Template="{DynamicResource Icon.Galaxy}" />
-                <TextBlock Width="150"
-                           VerticalAlignment="Center"
-                           FontWeight="SemiBold"
-                           Text="SOME_GALAXY"
-                           TextTrimming="CharacterEllipsis"/>
-                <ui:Icon Margin="0,0,5,0" VerticalAlignment="Center" Template="{DynamicResource Icon.Arrow.Down}" />
-            </StackPanel>
-            <TextBox Grid.Column="3" MinWidth="100" MaxWidth="400" />
-        </Grid>
-    </Border>
-    
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <design:DesignViewModels x:Key="DesignViewModels" />
+    </ResourceDictionary>
+  </UserControl.Resources>
+
+  <Border Background="{ui:ThemeResource ResourceKey=PanelBackground}"
+          BorderBrush="{ui:ThemeResource ResourceKey=PrimaryBorder}"
+          BorderThickness="0 1 0 1"
+          d:DataContext="{Binding ShellHeaderViewModel, Source={StaticResource DesignViewModels}}">
+    <Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto" />
+        <ColumnDefinition Width="Auto" />
+        <ColumnDefinition Width="Auto" />
+        <ColumnDefinition />
+        <ColumnDefinition />
+      </Grid.ColumnDefinitions>
+
+      <Button Grid.Column="0" Margin="10,0"
+              Width="60" Height="26"
+              Command="{Binding NewResourceCommand}">
+        <StackPanel Orientation="Horizontal">
+          <ui:Icon Template="{DynamicResource Icon.Add}"
+                   Foreground="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
+                   Margin="0 0 5 0" />
+          <TextBlock Text="New"
+                     Foreground="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}" />
+        </StackPanel>
+      </Button>
+
+      <StackPanel Grid.Column="1"
+                  Margin="5,0"
+                  HorizontalAlignment="Left"
+                  Orientation="Horizontal">
+        <ComboBox x:Name="ResourceSelector"
+                  ItemsSource="{Binding Resources}"
+                  SelectedItem="{Binding SelectedResourceEntry}"
+                  Background="{ui:ThemeResource ResourceKey=PrimaryBackground}"
+                  Width="300" Height="26"
+                  VerticalContentAlignment="Center">
+          <ComboBox.ItemTemplate>
+            <DataTemplate>
+              <Grid>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="30" />
+                  <ColumnDefinition />
+                  <ColumnDefinition Width="30" />
+                </Grid.ColumnDefinitions>
+                <ui:Icon Grid.Column="0"
+                         Template="{Binding ResourceType, Converter={ui:ResourceTypeIconConverter}}" />
+                <TextBlock Grid.Column="1" Text="{Binding ResourceName}" />
+                <Button Grid.Column="2" Style="{StaticResource Style.Button.Transparent}">
+                  <ui:Icon Template="{StaticResource Icon.Menu}"
+                           Height="10" Width="10"/>
+                </Button>
+              </Grid>
+            </DataTemplate>
+          </ComboBox.ItemTemplate>
+        </ComboBox>
+      </StackPanel>
+    </Grid>
+  </Border>
+
 </UserControl>

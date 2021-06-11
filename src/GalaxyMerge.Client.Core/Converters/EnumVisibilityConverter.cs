@@ -1,30 +1,36 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Markup;
 
 namespace GalaxyMerge.Client.Core.Converters
 {
-    public class EnumVisibilityConverter : MarkupExtension, IValueConverter
+    public class EnumVisibilityConverter : ValueConverter
     {
-        public string VisibleValue { get; set; }
-        
-        public override object ProvideValue(IServiceProvider serviceProvider)
+        public Visibility FalseValue { get; set; }
+        public Visibility TrueValue { get; set; }
+        public Visibility DefaultValue { get; set; }
+
+        public EnumVisibilityConverter()
         {
-            return this;
+            FalseValue = Visibility.Collapsed;
+            TrueValue = Visibility.Visible;
+            DefaultValue = Visibility.Collapsed;
         }
 
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (string.IsNullOrEmpty(VisibleValue)) return Visibility.Collapsed;
-            if (value == null) return Visibility.Collapsed;
-            return value.ToString() == VisibleValue ? Visibility.Visible : Visibility.Collapsed;
-        }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            if (value == null || parameter == null)
+                return DefaultValue;
+            
+            if (!parameter.ToString().Contains("|"))
+                return value.ToString() == parameter.ToString() ? TrueValue : FalseValue;
+            
+            var tokens = parameter.ToString().Split('|');
+            return tokens.Any(token => value.ToString() == token) ? TrueValue : FalseValue;
         }
     }
 }

@@ -24,8 +24,7 @@
         </Button>
         <TextBlock Text="{Binding PreviousLogMessage}"
                    VerticalAlignment="Center"
-                   Margin="5 0 0 0"
-                   FontSize="10" />
+                   Margin="5 0 0 0"/>
       </StackPanel>
     </Border>
   </Grid>

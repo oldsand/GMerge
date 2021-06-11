@@ -1,17 +1,19 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using GalaxyMerge.Client.Data.Entities;
 
 namespace GalaxyMerge.Client.Data.Abstractions
 {
     public interface IResourceRepository : IDisposable
     {
-        GalaxyResource Get(int id);
-        GalaxyResource Get(string name);
-        IEnumerable<GalaxyResource> GetAll();
-        void Add(GalaxyResource resource);
-        void Remove(GalaxyResource resource);
-        void Update(GalaxyResource resource);
+        ResourceEntry Get(int id);
+        ResourceEntry Get(string name);
+        IEnumerable<ResourceEntry> GetAll();
+        Task<IEnumerable<ResourceEntry>> GetAllAsync();
+        void Add(ResourceEntry resourceEntry);
+        void Remove(ResourceEntry resourceEntry);
+        void Update(ResourceEntry resourceEntry);
         void Save();
     }
 }
