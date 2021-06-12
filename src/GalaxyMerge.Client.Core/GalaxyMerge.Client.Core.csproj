@@ -73,6 +73,7 @@
         <Compile Include="Converters\WidthHeightExtender.cs" />
         <Compile Include="Extensions\CollapsibleColumnDefinition.cs" />
         <Compile Include="Extensions\ColorExtensions.cs" />
+        <Compile Include="Extensions\ComboBoxTemplateSelectorExtension.cs" />
         <Compile Include="Extensions\DependencyObjectExtensions.cs" />
         <Compile Include="Extensions\EnumBindingSourceExtension.cs" />
         <Compile Include="Extensions\TreeViewItemExtensions.cs" />
@@ -96,6 +97,7 @@
             <DesignTime>True</DesignTime>
             <DependentUpon>Resources.resx</DependentUpon>
         </Compile>
+        <Compile Include="Selectors\ComboBoxTemplateSelector.cs" />
         <Compile Include="Utilities\BindingProxy.cs" />
         <Compile Include="Utilities\ResourceFinder.cs" />
         <EmbeddedResource Include="Properties\Resources.resx">

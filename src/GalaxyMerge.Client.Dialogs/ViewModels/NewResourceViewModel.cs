@@ -20,9 +20,11 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
         private string _nodeName;
         private string _galaxyName;
         private string _fileName;
+        private string _directoryName;
         private DelegateCommand<string> _resourceTypeSelectedCommand;
         private DelegateCommand _backCommand;
         private DelegateCommand _saveResourceCommand;
+
 
         public NewResourceViewModel()
         {
@@ -46,17 +48,17 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
         public ResourceType SelectedResourceType
         {
             get => _selectedResourceType;
-            set
-            {
-                SetProperty(ref _selectedResourceType, value);
-                CanExecuteBackCommand();
-            }
+            set => SetProperty(ref _selectedResourceType, value);
         }
 
         public string ResourceName
         {
             get => _resourceName;
-            set => SetProperty(ref _resourceName, value);
+            set
+            {
+                SetProperty(ref _resourceName, value);
+                SaveResourceCommand.RaiseCanExecuteChanged();
+            }
         }
 
         public string ResourceDescription
@@ -68,19 +70,41 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
         public string NodeName
         {
             get => _nodeName;
-            set => SetProperty(ref _nodeName, value);
+            set
+            {
+                SetProperty(ref _nodeName, value);
+                SaveResourceCommand.RaiseCanExecuteChanged();
+            }
         }
 
         public string GalaxyName
         {
             get => _galaxyName;
-            set => SetProperty(ref _galaxyName, value);
+            set
+            {
+                SetProperty(ref _galaxyName, value);
+                SaveResourceCommand.RaiseCanExecuteChanged();
+            }
         }
 
         public string FileName
         {
             get => _fileName;
-            set => SetProperty(ref _fileName, value);
+            set
+            {
+                SetProperty(ref _fileName, value);
+                SaveResourceCommand.RaiseCanExecuteChanged();
+            }
+        }
+
+        public string DirectoryName
+        {
+            get => _directoryName;
+            set
+            {
+                SetProperty(ref _directoryName, value);
+                SaveResourceCommand.RaiseCanExecuteChanged();
+            }
         }
 
         public DelegateCommand<string> ResourceTypeSelectedCommand =>
@@ -92,7 +116,8 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
         }
 
         public DelegateCommand BackCommand =>
-            _backCommand ??= new DelegateCommand(ExecuteBackCommand, CanExecuteBackCommand);
+            _backCommand ??= new DelegateCommand(ExecuteBackCommand, CanExecuteBackCommand)
+                .ObservesProperty(() => SelectedResourceType);
 
         private void ExecuteBackCommand()
         {
@@ -133,7 +158,28 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
 
         private bool CanExecuteSaveResourceCommand()
         {
-            return true;
+            return !string.IsNullOrEmpty(ResourceName)
+                   && SelectedResourceType == ResourceType.Connection
+                ? HasValidConnectionData()
+                : SelectedResourceType == ResourceType.Archive
+                    ? HasValidArchiveData()
+                    : HasValidDirectoryData();
+        }
+
+        private bool HasValidConnectionData()
+        {
+            return !string.IsNullOrEmpty(NodeName)
+                   && !string.IsNullOrEmpty(GalaxyName);
+        }
+        
+        private bool HasValidArchiveData()
+        {
+            return !string.IsNullOrEmpty(FileName);
+        }
+        
+        private bool HasValidDirectoryData()
+        {
+            return !string.IsNullOrEmpty(DirectoryName);
         }
     }
 }

@@ -42,11 +42,7 @@ namespace GalaxyMerge.Client.Application.ViewModels
             eventAggregator.GetEvent<RefreshResourcesEvent>().Subscribe(OnRefreshResources);
             LoadResources().Await(ResourceLoadComplete, ResourceLoadError);
         }
-
         
-
-
-        #region Properties
 
         public ResourceEntry SelectedResourceEntry
         {
@@ -60,34 +56,26 @@ namespace GalaxyMerge.Client.Application.ViewModels
             set => SetProperty(ref _resources, value);
         }
 
-        #endregion
-
-        #region Commands
-
-        public DelegateCommand NewResourceCommand => _addResourceCommand ??= new DelegateCommand(ExecuteAddResource);
+        public DelegateCommand NewResourceCommand => _addResourceCommand ??= new DelegateCommand(ExecuteNewResourceCommand);
         
-        public DelegateCommand DeleteResourceCommand =>
-            _deleteResourceCommand ??= new DelegateCommand(ExecuteDeleteResource, CanExecuteDeleteResource);
-
-        private void ExecuteAddResource()
+        private void ExecuteNewResourceCommand()
         {
             Logger.Trace("Executing New Resource Command. Showing Dialog {DialogName}", DialogName.NewResourceDialog);
             _dialogService.Show(DialogName.NewResourceDialog, result => { });
         }
-
-        private void ExecuteDeleteResource()
+        
+        public DelegateCommand DeleteResourceCommand =>
+            _deleteResourceCommand ??= new DelegateCommand(ExecuteDeleteResourceCommand, CanExecuteDeleteResourceCommand);
+        
+        private void ExecuteDeleteResourceCommand()
         {
             //todo
         }
 
-        private bool CanExecuteDeleteResource()
+        private bool CanExecuteDeleteResourceCommand()
         {
             return true;
         }
-
-        #endregion
-
-        #region Methods
 
         private async Task LoadResources()
         {
@@ -124,7 +112,5 @@ namespace GalaxyMerge.Client.Application.ViewModels
         {
             LoadResources().Await(ResourceLoadComplete, ResourceLoadError);
         }
-
-        #endregion
     }
 }

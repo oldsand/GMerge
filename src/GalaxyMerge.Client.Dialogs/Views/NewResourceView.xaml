@@ -28,7 +28,7 @@
       </Style>
 
       <Style TargetType="{x:Type RadioButton}">
-        <Setter Property="Background" Value="#F2F2F6" />
+        <Setter Property="Background" Value="{ui:ThemeResource ResourceKey=ControlBackground}" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="BorderThickness" Value="2" />
         <Setter Property="Margin" Value="10" />
@@ -352,7 +352,7 @@
 
           <StackPanel Grid.Row="1" Margin="0 20 0 0">
             <TextBlock Text="Galaxy File" Margin="0 5" />
-            <TextBox Text="{Binding FileName}" />
+            <TextBox Text="{Binding DirectoryName}" />
             <TextBlock Text="Select or enter the archive database file"
                        TextWrapping="Wrap"
                        Foreground="DarkGray"
