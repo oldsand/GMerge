@@ -41,12 +41,17 @@ namespace GalaxyMerge.Client.Data.Repositories
 
         public ResourceEntry Get(string name)
         {
-            return _context.Set<ResourceEntry>().FirstOrDefault(x => x.ResourceName == name);
+            return _context.Set<ResourceEntry>().SingleOrDefault(x => x.ResourceName == name);
         }
 
         public IEnumerable<ResourceEntry> GetAll()
         {
             return _context.Set<ResourceEntry>().ToList();
+        }
+
+        public IEnumerable<string> GetNames()
+        {
+            return _context.Set<ResourceEntry>().Select(x => x.ResourceName).ToList();
         }
 
         public async Task<IEnumerable<ResourceEntry>> GetAllAsync()

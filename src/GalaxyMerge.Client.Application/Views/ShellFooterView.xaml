@@ -20,7 +20,7 @@
         <Button Style="{StaticResource Style.Button.Transparent}"
                 Command="{Binding ShowHideEventLogCommand}"
                 Width="24" Height="24">
-          <ui:Icon Template="{DynamicResource Icon.Notification}"/>
+          <ui:Icon Template="{DynamicResource Icon.Outlined.Notification}"/>
         </Button>
         <TextBlock Text="{Binding PreviousLogMessage}"
                    VerticalAlignment="Center"

@@ -10,6 +10,7 @@ namespace GalaxyMerge.Client.Data.Abstractions
         ResourceEntry Get(int id);
         ResourceEntry Get(string name);
         IEnumerable<ResourceEntry> GetAll();
+        IEnumerable<string> GetNames();
         Task<IEnumerable<ResourceEntry>> GetAllAsync();
         void Add(ResourceEntry resourceEntry);
         void Remove(ResourceEntry resourceEntry);

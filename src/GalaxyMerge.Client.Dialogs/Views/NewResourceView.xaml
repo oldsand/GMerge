@@ -102,7 +102,7 @@
 
             <ui:Icon Grid.Row="0"
                      Grid.Column="0"
-                     Template="{DynamicResource Icon.Connection}" />
+                     Template="{DynamicResource Icon.Outlined.Plug}" />
 
             <TextBlock Grid.Row="0"
                        Grid.Column="1"
@@ -144,7 +144,7 @@
 
             <ui:Icon Grid.Row="0"
                      Grid.Column="0"
-                     Template="{DynamicResource Icon.Database}" />
+                     Template="{DynamicResource Icon.Outlined.Database}" />
 
             <TextBlock Grid.Row="0"
                        Grid.Column="1"
@@ -186,7 +186,7 @@
 
             <ui:Icon Grid.Row="0"
                      Grid.Column="0"
-                     Template="{DynamicResource Icon.Folder}" />
+                     Template="{DynamicResource Icon.Outlined.Folder}" />
 
             <TextBlock Grid.Row="0"
                        Grid.Column="1"
@@ -384,7 +384,7 @@
           <Button Width="70" Height="26"
                   Margin="10 0 0 0"
                   Content="Cancel"
-                  Command="{Binding CloseDialogCommand}"
+                  Command="{Binding CancelDialogCommand}"
                   Style="{StaticResource Style.Button.Secondary}" />
         </StackPanel>
       </Grid>

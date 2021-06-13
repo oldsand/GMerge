@@ -8,50 +8,83 @@
              xmlns:design="clr-namespace:GalaxyMerge.Client.Application.Design"
              prism:ViewModelLocator.AutoWireViewModel="True"
              d:DesignHeight="50"
-             d:DesignWidth="1200"
+             d:DesignWidth="1920"
              mc:Ignorable="d">
 
   <UserControl.Resources>
     <ResourceDictionary>
       <design:DesignViewModels x:Key="DesignModels" />
-
+      
       <DataTemplate x:Key="ResourceSelectedItemTemplate">
-        <StackPanel Orientation="Horizontal"
-                    d:DataContext="{Binding Source={StaticResource DesignModels}, Path=ResourceEntry}">
-          <ui:Icon Template="{Binding ResourceType, Converter={ui:ResourceTypeIconConverter}}"
-                   Margin="5 0" />
-          <TextBlock Text="{Binding ResourceName}" />
-        </StackPanel>
-      </DataTemplate>
-
-      <DataTemplate x:Key="ResourceDropDownItemTemplate">
         <Grid d:DataContext="{Binding Source={StaticResource DesignModels}, Path=ResourceEntry}">
-
-          <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-          </Grid.RowDefinitions>
           <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="Auto" />
             <ColumnDefinition />
           </Grid.ColumnDefinitions>
 
-          <ui:Icon Grid.Row="0"
-                   Grid.Column="0"
-                   Margin="5 0"
+          <ui:Icon Grid.Column="0"
+                   Height="12" Width="12"
+                   VerticalAlignment="Center"
                    Template="{Binding ResourceType, Converter={ui:ResourceTypeIconConverter}}" />
-          <TextBlock Grid.Row="0"
-                     Grid.Column="1"
-                     Text="{Binding ResourceName}" />
-          <Button Grid.Row="0"
+          <TextBlock Grid.Column="1"
+                     Margin="10 0"
+                     Text="{Binding ResourceName}"
+                     FontWeight="SemiBold" />
+        </Grid>
+      </DataTemplate>
+
+      <DataTemplate x:Key="ResourceDropDownItemTemplate">
+        <Grid d:DataContext="{Binding Source={StaticResource DesignModels}, Path=ResourceEntry}"
+              MaxWidth="{Binding RelativeSource={RelativeSource AncestorType=ComboBox}, Path=Width}">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition />
+            <ColumnDefinition Width="Auto" />
+          </Grid.ColumnDefinitions>
+
+          <ui:Icon Grid.Column="0"
+                   Height="12" Width="12"
+                   VerticalAlignment="Center"
+                   Template="{Binding ResourceType, Converter={ui:ResourceTypeIconConverter}}" />
+          
+          <Grid Grid.Column="1"
+                Margin="10 0">
+            <Grid.RowDefinitions>
+              <RowDefinition />
+              <RowDefinition />
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Text="{Binding ResourceName}"
+                       FontWeight="SemiBold" />
+            <TextBlock Grid.Row="1" Text="{Binding ResourceDescription}"
+                       TextTrimming="CharacterEllipsis">
+              <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                  <Style.Triggers>
+                    <DataTrigger Binding="{Binding Path=ResourceDescription}" Value="{x:Null}">
+                      <Setter Property="FontStyle" Value="Italic"/>
+                      <Setter Property="Text" Value="No Description"/>
+                    </DataTrigger>
+                  </Style.Triggers>
+                </Style>
+              </TextBlock.Style>
+            </TextBlock>
+          </Grid>
+          
+          <Button x:Name="MenuButton"
+                  Visibility="Hidden"
                   Grid.Column="2"
+                  VerticalAlignment="Center"
                   Style="{StaticResource Style.Button.Transparent}">
             <ui:Icon Height="10"
                      Width="10"
-                     Template="{StaticResource Icon.Menu}" />
+                     Template="{StaticResource Icon.More.Horizontal}" />
           </Button>
         </Grid>
+        <DataTemplate.Triggers>
+          <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource TemplatedParent}}" Value="True">
+            <Setter Property="Visibility" TargetName="MenuButton" Value="Visible" />
+          </DataTrigger>
+        </DataTemplate.Triggers>
       </DataTemplate>
     </ResourceDictionary>
   </UserControl.Resources>
@@ -69,26 +102,35 @@
         <ColumnDefinition />
       </Grid.ColumnDefinitions>
 
-      <Button Grid.Column="0" Margin="10,0"
-              Width="60" Height="26"
-              Command="{Binding NewResourceCommand}">
-        <StackPanel Orientation="Horizontal">
-          <ui:Icon Template="{DynamicResource Icon.Add}"
-                   Foreground="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
-                   Margin="0 0 5 0" />
-          <TextBlock Text="New"
-                     Foreground="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}" />
-        </StackPanel>
-      </Button>
-
-      <StackPanel Grid.Column="1"
-                  Margin="5,0"
+      <StackPanel Grid.Column="0"
+                  Margin="10,0"
                   HorizontalAlignment="Left"
                   Orientation="Horizontal">
+
+        <!--New Resource-->
+        <Button Width="60"
+                Height="26"
+                Command="{Binding NewResourceCommand}">
+          <StackPanel Orientation="Horizontal">
+            <ui:Icon Template="{DynamicResource Icon.Outlined.Add}"
+                     Foreground="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
+                     Margin="0 0 5 0" />
+            <TextBlock Text="New"
+                       Foreground="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}" />
+          </StackPanel>
+        </Button>
+
+        <!--Spacer Border-->
+        <Border Margin="5"
+                BorderBrush="Transparent"
+                BorderThickness="1" />
+
+        <!--Resource Selector-->
         <ComboBox ItemsSource="{Binding Resources}"
                   SelectedItem="{Binding SelectedResourceEntry}"
                   Background="{ui:ThemeResource ResourceKey=PrimaryBackground}"
                   Width="300" Height="26"
+                  MaxDropDownHeight="200"
                   VerticalContentAlignment="Center"
                   HorizontalContentAlignment="Stretch"
                   ItemTemplateSelector="{ui:ComboBoxTemplateSelector 
@@ -96,23 +138,27 @@
                   DropdownItemsTemplate={StaticResource ResourceDropDownItemTemplate}}" />
 
         <!--Spacer Border-->
-        <Border Margin="10 0 0 0"
+        <Border Margin="5"
                 BorderBrush="Transparent"
                 BorderThickness="1" />
 
+        <!--Resource Buttons-->
         <Button Style="{StaticResource Style.Button.Transparent}"
                 Margin="5 0 0 0">
-          <ui:Icon Template="{StaticResource Icon.Cog}" />
+          <ui:Icon Template="{StaticResource Icon.Filled.Cog}" />
         </Button>
-
         <Button Style="{StaticResource Style.Button.Transparent}"
-                Margin="5 0 0 0">
-          <ui:Icon Template="{StaticResource Icon.Delete}" />
+                Margin="5 0 0 0"
+                Command="{Binding DeleteResourceCommand}">
+          <ui:Icon Template="{StaticResource Icon.Filled.Delete}" />
         </Button>
-
         <Button Style="{StaticResource Style.Button.Transparent}"
                 Margin="5 0 0 0">
-          <ui:Icon Template="{StaticResource Icon.Filter.Outline}" />
+          <ui:Icon Template="{StaticResource Icon.Refresh}" />
+        </Button>
+        <Button Style="{StaticResource Style.Button.Transparent}"
+                Margin="5 0 0 0">
+          <ui:Icon Template="{StaticResource Icon.More.Horizontal}" />
         </Button>
 
       </StackPanel>

@@ -2,4 +2,276 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:controls="clr-namespace:GalaxyMerge.Client.Resources.Controls">
   
+  <ControlTemplate x:Key="Icon.Galaxy" TargetType="{x:Type controls:Icon}">
+    <Viewbox Stretch="Uniform">
+      <Viewbox.RenderTransform>
+        <TranslateTransform X="0" Y="0" />
+      </Viewbox.RenderTransform>
+      <Viewbox.Resources>
+        <RadialGradientBrush x:Key="RadialGradient" MappingMode="Absolute" Center="12,12" GradientOrigin="12,12"
+                             RadiusX="10" RadiusY="10">
+          <RadialGradientBrush.GradientStops>
+            <GradientStopCollection>
+              <GradientStop Color="#FFAA00D4" Offset="0" />
+              <GradientStop Color="#FFFF7F2A" Offset="0.5" />
+              <GradientStop Color="#FF0000D4" Offset="1" />
+            </GradientStopCollection>
+          </RadialGradientBrush.GradientStops>
+          <RadialGradientBrush.Transform>
+            <MatrixTransform Matrix="1 0 0 0.99996875 0 3.7498028e-4" />
+          </RadialGradientBrush.Transform>
+        </RadialGradientBrush>
+      </Viewbox.Resources>
+      <Path Fill="{StaticResource RadialGradient}"
+            Stretch="Uniform"
+            SnapsToDevicePixels="False"
+            UseLayoutRounding="False"
+            Data="M7.729 3.521L2 9.199l1.407 1.42l5.729-5.779c1.206-1.217 3.116-1.217 4.221 0l2.814 2.839c1.206 1.217 1.206 3.143 0 4.259 l-2.814 2.839c-0.402 0.406-1.005 0.406-1.407 0c-0.402-0.406-0.402-1.014 0-1.42l1.407-1.42c1.206-1.217 1.206-3.143 0-4.259 s-3.116-1.217-4.221 0l-2.814 2.839c-1.91 1.926-1.91 5.171 0 7.199l2.814 2.839c1.91 1.926 5.126 1.926 7.136 0L22 14.776 l-1.407-1.42l-5.829 5.881c-1.206 1.217-3.116 1.217-4.221 0l-2.814-2.839c-1.206-1.217-1.206-3.143 0-4.259L10.543 9.3 c0.402-0.406 1.005-0.406 1.407 0c0.402 0.406 0.402 1.014 0 1.42l-1.407 1.42c-1.206 1.217-1.206 3.143 0 4.259 s3.116 1.217 4.221 0l2.814-2.839c1.91-1.926 1.91-5.171 0-7.199l-2.814-2.839C12.854 1.493 9.638 1.493 7.729 3.521z" />
+    </Viewbox>
+  </ControlTemplate>
+
+  <ControlTemplate x:Key="Icon.Galaxy.Area" TargetType="{x:Type controls:Icon}">
+    <Viewbox Stretch="Uniform"
+             SnapsToDevicePixels="False"
+             UseLayoutRounding="False">
+      <Canvas Width="24" Height="24">
+        <Path Fill="#FF666666"
+              Data="M4,18V20H8V18H4M4,14V16H14V14H4M10,18V20H14V18H10M16,14V16H20V14H16M16,18V20H20V18H16M2,22V8L7,12V8L12,12V8L17,12L18,2H21L22,12V22H2Z" />
+      </Canvas>
+    </Viewbox>
+  </ControlTemplate>
+  
+  
+  <ControlTemplate x:Key="Icon.Galaxy.ApplicationEngine" TargetType="{x:Type controls:Icon}">
+    <Viewbox Stretch="Uniform"
+             SnapsToDevicePixels="False"
+             UseLayoutRounding="False">
+      <Canvas Name="svg4" Width="24" Height="24">
+        <Canvas Name="g882">
+          <Canvas.RenderTransform>
+            <MatrixTransform Matrix="0.85322617 0 0 0.85017521 1.761286 1.7978975" />
+          </Canvas.RenderTransform>
+          <Path Name="path2" Fill="#FFDBDEE3" StrokeThickness="1.17413" Stroke="#FF004455">
+            <Path.Data>
+              <PathGeometry
+                Figures="m 9.699219 2 -0.5 2.5 c -0.9 0.3 -1.5988282 0.8007813 -2.2988282 1.3007812 L 4.5000002 5 2.199219 9 4.0996095 10.699219 c -0.1 0.5 -0.099609 0.900781 -0.099609 1.300781 0 0.4 -3.905e-4 0.800781 0.099609 1.300781 L 2.199219 15 4.5000002 19 6.9003908 18.199219 c 0.7 0.5 1.3992188 1.000781 2.1992188 1.300781 L 9.699219 22 h 4.701172 l 0.5 -2.5 c 0.8 -0.3 1.599218 -0.700781 2.199218 -1.300781 L 19.5 19 21.800781 15 19.900391 13.300781 C 20.000391 12.800781 20 12.4 20 12 c 0 -0.4 3.91e-4 -0.800781 -0.09961 -1.300781 L 21.800781 9 19.5 5 17.099609 5.8007812 C 16.399609 5.3007812 15.700391 4.8 14.900391 4.5 L 14.300781 2 Z"
+                FillRule="NonZero" />
+            </Path.Data>
+          </Path>
+          <Path Name="path839" Fill="#FF3885FA" StrokeThickness="1.17413" Stroke="#FF004455" StrokeStartLineCap="Round"
+                StrokeEndLineCap="Round">
+            <Path.Data>
+              <PathGeometry
+                Figures="M 15.5 12 A 3.5000003 3.5000003 0 0 1 12 15.5 3.5000003 3.5000003 0 0 1 8.4999999 12 3.5000003 3.5000003 0 0 1 12 8.4999999 3.5000003 3.5000003 0 0 1 15.5 12"
+                FillRule="NonZero" />
+            </Path.Data>
+          </Path>
+        </Canvas>
+      </Canvas>
+    </Viewbox>
+  </ControlTemplate>
+
+  <ControlTemplate x:Key="Icon.Galaxy.ViewEngine" TargetType="{x:Type controls:Icon}">
+    <Viewbox Stretch="Uniform"
+             SnapsToDevicePixels="False"
+             UseLayoutRounding="False">
+      <Canvas Name="svg4" Width="24" Height="24">
+        <Canvas.RenderTransform>
+          <TranslateTransform X="0" Y="0" />
+        </Canvas.RenderTransform>
+        <Canvas.Resources />
+        <Canvas Name="g27">
+          <Path Name="path22" Fill="#FF373E48">
+            <Path.Data>
+              <PathGeometry
+                Figures="M 11.29 20 H 5 C 3.89 20 3 19.1 3 18 V 6 C 3 4.89 3.9 4 5 4 h 14 c 1.11 0 2 0.9 2 2 v 5.68 c -0.62 -0.29 -1.29 -0.5 -2 -0.6 V 8 H 5 v 10 h 6 c 0 0.7 0.11 1.37 0.29 2 z"
+                FillRule="NonZero" />
+            </Path.Data>
+          </Path>
+          <Path Name="path20" Fill="#FF5F8DD3">
+            <Path.Data>
+              <PathGeometry
+                Figures="M 17.099609 13.199219 C 16.899609 13.199219 16.800781 13.300391 16.800781 13.400391 L 16.599609 14.699219 C 16.299609 14.899219 16.100781 14.999219 15.800781 15.199219 L 14.599609 14.699219 C 14.499609 14.699219 14.400781 14.700781 14.300781 14.800781 L 13.300781 16.5 C 13.300781 16.6 13.300391 16.700781 13.400391 16.800781 L 14.5 17.599609 L 14.5 18.599609 L 13.400391 19.400391 C 13.300391 19.500391 13.200781 19.599219 13.300781 19.699219 L 14.300781 21.400391 C 14.400781 21.500391 14.499609 21.5 14.599609 21.5 L 15.800781 21 C 16.000781 21.2 16.299609 21.4 16.599609 21.5 L 16.800781 22.800781 C 16.900781 22.900781 16.999609 23 17.099609 23 L 19.099609 23 C 19.199609 23 19.300781 22.900781 19.300781 22.800781 L 19.5 21.5 C 19.8 21.3 20.000781 21.2 20.300781 21 L 21.5 21.400391 C 21.6 21.400391 21.700781 21.400781 21.800781 21.300781 L 22.800781 19.599609 C 22.900781 19.499609 22.900781 19.400391 22.800781 19.400391 L 21.699219 18.599609 L 21.699219 17.599609 L 22.800781 16.800781 C 22.900781 16.700781 23.000391 16.6 22.900391 16.5 L 21.900391 14.800781 C 21.900391 14.700781 21.699609 14.699219 21.599609 14.699219 L 20.400391 15.199219 C 20.100391 14.999219 19.8 14.799219 19.5 14.699219 L 19.300781 13.400391 C 19.300781 13.300391 19.199609 13.199219 19.099609 13.199219 L 17.099609 13.199219 z M 18 16.5 C 18.8 16.5 19.5 17.2 19.5 18 C 19.5 18.8 18.8 19.5 18 19.5 C 17.2 19.5 16.5 18.8 16.5 18 C 16.5 17.2 17.2 16.5 18 16.5 z "
+                FillRule="NonZero" />
+            </Path.Data>
+          </Path>
+        </Canvas>
+      </Canvas>
+    </Viewbox>
+  </ControlTemplate>
+
+  <ControlTemplate x:Key="Icon.Galaxy.PlatformEngine" TargetType="{x:Type controls:Icon}">
+    <Viewbox Stretch="Uniform"
+             SnapsToDevicePixels="False"
+             UseLayoutRounding="False">
+      <Canvas Width="24" Height="24">
+        <Path Fill="#FF666666">
+          <Path.Data>
+            <PathGeometry
+              Figures="m 8 2 h 8 a 2 2 0 0 1 2 1.9999999 V 20 a 2 2 0 0 1 -2 2 H 8 A 2 2 0 0 1 6 20 V 3.9999999 A 2 2 0 0 1 8 2 m 0 1.9999999 v 2 h 8 v -2 H 8 m 8 4 H 8 V 10 h 8 V 7.9999999 M 16 18 h -2 v 2 h 2 z"
+              FillRule="NonZero" />
+          </Path.Data>
+        </Path>
+      </Canvas>
+    </Viewbox>
+  </ControlTemplate>
+
+  <ControlTemplate x:Key="Icon.Galaxy.ApplicationObject" TargetType="{x:Type controls:Icon}">
+    <Viewbox Stretch="Uniform"
+             SnapsToDevicePixels="False"
+             UseLayoutRounding="False">
+      <Canvas Name="svg4" Width="24" Height="24">
+        <Canvas.RenderTransform>
+          <TranslateTransform X="0" Y="0" />
+        </Canvas.RenderTransform>
+        <Canvas.Resources>
+          <LinearGradientBrush x:Key="LinearGradient860" MappingMode="RelativeToBoundingBox" StartPoint="0,0"
+                               EndPoint="1,1">
+            <LinearGradientBrush.GradientStops>
+              <GradientStopCollection>
+                <GradientStop Color="#FF106DF9" Offset="0" />
+                <GradientStop Color="#FF69A4FD" Offset="0.5" />
+                <GradientStop Color="#FF619FFB" Offset="1" />
+              </GradientStopCollection>
+            </LinearGradientBrush.GradientStops>
+          </LinearGradientBrush>
+          <LinearGradientBrush x:Key="LinearGradient862" MappingMode="Absolute" StartPoint="12,12" EndPoint="4,4">
+            <LinearGradientBrush.GradientStops>
+              <GradientStopCollection>
+                <GradientStop Color="#FF106DF9" Offset="0" />
+                <GradientStop Color="#FF69A4FD" Offset="0.5" />
+                <GradientStop Color="#FF619FFB" Offset="1" />
+              </GradientStopCollection>
+            </LinearGradientBrush.GradientStops>
+          </LinearGradientBrush>
+        </Canvas.Resources>
+        <Path Name="path12" Fill="{StaticResource LinearGradient862}" StrokeThickness="4" StrokeStartLineCap="Round"
+              StrokeEndLineCap="Round">
+          <Path.Data>
+            <PathGeometry
+              Figures="m 20 12 a 7.9999999 8 0 0 1 -8 8 7.9999999 8 0 0 1 -8 -8 7.9999999 8 0 0 1 8 -8 7.9999999 8 0 0 1 8 8 z"
+              FillRule="NonZero" />
+          </Path.Data>
+        </Path>
+      </Canvas>
+    </Viewbox>
+  </ControlTemplate>
+
+  <ControlTemplate x:Key="Icon.Galaxy.OpcClient" TargetType="{x:Type controls:Icon}">
+    <Viewbox Stretch="Uniform"
+             SnapsToDevicePixels="False"
+             UseLayoutRounding="False">
+      <Canvas Name="svg4" Width="24" Height="24">
+        <Canvas Name="text1162" Opacity="1">
+          <Canvas.RenderTransform>
+            <MatrixTransform Matrix="0.9634872 0 0 1.0378965 -0.15784713 0.22340272" />
+          </Canvas.RenderTransform>
+        </Canvas>
+        <Canvas Name="text1166" Opacity="1">
+          <Canvas.RenderTransform>
+            <MatrixTransform Matrix="0.98724674 0 0 1.012918 0.10366647 6.3980435e-4" />
+          </Canvas.RenderTransform>
+        </Canvas>
+        <Canvas Name="g1076">
+          <Canvas Name="g27">
+            <Path Name="path17" Fill="#FF004455" StrokeThickness="0.999997">
+              <Path.Data>
+                <PathGeometry
+                  Figures="m 11.067907 7.4580683 q 1.820078 0 3.119237 1.3251879 1.305434 1.3251878 1.305434 3.1716588 0 1.877872 -1.31171 3.190499 -1.311711 1.312627 -3.188274 1.312627 -1.864011 0 -3.1819983 -1.318907 -1.3179873 -1.318907 -1.3179873 -3.184219 0 -1.884154 1.3242634 -3.1905004 1.3305395 -1.3063463 3.2510352 -1.3063463 z m -0.07531 2.5247655 q -0.784517 0 -1.3368161 0.5778062 -0.5522994 0.577808 -0.5522994 1.394275 0 0.816466 0.5522994 1.394273 0.5585751 0.577807 1.3368161 0.577807 0.790792 0 1.336815 -0.571527 0.552299 -0.577806 0.552299 -1.400553 0 -0.822747 -0.552299 -1.394275 -0.546023 -0.5778062 -1.336815 -0.5778062 z"
+                  FillRule="NonZero" />
+              </Path.Data>
+            </Path>
+            <Path Name="path873" Fill="#FF2C5AA0" StrokeThickness="2" StrokeMiterLimit="4" StrokeLineJoin="Miter"
+                  StrokeStartLineCap="Round" StrokeEndLineCap="Round" Opacity="0.99">
+              <Path.Data>
+                <PathGeometry
+                  Figures="M 3.0000003 3.0000003 V 4.0285717 21 H 21 V 18.958929 5.0410717 3.0000003 Z M 5.0571431 5.0571431 H 16.885715 V 18.942858 H 5.0571431 Z"
+                  FillRule="NonZero" />
+              </Path.Data>
+            </Path>
+            <Path Name="rect884" Fill="#FFD35F5F" StrokeThickness="1.99999" StrokeMiterLimit="4"
+                  StrokeStartLineCap="Round" StrokeEndLineCap="Round">
+              <Path.Data>
+                <PathGeometry Figures="M 16.883963 3 H 21 v 18 h -4.116037 z" FillRule="NonZero" />
+              </Path.Data>
+            </Path>
+          </Canvas>
+        </Canvas>
+      </Canvas>
+    </Viewbox>
+  </ControlTemplate>
+
+  <ControlTemplate x:Key="Icon.Galaxy.DdeClient" TargetType="{x:Type controls:Icon}">
+    <Viewbox Stretch="Uniform"
+             SnapsToDevicePixels="False"
+             UseLayoutRounding="False">
+      <Canvas Name="svg4" Width="24" Height="24">
+        <Canvas Name="text1162" Opacity="1">
+          <Canvas.RenderTransform>
+            <MatrixTransform Matrix="0.9634872 0 0 1.0378965 -0.15784713 0.22340272" />
+          </Canvas.RenderTransform>
+        </Canvas>
+        <Canvas Name="text1166" Opacity="1">
+          <Canvas.RenderTransform>
+            <MatrixTransform Matrix="0.98724674 0 0 1.012918 0.10366647 6.3980435e-4" />
+          </Canvas.RenderTransform>
+        </Canvas>
+        <TextBlock FontSize="40" FontWeight="Normal"
+                   FontFamily="sans-serif" FontStyle="normal" Foreground="#FF000000" Canvas.Left="55.002029"
+                   Canvas.Top="-35.7" Name="text882" />
+        <Canvas Name="g913">
+          <Path Name="path888" Fill="#FF004455"
+                StrokeThickness="0.999999">
+            <Path.Data>
+              <PathGeometry
+                Figures="m 9.2041201 10.02761 v 6.378004 H 6.4105423 V 7.4580538 H 10.05045 q 2.394496 0 3.750001 1.035688 1.610091 1.238893 1.610091 3.3627102 0 2.032047 -1.376147 3.316824 -1.376146 1.284778 -3.543578 1.284778 -0.254587 0 -0.8325678 -0.02622 v -2.628551 h 0.4472468 q 2.442661 0 2.442661 -1.946832 0 -1.828842 -2.401376 -1.828842 z"
+                FillRule="NonZero" />
+            </Path.Data>
+          </Path>
+          <Path Name="path873" Fill="#FF2C5AA0"
+                StrokeThickness="2" StrokeMiterLimit="4" StrokeLineJoin="Miter" StrokeStartLineCap="Round"
+                StrokeEndLineCap="Round" Opacity="0.99">
+            <Path.Data>
+              <PathGeometry
+                Figures="M 3.0000003 3.0000003 V 4.0285717 21 H 21 V 18.958929 5.0410717 3.0000003 Z M 5.0571431 5.0571431 H 16.885715 V 18.942858 H 5.0571431 Z"
+                FillRule="NonZero" />
+            </Path.Data>
+          </Path>
+          <Rectangle Canvas.Left="16.883963" Canvas.Top="3"
+                     Width="4.1160378" Height="18" Name="rect884" Fill="#FFD35F5F" StrokeThickness="1.99999"
+                     StrokeMiterLimit="4" StrokeStartLineCap="Round" StrokeEndLineCap="Round" />
+        </Canvas>
+      </Canvas>
+    </Viewbox>
+  </ControlTemplate>
+
+  <ControlTemplate x:Key="Icon.Galaxy.RdiObject" TargetType="{x:Type controls:Icon}">
+    <Viewbox>
+      <Path
+        Fill="{TemplateBinding Foreground}"
+        Stretch="Uniform"
+        SnapsToDevicePixels="False"
+        UseLayoutRounding="False"
+        Data="M12.89,3L14.85,3.4L11.11,21L9.15,20.6L12.89,3M19.59,12L16,8.41V5.58L22.42,12L16,18.41V15.58L19.59,12M1.58,12L8,5.58V8.41L4.41,12L8,15.58V18.41L1.58,12Z" />
+    </Viewbox>
+  </ControlTemplate>
+
+  <ControlTemplate x:Key="Icon.Galaxy.InTouchViewApp" TargetType="{x:Type controls:Icon}">
+    <Viewbox Stretch="Uniform"
+             SnapsToDevicePixels="False"
+             UseLayoutRounding="False">
+      <Canvas Name="svg4" Width="24" Height="24">
+        <Path Name="path22" Fill="#FF373E48">
+          <Path.Data>
+            <PathGeometry Figures="M 11.29 20 H 5 C 3.89 20 3 19.1 3 18 V 6 C 3 4.89 3.9 4 5 4 h 14 c 1.11 0 2 0.9 2 2 v 5.68 c -0.62 -0.29 -1.29 -0.5 -2 -0.6 V 8 H 5 v 10 h 6 c 0 0.7 0.11 1.37 0.29 2 z" FillRule="NonZero"/>
+          </Path.Data>
+        </Path>
+        <Path Name="path858" Fill="#FF0088AA" StrokeThickness="0.5" Stroke="#FF0088AA" StrokeMiterLimit="4">
+          <Path.Data>
+            <PathGeometry Figures="m 13.145321 20.555801 q 0.133149 -0.523486 0.133149 -1.370301 0 -2.083681 -0.327748 -4.013394 -0.322624 -1.934847 -0.834728 -2.904836 0.522345 -0.128305 0.757914 -0.128305 0.337988 0 0.491618 0.318198 0.158752 0.318196 0.399441 1.503739 0.373837 1.816805 0.54283 4.978251 1.710426 -3.530966 2.790965 -5.537662 0.06657 -0.01032 0.0973 -0.01541 0.215083 -0.04619 0.291899 -0.04619 0.425046 0 0.425046 0.405445 0 0.118042 -0.02561 0.292536 -0.204842 1.66797 -0.204842 2.463464 l -0.01536 0.585073 -0.0051 0.34899 q 0 1.924582 0.583799 1.924582 0.665735 0 1.362196 -1.395963 0.773276 -1.560194 0.773276 -3.643874 0 -0.898137 -0.44553 -1.673103 0.368714 -0.09238 0.670856 -0.09238 0.471135 0 0.665734 0.266875 0.1946 0.261743 0.1946 0.913534 0 2.109341 -1.213686 4.300798 -0.558193 1.005914 -1.259776 1.657706 -0.69646 0.651792 -1.218805 0.651792 -0.583799 0 -0.824487 -0.651792 -0.235568 -0.651792 -0.235568 -2.253043 0 -0.641528 0.06657 -1.970771 -1.234171 2.145266 -1.884543 3.54123 l -0.168994 0.374651 q -0.363593 0.749304 -0.578677 0.908403 -0.209962 0.159099 -1.003724 0.261743 z" FillRule="NonZero"/>
+          </Path.Data>
+        </Path>
+      </Canvas>
+    </Viewbox>
+  </ControlTemplate>
 </ResourceDictionary>

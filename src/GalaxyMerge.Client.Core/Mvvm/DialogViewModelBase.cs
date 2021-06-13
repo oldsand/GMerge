@@ -6,14 +6,14 @@ namespace GalaxyMerge.Client.Core.Mvvm
 {
     public class DialogViewModelBase : ViewModelBase, IDialogAware
     {
-        private DelegateCommand _closeDialogCommand;
+        private DelegateCommand _cancelDialogCommand;
 
-        public DelegateCommand CloseDialogCommand =>
-            _closeDialogCommand ??= new DelegateCommand(ExecuteCloseDialog);
+        public DelegateCommand CancelDialogCommand =>
+            _cancelDialogCommand ??= new DelegateCommand(ExecuteCancelDialog);
 
         public event Action<IDialogResult> RequestClose;
 
-        protected virtual void ExecuteCloseDialog()
+        protected virtual void ExecuteCancelDialog()
         {
             RaiseRequestClose(new DialogResult(ButtonResult.Cancel));
         }

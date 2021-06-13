@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using GalaxyMerge.Client.Data.Entities;
 using GalaxyMerge.Client.Data.Repositories;
 using GalaxyMerge.Client.Data.Tests.Base;
+using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 
 namespace GalaxyMerge.Client.Data.Tests
@@ -27,9 +28,9 @@ namespace GalaxyMerge.Client.Data.Tests
         {
             using var context = new AppContext(ContextOptions);
             context.Resources.Add(new ResourceEntry("Resource1", ResourceType.Connection, "This is a test"));
-            context.Resources.Add(new ResourceEntry("Resource2", ResourceType.Archive, "This is a test"));
-            context.Resources.Add(new ResourceEntry("Resource3", ResourceType.Directory, "This is a test"));
-            context.Resources.Add(new ResourceEntry("Resource1", ResourceType.Connection, "This is a test"));
+            context.Resources.Add(new ResourceEntry("Resource2", ResourceType.Archive, "Resource Number 2"));
+            context.Resources.Add(new ResourceEntry("Resource3", ResourceType.Directory, "Test Description"));
+            context.Resources.Add(new ResourceEntry("Resource4", ResourceType.Connection, "This is another test"));
             context.SaveChanges();
         }
 
@@ -58,23 +59,9 @@ namespace GalaxyMerge.Client.Data.Tests
             Assert.NotNull(result);
             Assert.AreEqual("Resource3", result.ResourceName);
             Assert.AreEqual(ResourceType.Directory, result.ResourceType);
-            Assert.AreEqual( "This is a test", result.ResourceDescription);
+            Assert.AreEqual( "Test Description", result.ResourceDescription);
         }
-        
-        [Test]
-        public void Get_ResourceNameThatIsDuplicate_ReturnExpectedEntry()
-        {
-            Seed();
-            using var repo = new ResourceRepository(Connection);
-            
-            var result = repo.Get("Resource1");
-            
-            Assert.NotNull(result);
-            Assert.AreEqual("Resource1", result.ResourceName);
-            Assert.AreEqual(ResourceType.Connection, result.ResourceType);
-            Assert.AreEqual( "This is a test", result.ResourceDescription);
-        }
-        
+
         [Test]
         public void Get_DoesNotExist_ReturnsNull()
         {
@@ -88,6 +75,19 @@ namespace GalaxyMerge.Client.Data.Tests
         
         [Test]
         public void GetAll_WhenCalled_ReturnsAllEntries()
+        {
+            Seed();
+            using var repo = new ResourceRepository(Connection);
+
+            var entries = repo.GetAll().ToList();
+            
+            Assert.NotNull(entries);
+            Assert.IsNotEmpty(entries);
+            Assert.That(entries, Has.Count.EqualTo(4));
+        }
+        
+        [Test]
+        public void GetNames_WhenCalled_ReturnsAllResourceNames()
         {
             Seed();
             using var repo = new ResourceRepository(Connection);
@@ -130,13 +130,26 @@ namespace GalaxyMerge.Client.Data.Tests
         }
         
         [Test]
+        public void Add_ExistingName_ThrowSqlException()
+        {
+            Seed();
+            using var repo = new ResourceRepository(Connection);
+            
+            Assert.Throws<DbUpdateException>(() =>
+            {
+                repo.Add(new ResourceEntry("Resource1", ResourceType.Archive));
+                repo.Save();
+            });
+        }
+        
+        [Test]
         public void Update_WhenCalled_UpdatePropertiesReturnExpected()
         {
             Seed();
             using var repo = new ResourceRepository(Connection);
 
             var target = repo.Get(4);
-            target.UpdateName("Resource4");
+            target.UpdateName("Resource44");
             target.UpdateDescription("TestUpdate");
             
             repo.Update(target);
@@ -145,9 +158,24 @@ namespace GalaxyMerge.Client.Data.Tests
             var result = repo.Get(4);
 
             Assert.NotNull(result);
-            Assert.AreEqual("Resource4", result.ResourceName);
+            Assert.AreEqual("Resource44", result.ResourceName);
             Assert.AreEqual(ResourceType.Connection, result.ResourceType);
             Assert.AreEqual("TestUpdate", result.ResourceDescription);
+        }
+        
+        [Test]
+        public void Update_ExistingName_ThrowSqlException()
+        {
+            Seed();
+            using var repo = new ResourceRepository(Connection);
+            var target = repo.Get(4);
+            target.UpdateName("Resource2");
+            
+            Assert.Throws<DbUpdateException>(() =>
+            {
+                repo.Update(target);
+                repo.Save();
+            });
         }
         
         [Test]

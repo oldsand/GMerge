@@ -16,9 +16,10 @@ namespace GalaxyMerge.Client.Converters
 
             return resourceType switch
             {
-                ResourceType.Connection => ResourceFinder.Find<ControlTemplate>("Icon.Connection"),
-                ResourceType.Archive => ResourceFinder.Find<ControlTemplate>("Icon.Archive"),
-                ResourceType.Directory => ResourceFinder.Find<ControlTemplate>("Icon.File"),
+                ResourceType.Connection => ResourceFinder.Find<ControlTemplate>("Icon.Filled.Plug"),
+                ResourceType.Archive => ResourceFinder.Find<ControlTemplate>("Icon.Filled.Database"),
+                ResourceType.Directory => ResourceFinder.Find<ControlTemplate>("Icon.Filled.Folder"),
+                ResourceType.None => ResourceFinder.Find<ControlTemplate>("Icon.Blank"),
                 _ => throw new ArgumentOutOfRangeException()
             };
         }

@@ -76,5 +76,9 @@
         <Name>GalaxyMerge.Primitives</Name>
       </ProjectReference>
     </ItemGroup>
+    <ItemGroup>
+      <Folder Include="App" />
+      <Folder Include="Core" />
+    </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

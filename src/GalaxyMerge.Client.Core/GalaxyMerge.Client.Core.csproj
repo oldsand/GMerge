@@ -57,6 +57,7 @@
         <Compile Include="Behaviors\TreeViewMultipleSelectionBehavior.cs" />
         <Compile Include="Behaviors\TriggersCollection.cs" />
         <Compile Include="Converters\Operator.cs" />
+        <Compile Include="Converters\StringEmptyOrNullVisibilityConverter.cs" />
         <Compile Include="Converters\ThicknessAdjuster.cs" />
         <Compile Include="Converters\ValueConverter.cs" />
         <Compile Include="Converters\BooleanBrushConverter.cs" />
@@ -72,6 +73,7 @@
         <Compile Include="Converters\LeftMarginMultiplierConverter.cs" />
         <Compile Include="Converters\WidthHeightExtender.cs" />
         <Compile Include="Extensions\CollapsibleColumnDefinition.cs" />
+        <Compile Include="Extensions\CollapsibleRowDefinition.cs" />
         <Compile Include="Extensions\ColorExtensions.cs" />
         <Compile Include="Extensions\ComboBoxTemplateSelectorExtension.cs" />
         <Compile Include="Extensions\DependencyObjectExtensions.cs" />
@@ -85,6 +87,7 @@
         <Compile Include="Mvvm\Observable.cs" />
         <Compile Include="Mvvm\RegionName.cs" />
         <Compile Include="Mvvm\ViewModelBase.cs" />
+        <Compile Include="Prism\DialogServiceExtension.cs" />
         <Compile Include="Prism\ICreateScopedRegionManager.cs" />
         <Compile Include="Prism\IRegionManagerAware.cs" />
         <Compile Include="Prism\RegionManagerAwareBehavior.cs" />

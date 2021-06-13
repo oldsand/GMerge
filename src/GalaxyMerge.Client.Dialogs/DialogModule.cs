@@ -12,6 +12,7 @@ namespace GalaxyMerge.Client.Dialogs
     {
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
+            containerRegistry.RegisterDialog<ConfirmationDialogView, ConfirmationDialogViewModel>(DialogName.ConfirmationDialog);
             containerRegistry.RegisterDialog<NewResourceView, NewResourceViewModel>(DialogName.NewResourceDialog);
         }
 

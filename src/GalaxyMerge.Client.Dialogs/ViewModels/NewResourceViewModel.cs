@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using GalaxyMerge.Client.Core.Mvvm;
 using GalaxyMerge.Client.Data.Abstractions;
 using GalaxyMerge.Client.Data.Entities;
@@ -14,6 +16,7 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
         private readonly IResourceRepository _resourceRepository;
         private readonly IEventAggregator _eventAggregator;
+        private readonly List<string> _resourceNames = new List<string>();
         private ResourceType _selectedResourceType;
         private string _resourceName;
         private string _resourceDescription;
@@ -38,6 +41,9 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
             Logger.Trace("Initializing New Resource Dialog");
             _resourceRepository = resourceRepository;
             _eventAggregator = eventAggregator;
+
+            Logger.Trace("Loading current resource names");
+            _resourceNames = _resourceRepository.GetNames().ToList();
         }
 
         public override void OnDialogClosed()
@@ -136,18 +142,20 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
         {
             Logger.Trace("Executing Save New Resource Command");
 
-            var galaxyResource = new ResourceEntry(_resourceName, _selectedResourceType);
+            var resourceEntry = new ResourceEntry(ResourceName, SelectedResourceType, ResourceDescription);
+            resourceEntry = SetEntryInformation(resourceEntry);
 
             try
             {
-                _resourceRepository.Add(galaxyResource);
+                _resourceRepository.Add(resourceEntry);
                 _resourceRepository.Save();
-                Logger.Info("Added new {ResourceType} resource named {ResourceName}", _selectedResourceType,
-                    _resourceName);
+                
+                Logger.Info("Added new {ResourceType} resource named {ResourceName}", SelectedResourceType,
+                    ResourceName);
 
-                _eventAggregator.GetEvent<RefreshResourcesEvent>().Publish();
+                _eventAggregator.GetEvent<NewResourceAddedEvent>().Publish(resourceEntry.ResourceName);
 
-                ExecuteCloseDialog();
+                ExecuteCancelDialog();
             }
             catch (Exception e)
             {
@@ -180,6 +188,28 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
         private bool HasValidDirectoryData()
         {
             return !string.IsNullOrEmpty(DirectoryName);
+        }
+        
+        private ResourceEntry SetEntryInformation(ResourceEntry resourceEntry)
+        {
+            switch (resourceEntry.ResourceType)
+            {
+                case ResourceType.None:
+                    break;
+                case ResourceType.Connection:
+                    resourceEntry.SetConnection(NodeName, GalaxyName);
+                    break;
+                case ResourceType.Archive:
+                    resourceEntry.SetArchive(FileName);
+                    break;
+                case ResourceType.Directory:
+                    resourceEntry.SetDirectory(DirectoryName);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            return resourceEntry;
         }
     }
 }

@@ -30,23 +30,21 @@
                   Foreground="{ui:ThemeResource ResourceKey=PrimaryForeground}" />
         <Button
           Margin="10 0"
-          Height="26" Width="26"
           Style="{StaticResource Style.Button.Transparent}"
           IsEnabled="{Binding ElementName=EnabledInput, Path=IsChecked}">
-          <ui:Icon Template="{StaticResource Icon.Cog}" />
+          <ui:Icon Template="{StaticResource Icon.Filled.Cog}" />
         </Button>
         <Button
           Margin="10 0"
-          Height="26" Width="26"
           Style="{StaticResource Style.Button.Transparent}"
           IsEnabled="{Binding ElementName=EnabledInput, Path=IsChecked}">
-          <ui:Icon Template="{StaticResource Icon.Cube}" />
+          <ui:Icon Template="{StaticResource Icon.Outlined.Cube}" />
         </Button>
       </StackPanel>
     </Border>
 
 
-    <TabControl Grid.Row="1" 
+    <TabControl Grid.Row="1"
                 BorderThickness="0 1 0 0"
                 TabStripPlacement="Top"
                 ui:TabControlProperties.HeaderPadding="20 0 0 0">
@@ -128,7 +126,7 @@
               <ComboBoxItem Content="Item1" />
               <ComboBoxItem Content="Item2" />
             </ComboBox>
-            
+
             <TextBox Margin="10" ui:TextBoxProperties.DefaultText="First Name"
                      IsEnabled="{Binding ElementName=EnabledInput, Path=IsChecked}"
                      Height="30" />
@@ -138,10 +136,41 @@
             <TextBox Margin="10" ui:TextBoxProperties.DefaultText="Last Name"
                      IsEnabled="{Binding ElementName=EnabledInput, Path=IsChecked}"
                      Height="30" />
-            
+
           </StackPanel>
         </Grid>
 
+      </TabItem>
+      <TabItem Height="30" Width="80" Header="Icons">
+        <Grid Margin="30">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+          </Grid.ColumnDefinitions>
+          
+          <GroupBox Grid.Column="0" Header="Standard">
+            <WrapPanel>
+              <ui:Icon Margin="5" Template="{StaticResource Icon.Filled.Plug}" />
+              <ui:Icon Margin="5" Template="{StaticResource Icon.Filled.Database}" />  
+            </WrapPanel>
+          </GroupBox>
+          
+          <GroupBox Grid.Column="1" Header="Filled">
+            <WrapPanel>
+              <ui:Icon Margin="5" Template="{StaticResource Icon.Filled.Plug}" />
+              <ui:Icon Margin="5" Template="{StaticResource Icon.Filled.Database}" />  
+            </WrapPanel>
+          </GroupBox>
+          
+          <GroupBox Grid.Column="2" Header="Outlined">
+            <WrapPanel>
+              <ui:Icon Margin="5" Template="{StaticResource Icon.Filled.Plug}" />
+              <ui:Icon Margin="5" Template="{StaticResource Icon.Filled.Database}" />  
+            </WrapPanel>
+          </GroupBox>
+        </Grid>
+        
       </TabItem>
       <TabItem Height="30" Width="80" Header="Lists" />
       <TabItem Height="30" Width="80" Header="DataGrid" />

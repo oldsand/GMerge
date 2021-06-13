@@ -1,4 +1,5 @@
 #nullable enable
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -26,9 +27,10 @@ namespace GalaxyMerge.Client.Core.Selectors
             // If you stopped at a ComboBoxItem, you're in the dropdown
             var inDropDown = itemToCheck is ComboBoxItem;
 
-            return inDropDown
+            return (inDropDown
                 ? DropdownItemsTemplate ?? DropdownItemsTemplateSelector?.SelectTemplate(item, container)
-                : SelectedItemTemplate ?? SelectedItemTemplateSelector?.SelectTemplate(item, container);
+                : SelectedItemTemplate ?? SelectedItemTemplateSelector?.SelectTemplate(item, container)) 
+                   ?? throw new InvalidOperationException("Must provide a DataTemplate or DataTemplateSelector for ComboBoxTemplateSelector");
         }
     }
 }

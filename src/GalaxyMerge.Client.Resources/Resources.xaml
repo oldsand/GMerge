@@ -10,6 +10,8 @@
     <ResourceDictionary Source="Styles/FontStyles.xaml" />
     <!--Icons-->
     <ResourceDictionary Source="Icons/StandardIcons.xaml" />
+    <ResourceDictionary Source="Icons/FilledIcons.xaml" />
+    <ResourceDictionary Source="Icons/OutlinedIcons.xaml" />
     <ResourceDictionary Source="Icons/WindowIcons.xaml" />
     <ResourceDictionary Source="Icons/GalaxyIcons.xaml" />
     <!--Controls-->

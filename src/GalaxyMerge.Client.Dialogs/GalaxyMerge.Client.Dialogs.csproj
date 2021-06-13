@@ -57,7 +57,11 @@
             <DesignTime>True</DesignTime>
             <DependentUpon>Resources.resx</DependentUpon>
         </Compile>
+        <Compile Include="ViewModels\ConfirmationDialogViewModel.cs" />
         <Compile Include="ViewModels\NewResourceViewModel.cs" />
+        <Compile Include="Views\ConfirmationDialogView.xaml.cs">
+          <DependentUpon>ConfirmationDialogView.xaml</DependentUpon>
+        </Compile>
         <Compile Include="Views\NewResourceView.xaml.cs">
           <DependentUpon>NewResourceView.xaml</DependentUpon>
         </Compile>
@@ -73,6 +77,7 @@
       <PackageReference Include="Prism.Wpf" Version="8.1.97" />
     </ItemGroup>
     <ItemGroup>
+      <Page Include="Views\ConfirmationDialogView.xaml" />
       <Page Include="Views\NewResourceView.xaml" />
     </ItemGroup>
     <ItemGroup>
