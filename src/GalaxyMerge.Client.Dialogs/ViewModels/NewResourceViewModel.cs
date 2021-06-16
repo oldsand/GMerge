@@ -8,6 +8,7 @@ using GalaxyMerge.Client.Events;
 using NLog;
 using Prism.Commands;
 using Prism.Events;
+using Prism.Services.Dialogs;
 
 namespace GalaxyMerge.Client.Dialogs.ViewModels
 {
@@ -153,14 +154,15 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
                 Logger.Info("Added new {ResourceType} resource named {ResourceName}", SelectedResourceType,
                     ResourceName);
 
-                _eventAggregator.GetEvent<NewResourceAddedEvent>().Publish(resourceEntry.ResourceName);
-
-                ExecuteCancelDialog();
+                var parameters = new DialogParameters {{"resource", resourceEntry}};
+                RaiseRequestClose(new DialogResult(ButtonResult.OK, parameters));
             }
             catch (Exception e)
             {
                 Logger.Error(e, "Failed to add new {ResourceType} resource named {ResourceName}", _selectedResourceType,
                     _resourceName);
+                
+                //todo prompt user?
             }
         }
 

@@ -5,6 +5,7 @@ using GalaxyMerge.Client.Core.Prism;
 using GalaxyMerge.Client.Data.Abstractions;
 using GalaxyMerge.Client.Data.Repositories;
 using GalaxyMerge.Client.Dialogs;
+using GalaxyMerge.Client.UI.Connection;
 using NLog;
 using Prism.Ioc;
 using Prism.Modularity;
@@ -38,6 +39,7 @@ namespace GalaxyMerge.Client.Application
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
         {
             moduleCatalog.AddModule<DialogModule>();
+            moduleCatalog.AddModule<ConnectionModule>();
         }
 
         protected override void ConfigureDefaultRegionBehaviors(IRegionBehaviorFactory regionBehaviors)

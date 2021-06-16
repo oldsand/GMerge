@@ -2,9 +2,9 @@ using System.Windows.Controls;
 
 namespace GalaxyMerge.Client.Dialogs.Views
 {
-    public partial class ConfirmationDialogView : UserControl
+    public partial class ResourceSettingsView : UserControl
     {
-        public ConfirmationDialogView()
+        public ResourceSettingsView()
         {
             InitializeComponent();
         }

@@ -4,10 +4,10 @@
     <PropertyGroup>
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
         <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-        <ProjectGuid>{9A11B5E3-17BF-4B60-9558-E1982C172B25}</ProjectGuid>
+        <ProjectGuid>{CE25B627-6028-438D-B172-D81CE5FEDFB9}</ProjectGuid>
         <OutputType>Library</OutputType>
-        <RootNamespace>GalaxyMerge.Client.Dialogs</RootNamespace>
-        <AssemblyName>GalaxyMerge.Client.Dialogs</AssemblyName>
+        <RootNamespace>GalaxyMerge.Client.UI.Connection</RootNamespace>
+        <AssemblyName>GalaxyMerge.Client.UI.Connection</AssemblyName>
         <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
         <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -47,8 +47,7 @@
         <Reference Include="PresentationFramework" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Design\DesignViewModels.cs" />
-        <Compile Include="DialogModule.cs" />
+        <Compile Include="ConnectionModule.cs" />
         <Compile Include="Properties\AssemblyInfo.cs">
             <SubType>Code</SubType>
         </Compile>
@@ -56,26 +55,6 @@
             <AutoGen>True</AutoGen>
             <DesignTime>True</DesignTime>
             <DependentUpon>Resources.resx</DependentUpon>
-        </Compile>
-        <Compile Include="ViewModels\ConfirmationViewModel.cs" />
-        <Compile Include="ViewModels\NewResourceViewModel.cs" />
-        <Compile Include="ViewModels\ResourceSettingsGeneralViewModel.cs" />
-        <Compile Include="ViewModels\ResourceSettingsOptionsViewModel.cs" />
-        <Compile Include="ViewModels\ResourceSettingsViewModel.cs" />
-        <Compile Include="Views\ConfirmationView.xaml.cs">
-          <DependentUpon>ConfirmationView.xaml</DependentUpon>
-        </Compile>
-        <Compile Include="Views\NewResourceView.xaml.cs">
-          <DependentUpon>NewResourceView.xaml</DependentUpon>
-        </Compile>
-        <Compile Include="Views\ResourceSettingsGeneralView.xaml.cs">
-          <DependentUpon>ResourceSettingsGeneralView.xaml</DependentUpon>
-        </Compile>
-        <Compile Include="Views\ResourceSettingsOptionsView.xaml.cs">
-          <DependentUpon>ResourceSettingsOptionsView.xaml</DependentUpon>
-        </Compile>
-        <Compile Include="Views\ResourceSettingsView.xaml.cs">
-          <DependentUpon>ResourceSettingsView.xaml</DependentUpon>
         </Compile>
         <EmbeddedResource Include="Properties\Resources.resx">
             <Generator>ResXFileCodeGenerator</Generator>
@@ -88,17 +67,6 @@
       <PackageReference Include="Prism.Wpf" Version="8.1.97" />
     </ItemGroup>
     <ItemGroup>
-      <Page Include="Views\ConfirmationView.xaml" />
-      <Page Include="Views\NewResourceView.xaml" />
-      <Page Include="Views\ResourceSettingsGeneralView.xaml" />
-      <Page Include="Views\ResourceSettingsOptionsView.xaml" />
-      <Page Include="Views\ResourceSettingsView.xaml" />
-    </ItemGroup>
-    <ItemGroup>
-      <ProjectReference Include="..\GalaxyMerge.Client.Contracts\GalaxyMerge.Client.Contracts.csproj">
-        <Project>{b72fb577-363e-493f-b9c7-66b6dd8720ae}</Project>
-        <Name>GalaxyMerge.Client.Contracts</Name>
-      </ProjectReference>
       <ProjectReference Include="..\GalaxyMerge.Client.Converters\GalaxyMerge.Client.Converters.csproj">
         <Project>{710ea881-acd9-4c06-97e6-6c88e395e821}</Project>
         <Name>GalaxyMerge.Client.Converters</Name>
@@ -112,21 +80,30 @@
         <Name>GalaxyMerge.Client.Data</Name>
       </ProjectReference>
       <ProjectReference Include="..\GalaxyMerge.Client.Events\GalaxyMerge.Client.Events.csproj">
-        <Project>{af4bd15a-bc5c-4f2f-9ef9-778e20e381e0}</Project>
+        <Project>{60790ac9-6add-444f-a812-22129782fa81}</Project>
         <Name>GalaxyMerge.Client.Events</Name>
-      </ProjectReference>
-      <ProjectReference Include="..\GalaxyMerge.Client.Observables\GalaxyMerge.Client.Observables.csproj">
-        <Project>{31a6b9b2-e1c6-41ac-a753-8a1985842fb6}</Project>
-        <Name>GalaxyMerge.Client.Observables</Name>
-      </ProjectReference>
-      <ProjectReference Include="..\GalaxyMerge.Client.Proxies\GalaxyMerge.Client.Proxies.csproj">
-        <Project>{c080b539-439d-4c9e-bdf4-7578e215f34d}</Project>
-        <Name>GalaxyMerge.Client.Proxies</Name>
       </ProjectReference>
       <ProjectReference Include="..\GalaxyMerge.Client.Resources\GalaxyMerge.Client.Resources.csproj">
         <Project>{0db6d056-eee8-49e1-8ff5-c6edce7c48fc}</Project>
         <Name>GalaxyMerge.Client.Resources</Name>
       </ProjectReference>
+      <ProjectReference Include="..\GalaxyMerge.Core\GalaxyMerge.Core.csproj">
+        <Project>{dd496472-fb15-4ffc-86ca-2ac8f0e6cf3c}</Project>
+        <Name>GalaxyMerge.Core</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\GalaxyMerge.Data\GalaxyMerge.Data.csproj">
+        <Project>{1116a38e-aa67-46e3-9d09-e2de5c2a694e}</Project>
+        <Name>GalaxyMerge.Data</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\GalaxyMerge.Primitives\GalaxyMerge.Primitives.csproj">
+        <Project>{446fe87c-5122-4344-9df9-9f641e81a476}</Project>
+        <Name>GalaxyMerge.Primitives</Name>
+      </ProjectReference>
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Design" />
+      <Folder Include="ViewModels" />
+      <Folder Include="Views" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

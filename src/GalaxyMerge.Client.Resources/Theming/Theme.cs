@@ -42,7 +42,7 @@ namespace GalaxyMerge.Client.Resources.Theming
                 case ThemeType.Light:
                 { 
                     //Primary
-                    SetResource(ThemeResourceKey.PrimaryBackground.ToString(), new SolidColorBrush(ColorFromHex("#FFFBFBFC")));
+                    SetResource(ThemeResourceKey.PrimaryBackground.ToString(), new SolidColorBrush(ColorFromHex("#FFF4F5F8")));
                     SetResource(ThemeResourceKey.PrimaryForeground.ToString(), new SolidColorBrush(ColorFromHex("#FF353B43")));
                     SetResource(ThemeResourceKey.PrimaryBorder.ToString(), new SolidColorBrush(ColorFromHex("#FFC7CED9")));
                     

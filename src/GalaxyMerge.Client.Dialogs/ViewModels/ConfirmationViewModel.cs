@@ -4,7 +4,7 @@ using Prism.Services.Dialogs;
 
 namespace GalaxyMerge.Client.Dialogs.ViewModels
 {
-    public class ConfirmationDialogViewModel : DialogViewModelBase
+    public class ConfirmationViewModel : DialogViewModelBase
     {
         private string _message;
         private DelegateCommand _confirmCommand;

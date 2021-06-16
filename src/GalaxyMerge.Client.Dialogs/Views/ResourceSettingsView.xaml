@@ -1,0 +1,158 @@
+<UserControl x:Class="GalaxyMerge.Client.Dialogs.Views.ResourceSettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="http://gmerge.com/ui/wpf"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:design="clr-namespace:GalaxyMerge.Client.Dialogs.Design"
+             xmlns:naming="clr-namespace:GalaxyMerge.Client.Core.Naming;assembly=GalaxyMerge.Client.Core"
+             prism:Dialog.WindowStyle="{DynamicResource LocalDialogStyle}"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             mc:Ignorable="d"
+             d:DesignHeight="800" d:DesignWidth="1000">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/GalaxyMerge.Client.Resources;component/Resources.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+      <design:DesignViewModels x:Key="DesignModels" />
+
+      <Style x:Key="LocalDialogStyle" BasedOn="{StaticResource DialogStyle}" TargetType="{x:Type Window}">
+        <Setter Property="Title" Value="Select New Resource" />
+        <Setter Property="Height" Value="700" />
+        <Setter Property="Width" Value="900" />
+        <Setter Property="prism:Dialog.WindowStartupLocation" Value="CenterScreen" />
+        <Setter Property="ResizeMode" Value="NoResize" />
+      </Style>
+
+      <ControlTemplate x:Key="LocalTabItemControlTemplate" TargetType="{x:Type TabItem}">
+        <Grid x:Name="templateRoot" SnapsToDevicePixels="true">
+          <Border
+            x:Name="border"
+            Background="{TemplateBinding Background}"
+            BorderBrush="{TemplateBinding BorderBrush}"
+            BorderThickness="{TemplateBinding BorderThickness}">
+            <ContentPresenter
+              x:Name="contentPresenter"
+              Margin="{TemplateBinding Padding}"
+              HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+              VerticalAlignment="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+              KeyboardNavigation.TabNavigation="None"
+              ContentSource="Header"
+              Focusable="False"
+              RecognizesAccessKey="True"
+              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+          </Border>
+          <Border x:Name="SelectedBorder"
+                  BorderBrush="{ui:ThemeResource ResourceKey=ControlFocusBorder}"
+                  BorderThickness="5 0 0 0"
+                  Margin="-1"
+                  Visibility="Collapsed" />
+        </Grid>
+        <ControlTemplate.Triggers>
+          <Trigger Property="IsEnabled" Value="False">
+            <Setter Property="Opacity" Value="{ui:ThemeResource ResourceKey=ControlDisabledOpacity}" />
+          </Trigger>
+          <Trigger SourceName="border" Property="IsMouseOver" Value="True">
+            <Setter Property="Background" Value="{ui:ThemeResource ResourceKey=ControlMouseOverBackground}" />
+          </Trigger>
+          <Trigger Property="IsSelected" Value="True">
+            <Setter TargetName="SelectedBorder" Property="Visibility" Value="Visible" />
+            <Setter Property="Background" Value="{ui:ThemeResource ResourceKey=PrimaryBackground}" />
+            <Setter Property="Foreground" Value="{ui:ThemeResource ResourceKey=ControlForeground}" />
+          </Trigger>
+        </ControlTemplate.Triggers>
+      </ControlTemplate>
+      
+      <DataTemplate x:Key="LocalTabItemDataTemplate"
+                    d:DataContext="{Binding Source={StaticResource DesignModels}, Path=ResourceSettingsGeneralViewModel}">
+        <TextBlock Text="{Binding TabLabel}"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Left" />
+      </DataTemplate>
+      
+      <Style TargetType="{x:Type TabItem}">
+        <Setter Property="Background" Value="{ui:ThemeResource ResourceKey=ControlBackground}" />
+        <Setter Property="Foreground" Value="{ui:ThemeResource ResourceKey=ControlDefaultForeground}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Height" Value="50" />
+        <Setter Property="Width" Value="200" />
+        <Setter Property="Padding" Value="20 0 0 0" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Stretch" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="Template" Value="{StaticResource LocalTabItemControlTemplate}" />
+        <Setter Property="HeaderTemplate" Value="{StaticResource LocalTabItemDataTemplate}"/>
+      </Style>
+    </ResourceDictionary>
+  </UserControl.Resources>
+
+  <Grid d:DataContext="{Binding Source={StaticResource DesignModels}, Path=ResourceSettingsViewModel}"
+        Background="{ui:ThemeResource ResourceKey=PrimaryBackground}">
+    <Grid.RowDefinitions>
+      <RowDefinition />
+      <RowDefinition Height="40" />
+    </Grid.RowDefinitions>
+
+    <TabControl x:Name="SettingsTabs" Grid.Row="0"
+                TabStripPlacement="Left"
+                HorizontalContentAlignment="Left"
+                BorderThickness="0"
+                ui:TabControlProperties.HeaderBackground="{ui:ThemeResource ResourceKey=ControlBackground}"
+                prism:RegionManager.RegionName="{x:Static naming:RegionName.ResourceSettingsTabRegion}">
+    </TabControl>
+
+    <!--<StackPanel x:Name="ResourceDetailsGrid" 
+      Grid.Row="0">
+      <Grid x:Name="ResourceNameGrid">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition />
+          <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+        
+        <TextBlock Grid.Row="0" 
+                   Grid.Column="0"
+                   Margin="0 5" 
+                   Text="Name" 
+                   Style="{StaticResource Text.Label}"/>
+        <TextBox Grid.Row="0" 
+                 Grid.Column="1"
+                 Text="{Binding ResourceName}"
+                 ui:TextBoxProperties.DefaultText="Name"
+                 Width="300" 
+                 HorizontalAlignment="Left"/>
+        <TextBlock Grid.Row="1" 
+                   Grid.Column="1"
+                   Text="The name that uniquely identifies the resource"
+                   Margin="2"
+                   TextWrapping="Wrap"
+                   Style="{StaticResource Text.Caption}" />
+      </Grid>  
+    </StackPanel>-->
+
+
+    <Border x:Name="ButtonPanel"
+            Grid.Row="1"
+            Background="{ui:ThemeResource ResourceKey=PanelBackground}"
+            BorderBrush="{ui:ThemeResource ResourceKey=PrimaryBorder}"
+            BorderThickness="0 1 0 0">
+      <StackPanel Orientation="Horizontal"
+                  HorizontalAlignment="Right"
+                  Margin="5 0">
+        <Button Height="26" Width="80" Margin="5 0"
+                Content="OK" />
+        <Button Height="26" Width="80" Margin="5 0"
+                Content="Cancel"
+                Style="{StaticResource Style.Button.Secondary}"
+                Command="{Binding CancelDialogCommand}" />
+        <Button Height="26" Width="80" Margin="5 0"
+                Content="Apply" />
+      </StackPanel>
+    </Border>
+  </Grid>
+</UserControl>

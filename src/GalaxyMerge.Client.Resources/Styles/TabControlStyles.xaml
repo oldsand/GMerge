@@ -41,7 +41,6 @@
       <Trigger Property="TabStripPlacement" Value="Bottom">
         <Setter Property="Grid.Row" TargetName="headerPanel" Value="1" />
         <Setter Property="Grid.Row" TargetName="contentPanel" Value="0" />
-        <Setter Property="BorderThickness" TargetName="contentPanel" Value="0 0 0 1" />
         <Setter Property="Height" TargetName="RowDefinition0" Value="*" />
         <Setter Property="Height" TargetName="RowDefinition1" Value="Auto" />
       </Trigger>
@@ -50,7 +49,6 @@
         <Setter Property="Grid.Row" TargetName="contentPanel" Value="0" />
         <Setter Property="Grid.Column" TargetName="headerPanel" Value="0" />
         <Setter Property="Grid.Column" TargetName="contentPanel" Value="1" />
-        <Setter Property="BorderThickness" TargetName="contentPanel" Value="1 0 0 0" />
         <Setter Property="Width" TargetName="ColumnDefinition0" Value="Auto" />
         <Setter Property="Width" TargetName="ColumnDefinition1" Value="*" />
         <Setter Property="Height" TargetName="RowDefinition0" Value="*" />
@@ -61,7 +59,6 @@
         <Setter Property="Grid.Row" TargetName="contentPanel" Value="0" />
         <Setter Property="Grid.Column" TargetName="headerPanel" Value="1" />
         <Setter Property="Grid.Column" TargetName="contentPanel" Value="0" />
-        <Setter Property="BorderThickness" TargetName="contentPanel" Value="0 0 1 0" />
         <Setter Property="Width" TargetName="ColumnDefinition0" Value="*" />
         <Setter Property="Width" TargetName="ColumnDefinition1" Value="Auto" />
         <Setter Property="Height" TargetName="RowDefinition0" Value="*" />

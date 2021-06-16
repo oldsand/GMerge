@@ -13,7 +13,8 @@ namespace GalaxyMerge.Client.Data.Configurations
             builder.Property(x => x.GalaxyName).IsRequired();
 
             builder.HasOne(x => x.Resource).WithOne(x => x.Connection)
-                .HasForeignKey<ConnectionResource>(x => x.ResourceId);
+                .HasForeignKey<ConnectionResource>(x => x.ResourceId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

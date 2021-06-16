@@ -1,5 +1,6 @@
 using GalaxyMerge.Client.Application.Views;
 using GalaxyMerge.Client.Core.Mvvm;
+using GalaxyMerge.Client.Core.Naming;
 using NLog;
 using Prism.Mvvm;
 using Prism.Regions;

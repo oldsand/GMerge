@@ -128,6 +128,10 @@
       <Project>{0db6d056-eee8-49e1-8ff5-c6edce7c48fc}</Project>
       <Name>GalaxyMerge.Client.Resources</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GalaxyMerge.Client.UI.Connection\GalaxyMerge.Client.UI.Connection.csproj">
+      <Project>{ce25b627-6028-438d-b172-d81ce5fedfb9}</Project>
+      <Name>GalaxyMerge.Client.UI.Connection</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GalaxyMerge.Core\GalaxyMerge.Core.csproj">
       <Project>{dd496472-fb15-4ffc-86ca-2ac8f0e6cf3c}</Project>
       <Name>GalaxyMerge.Core</Name>

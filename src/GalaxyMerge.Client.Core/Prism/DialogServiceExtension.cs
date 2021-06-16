@@ -1,5 +1,6 @@
 using System;
 using GalaxyMerge.Client.Core.Mvvm;
+using GalaxyMerge.Client.Core.Naming;
 using Prism.Services.Dialogs;
 
 namespace GalaxyMerge.Client.Core.Prism

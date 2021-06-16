@@ -144,7 +144,8 @@
 
         <!--Resource Buttons-->
         <Button Style="{StaticResource Style.Button.Transparent}"
-                Margin="5 0 0 0">
+                Margin="5 0 0 0"
+                Command="{Binding OpenSettingsCommand}">
           <ui:Icon Template="{StaticResource Icon.Filled.Cog}" />
         </Button>
         <Button Style="{StaticResource Style.Button.Transparent}"
@@ -152,14 +153,14 @@
                 Command="{Binding DeleteResourceCommand}">
           <ui:Icon Template="{StaticResource Icon.Filled.Delete}" />
         </Button>
-        <Button Style="{StaticResource Style.Button.Transparent}"
+        <!--<Button Style="{StaticResource Style.Button.Transparent}"
                 Margin="5 0 0 0">
           <ui:Icon Template="{StaticResource Icon.Refresh}" />
-        </Button>
-        <Button Style="{StaticResource Style.Button.Transparent}"
+        </Button>-->
+        <!--<Button Style="{StaticResource Style.Button.Transparent}"
                 Margin="5 0 0 0">
           <ui:Icon Template="{StaticResource Icon.More.Horizontal}" />
-        </Button>
+        </Button>-->
 
       </StackPanel>
     </Grid>

@@ -79,14 +79,12 @@
         <Compile Include="Extensions\DependencyObjectExtensions.cs" />
         <Compile Include="Extensions\EnumBindingSourceExtension.cs" />
         <Compile Include="Extensions\TreeViewItemExtensions.cs" />
-        <Compile Include="Mvvm\DialogName.cs" />
         <Compile Include="Mvvm\DialogViewModelBase.cs" />
-        <Compile Include="Mvvm\ModelAdapter.cs" />
-        <Compile Include="Mvvm\ModelWrapper.cs" />
         <Compile Include="Mvvm\NavigationViewModelBase.cs" />
-        <Compile Include="Mvvm\Observable.cs" />
-        <Compile Include="Mvvm\RegionName.cs" />
         <Compile Include="Mvvm\ViewModelBase.cs" />
+        <Compile Include="Naming\DialogName.cs" />
+        <Compile Include="Naming\RegionName.cs" />
+        <Compile Include="Naming\ViewName.cs" />
         <Compile Include="Prism\DialogServiceExtension.cs" />
         <Compile Include="Prism\ICreateScopedRegionManager.cs" />
         <Compile Include="Prism\IRegionManagerAware.cs" />

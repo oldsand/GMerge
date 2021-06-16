@@ -1,5 +1,5 @@
 ﻿
-namespace GalaxyMerge.Client.Core.Mvvm
+namespace GalaxyMerge.Client.Core.Naming
 {
     public class RegionName
     {
@@ -7,6 +7,8 @@ namespace GalaxyMerge.Client.Core.Mvvm
         public const string ShellFooterRegion = nameof(ShellFooterRegion);
         public const string ShellHeaderRegion = nameof(ShellHeaderRegion);
         public const string ShellContentRegion = nameof(ShellContentRegion);
+
+        public const string ResourceSettingsTabRegion = nameof(ResourceSettingsTabRegion);
         /*public const string ConnectionRegion = nameof(ConnectionRegion);
         public const string ConnectionNavigationRegion = nameof(ConnectionNavigationRegion);
         public const string ConnectionContentRegion = nameof(ConnectionContentRegion);
@@ -18,6 +20,8 @@ namespace GalaxyMerge.Client.Core.Mvvm
         public const string RepositoryNavigationRegion = nameof(RepositoryNavigationRegion);
         public const string RepositoryContentRegion = nameof(RepositoryContentRegion);
         public const string CompareRegion = nameof(CompareRegion);*/
+        
+        
 
         //Scoped Region Names
         public const string TabRegion = nameof(TabRegion);

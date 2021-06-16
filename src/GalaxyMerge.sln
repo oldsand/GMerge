@@ -73,6 +73,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Client.Data.Mig
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Client.Converters.Tests", "GalaxyMerge.Client.Converters.Tests\GalaxyMerge.Client.Converters.Tests.csproj", "{A34225E1-5B53-4464-B66C-05F8B0E2BFF0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Client.UI.Connection", "GalaxyMerge.Client.UI.Connection\GalaxyMerge.Client.UI.Connection.csproj", "{CE25B627-6028-438D-B172-D81CE5FEDFB9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Client.Observables", "GalaxyMerge.Client.Observables\GalaxyMerge.Client.Observables.csproj", "{31A6B9B2-E1C6-41AC-A753-8A1985842FB6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Client.Observables.Tests", "GalaxyMerge.Client.Observables.Tests\GalaxyMerge.Client.Observables.Tests.csproj", "{E6ECCA85-F6DA-4FA9-A162-E6B5BCA819C0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -199,6 +205,18 @@ Global
 		{A34225E1-5B53-4464-B66C-05F8B0E2BFF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A34225E1-5B53-4464-B66C-05F8B0E2BFF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A34225E1-5B53-4464-B66C-05F8B0E2BFF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE25B627-6028-438D-B172-D81CE5FEDFB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE25B627-6028-438D-B172-D81CE5FEDFB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE25B627-6028-438D-B172-D81CE5FEDFB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE25B627-6028-438D-B172-D81CE5FEDFB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31A6B9B2-E1C6-41AC-A753-8A1985842FB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31A6B9B2-E1C6-41AC-A753-8A1985842FB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31A6B9B2-E1C6-41AC-A753-8A1985842FB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31A6B9B2-E1C6-41AC-A753-8A1985842FB6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6ECCA85-F6DA-4FA9-A162-E6B5BCA819C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6ECCA85-F6DA-4FA9-A162-E6B5BCA819C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6ECCA85-F6DA-4FA9-A162-E6B5BCA819C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6ECCA85-F6DA-4FA9-A162-E6B5BCA819C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -238,5 +256,8 @@ Global
 		{60790AC9-6ADD-444F-A812-22129782FA81} = {62CE6D9C-8204-479F-B8EF-A11609AB4273}
 		{FA36EC7D-59E3-42E9-9661-4CDEB8206BD1} = {62CE6D9C-8204-479F-B8EF-A11609AB4273}
 		{A34225E1-5B53-4464-B66C-05F8B0E2BFF0} = {5B40454C-F34F-4EC8-80BF-48E4F9DCD4C9}
+		{CE25B627-6028-438D-B172-D81CE5FEDFB9} = {A269B225-3BF3-4407-8F25-402F484B24B5}
+		{31A6B9B2-E1C6-41AC-A753-8A1985842FB6} = {62CE6D9C-8204-479F-B8EF-A11609AB4273}
+		{E6ECCA85-F6DA-4FA9-A162-E6B5BCA819C0} = {5B40454C-F34F-4EC8-80BF-48E4F9DCD4C9}
 	EndGlobalSection
 EndGlobal

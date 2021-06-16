@@ -12,7 +12,8 @@ namespace GalaxyMerge.Client.Data.Configurations
             builder.Property(x => x.FileName).IsRequired();
 
             builder.HasOne(x => x.Resource).WithOne(x => x.Archive)
-                .HasForeignKey<ArchiveResource>(x => x.ResourceId);
+                .HasForeignKey<ArchiveResource>(x => x.ResourceId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

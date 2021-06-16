@@ -3,10 +3,10 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using GalaxyMerge.Client.Core.Mvvm;
+using GalaxyMerge.Client.Core.Naming;
 using GalaxyMerge.Client.Core.Prism;
 using GalaxyMerge.Client.Data.Abstractions;
 using GalaxyMerge.Client.Data.Entities;
-using GalaxyMerge.Client.Events;
 using NLog;
 using Prism.Commands;
 using Prism.Events;
@@ -22,7 +22,9 @@ namespace GalaxyMerge.Client.Application.ViewModels
         private ResourceEntry _selectedResourceEntry;
         private ObservableCollection<ResourceEntry> _resources;
         private DelegateCommand _addResourceCommand;
+        private DelegateCommand _openSettingsCommand;
         private DelegateCommand _deleteResourceCommand;
+
 
         public ShellHeaderViewModel()
         {
@@ -38,11 +40,8 @@ namespace GalaxyMerge.Client.Application.ViewModels
 
             Resources = new ObservableCollection<ResourceEntry>();
 
-            eventAggregator.GetEvent<NewResourceAddedEvent>().Subscribe(OnNewResourceAdded);
-
             LoadResources().Await(ResourceLoadComplete, ResourceLoadError);
         }
-
 
         public ResourceEntry SelectedResourceEntry
         {
@@ -61,13 +60,47 @@ namespace GalaxyMerge.Client.Application.ViewModels
 
         private void ExecuteNewResourceCommand()
         {
-            Logger.Trace("Executing New Resource Command. Showing Dialog {DialogName}", DialogName.NewResourceDialog);
-            _dialogService.Show(DialogName.NewResourceDialog);
+            Logger.Trace("Executing new resource command. Showing dialog {DialogName}", DialogName.NewResourceDialog);
+            
+            _dialogService.Show(DialogName.NewResourceDialog, dialogResult =>
+            {
+                Logger.Trace("Entering new resource command callback with result {ButtonResult}", dialogResult.Result);
+                if (dialogResult.Result != ButtonResult.OK) return;
+
+                var resource = dialogResult.Parameters.GetValue<ResourceEntry>("resource");
+                
+                Logger.Trace("Adding new resource {ResourceName} to resources collection", resource.ResourceName);
+
+                if (Resources.Contains(resource))
+                    return;
+                
+                Resources.Add(resource);
+            });
+        }
+
+        public DelegateCommand OpenSettingsCommand =>
+            _openSettingsCommand ??= new DelegateCommand(ExecuteOpenSettingsCommand, CanExecuteOpenSettingsCommand)
+                .ObservesProperty(() => SelectedResourceEntry);
+
+        private void ExecuteOpenSettingsCommand()
+        {
+            Logger.Trace("Executing open resource settings command for resource {ResourceName}",
+                SelectedResourceEntry.ResourceName);
+            
+            var parameters = new DialogParameters {{"resource", SelectedResourceEntry}};
+            
+            _dialogService.Show(DialogName.ResourceSettingsDialog, parameters, result => { });
+        }
+
+        private bool CanExecuteOpenSettingsCommand()
+        {
+            return SelectedResourceEntry != null;
         }
 
         public DelegateCommand DeleteResourceCommand =>
             _deleteResourceCommand ??=
-                new DelegateCommand(ExecuteDeleteResourceCommand, CanExecuteDeleteResourceCommand).ObservesProperty(() => SelectedResourceEntry);
+                new DelegateCommand(ExecuteDeleteResourceCommand, CanExecuteDeleteResourceCommand)
+                    .ObservesProperty(() => SelectedResourceEntry);
 
         private void ExecuteDeleteResourceCommand()
         {
@@ -75,35 +108,40 @@ namespace GalaxyMerge.Client.Application.ViewModels
                 SelectedResourceEntry.ResourceName);
 
             _dialogService.ShowConfirmation(
-                $"Are you sure you want to delete the resource {SelectedResourceEntry.ResourceName}?", DeleteResourceCommandCallback);
-        }
+                $"Are you sure you want to delete the resource '{SelectedResourceEntry.ResourceName}'?",
+                dialogResult =>
+                {
+                    Logger.Trace("Entering delete resource command callback with result {ButtonResult}", dialogResult.Result);
+                    if (dialogResult.Result != ButtonResult.OK) return;
 
-        private void DeleteResourceCommandCallback(IDialogResult result)
-        {
-            if (result.Result != ButtonResult.OK) return;
+                    var resource = SelectedResourceEntry;
+                    var resourceName = SelectedResourceEntry.ResourceName;
 
-            var resource = SelectedResourceEntry;
-            var resourceName = SelectedResourceEntry.ResourceName;
+                    try
+                    {
+                        Logger.Trace("Deleting {ResourceName} from database", resourceName);
+                        _resourceRepository.Remove(resource);
+                        _resourceRepository.Save();
+                
+                        Logger.Trace("Removing {ResourceName} from resource collection and setting selected resource to null", resourceName);
+                        Resources.Remove(resource);
+                        SelectedResourceEntry = null;
 
-            try
-            {
-                _resourceRepository.Remove(resource);
-                _resourceRepository.Save();
-
-                Logger.Info("Resource {ResourceName} successfully removed", resourceName);
-            }
-            catch (Exception e)
-            {
-                Logger.Error(e, "Failed to remove {ResourceName}", resourceName);
-                //todo prompt user of error
-            }
+                        Logger.Info("Resource {ResourceName} successfully removed", resourceName);
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.Error(e, "Failed to remove {ResourceName}", resourceName);
+                        //todo prompt user of error
+                    }
+                });
         }
 
         private bool CanExecuteDeleteResourceCommand()
         {
             return SelectedResourceEntry != null;
         }
-
+        
         private async Task LoadResources()
         {
             Logger.Trace("Getting all resource records from application database");
@@ -130,12 +168,6 @@ namespace GalaxyMerge.Client.Application.ViewModels
             }
 
             Logger.Info("No resources found");
-        }
-
-        private void OnNewResourceAdded(string resourceName)
-        {
-            LoadResources().Await(ResourceLoadComplete, ResourceLoadError);
-            SelectedResourceEntry = Resources.Single(x => x.ResourceName == resourceName);
         }
     }
 }
