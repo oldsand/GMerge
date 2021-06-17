@@ -17,26 +17,47 @@ namespace GalaxyMerge.Client.Wrappers.Base
     /// <typeparam name="T"></typeparam>
     public abstract class ModelWrapper<T> : ObservableErrorInfo, IValidatableChangeTracking, IValidatableObject
     {
-               private readonly Dictionary<string, object> _originalValues;
+        private readonly Dictionary<string, object> _originalValues;
         private readonly Dictionary<string, IValidatableChangeTracking> _trackingObjects;
-
+        
         /// <summary>
         /// Base constructor for the ObservableModel. This constructor optionally performs initialization by making
         /// a call to the virtual Initialize method, as well as optionally performs validation in order to check the
         /// state of the model prior to and property changes.
         /// </summary>
         /// <param name="model"></param>
-        /// <param name="initializeOnConstruction">Calls Initialize during construction of the base class</param>
-        /// <param name="validateOnConstruction">Cals private Validate method which perform validation during construction of the base class</param>
         /// <exception cref="ArgumentNullException">Thrown when the model property is null</exception>
-        protected ModelWrapper(T model, bool initializeOnConstruction = true, bool validateOnConstruction = true)
+        protected ModelWrapper(T model)
         {
             Model = model;
             _originalValues = new Dictionary<string, object>();
             _trackingObjects = new Dictionary<string, IValidatableChangeTracking>();
 
-            if (initializeOnConstruction)
-                InitializeInternal(model);
+            CallInitialization(model);
+
+            Validate();
+        }
+
+        protected ModelWrapper(T model, bool callInitialize)
+        {
+            Model = model;
+            _originalValues = new Dictionary<string, object>();
+            _trackingObjects = new Dictionary<string, IValidatableChangeTracking>();
+
+            if (callInitialize)
+                CallInitialization(model);
+
+            Validate();
+        }
+        
+        protected ModelWrapper(T model, bool callInitialize, bool validateOnConstruction)
+        {
+            Model = model;
+            _originalValues = new Dictionary<string, object>();
+            _trackingObjects = new Dictionary<string, IValidatableChangeTracking>();
+
+            if (callInitialize)
+                CallInitialization(model);
 
             if (validateOnConstruction)
                 Validate();
@@ -106,6 +127,14 @@ namespace GalaxyMerge.Client.Wrappers.Base
 
         protected virtual void Initialize(T model)
         {
+            var properties = GetType().GetProperties();
+
+            foreach (var property in properties)
+            {
+                var value = property.GetValue(this);
+                if (value is IValidatableChangeTracking tracking)
+                    RegisterTrackingObject(property.Name, tracking);
+            }
         }
 
         protected TValue GetValue<TValue>([CallerMemberName] string propertyName = null)
@@ -283,7 +312,7 @@ namespace GalaxyMerge.Client.Wrappers.Base
             if (comparer != null)
                 return comparer.Invoke(currentValue, newValue.Model);
 
-            // ReSharper disable once SuspiciousTypeConversion.Global
+            // ReSharper disable once SuspiciousTypeConversion.Global because maybe there are no implementations
             if (newValue is IEquatable<TModel> equatable)
                 return equatable.Equals(currentValue);
 
@@ -318,7 +347,7 @@ namespace GalaxyMerge.Client.Wrappers.Base
             return propertyInfo;
         }
 
-        private void InitializeInternal(T model)
+        private void CallInitialization(T model)
         {
             Initialize(model);
         }

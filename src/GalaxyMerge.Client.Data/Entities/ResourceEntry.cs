@@ -19,24 +19,14 @@ namespace GalaxyMerge.Client.Data.Entities
         }
 
         public int ResourceId { get; private set; }
-        public string ResourceName { get; private set; }
-        public string ResourceDescription { get; private set; }
+        public string ResourceName { get; set; }
+        public string ResourceDescription { get; set; }
         public ResourceType ResourceType { get; }
         public DateTime AddedOn { get; }
         public string AddedBy { get; }
         public virtual ConnectionResource Connection { get; private set; }
         public virtual ArchiveResource Archive { get; private set; }
         public virtual DirectoryResource Directory { get; private set; }
-
-        public void UpdateName(string name)
-        {
-            ResourceName = name;
-        }
-        
-        public void UpdateDescription(string description)
-        {
-            ResourceDescription = description;
-        }
 
         public void SetConnection(string nodeName, string galaxyName, string version = null)
         {

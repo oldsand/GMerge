@@ -22,9 +22,9 @@ namespace GalaxyMerge.Client.Wrapper.Tests
             
             Assert.NotNull(wrapper);
             Assert.NotNull(wrapper.Model);
-            Assert.Null(wrapper.Connection);
-            Assert.Null(wrapper.Archive);
-            Assert.Null(wrapper.Directory);
+            Assert.NotNull(wrapper.Connection);
+            Assert.NotNull(wrapper.Archive);
+            Assert.NotNull(wrapper.Directory);
             Assert.AreEqual(wrapper.ResourceName, _model.ResourceName);
             Assert.AreEqual(wrapper.ResourceDescription, _model.ResourceDescription);
             Assert.AreEqual(wrapper.ResourceType, _model.ResourceType);
@@ -73,15 +73,13 @@ namespace GalaxyMerge.Client.Wrapper.Tests
             var wrapper = new ResourceEntryWrapper(_model);
             var changed = new List<string>();
             wrapper.PropertyChanged += (_, e) => changed.Add(e.PropertyName);
-
-            wrapper.Model.SetConnection("NodeName", "GalaxyName", "1234.5678");
+            
             wrapper.Connection = new ConnectionResourceWrapper(new ConnectionResource(wrapper.Model, "Node", "Galaxy"));
 
             Assert.NotNull(wrapper.Connection);
             Assert.AreSame(wrapper.Model.Connection, _model.Connection);
-            Assert.AreEqual(wrapper.Connection.NodeName, "NodeName");
-            Assert.AreEqual(wrapper.Connection.GalaxyName, "GalaxyName");
-            Assert.AreEqual(wrapper.Connection.Version, "1234.5678");
+            Assert.AreEqual(wrapper.Connection.NodeName, "Node");
+            Assert.AreEqual(wrapper.Connection.GalaxyName, "Galaxy");
         }
     }
 }

@@ -18,16 +18,7 @@ namespace GalaxyMerge.Client.Wrappers.Base
         /// that support <see cref="CallerMemberNameAttribute"/>.</param>
         protected void RaisePropertyChanged([CallerMemberName] string propertyName = null)
         {
-            OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
-        }
-        
-        /// <summary>
-        /// Raises this object's PropertyChanged event.
-        /// </summary>
-        /// <param name="args">The PropertyChangedEventArgs</param>
-        protected virtual void OnPropertyChanged(PropertyChangedEventArgs args)
-        {
-            PropertyChanged?.Invoke(this, args);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

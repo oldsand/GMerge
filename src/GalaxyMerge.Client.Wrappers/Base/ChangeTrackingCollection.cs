@@ -79,6 +79,7 @@ namespace GalaxyMerge.Client.Wrappers.Base
             UpdateObservableCollection(_modified, modified);
             
             base.OnCollectionChanged(e);
+            
             RaisePropertyChanged(nameof(IsChanged));
             RaisePropertyChanged(nameof(IsValid));
         }

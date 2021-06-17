@@ -15,7 +15,7 @@ namespace GalaxyMerge.Client.Wrappers
         public string ResourceName
         {
             get => GetValue<string>();
-            set => SetValue(value, (m, v) => { m.UpdateName(v); });
+            set => SetValue(value);
         }
 
         public string ResourceDescription

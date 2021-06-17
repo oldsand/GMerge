@@ -149,8 +149,8 @@ namespace GalaxyMerge.Client.Data.Tests
             using var repo = new ResourceRepository(Connection);
 
             var target = repo.Get(4);
-            target.UpdateName("Resource44");
-            target.UpdateDescription("TestUpdate");
+            target.ResourceName = "Resource44";
+            target.ResourceDescription = "TestUpdate";
             
             repo.Update(target);
             repo.Save();
@@ -169,8 +169,8 @@ namespace GalaxyMerge.Client.Data.Tests
             Seed();
             using var repo = new ResourceRepository(Connection);
             var target = repo.Get(4);
-            target.UpdateName("Resource2");
-            
+            target.ResourceName = "Resource2";
+
             Assert.Throws<DbUpdateException>(() =>
             {
                 repo.Update(target);
