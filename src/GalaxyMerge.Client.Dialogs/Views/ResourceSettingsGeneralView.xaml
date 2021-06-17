@@ -21,6 +21,6 @@
   <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center"
               Background="{ui:ThemeResource ResourceKey=PrimaryBackground}">
     <TextBlock Text="General View" Margin="10"/>
-    <TextBlock Text="{Binding ObservableResourceEntry.ResourceName}" Margin="10" />
+    <TextBlock Text="{Binding ResourceEntryWrapper.ResourceName}" Margin="10" />
   </StackPanel>
 </UserControl>

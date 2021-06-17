@@ -1,6 +1,6 @@
 using GalaxyMerge.Client.Core.Mvvm;
 using GalaxyMerge.Client.Data.Entities;
-using GalaxyMerge.Client.Observables;
+using GalaxyMerge.Client.Wrappers;
 using Prism.Regions;
 
 namespace GalaxyMerge.Client.Dialogs.ViewModels
@@ -8,7 +8,7 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
     public class ResourceSettingsGeneralViewModel : NavigationViewModelBase
     {
         private string _tabLabel = "General";
-        private ObservableResourceEntry _observableResourceEntry;
+        private ResourceEntryWrapper _resourceEntryWrapper;
 
         public string TabLabel
         {
@@ -16,17 +16,17 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
             set => SetProperty(ref _tabLabel, value);
         }
 
-        public ObservableResourceEntry ObservableResourceEntry
+        public ResourceEntryWrapper ResourceEntryWrapper
         {
-            get => _observableResourceEntry;
-            set => SetProperty(ref _observableResourceEntry, value);
+            get => _resourceEntryWrapper;
+            set => SetProperty(ref _resourceEntryWrapper, value);
         }
         
 
         public override void OnNavigatedTo(NavigationContext navigationContext)
         {
             var resource = navigationContext.Parameters.GetValue<ResourceEntry>("resource");
-            ObservableResourceEntry = new ObservableResourceEntry(resource);
+            ResourceEntryWrapper = new ResourceEntryWrapper(resource);
         }
     }
 }

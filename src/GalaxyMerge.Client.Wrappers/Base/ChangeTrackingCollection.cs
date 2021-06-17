@@ -5,10 +5,10 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
-namespace GalaxyMerge.Client.Observables.Base
+namespace GalaxyMerge.Client.Wrappers.Base
 {
-    public class ChangeTrackingCollection<T> : ObservableCollection<T>, IRevertibleChangeTracking
-        where T : class, IRevertibleChangeTracking, INotifyPropertyChanged
+    public class ChangeTrackingCollection<T> : ObservableCollection<T>, IValidatableChangeTracking
+        where T : class, IValidatableChangeTracking
     {
         private IList<T> _original;
         private readonly ObservableCollection<T> _added;
@@ -35,6 +35,8 @@ namespace GalaxyMerge.Client.Observables.Base
         public ReadOnlyObservableCollection<T> Modified { get; }
         
         public bool IsChanged => Added.Count > 0 || Removed.Count > 0 || Modified.Count > 0;
+
+        public bool IsValid => this.All(t => t.IsValid);
 
         public void AcceptChanges()
         {
@@ -78,11 +80,7 @@ namespace GalaxyMerge.Client.Observables.Base
             
             base.OnCollectionChanged(e);
             RaisePropertyChanged(nameof(IsChanged));
-        }
-
-        protected void RaisePropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
+            RaisePropertyChanged(nameof(IsValid));
         }
 
         private static void UpdateObservableCollection(ICollection<T> collection, IEnumerable<T> items)
@@ -96,7 +94,10 @@ namespace GalaxyMerge.Client.Observables.Base
         private void AttachPropertyChangeHandler(IEnumerable<T> collection)
         {
             foreach (var item in collection)
+            {
+                item.PropertyChanged -= ItemPropertyChanged;
                 item.PropertyChanged += ItemPropertyChanged;
+            }
         }
 
         private void DetachPropertyChangeHandler(IEnumerable<T> collection)
@@ -107,6 +108,12 @@ namespace GalaxyMerge.Client.Observables.Base
 
         private void ItemPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            if (e.PropertyName == nameof(IsValid))
+            {
+                RaisePropertyChanged(nameof(IsValid));
+                return;
+            }
+            
             var item = (T) sender;
 
             if (_added.Contains(item)) return;
@@ -123,6 +130,11 @@ namespace GalaxyMerge.Client.Observables.Base
             }
 
             RaisePropertyChanged(nameof(IsChanged));
+        }
+
+        private void RaisePropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
         }
     }
 }

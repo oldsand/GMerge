@@ -75,9 +75,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Client.Converte
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Client.UI.Connection", "GalaxyMerge.Client.UI.Connection\GalaxyMerge.Client.UI.Connection.csproj", "{CE25B627-6028-438D-B172-D81CE5FEDFB9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Client.Observables", "GalaxyMerge.Client.Observables\GalaxyMerge.Client.Observables.csproj", "{31A6B9B2-E1C6-41AC-A753-8A1985842FB6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Client.Wrappers", "GalaxyMerge.Client.Wrappers\GalaxyMerge.Client.Wrappers.csproj", "{31A6B9B2-E1C6-41AC-A753-8A1985842FB6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Client.Observables.Tests", "GalaxyMerge.Client.Observables.Tests\GalaxyMerge.Client.Observables.Tests.csproj", "{E6ECCA85-F6DA-4FA9-A162-E6B5BCA819C0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Client.Wrapper.Tests", "GalaxyMerge.Client.Wrapper.Tests\GalaxyMerge.Client.Wrapper.Tests.csproj", "{E6ECCA85-F6DA-4FA9-A162-E6B5BCA819C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

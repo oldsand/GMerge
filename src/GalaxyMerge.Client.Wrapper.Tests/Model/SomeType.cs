@@ -1,4 +1,4 @@
-namespace GalaxyMerge.Client.Observables.Tests.Model
+namespace GalaxyMerge.Client.Wrapper.Tests.Model
 {
     public enum SomeType
     {

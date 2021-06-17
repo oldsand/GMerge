@@ -1,10 +1,11 @@
-using GalaxyMerge.Client.Observables.Base;
+using System.ComponentModel.DataAnnotations;
+using GalaxyMerge.Client.Wrappers.Base;
 
-namespace GalaxyMerge.Client.Observables.Tests.Model
+namespace GalaxyMerge.Client.Wrapper.Tests.Model
 {
-    public class ObservableSubModel : ObservableModel<SubModel>
+    public class SubModelWrapper : ModelWrapper<SubModel>
     {
-        public ObservableSubModel(SubModel model) : base(model)
+        public SubModelWrapper(SubModel model) : base(model)
         {
         }
 
@@ -14,6 +15,7 @@ namespace GalaxyMerge.Client.Observables.Tests.Model
             set => SetValue(value);
         }
 
+        [Required(ErrorMessage = "City is required")]
         public string Name
         {
             get => GetValue<string>();

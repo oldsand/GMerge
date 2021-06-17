@@ -1,34 +1,34 @@
 using System.Collections.Generic;
 using System.Linq;
-using GalaxyMerge.Client.Observables.Base;
-using GalaxyMerge.Client.Observables.Tests.Model;
+using GalaxyMerge.Client.Wrapper.Tests.Model;
+using GalaxyMerge.Client.Wrappers.Base;
 using NUnit.Framework;
 
-namespace GalaxyMerge.Client.Observables.Tests
+namespace GalaxyMerge.Client.Wrapper.Tests
 {
     public class ChangeTrackingCollectionTests
     {
-        private List<ObservableSubModel> _subModels;
+        private List<SubModelWrapper> _subModels;
 
         [SetUp]
         public void Setup()
         {
-            _subModels = new List<ObservableSubModel>
+            _subModels = new List<SubModelWrapper>
             {
-                new ObservableSubModel(new SubModel {Id=1, Name = "Item1", Value = 1.1f}),
-                new ObservableSubModel(new SubModel {Id=2, Name = "Item2", Value = 1.2f}),
-                new ObservableSubModel(new SubModel {Id=2, Name = "Item3", Value = 1.3f})
+                new SubModelWrapper(new SubModel {Id=1, Name = "Item1", Value = 1.1f}),
+                new SubModelWrapper(new SubModel {Id=2, Name = "Item2", Value = 1.2f}),
+                new SubModelWrapper(new SubModel {Id=2, Name = "Item3", Value = 1.3f})
             };
         }
 
         [Test]
         public void Add_WhenCalled_ReturnsItemToAddedCollection()
         {
-            var collection = new ChangeTrackingCollection<ObservableSubModel>(_subModels);
+            var collection = new ChangeTrackingCollection<SubModelWrapper>(_subModels);
             Assert.AreEqual(3, collection.Count);
             Assert.False(collection.IsChanged);
 
-            var item = new ObservableSubModel(new SubModel() {Id = 4, Name = "Item4", Value = 1.4f});
+            var item = new SubModelWrapper(new SubModel() {Id = 4, Name = "Item4", Value = 1.4f});
             collection.Add(item);
             Assert.AreEqual(4, collection.Count);
             Assert.AreEqual(1, collection.Added.Count);
@@ -41,7 +41,7 @@ namespace GalaxyMerge.Client.Observables.Tests
         [Test]
         public void Remove_WhenCalled_ReturnsItemToRemovedCollection()
         {
-            var collection = new ChangeTrackingCollection<ObservableSubModel>(_subModels);
+            var collection = new ChangeTrackingCollection<SubModelWrapper>(_subModels);
             Assert.AreEqual(3, collection.Count);
             Assert.False(collection.IsChanged);
 

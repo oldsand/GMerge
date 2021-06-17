@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace GalaxyMerge.Client.Observables.Tests.Model
+namespace GalaxyMerge.Client.Wrapper.Tests.Model
 {
     public class GenericModel
     {

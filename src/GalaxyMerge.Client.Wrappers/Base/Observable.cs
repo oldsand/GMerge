@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace GalaxyMerge.Client.Observables.Base
+namespace GalaxyMerge.Client.Wrappers.Base
 {
     public class Observable : INotifyPropertyChanged
     {
