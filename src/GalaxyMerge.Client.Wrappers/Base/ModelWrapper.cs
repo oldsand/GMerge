@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Expressions;
@@ -16,8 +17,8 @@ namespace GalaxyMerge.Client.Wrappers.Base
     /// <typeparam name="T"></typeparam>
     public abstract class ModelWrapper<T> : ObservableErrorInfo, IValidatableChangeTracking, IValidatableObject
     {
-        private readonly Dictionary<string, object> _originalValues;
-        private readonly List<IValidatableChangeTracking> _trackingObjects;
+               private readonly Dictionary<string, object> _originalValues;
+        private readonly Dictionary<string, IValidatableChangeTracking> _trackingObjects;
 
         /// <summary>
         /// Base constructor for the ObservableModel. This constructor optionally performs initialization by making
@@ -30,9 +31,9 @@ namespace GalaxyMerge.Client.Wrappers.Base
         /// <exception cref="ArgumentNullException">Thrown when the model property is null</exception>
         protected ModelWrapper(T model, bool initializeOnConstruction = true, bool validateOnConstruction = true)
         {
-            Model = model ?? throw new ArgumentNullException(nameof(model));
+            Model = model;
             _originalValues = new Dictionary<string, object>();
-            _trackingObjects = new List<IValidatableChangeTracking>();
+            _trackingObjects = new Dictionary<string, IValidatableChangeTracking>();
 
             if (initializeOnConstruction)
                 InitializeInternal(model);
@@ -43,15 +44,16 @@ namespace GalaxyMerge.Client.Wrappers.Base
 
         public T Model { get; }
 
-        public bool IsChanged => _originalValues.Count > 0 || _trackingObjects.Any(t => t.IsChanged);
+        public bool IsChanged =>
+            _originalValues.Count > 0 || _trackingObjects.Select(t => t.Value).Any(t => t.IsChanged);
 
-        public bool IsValid => !HasErrors && _trackingObjects.All(t => t.IsValid);
+        public bool IsValid => !HasErrors && _trackingObjects.Select(t => t.Value).All(t => t.IsValid);
 
         public void AcceptChanges()
         {
             _originalValues.Clear();
 
-            foreach (var trackingObject in _trackingObjects)
+            foreach (var trackingObject in _trackingObjects.Values)
                 trackingObject.AcceptChanges();
 
             RaisePropertyChanged($"");
@@ -64,7 +66,7 @@ namespace GalaxyMerge.Client.Wrappers.Base
 
             _originalValues.Clear();
 
-            foreach (var trackingObject in _trackingObjects)
+            foreach (var trackingObject in _trackingObjects.Values)
                 trackingObject.RejectChanges();
 
             Validate();
@@ -102,7 +104,7 @@ namespace GalaxyMerge.Client.Wrappers.Base
             yield break;
         }
 
-        public virtual void Initialize(T model)
+        protected virtual void Initialize(T model)
         {
         }
 
@@ -112,20 +114,21 @@ namespace GalaxyMerge.Client.Wrappers.Base
             return (TValue) propertyInfo?.GetValue(Model);
         }
 
-        protected void SetValue<TValue>(TValue newValue, Action<T, TValue> customSet = null, Action onChanged = null, [CallerMemberName] string propertyName = null)
+        protected void SetValue<TValue>(TValue newValue, Action<T, TValue> setValue = null, Action onChanged = null,
+            [CallerMemberName] string propertyName = null)
         {
             var propertyInfo = GetPropertyInfo(propertyName);
             var currentValue = propertyInfo?.GetValue(Model);
 
-            if (Equals(currentValue, newValue)) return;
+            if (newValue.Equals(currentValue)) return;
 
             UpdateOriginalValue(currentValue, newValue, propertyName);
 
-            if (customSet != null)
-                customSet.Invoke(Model, newValue);
+            if (setValue != null)
+                setValue.Invoke(Model, newValue);
             else
                 propertyInfo?.SetValue(Model, newValue);
-            
+
             onChanged?.Invoke();
 
             Validate();
@@ -133,19 +136,30 @@ namespace GalaxyMerge.Client.Wrappers.Base
             RaisePropertyChanged(propertyName);
             RaisePropertyChanged(propertyName + "IsChanged");
         }
-        
-        protected void SetValue<TValue>(ref TValue current, TValue newValue, Action<T, TValue> customSet = null, 
-            Action onChanged = null, [CallerMemberName] string propertyName = null)
-        {
-            if (EqualityComparer<TValue>.Default.Equals(current, newValue)) return;
-            
-            UpdateOriginalValue(current, newValue, propertyName);
 
-            if (customSet != null)
-                customSet.Invoke(Model, newValue);
+        protected void SetValue<TWrapper, TModel>(TWrapper newValue,
+            bool autoRegister = true,
+            Func<TModel, TModel, bool> comparer = null,
+            Action<T, TModel> setValue = null,
+            Action onChanged = null,
+            [CallerMemberName] string propertyName = null)
+            where TWrapper : ModelWrapper<TModel>
+        {
+            var propertyInfo = GetPropertyInfo(propertyName);
+            var currentValue = propertyInfo?.GetValue(Model);
+
+            if (AreEqual(newValue, (TModel) currentValue, comparer)) return;
+
+            UpdateOriginalValue((TModel) currentValue, newValue, propertyName);
+
+            if (autoRegister)
+                RegisterTrackingObject(propertyName, newValue);
+
+            if (setValue != null)
+                setValue.Invoke(Model, newValue.Model);
             else
-                current = newValue;
-            
+                propertyInfo?.SetValue(Model, newValue.Model);
+
             onChanged?.Invoke();
 
             Validate();
@@ -154,33 +168,35 @@ namespace GalaxyMerge.Client.Wrappers.Base
             RaisePropertyChanged(propertyName + "IsChanged");
         }
 
-        protected void RegisterTrackingObject(IValidatableChangeTracking trackingObject)
+        protected void RegisterTrackingObject(string propertyName, IValidatableChangeTracking trackingObject)
         {
-            if (_trackingObjects.Contains(trackingObject)) return;
-
-            _trackingObjects.Add(trackingObject);
-
-            trackingObject.PropertyChanged += (_, e) =>
+            if (_trackingObjects.ContainsKey(propertyName))
             {
-                if (e.PropertyName is nameof(IsChanged) or nameof(IsValid))
-                    RaisePropertyChanged(e.PropertyName);
-            };
+                var current = _trackingObjects[propertyName];
+                if (ReferenceEquals(current, trackingObject)) return;
+                current.PropertyChanged -= TrackingObjectOnPropertyChanged;
+                _trackingObjects.Remove(propertyName);
+            }
+
+            _trackingObjects.Add(propertyName, trackingObject);
+
+            trackingObject.PropertyChanged += TrackingObjectOnPropertyChanged;
         }
 
-        protected void RegisterCollection<TObservable, TModel>(ObservableCollection<TObservable> observableCollection,
-            ICollection<TModel> modelCollection) where TObservable : ModelWrapper<TModel>
+        protected void RegisterCollection<TWrapper, TModel>(ObservableCollection<TWrapper> observableCollection,
+            ICollection<TModel> modelCollection) where TWrapper : ModelWrapper<TModel>
         {
             observableCollection.CollectionChanged += (_, e) =>
             {
                 if (observableCollection.Count > 0)
                 {
                     if (e.OldItems != null)
-                        foreach (var item in e.OldItems.Cast<TObservable>())
+                        foreach (var item in e.OldItems.Cast<TWrapper>())
                             modelCollection.Remove(item.Model);
 
                     if (e.NewItems == null) return;
 
-                    foreach (var item in e.NewItems.Cast<TObservable>())
+                    foreach (var item in e.NewItems.Cast<TWrapper>())
                         modelCollection.Add(item.Model);
                 }
                 else
@@ -197,33 +213,6 @@ namespace GalaxyMerge.Client.Wrappers.Base
         {
             collection.CollectionChanged += changedHandler;
             collection.CollectionChanged += (_, _) => Validate();
-        }
-
-        private void UpdateOriginalValue(object currentValue, object newValue, string propertyName)
-        {
-            if (!_originalValues.ContainsKey(propertyName))
-            {
-                _originalValues.Add(propertyName, currentValue);
-                RaisePropertyChanged(nameof(IsChanged));
-                return;
-            }
-
-            if (!Equals(_originalValues[propertyName], newValue)) return;
-            _originalValues.Remove(propertyName);
-            RaisePropertyChanged(nameof(IsChanged));
-        }
-
-        private PropertyInfo GetPropertyInfo(string propertyName)
-        {
-            if (propertyName == null)
-                throw new ArgumentNullException(nameof(propertyName), @"Property name can not be null");
-
-            var propertyInfo = Model.GetType().GetProperty(propertyName);
-
-            if (propertyInfo == null)
-                throw new InvalidOperationException($"Could not retrieve property info for {propertyName}");
-
-            return propertyInfo;
         }
 
         private void Validate()
@@ -250,6 +239,83 @@ namespace GalaxyMerge.Client.Wrappers.Base
             }
 
             RaisePropertyChanged(nameof(IsValid));
+        }
+
+        private void TrackingObjectOnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName is nameof(IsChanged) or nameof(IsValid))
+                RaisePropertyChanged(e.PropertyName);
+        }
+
+        private void UpdateOriginalValue(object currentValue, object newValue, string propertyName)
+        {
+            if (!_originalValues.ContainsKey(propertyName))
+            {
+                _originalValues.Add(propertyName, currentValue);
+                RaisePropertyChanged(nameof(IsChanged));
+                return;
+            }
+
+            if (!newValue.Equals(_originalValues[propertyName])) return;
+            _originalValues.Remove(propertyName);
+            RaisePropertyChanged(nameof(IsChanged));
+        }
+
+        private void UpdateOriginalValue<TWrapper, TModel>(TModel currentValue, TWrapper newValue, string propertyName,
+            Func<TModel, TModel, bool> comparer = null)
+            where TWrapper : ModelWrapper<TModel>
+        {
+            if (!_originalValues.ContainsKey(propertyName))
+            {
+                _originalValues.Add(propertyName, currentValue);
+                RaisePropertyChanged(nameof(IsChanged));
+                return;
+            }
+
+            if (!AreEqual(newValue, (TModel) _originalValues[propertyName], comparer)) return;
+            _originalValues.Remove(propertyName);
+            RaisePropertyChanged(nameof(IsChanged));
+        }
+
+        private static bool AreEqual<TWrapper, TModel>(TWrapper newValue, TModel currentValue,
+            Func<TModel, TModel, bool> comparer = null) where TWrapper : ModelWrapper<TModel>
+        {
+            if (comparer != null)
+                return comparer.Invoke(currentValue, newValue.Model);
+
+            // ReSharper disable once SuspiciousTypeConversion.Global
+            if (newValue is IEquatable<TModel> equatable)
+                return equatable.Equals(currentValue);
+
+            if (ReferenceEquals(newValue.Model, currentValue)) return true;
+            if (ReferenceEquals(newValue.Model, null) && ReferenceEquals(currentValue, null)) return true;
+            if (ReferenceEquals(newValue.Model, null) || ReferenceEquals(currentValue, null)) return false;
+            return currentValue.GetType() == newValue.Model.GetType() && PropertiesEquate(newValue, currentValue);
+        }
+
+        private static bool PropertiesEquate<TWrapper, TModel>(TWrapper newValue, TModel currentValue)
+            where TWrapper : ModelWrapper<TModel>
+        {
+            var currentProperties = currentValue.GetType().GetProperties();
+
+            return !(from property in currentProperties
+                let c = property.GetValue(currentValue)
+                let n = property.GetValue(newValue.Model)
+                where !Equals(c, n)
+                select c).Any();
+        }
+
+        private PropertyInfo GetPropertyInfo(string propertyName)
+        {
+            if (propertyName == null)
+                throw new ArgumentNullException(nameof(propertyName), @"Property name can not be null");
+
+            var propertyInfo = Model.GetType().GetProperty(propertyName);
+
+            if (propertyInfo == null)
+                throw new InvalidOperationException($"Could not retrieve property info for {propertyName}");
+
+            return propertyInfo;
         }
 
         private void InitializeInternal(T model)

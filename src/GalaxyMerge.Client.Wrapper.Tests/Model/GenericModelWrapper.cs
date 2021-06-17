@@ -12,7 +12,7 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Model
         {
         }
 
-        public override void Initialize(GenericModel model)
+        protected override void Initialize(GenericModel model)
         {
             SubModel = model.SubModel != null 
                 ? new SubModelWrapper(model.SubModel) 
@@ -26,9 +26,9 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Model
                 ? new ChangeTrackingCollection<SubModelWrapper>(model.OtherModels.Select(x => new SubModelWrapper(x)).ToList())
                 : throw new ArgumentNullException(nameof(model.OtherModels), "OtherModels cannot be null");
 
-            RegisterTrackingObject(SubModel);
-            RegisterTrackingObject(SubModels);
-            RegisterTrackingObject(OtherModels);
+            RegisterTrackingObject(nameof(SubModel), SubModel);
+            RegisterTrackingObject(nameof(SubModels), SubModels);
+            RegisterTrackingObject(nameof(SubModels), OtherModels);
             RegisterCollection(SubModels, model.SubModels);
             RegisterCollection(OtherModels, (s, e) =>
             {

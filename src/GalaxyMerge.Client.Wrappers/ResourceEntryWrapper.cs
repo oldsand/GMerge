@@ -11,27 +11,6 @@ namespace GalaxyMerge.Client.Wrappers
         {
         }
 
-        public override void Initialize(ResourceEntry model)
-        {
-            if (model.Connection != null)
-            {
-                Connection = new ConnectionResourceWrapper(model.Connection);
-                RegisterTrackingObject(Connection);
-            }
-
-            if (model.Archive != null)
-            {
-                Archive = new ArchiveResourceWrapper(model.Archive);
-                RegisterTrackingObject(Archive);
-            }
-
-            if (model.Directory != null)
-            {
-                Directory = new DirectoryResourceWrapper(model.Directory);
-                RegisterTrackingObject(Directory);
-            }
-        }
-
         [Required(ErrorMessage = "Resource name is required")]
         public string ResourceName
         {
@@ -51,10 +30,29 @@ namespace GalaxyMerge.Client.Wrappers
 
         public string AddedBy => Model.AddedBy;
 
-        public ConnectionResourceWrapper Connection { get; private set; }
+        public ConnectionResourceWrapper Connection
+        {
+            get => new(Model.Connection);
+            set => SetValue<ConnectionResourceWrapper, ConnectionResource>(value);
+        }
 
-        public ArchiveResourceWrapper Archive { get; private set; }
+        public ArchiveResourceWrapper Archive
+        {
+            get => new(Model.Archive);
+            set => SetValue<ArchiveResourceWrapper, ArchiveResource>(value);
+        }
 
-        public DirectoryResourceWrapper Directory { get; private set; }
+        public DirectoryResourceWrapper Directory
+        {
+            get => new(Model.Directory);
+            set => SetValue<DirectoryResourceWrapper, DirectoryResource>(value);
+        }
+
+        protected override void Initialize(ResourceEntry model)
+        {
+            RegisterTrackingObject(nameof(Connection), Connection);
+            RegisterTrackingObject(nameof(Archive), Archive);
+            RegisterTrackingObject(nameof(Directory), Directory);
+        }
     }
 }

@@ -16,16 +16,16 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Model
         public string Name { get; set; }
     }
 
-    public class TestModelWrapper : ModelWrapperNull<TestModel>
+    public class TestModelWrapper : ModelWrapper<TestModel>
     {
         public TestModelWrapper(TestModel model) : base(model)
         {
         }
 
-        public override void Initialize(TestModel model)
+        protected override void Initialize(TestModel model)
         {
             ComplexType = new TestComplexTypeWrapper(Model.ComplexType);
-            RegisterTrackingObject(ComplexType);
+            RegisterTrackingObject(nameof(ComplexType), ComplexType);
         }
 
         public int Id
@@ -40,7 +40,7 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Model
             set => SetValue(value);
         }
 
-        public string Description  
+        public string Description
         {
             get => GetValue<string>();
             set => SetValue(value);
@@ -48,19 +48,12 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Model
 
         public TestComplexTypeWrapper ComplexType
         {
-            get => GetValue<TestComplexTypeWrapper>();
-            set => SetValue(value, (m, v) =>
-            {
-                m.ComplexType = new TestComplexType
-                {
-                    Id = v.Id,
-                    Name = v.Name
-                };
-            });
+            get => new TestComplexTypeWrapper(Model.ComplexType);
+            set => SetValue<TestComplexTypeWrapper, TestComplexType>(value);
         }
     }
 
-    public class TestComplexTypeWrapper : ModelWrapperNull<TestComplexType>
+    public class TestComplexTypeWrapper : ModelWrapper<TestComplexType>
     {
         public TestComplexTypeWrapper(TestComplexType model) : base(model)
         {

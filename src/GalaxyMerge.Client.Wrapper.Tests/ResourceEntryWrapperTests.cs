@@ -75,7 +75,7 @@ namespace GalaxyMerge.Client.Wrapper.Tests
             wrapper.PropertyChanged += (_, e) => changed.Add(e.PropertyName);
 
             wrapper.Model.SetConnection("NodeName", "GalaxyName", "1234.5678");
-            wrapper.Initialize(wrapper.Model);
+            wrapper.Connection = new ConnectionResourceWrapper(new ConnectionResource(wrapper.Model, "Node", "Galaxy"));
 
             Assert.NotNull(wrapper.Connection);
             Assert.AreSame(wrapper.Model.Connection, _model.Connection);
