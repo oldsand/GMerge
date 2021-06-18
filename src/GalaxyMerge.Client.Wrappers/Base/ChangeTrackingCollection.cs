@@ -53,15 +53,18 @@ namespace GalaxyMerge.Client.Wrappers.Base
 
         public void RejectChanges()
         {
-            foreach (var item in _added)
-                Remove(item);
+            foreach (var addedItem in _added.ToList())
+                Remove(addedItem);
+
+            foreach (var removedItem in _removed.ToList())
+            {
+                removedItem.RejectChanges();
+                Add(removedItem);
+            }
             
-            foreach (var item in _removed)
-                Add(item);
-            
-            foreach (var item in _modified)
-                item.RejectChanges();
-            
+            foreach (var modifiedItem in _modified.ToList())
+                modifiedItem.RejectChanges();
+
             RaisePropertyChanged(nameof(IsChanged));
         }
 

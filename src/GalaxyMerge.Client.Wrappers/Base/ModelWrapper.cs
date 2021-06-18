@@ -19,7 +19,7 @@ namespace GalaxyMerge.Client.Wrappers.Base
     {
         private readonly Dictionary<string, object> _originalValues;
         private readonly Dictionary<string, IValidatableChangeTracking> _trackingObjects;
-        
+
         /// <summary>
         /// Base constructor for the ObservableModel. This constructor optionally performs initialization by making
         /// a call to the virtual Initialize method, as well as optionally performs validation in order to check the
@@ -49,7 +49,7 @@ namespace GalaxyMerge.Client.Wrappers.Base
 
             Validate();
         }
-        
+
         protected ModelWrapper(T model, bool callInitialize, bool validateOnConstruction)
         {
             Model = model;
@@ -166,11 +166,11 @@ namespace GalaxyMerge.Client.Wrappers.Base
             RaisePropertyChanged(propertyName + "IsChanged");
         }
 
-        protected void SetValue<TWrapper, TModel>(TWrapper newValue,
-            bool autoRegister = true,
-            Func<TModel, TModel, bool> comparer = null,
+        protected void SetValue<TWrapper, TModel>(TWrapper newValue, 
             Action<T, TModel> setValue = null,
             Action onChanged = null,
+            Func<TModel, TModel, bool> comparer = null,
+            bool autoRegister = true,
             [CallerMemberName] string propertyName = null)
             where TWrapper : ModelWrapper<TModel>
         {
@@ -208,7 +208,6 @@ namespace GalaxyMerge.Client.Wrappers.Base
             }
 
             _trackingObjects.Add(propertyName, trackingObject);
-
             trackingObject.PropertyChanged += TrackingObjectOnPropertyChanged;
         }
 
@@ -312,7 +311,7 @@ namespace GalaxyMerge.Client.Wrappers.Base
             if (comparer != null)
                 return comparer.Invoke(currentValue, newValue.Model);
 
-            // ReSharper disable once SuspiciousTypeConversion.Global because maybe there are no implementations
+            // ReSharper disable once SuspiciousTypeConversion.Global because maybe there are no implementations?
             if (newValue is IEquatable<TModel> equatable)
                 return equatable.Equals(currentValue);
 
@@ -337,7 +336,10 @@ namespace GalaxyMerge.Client.Wrappers.Base
         private PropertyInfo GetPropertyInfo(string propertyName)
         {
             if (propertyName == null)
-                throw new ArgumentNullException(nameof(propertyName), @"Property name can not be null");
+                throw new ArgumentNullException(nameof(propertyName), "Property name can not be null");
+
+            if (Model == null)
+                throw new InvalidOperationException("Model object is null. Cannot get property information");
 
             var propertyInfo = Model.GetType().GetProperty(propertyName);
 

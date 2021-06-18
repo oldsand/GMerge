@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using GalaxyMerge.Client.Wrappers.Base;
 
@@ -62,11 +63,11 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Model
 
         protected override void Initialize(TestModel model)
         {
-            if (model.Items == null)
-                throw new ArgumentNullException(nameof(model.Items), "Items collection on model must not be null");
-            
-            TestItems = new ChangeTrackingCollection<TestItemWrapper>(model.Items.Select(i => new TestItemWrapper(i)).ToList());
-            RegisterCollection(TestItems, model.Items);
+            if (model.Items != null)
+            {
+                TestItems = new ChangeTrackingCollection<TestItemWrapper>(model.Items.Select(i => new TestItemWrapper(i)).ToList());
+                RegisterCollection(TestItems, model.Items);
+            }
             
             base.Initialize(model);
         }
