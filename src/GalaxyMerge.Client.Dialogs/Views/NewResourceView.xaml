@@ -236,7 +236,7 @@
 
           <StackPanel Grid.Row="0" Margin="0 20 0 0">
             <TextBlock Text="Name" Margin="0 5" />
-            <TextBox Text="{Binding ResourceName}"
+            <TextBox Text="{Binding ResourceEntry.ResourceName}"
                      ui:TextBoxProperties.DefaultText="Name"/>
             <TextBlock Text="Enter a name that will identify the new resource"
                        Margin="2"
@@ -246,7 +246,7 @@
           
           <StackPanel Grid.Row="1" Margin="0 20 0 0">
             <TextBlock Text="Description" Margin="0 5" />
-            <TextBox Text="{Binding ResourceDescription}"
+            <TextBox Text="{Binding ResourceEntry.ResourceDescription}"
                      Height="60" Padding="10 3 0 0"
                      VerticalContentAlignment="Top"/>
             <TextBlock Text="Add a description to let people know more about the purpose of this resource"
@@ -257,7 +257,7 @@
 
           <StackPanel Grid.Row="2" Margin="0 20 0 0">
             <TextBlock Text="Node Name" Margin="0 5" />
-            <TextBox Text="{Binding NodeName}" 
+            <TextBox Text="{Binding ResourceEntry.Connection.NodeName}" 
                      ui:TextBoxProperties.DefaultText="Node Name"/>
             <TextBlock Text="Enter the machine name on which the galaxy repository is located"
                        Margin="2"
@@ -267,7 +267,7 @@
 
           <StackPanel Grid.Row="3" Margin="0 20 0 0">
             <TextBlock Text="Galaxy Name" Margin="0 5" />
-            <TextBox Text="{Binding GalaxyName}" 
+            <TextBox Text="{Binding ResourceEntry.Connection.GalaxyName}" 
                      ui:TextBoxProperties.DefaultText="Node Name"/>
             <TextBlock Text="Enter the name of the galaxy repository to connect to"
                        Margin="2"
@@ -301,7 +301,7 @@
 
           <StackPanel Grid.Row="0" Margin="0 20 0 0">
             <TextBlock Text="Resource Name" Margin="0 5" />
-            <TextBox Text="{Binding ResourceName}" />
+            <TextBox Text="{Binding ResourceEntry.ResourceName}" />
             <TextBlock Text="Enter a name that will identify the new resource"
                        TextWrapping="Wrap"
                        Foreground="DarkGray"
@@ -310,7 +310,7 @@
 
           <StackPanel Grid.Row="1" Margin="0 20 0 0">
             <TextBlock Text="Archive Backup File" Margin="0 5" />
-            <TextBox Text="{Binding FileName}" />
+            <TextBox Text="{Binding ResourceEntry.Archive.FileName}" />
             <TextBlock Text="Select or enter the archive database file"
                        TextWrapping="Wrap"
                        Foreground="DarkGray"
@@ -343,7 +343,7 @@
 
           <StackPanel Grid.Row="0" Margin="0 20 0 0">
             <TextBlock Text="Resource Name" Margin="0 5" />
-            <TextBox Text="{Binding ResourceName}" />
+            <TextBox Text="{Binding ResourceEntry.ResourceName}" />
             <TextBlock Text="Enter a name that will identify the new resource"
                        TextWrapping="Wrap"
                        Foreground="DarkGray"
@@ -352,7 +352,7 @@
 
           <StackPanel Grid.Row="1" Margin="0 20 0 0">
             <TextBlock Text="Galaxy File" Margin="0 5" />
-            <TextBox Text="{Binding DirectoryName}" />
+            <TextBox Text="{Binding ResourceEntry.Directory.DirectoryName}" />
             <TextBlock Text="Select or enter the archive database file"
                        TextWrapping="Wrap"
                        Foreground="DarkGray"

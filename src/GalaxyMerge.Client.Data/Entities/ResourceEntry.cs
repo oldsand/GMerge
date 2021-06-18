@@ -16,33 +16,46 @@ namespace GalaxyMerge.Client.Data.Entities
             ResourceDescription = resourceDescription;
             AddedBy = Environment.UserName;
             AddedOn = DateTime.Now;
+
+            InitializeResource(ResourceType);
         }
 
         public int ResourceId { get; private set; }
+
         public string ResourceName { get; set; }
+
         public string ResourceDescription { get; set; }
+
         public ResourceType ResourceType { get; }
+
         public DateTime AddedOn { get; }
+
         public string AddedBy { get; }
+
         public virtual ConnectionResource Connection { get; private set; }
+
         public virtual ArchiveResource Archive { get; private set; }
+
         public virtual DirectoryResource Directory { get; private set; }
 
-        public void SetConnection(string nodeName, string galaxyName, string version = null)
+        private void InitializeResource(ResourceType resourceType)
         {
-            Connection = new ConnectionResource(this, nodeName, galaxyName, version);
-            Archive = null;
-            Directory = null;
-        }
-        
-        public void SetArchive(string fileName, string machineName = null, string galaxyName = null, string version = null)
-        {
-            Archive = new ArchiveResource(this, fileName, machineName, galaxyName, version);
-        }
-        
-        public void SetDirectory(string directoryName)
-        {
-            Directory = new DirectoryResource(this, directoryName);
+            switch (resourceType)
+            {
+                case ResourceType.None:
+                    throw new InvalidOperationException("Cannot initialize resource entry with type set to 'None'");
+                case ResourceType.Connection:
+                    Connection = new ConnectionResource(this);
+                    break;
+                case ResourceType.Archive:
+                    Archive = new ArchiveResource(this);
+                    break;
+                case ResourceType.Directory:
+                    Directory = new DirectoryResource(this);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(resourceType), resourceType, null);
+            }
         }
     }
 }

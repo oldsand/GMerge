@@ -2,11 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
-using GalaxyMerge.Client.Wrapper.Tests.Model;
 using GalaxyMerge.Client.Wrappers.Base;
 using NUnit.Framework;
 
-namespace GalaxyMerge.Client.Wrapper.Tests
+namespace GalaxyMerge.Client.Wrapper.Tests.Base
 {
     public class ChangeTrackingCollectionTests
     {

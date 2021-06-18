@@ -4,10 +4,9 @@ using System.Linq;
 using GalaxyMerge.Client.Core.Mvvm;
 using GalaxyMerge.Client.Data.Abstractions;
 using GalaxyMerge.Client.Data.Entities;
-using GalaxyMerge.Client.Events;
+using GalaxyMerge.Client.Wrappers;
 using NLog;
 using Prism.Commands;
-using Prism.Events;
 using Prism.Services.Dialogs;
 
 namespace GalaxyMerge.Client.Dialogs.ViewModels
@@ -16,15 +15,8 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
     {
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
         private readonly IResourceRepository _resourceRepository;
-        private readonly IEventAggregator _eventAggregator;
         private readonly List<string> _resourceNames = new List<string>();
         private ResourceType _selectedResourceType;
-        private string _resourceName;
-        private string _resourceDescription;
-        private string _nodeName;
-        private string _galaxyName;
-        private string _fileName;
-        private string _directoryName;
         private DelegateCommand<string> _resourceTypeSelectedCommand;
         private DelegateCommand _backCommand;
         private DelegateCommand _saveResourceCommand;
@@ -34,14 +26,13 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
         {
         }
 
-        public NewResourceViewModel(IResourceRepository resourceRepository, IEventAggregator eventAggregator)
+        public NewResourceViewModel(IResourceRepository resourceRepository)
         {
             if (resourceRepository == null)
                 throw new ArgumentNullException();
 
             Logger.Trace("Initializing New Resource Dialog");
             _resourceRepository = resourceRepository;
-            _eventAggregator = eventAggregator;
 
             Logger.Trace("Loading current resource names");
             _resourceNames = _resourceRepository.GetNames().ToList();
@@ -52,66 +43,12 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
             _resourceRepository.Dispose();
         }
 
+        public ResourceEntryWrapper ResourceEntry { get; set; }
+
         public ResourceType SelectedResourceType
         {
             get => _selectedResourceType;
             set => SetProperty(ref _selectedResourceType, value);
-        }
-
-        public string ResourceName
-        {
-            get => _resourceName;
-            set
-            {
-                SetProperty(ref _resourceName, value);
-                SaveResourceCommand.RaiseCanExecuteChanged();
-            }
-        }
-
-        public string ResourceDescription
-        {
-            get => _resourceDescription;
-            set => SetProperty(ref _resourceDescription, value);
-        }
-
-        public string NodeName
-        {
-            get => _nodeName;
-            set
-            {
-                SetProperty(ref _nodeName, value);
-                SaveResourceCommand.RaiseCanExecuteChanged();
-            }
-        }
-
-        public string GalaxyName
-        {
-            get => _galaxyName;
-            set
-            {
-                SetProperty(ref _galaxyName, value);
-                SaveResourceCommand.RaiseCanExecuteChanged();
-            }
-        }
-
-        public string FileName
-        {
-            get => _fileName;
-            set
-            {
-                SetProperty(ref _fileName, value);
-                SaveResourceCommand.RaiseCanExecuteChanged();
-            }
-        }
-
-        public string DirectoryName
-        {
-            get => _directoryName;
-            set
-            {
-                SetProperty(ref _directoryName, value);
-                SaveResourceCommand.RaiseCanExecuteChanged();
-            }
         }
 
         public DelegateCommand<string> ResourceTypeSelectedCommand =>
@@ -120,6 +57,8 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
         private void ExecuteResourceTypeSelectedCommand(string resourceTypeName)
         {
             SelectedResourceType = (ResourceType) Enum.Parse(typeof(ResourceType), resourceTypeName);
+            var entry = new ResourceEntry("", SelectedResourceType);
+            ResourceEntry = new ResourceEntryWrapper(entry);
         }
 
         public DelegateCommand BackCommand =>
@@ -143,24 +82,21 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
         {
             Logger.Trace("Executing Save New Resource Command");
 
-            var resourceEntry = new ResourceEntry(ResourceName, SelectedResourceType, ResourceDescription);
-            resourceEntry = SetEntryInformation(resourceEntry);
-
             try
             {
-                _resourceRepository.Add(resourceEntry);
+                _resourceRepository.Add(ResourceEntry.Model);
                 _resourceRepository.Save();
                 
-                Logger.Info("Added new {ResourceType} resource named {ResourceName}", SelectedResourceType,
-                    ResourceName);
+                Logger.Info("Added new {ResourceType} resource named {ResourceName}", ResourceEntry.ResourceType,
+                    ResourceEntry.ResourceName);
 
-                var parameters = new DialogParameters {{"resource", resourceEntry}};
+                var parameters = new DialogParameters {{"resource", ResourceEntry}};
                 RaiseRequestClose(new DialogResult(ButtonResult.OK, parameters));
             }
             catch (Exception e)
             {
-                Logger.Error(e, "Failed to add new {ResourceType} resource named {ResourceName}", _selectedResourceType,
-                    _resourceName);
+                Logger.Error(e, "Failed to add new {ResourceType} resource named {ResourceName}", ResourceEntry.ResourceType,
+                    ResourceEntry.ResourceName);
                 
                 //todo prompt user?
             }
@@ -168,50 +104,7 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
 
         private bool CanExecuteSaveResourceCommand()
         {
-            return !string.IsNullOrEmpty(ResourceName)
-                   && SelectedResourceType == ResourceType.Connection
-                ? HasValidConnectionData()
-                : SelectedResourceType == ResourceType.Archive
-                    ? HasValidArchiveData()
-                    : HasValidDirectoryData();
-        }
-
-        private bool HasValidConnectionData()
-        {
-            return !string.IsNullOrEmpty(NodeName)
-                   && !string.IsNullOrEmpty(GalaxyName);
-        }
-        
-        private bool HasValidArchiveData()
-        {
-            return !string.IsNullOrEmpty(FileName);
-        }
-        
-        private bool HasValidDirectoryData()
-        {
-            return !string.IsNullOrEmpty(DirectoryName);
-        }
-        
-        private ResourceEntry SetEntryInformation(ResourceEntry resourceEntry)
-        {
-            switch (resourceEntry.ResourceType)
-            {
-                case ResourceType.None:
-                    break;
-                case ResourceType.Connection:
-                    resourceEntry.SetConnection(NodeName, GalaxyName);
-                    break;
-                case ResourceType.Archive:
-                    resourceEntry.SetArchive(FileName);
-                    break;
-                case ResourceType.Directory:
-                    resourceEntry.SetDirectory(DirectoryName);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-
-            return resourceEntry;
+            return ResourceEntry.IsValid;
         }
     }
 }

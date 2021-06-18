@@ -24,35 +24,26 @@ namespace GalaxyMerge.Client.Wrappers
             set => SetValue(value);
         }
 
+        [Required(ErrorMessage = "Resource type is required")]
         public ResourceType ResourceType => Model.ResourceType;
 
         public DateTime AddedOn => Model.AddedOn;
 
         public string AddedBy => Model.AddedBy;
 
-        public ConnectionResourceWrapper Connection
-        {
-            get => new(Model.Connection);
-            set => SetValue<ConnectionResourceWrapper, ConnectionResource>(value);
-        }
+        public ConnectionResourceWrapper Connection { get; private set; }
 
-        public ArchiveResourceWrapper Archive
-        {
-            get => new(Model.Archive);
-            set => SetValue<ArchiveResourceWrapper, ArchiveResource>(value);
-        }
+        public ArchiveResourceWrapper Archive { get; private set; }
 
-        public DirectoryResourceWrapper Directory
-        {
-            get => new(Model.Directory);
-            set => SetValue<DirectoryResourceWrapper, DirectoryResource>(value);
-        }
+        public DirectoryResourceWrapper Directory { get; private set; }
 
         protected override void Initialize(ResourceEntry model)
         {
-            RegisterTrackingObject(nameof(Connection), Connection);
-            RegisterTrackingObject(nameof(Archive), Archive);
-            RegisterTrackingObject(nameof(Directory), Directory);
+            Connection = new ConnectionResourceWrapper(Model.Connection);
+            Archive = new ArchiveResourceWrapper(Model.Archive);
+            Directory = new DirectoryResourceWrapper(Model.Directory);
+            
+            base.Initialize(model);
         }
     }
 }

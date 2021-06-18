@@ -68,18 +68,22 @@ namespace GalaxyMerge.Client.Wrapper.Tests
         }
         
         [Test]
-        public void SetValue_Connection_SetsThePropertyAndRaisesEvents()
+        public void SetValue_ConnectionProperties_SetsThePropertyAndRaisesEvents()
         {
             var wrapper = new ResourceEntryWrapper(_model);
             var changed = new List<string>();
             wrapper.PropertyChanged += (_, e) => changed.Add(e.PropertyName);
-            
-            wrapper.Connection = new ConnectionResourceWrapper(new ConnectionResource(wrapper.Model, "Node", "Galaxy"));
+
+            wrapper.Connection.NodeName = "Node";
+            wrapper.Connection.GalaxyName = "Galaxy";
 
             Assert.NotNull(wrapper.Connection);
             Assert.AreSame(wrapper.Model.Connection, _model.Connection);
             Assert.AreEqual(wrapper.Connection.NodeName, "Node");
             Assert.AreEqual(wrapper.Connection.GalaxyName, "Galaxy");
+            Assert.IsNotEmpty(changed);
+            Assert.That(changed, Contains.Item(nameof(wrapper.IsChanged)));
+            Assert.That(changed, Contains.Item(nameof(wrapper.IsValid)));
         }
     }
 }

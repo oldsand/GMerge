@@ -35,7 +35,8 @@ namespace GalaxyMerge.Client.Wrappers.Base
 
             CallInitialization(model);
 
-            Validate();
+            if (Model != null)
+                Validate();
         }
 
         protected ModelWrapper(T model, bool callInitialize)
@@ -47,7 +48,8 @@ namespace GalaxyMerge.Client.Wrappers.Base
             if (callInitialize)
                 CallInitialization(model);
 
-            Validate();
+            if (Model != null)
+                Validate();
         }
 
         protected ModelWrapper(T model, bool callInitialize, bool validateOnConstruction)
@@ -59,7 +61,7 @@ namespace GalaxyMerge.Client.Wrappers.Base
             if (callInitialize)
                 CallInitialization(model);
 
-            if (validateOnConstruction)
+            if (validateOnConstruction && Model != null)
                 Validate();
         }
 
@@ -338,8 +340,8 @@ namespace GalaxyMerge.Client.Wrappers.Base
             if (propertyName == null)
                 throw new ArgumentNullException(nameof(propertyName), "Property name can not be null");
 
-            if (Model == null)
-                throw new InvalidOperationException("Model object is null. Cannot get property information");
+            /*if (Model == null)
+                throw new InvalidOperationException("Model object is null. Cannot get property information");*/
 
             var propertyInfo = Model.GetType().GetProperty(propertyName);
 

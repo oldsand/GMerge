@@ -1,10 +1,8 @@
-using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using GalaxyMerge.Client.Wrappers.Base;
 
-namespace GalaxyMerge.Client.Wrapper.Tests.Model
+namespace GalaxyMerge.Client.Wrapper.Tests.Base
 {
     public class TestModel
     {
