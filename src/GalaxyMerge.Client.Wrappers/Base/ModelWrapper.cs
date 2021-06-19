@@ -21,48 +21,25 @@ namespace GalaxyMerge.Client.Wrappers.Base
         private readonly Dictionary<string, IValidatableChangeTracking> _trackingObjects;
 
         /// <summary>
-        /// Base constructor for the ObservableModel. This constructor optionally performs initialization by making
-        /// a call to the virtual Initialize method, as well as optionally performs validation in order to check the
-        /// state of the model prior to and property changes.
+        /// Base constructor for the ModelWrapper. This constructor optionally performs registration by making
+        /// a call to the overridable Register method. By default the Register method uses reflection to attempt
+        /// registering any IValidatableChangeTracking objects with the parent model so that the root IsChanged property can
+        /// be kept in sync with child model object changes. Consumers should override Register in models that contain
+        /// complex properties or collections to perform initialization prior to registration.
+        /// Consumers may also manually call RegisterChangeTracking to bypass the default reflection implementation.
+        /// Any collection members can also call RegisterCollection in the overridable Register method.
         /// </summary>
         /// <param name="model"></param>
+        /// <param name="callRegister"></param>
         /// <exception cref="ArgumentNullException">Thrown when the model property is null</exception>
-        protected ModelWrapper(T model)
+        protected ModelWrapper(T model, bool callRegister = false)
         {
             Model = model;
             _originalValues = new Dictionary<string, object>();
             _trackingObjects = new Dictionary<string, IValidatableChangeTracking>();
 
-            CallInitialization(model);
-
-            if (Model != null)
-                Validate();
-        }
-
-        protected ModelWrapper(T model, bool callInitialize)
-        {
-            Model = model;
-            _originalValues = new Dictionary<string, object>();
-            _trackingObjects = new Dictionary<string, IValidatableChangeTracking>();
-
-            if (callInitialize)
-                CallInitialization(model);
-
-            if (Model != null)
-                Validate();
-        }
-
-        protected ModelWrapper(T model, bool callInitialize, bool validateOnConstruction)
-        {
-            Model = model;
-            _originalValues = new Dictionary<string, object>();
-            _trackingObjects = new Dictionary<string, IValidatableChangeTracking>();
-
-            if (callInitialize)
-                CallInitialization(model);
-
-            if (validateOnConstruction && Model != null)
-                Validate();
+            if (callRegister)
+                RunRegistration(model);
         }
 
         public T Model { get; }
@@ -92,7 +69,7 @@ namespace GalaxyMerge.Client.Wrappers.Base
             foreach (var trackingObject in _trackingObjects.Values)
                 trackingObject.RejectChanges();
 
-            Validate();
+            ValidateObject();
             RaisePropertyChanged($"");
         }
 
@@ -127,7 +104,17 @@ namespace GalaxyMerge.Client.Wrappers.Base
             yield break;
         }
 
-        protected virtual void Initialize(T model)
+        protected void RunValidation()
+        {
+            ValidateObject();
+        }
+        
+        protected void RunValidation(string propertyName)
+        {
+            ValidateProperty(propertyName);
+        }
+
+        protected virtual void Register(T model)
         {
             var properties = GetType().GetProperties();
 
@@ -135,7 +122,7 @@ namespace GalaxyMerge.Client.Wrappers.Base
             {
                 var value = property.GetValue(this);
                 if (value is IValidatableChangeTracking tracking)
-                    RegisterTrackingObject(property.Name, tracking);
+                    RegisterTrackingObjectInternal(property.Name, tracking);
             }
         }
 
@@ -159,10 +146,10 @@ namespace GalaxyMerge.Client.Wrappers.Base
                 setValue.Invoke(Model, newValue);
             else
                 propertyInfo?.SetValue(Model, newValue);
+            
+            ValidateProperty(propertyName);
 
             onChanged?.Invoke();
-
-            Validate();
 
             RaisePropertyChanged(propertyName);
             RaisePropertyChanged(propertyName + "IsChanged");
@@ -184,16 +171,16 @@ namespace GalaxyMerge.Client.Wrappers.Base
             UpdateOriginalValue((TModel) currentValue, newValue, propertyName);
 
             if (autoRegister)
-                RegisterTrackingObject(propertyName, newValue);
+                RegisterTrackingObjectInternal(propertyName, newValue);
 
             if (setValue != null)
                 setValue.Invoke(Model, newValue.Model);
             else
                 propertyInfo?.SetValue(Model, newValue.Model);
 
+            ValidateProperty(propertyName);
+            
             onChanged?.Invoke();
-
-            Validate();
 
             RaisePropertyChanged(propertyName);
             RaisePropertyChanged(propertyName + "IsChanged");
@@ -201,16 +188,7 @@ namespace GalaxyMerge.Client.Wrappers.Base
 
         protected void RegisterTrackingObject(string propertyName, IValidatableChangeTracking trackingObject)
         {
-            if (_trackingObjects.ContainsKey(propertyName))
-            {
-                var current = _trackingObjects[propertyName];
-                if (ReferenceEquals(current, trackingObject)) return;
-                current.PropertyChanged -= TrackingObjectOnPropertyChanged;
-                _trackingObjects.Remove(propertyName);
-            }
-
-            _trackingObjects.Add(propertyName, trackingObject);
-            trackingObject.PropertyChanged += TrackingObjectOnPropertyChanged;
+            RegisterTrackingObjectInternal(propertyName, trackingObject);
         }
 
         protected void RegisterCollection<TWrapper, TModel>(ObservableCollection<TWrapper> observableCollection,
@@ -234,7 +212,7 @@ namespace GalaxyMerge.Client.Wrappers.Base
                     modelCollection.Clear();
                 }
 
-                Validate();
+                ValidateObject();
             };
         }
 
@@ -242,17 +220,17 @@ namespace GalaxyMerge.Client.Wrappers.Base
             NotifyCollectionChangedEventHandler changedHandler)
         {
             collection.CollectionChanged += changedHandler;
-            collection.CollectionChanged += (_, _) => Validate();
+            collection.CollectionChanged += (_, _) => ValidateObject();
         }
 
-        private void Validate()
+        private void ValidateObject()
         {
             ClearErrors();
 
             var results = new List<ValidationResult>();
             var context = new ValidationContext(this);
             Validator.TryValidateObject(this, context, results, true);
-
+            
             if (results.Any())
             {
                 var propertyNames = results.SelectMany(r => r.MemberNames).Distinct().ToList();
@@ -269,6 +247,43 @@ namespace GalaxyMerge.Client.Wrappers.Base
             }
 
             RaisePropertyChanged(nameof(IsValid));
+        }
+        
+        private void ValidateProperty(string propertyName)
+        {
+            var results = new List<ValidationResult>();
+            var context = new ValidationContext(this) { MemberName = propertyName};
+            Validator.TryValidateObject(this, context, results, true);
+            //Validator.TryValidateProperty(newValue, context, results);
+            
+            var propertyErrors = results.Where(r => r.MemberNames.Contains(propertyName)).ToList();
+
+            if (propertyErrors.Any())
+            {
+                Errors[propertyName] = propertyErrors.Select(r => r.ErrorMessage).Distinct().ToList();
+                RaiseErrorsChanged(propertyName);
+                RaisePropertyChanged(nameof(IsValid));
+            }
+            else if (Errors.ContainsKey(propertyName))
+            {
+                Errors.Remove(propertyName);
+                RaiseErrorsChanged(propertyName);
+                RaisePropertyChanged(nameof(IsValid));
+            }
+        }
+
+        private void RegisterTrackingObjectInternal(string propertyName, IValidatableChangeTracking trackingObject)
+        {
+            if (_trackingObjects.ContainsKey(propertyName))
+            {
+                var current = _trackingObjects[propertyName];
+                if (ReferenceEquals(current, trackingObject)) return;
+                current.PropertyChanged -= TrackingObjectOnPropertyChanged;
+                _trackingObjects.Remove(propertyName);
+            }
+
+            _trackingObjects.Add(propertyName, trackingObject);
+            trackingObject.PropertyChanged += TrackingObjectOnPropertyChanged;
         }
 
         private void TrackingObjectOnPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -351,9 +366,9 @@ namespace GalaxyMerge.Client.Wrappers.Base
             return propertyInfo;
         }
 
-        private void CallInitialization(T model)
+        private void RunRegistration(T model)
         {
-            Initialize(model);
+            Register(model);
         }
     }
 }

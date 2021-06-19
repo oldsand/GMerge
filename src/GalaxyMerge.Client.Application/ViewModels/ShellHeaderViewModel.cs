@@ -7,6 +7,8 @@ using GalaxyMerge.Client.Core.Naming;
 using GalaxyMerge.Client.Core.Prism;
 using GalaxyMerge.Client.Data.Abstractions;
 using GalaxyMerge.Client.Data.Entities;
+using GalaxyMerge.Client.Wrappers;
+using GalaxyMerge.Client.Wrappers.Base;
 using NLog;
 using Prism.Commands;
 using Prism.Events;
@@ -14,45 +16,78 @@ using Prism.Services.Dialogs;
 
 namespace GalaxyMerge.Client.Application.ViewModels
 {
-    public class ShellHeaderViewModel : ViewModelBase
+    public sealed class ShellHeaderViewModel : ViewModelBase
     {
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
         private readonly IDialogService _dialogService;
         private readonly IResourceRepository _resourceRepository;
-        private ResourceEntry _selectedResourceEntry;
-        private ObservableCollection<ResourceEntry> _resources;
+        private ResourceEntryWrapper _selectedResourceEntry;
+        private ChangeTrackingCollection<ResourceEntryWrapper> _resources;
         private DelegateCommand _addResourceCommand;
         private DelegateCommand _openSettingsCommand;
         private DelegateCommand _deleteResourceCommand;
-
-
+        
         public ShellHeaderViewModel()
         {
         }
 
-        public ShellHeaderViewModel(IEventAggregator eventAggregator, IDialogService dialogService,
+        public ShellHeaderViewModel(IDialogService dialogService,
             IResourceRepository resourceRepository)
         {
             Logger.Trace("Initializing Shell Header ViewModel");
 
             _dialogService = dialogService;
             _resourceRepository = resourceRepository;
-
-            Resources = new ObservableCollection<ResourceEntry>();
-
-            LoadResources().Await(ResourceLoadComplete, ResourceLoadError);
+            
+            LoadAsync().Await(OnLoadComplete, OnLoadError);
         }
 
-        public ResourceEntry SelectedResourceEntry
+        public ResourceEntryWrapper SelectedResourceEntry
         {
             get => _selectedResourceEntry;
             set => SetProperty(ref _selectedResourceEntry, value);
         }
 
-        public ObservableCollection<ResourceEntry> Resources
+        public ChangeTrackingCollection<ResourceEntryWrapper> Resources
         {
             get => _resources;
-            set => SetProperty(ref _resources, value);
+            private set => SetProperty(ref _resources, value);
+        }
+
+        protected override async Task LoadAsync()
+        {
+            Logger.Trace("Getting all resource records from application database");
+
+            var resources = (await _resourceRepository.GetAllAsync()).ToList();
+
+            if (Resources != null)
+            {
+                Resources.Clear();
+                Resources.AddRange(resources.Select(r => new ResourceEntryWrapper(r)));
+                Resources.AcceptChanges();
+                return;
+            }
+            
+            Resources = new ChangeTrackingCollection<ResourceEntryWrapper>(resources
+                .Select(r => new ResourceEntryWrapper(r)).ToList());
+        }
+
+        protected override void OnLoadError(Exception ex)
+        {
+            Logger.Error(ex, "Unable to load galaxy resources from application data store");
+
+            //todo display generic error message box to user
+        }
+
+        protected override void OnLoadComplete()
+        {
+            if (Resources.Count > 0)
+            {
+                Logger.Info("{ResourceCount} Resource(s) loaded successfully", Resources.Count);
+                return;
+            }
+
+            Logger.Info("No resources found");
         }
 
         public DelegateCommand NewResourceCommand =>
@@ -67,14 +102,10 @@ namespace GalaxyMerge.Client.Application.ViewModels
                 Logger.Trace("Entering new resource command callback with result {ButtonResult}", dialogResult.Result);
                 if (dialogResult.Result != ButtonResult.OK) return;
 
-                var resource = dialogResult.Parameters.GetValue<ResourceEntry>("resource");
-                
-                Logger.Trace("Adding new resource {ResourceName} to resources collection", resource.ResourceName);
-
-                if (Resources.Contains(resource))
-                    return;
-                
+                var resource = dialogResult.Parameters.GetValue<ResourceEntryWrapper>("resource");
                 Resources.Add(resource);
+                Resources.AcceptChanges();
+                Logger.Trace("Added new resource {ResourceName} to resources collection", resource.ResourceName);
             });
         }
 
@@ -89,7 +120,7 @@ namespace GalaxyMerge.Client.Application.ViewModels
             
             var parameters = new DialogParameters {{"resource", SelectedResourceEntry}};
             
-            _dialogService.Show(DialogName.ResourceSettingsDialog, parameters, result => { });
+            _dialogService.Show(DialogName.ResourceSettingsDialog, parameters, _ => { });
         }
 
         private bool CanExecuteOpenSettingsCommand()
@@ -120,12 +151,13 @@ namespace GalaxyMerge.Client.Application.ViewModels
                     try
                     {
                         Logger.Trace("Deleting {ResourceName} from database", resourceName);
-                        _resourceRepository.Remove(resource);
+                        _resourceRepository.Remove(resource.Model);
                         _resourceRepository.Save();
                 
                         Logger.Trace("Removing {ResourceName} from resource collection and setting selected resource to null", resourceName);
                         Resources.Remove(resource);
                         SelectedResourceEntry = null;
+                        Resources.AcceptChanges();
 
                         Logger.Info("Resource {ResourceName} successfully removed", resourceName);
                     }
@@ -140,34 +172,6 @@ namespace GalaxyMerge.Client.Application.ViewModels
         private bool CanExecuteDeleteResourceCommand()
         {
             return SelectedResourceEntry != null;
-        }
-        
-        private async Task LoadResources()
-        {
-            Logger.Trace("Getting all resource records from application database");
-
-            var resources = (await _resourceRepository.GetAllAsync()).ToList();
-
-            Resources.Clear();
-            Resources.AddRange(resources);
-        }
-
-        private void ResourceLoadError(Exception ex)
-        {
-            Logger.Error(ex, "Unable to load galaxy resources from application data store");
-
-            //todo display generic error message box to user
-        }
-
-        private void ResourceLoadComplete()
-        {
-            if (Resources.Count > 0)
-            {
-                Logger.Info("{ResourceCount} Resource(s) loaded successfully", Resources.Count);
-                return;
-            }
-
-            Logger.Info("No resources found");
         }
     }
 }

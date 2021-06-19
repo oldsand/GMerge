@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using GalaxyMerge.Client.Data.Entities;
 using GalaxyMerge.Client.Wrappers.Base;
@@ -7,8 +8,16 @@ namespace GalaxyMerge.Client.Wrappers
 {
     public class ResourceEntryWrapper : ModelWrapper<ResourceEntry>
     {
-        public ResourceEntryWrapper(ResourceEntry model) : base(model)
+        private readonly List<string> _existingNames;
+
+        public ResourceEntryWrapper(ResourceEntry model) : base(model, true)
         {
+            _existingNames = new List<string>();
+        }
+
+        public ResourceEntryWrapper(ResourceEntry model, List<string> existingNames) : base(model, true)
+        {
+            _existingNames = existingNames;
         }
 
         [Required(ErrorMessage = "Resource name is required")]
@@ -35,15 +44,24 @@ namespace GalaxyMerge.Client.Wrappers
 
         public ArchiveResourceWrapper Archive { get; private set; }
 
-        public DirectoryResourceWrapper Directory { get; private set; }
+        public DirectoryResourceWrapper Directory => new(Model.Directory);
 
-        protected override void Initialize(ResourceEntry model)
+        protected override void Register(ResourceEntry model)
         {
-            Connection = new ConnectionResourceWrapper(Model.Connection);
-            Archive = new ArchiveResourceWrapper(Model.Archive);
-            Directory = new DirectoryResourceWrapper(Model.Directory);
-            
-            base.Initialize(model);
+            if (Model.Connection != null)
+                Connection = new ConnectionResourceWrapper(Model.Connection);
+
+            if (Model.Archive != null)
+                Archive = new ArchiveResourceWrapper(Model.Archive);
+
+            base.Register(model);
+        }
+
+        public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (_existingNames.Contains(ResourceName))
+                yield return new ValidationResult($"{ResourceName} is taken. Resource Name must be unique.",
+                    new[] {nameof(ResourceName)});
         }
     }
 }

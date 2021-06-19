@@ -1,4 +1,6 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Threading.Tasks;
+using System.Windows.Controls;
 using Prism.Mvvm;
 using Prism.Navigation;
 
@@ -6,6 +8,7 @@ namespace GalaxyMerge.Client.Core.Mvvm
 {
     public abstract class ViewModelBase : BindableBase, IDestructible
     {
+
         private string _title;
         private ControlTemplate _icon;
 
@@ -23,6 +26,25 @@ namespace GalaxyMerge.Client.Core.Mvvm
 
         public virtual void Destroy()
         {
+        }
+
+        protected virtual void Load()
+        {
+        }
+        
+        protected virtual Task LoadAsync()
+        {
+            return Task.CompletedTask;
+        }
+
+        protected virtual void OnLoadError(Exception ex)
+        {
+            
+        }
+        
+        protected virtual void OnLoadComplete()
+        {
+            
         }
     }
 }

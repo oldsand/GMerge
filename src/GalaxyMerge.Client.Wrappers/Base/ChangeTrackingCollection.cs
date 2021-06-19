@@ -15,7 +15,7 @@ namespace GalaxyMerge.Client.Wrappers.Base
         private readonly ObservableCollection<T> _removed;
         private readonly ObservableCollection<T> _modified;
 
-        public ChangeTrackingCollection(IList<T> collection) : base (collection)
+        public ChangeTrackingCollection(ICollection<T> collection) : base (collection)
         {
             _original = this.ToList();
 

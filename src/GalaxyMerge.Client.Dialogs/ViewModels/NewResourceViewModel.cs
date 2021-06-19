@@ -11,11 +11,12 @@ using Prism.Services.Dialogs;
 
 namespace GalaxyMerge.Client.Dialogs.ViewModels
 {
-    public class NewResourceViewModel : DialogViewModelBase
+    public sealed class NewResourceViewModel : DialogViewModelBase
     {
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
         private readonly IResourceRepository _resourceRepository;
-        private readonly List<string> _resourceNames = new List<string>();
+        private  List<string> _resourceNames;
+        private ResourceEntryWrapper _resourceEntry;
         private ResourceType _selectedResourceType;
         private DelegateCommand<string> _resourceTypeSelectedCommand;
         private DelegateCommand _backCommand;
@@ -24,6 +25,7 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
 
         public NewResourceViewModel()
         {
+            _resourceNames = new List<string>();
         }
 
         public NewResourceViewModel(IResourceRepository resourceRepository)
@@ -34,8 +36,19 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
             Logger.Trace("Initializing New Resource Dialog");
             _resourceRepository = resourceRepository;
 
-            Logger.Trace("Loading current resource names");
-            _resourceNames = _resourceRepository.GetNames().ToList();
+            Load();
+        }
+
+        public ResourceEntryWrapper ResourceEntry
+        {
+            get => _resourceEntry;
+            private set => SetProperty(ref _resourceEntry, value);
+        }
+
+        public ResourceType SelectedResourceType
+        {
+            get => _selectedResourceType;
+            set => SetProperty(ref _selectedResourceType, value);
         }
 
         public override void OnDialogClosed()
@@ -43,12 +56,20 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
             _resourceRepository.Dispose();
         }
 
-        public ResourceEntryWrapper ResourceEntry { get; set; }
-
-        public ResourceType SelectedResourceType
+        protected override void Load()
         {
-            get => _selectedResourceType;
-            set => SetProperty(ref _selectedResourceType, value);
+            Logger.Trace("Loading current resource names");
+            
+            try
+            {
+                _resourceNames = _resourceRepository.GetNames().ToList();
+                Logger.Trace("Loaded {ResourceNameCount} names from database", _resourceNames.Count);
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e, "Failed to load resource names from database");
+                RaiseRequestClose(new DialogResult(ButtonResult.Abort));
+            }
         }
 
         public DelegateCommand<string> ResourceTypeSelectedCommand =>
@@ -58,7 +79,7 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
         {
             SelectedResourceType = (ResourceType) Enum.Parse(typeof(ResourceType), resourceTypeName);
             var entry = new ResourceEntry("", SelectedResourceType);
-            ResourceEntry = new ResourceEntryWrapper(entry);
+            ResourceEntry = new ResourceEntryWrapper(entry, _resourceNames);
         }
 
         public DelegateCommand BackCommand =>
@@ -76,7 +97,9 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
         }
 
         public DelegateCommand SaveResourceCommand =>
-            _saveResourceCommand ??= new DelegateCommand(ExecuteSaveResourceCommand, CanExecuteSaveResourceCommand);
+            _saveResourceCommand ??= new DelegateCommand(ExecuteSaveResourceCommand, CanExecuteSaveResourceCommand)
+                .ObservesProperty(() => ResourceEntry.IsValid)
+                .ObservesProperty(() => ResourceEntry.IsChanged);
 
         private void ExecuteSaveResourceCommand()
         {
@@ -104,7 +127,7 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
 
         private bool CanExecuteSaveResourceCommand()
         {
-            return ResourceEntry.IsValid;
+            return ResourceEntry is {IsValid: true, IsChanged: true};
         }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using GalaxyMerge.Client.Core.Mvvm;
 using GalaxyMerge.Client.Core.Naming;
 using GalaxyMerge.Client.Data.Entities;
+using GalaxyMerge.Client.Wrappers;
 using Prism.Regions;
 using Prism.Services.Dialogs;
 
@@ -10,7 +11,7 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
     public class ResourceSettingsViewModel : DialogViewModelBase, INavigationAware
     {
         private readonly IRegionManager _regionManager;
-        private ResourceEntry _resourceEntry;
+        private ResourceEntryWrapper _resourceEntry;
 
         public ResourceSettingsViewModel()
         {
@@ -21,7 +22,7 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
             _regionManager = regionManager;
         }
 
-        public ResourceEntry ResourceEntry
+        public ResourceEntryWrapper ResourceEntry
         {
             get => _resourceEntry;
             set => SetProperty(ref _resourceEntry, value);
@@ -29,7 +30,7 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
 
         public override void OnDialogOpened(IDialogParameters parameters)
         {
-            ResourceEntry = parameters.GetValue<ResourceEntry>("resource");
+            ResourceEntry = parameters.GetValue<ResourceEntryWrapper>("resource");
 
             LoadResourceSettingTabs();
         }

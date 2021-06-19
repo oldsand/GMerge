@@ -6,7 +6,7 @@ namespace GalaxyMerge.Client.Wrappers
 {
     public class ConnectionResourceWrapper : ModelWrapper<ConnectionResource>
     {
-        public ConnectionResourceWrapper(ConnectionResource model) : base(model, false)
+        public ConnectionResourceWrapper(ConnectionResource model) : base(model)
         {
         }
 

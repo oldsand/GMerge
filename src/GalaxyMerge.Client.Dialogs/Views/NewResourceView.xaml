@@ -236,7 +236,7 @@
 
           <StackPanel Grid.Row="0" Margin="0 20 0 0">
             <TextBlock Text="Name" Margin="0 5" />
-            <TextBox Text="{Binding ResourceEntry.ResourceName}"
+            <TextBox Text="{Binding ResourceEntry.ResourceName, UpdateSourceTrigger=PropertyChanged}"
                      ui:TextBoxProperties.DefaultText="Name"/>
             <TextBlock Text="Enter a name that will identify the new resource"
                        Margin="2"
@@ -257,7 +257,7 @@
 
           <StackPanel Grid.Row="2" Margin="0 20 0 0">
             <TextBlock Text="Node Name" Margin="0 5" />
-            <TextBox Text="{Binding ResourceEntry.Connection.NodeName}" 
+            <TextBox Text="{Binding ResourceEntry.Connection.NodeName, UpdateSourceTrigger=PropertyChanged}" 
                      ui:TextBoxProperties.DefaultText="Node Name"/>
             <TextBlock Text="Enter the machine name on which the galaxy repository is located"
                        Margin="2"
@@ -267,7 +267,7 @@
 
           <StackPanel Grid.Row="3" Margin="0 20 0 0">
             <TextBlock Text="Galaxy Name" Margin="0 5" />
-            <TextBox Text="{Binding ResourceEntry.Connection.GalaxyName}" 
+            <TextBox Text="{Binding ResourceEntry.Connection.GalaxyName, UpdateSourceTrigger=PropertyChanged}" 
                      ui:TextBoxProperties.DefaultText="Node Name"/>
             <TextBlock Text="Enter the name of the galaxy repository to connect to"
                        Margin="2"
@@ -301,7 +301,7 @@
 
           <StackPanel Grid.Row="0" Margin="0 20 0 0">
             <TextBlock Text="Resource Name" Margin="0 5" />
-            <TextBox Text="{Binding ResourceEntry.ResourceName}" />
+            <TextBox Text="{Binding ResourceEntry.ResourceName, UpdateSourceTrigger=PropertyChanged}" />
             <TextBlock Text="Enter a name that will identify the new resource"
                        TextWrapping="Wrap"
                        Foreground="DarkGray"
@@ -310,7 +310,7 @@
 
           <StackPanel Grid.Row="1" Margin="0 20 0 0">
             <TextBlock Text="Archive Backup File" Margin="0 5" />
-            <TextBox Text="{Binding ResourceEntry.Archive.FileName}" />
+            <TextBox Text="{Binding ResourceEntry.Archive.FileName, UpdateSourceTrigger=PropertyChanged}" />
             <TextBlock Text="Select or enter the archive database file"
                        TextWrapping="Wrap"
                        Foreground="DarkGray"
@@ -343,7 +343,7 @@
 
           <StackPanel Grid.Row="0" Margin="0 20 0 0">
             <TextBlock Text="Resource Name" Margin="0 5" />
-            <TextBox Text="{Binding ResourceEntry.ResourceName}" />
+            <TextBox Text="{Binding ResourceEntry.ResourceName, UpdateSourceTrigger=PropertyChanged}" />
             <TextBlock Text="Enter a name that will identify the new resource"
                        TextWrapping="Wrap"
                        Foreground="DarkGray"
@@ -352,7 +352,7 @@
 
           <StackPanel Grid.Row="1" Margin="0 20 0 0">
             <TextBlock Text="Galaxy File" Margin="0 5" />
-            <TextBox Text="{Binding ResourceEntry.Directory.DirectoryName}" />
+            <TextBox Text="{Binding ResourceEntry.Directory.DirectoryName, UpdateSourceTrigger=PropertyChanged}" />
             <TextBlock Text="Select or enter the archive database file"
                        TextWrapping="Wrap"
                        Foreground="DarkGray"

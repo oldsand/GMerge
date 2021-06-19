@@ -59,7 +59,7 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Base
 
         public ChangeTrackingCollection<TestItemWrapper> TestItems { get; private set; }
 
-        protected override void Initialize(TestModel model)
+        protected override void Register(TestModel model)
         {
             if (model.Items != null)
             {
@@ -67,7 +67,7 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Base
                 RegisterCollection(TestItems, model.Items);
             }
             
-            base.Initialize(model);
+            base.Register(model);
         }
     }
 

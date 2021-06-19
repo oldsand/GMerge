@@ -132,6 +132,10 @@
       <Project>{ce25b627-6028-438d-b172-d81ce5fedfb9}</Project>
       <Name>GalaxyMerge.Client.UI.Connection</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GalaxyMerge.Client.Wrappers\GalaxyMerge.Client.Wrappers.csproj">
+      <Project>{31a6b9b2-e1c6-41ac-a753-8a1985842fb6}</Project>
+      <Name>GalaxyMerge.Client.Wrappers</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GalaxyMerge.Core\GalaxyMerge.Core.csproj">
       <Project>{dd496472-fb15-4ffc-86ca-2ac8f0e6cf3c}</Project>
       <Name>GalaxyMerge.Core</Name>
