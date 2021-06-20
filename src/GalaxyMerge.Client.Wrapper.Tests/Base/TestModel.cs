@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using GalaxyMerge.Client.Wrappers.Base;
 
@@ -19,7 +20,7 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Base
         public int Id { get; set; }
         public string Name { get; set; }
     }
-    
+
     public class TestItem
     {
         public int Id { get; set; }
@@ -29,7 +30,7 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Base
 
     public class TestModelWrapper : ModelWrapper<TestModel>
     {
-        public TestModelWrapper(TestModel model) : base(model)
+        public TestModelWrapper(TestModel model) : base(model, true)
         {
         }
 
@@ -39,6 +40,7 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Base
             set => SetValue(value);
         }
 
+        [Required(ErrorMessage = "Name is required")]
         public string Name
         {
             get => GetValue<string>();
@@ -51,29 +53,33 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Base
             set => SetValue(value);
         }
 
+        private TestComplexTypeWrapper _complexType;
         public TestComplexTypeWrapper ComplexType
         {
-            get => new TestComplexTypeWrapper(Model.ComplexType);
-            set => SetValue<TestComplexTypeWrapper, TestComplexType>(value);
+            get => _complexType;
+            set => SetValue<TestComplexTypeWrapper, TestComplexType>(ref _complexType, value);
         }
 
         public ChangeTrackingCollection<TestItemWrapper> TestItems { get; private set; }
 
-        protected override void Register(TestModel model)
+        protected override void Initialize(TestModel model)
         {
+            ComplexType = new TestComplexTypeWrapper(model.ComplexType);
+            
             if (model.Items != null)
             {
-                TestItems = new ChangeTrackingCollection<TestItemWrapper>(model.Items.Select(i => new TestItemWrapper(i)).ToList());
+                TestItems = new ChangeTrackingCollection<TestItemWrapper>(model.Items
+                    .Select(i => new TestItemWrapper(i)).ToList());
                 RegisterCollection(TestItems, model.Items);
             }
-            
-            base.Register(model);
+
+            base.Initialize(model);
         }
     }
 
     public class TestComplexTypeWrapper : ModelWrapper<TestComplexType>
     {
-        public TestComplexTypeWrapper(TestComplexType model) : base(model, false)
+        public TestComplexTypeWrapper(TestComplexType model) : base(model)
         {
         }
 
@@ -88,11 +94,18 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Base
             get => GetValue<string>();
             set => SetValue(value);
         }
+
+        protected override void Initialize(TestComplexType model)
+        {
+            RegisterRequired(nameof(Name));
+            
+            base.Initialize(model);
+        }
     }
-    
+
     public class TestItemWrapper : ModelWrapper<TestItem>
     {
-        public TestItemWrapper(TestItem model) : base(model, false)
+        public TestItemWrapper(TestItem model) : base(model)
         {
         }
 
@@ -102,7 +115,7 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Base
             set => SetValue(value, (m, v) => m.Id = v);
         }
 
-        public string Item  
+        public string Item
         {
             get => GetValue<string>();
             set => SetValue(value, (m, v) => m.Item = v);

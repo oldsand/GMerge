@@ -7,8 +7,8 @@ using System.Runtime.CompilerServices;
 
 namespace GalaxyMerge.Client.Wrappers.Base
 {
-    public class ChangeTrackingCollection<T> : ObservableCollection<T>, IValidatableChangeTracking
-        where T : class, IValidatableChangeTracking
+    public class ChangeTrackingCollection<T> : ObservableCollection<T>, ITrackingObject
+        where T : class, ITrackingObject
     {
         private IList<T> _original;
         private readonly ObservableCollection<T> _added;
@@ -37,6 +37,7 @@ namespace GalaxyMerge.Client.Wrappers.Base
         public bool IsChanged => Added.Count > 0 || Removed.Count > 0 || Modified.Count > 0;
 
         public bool IsValid => this.All(t => t.IsValid);
+        public bool HasRequired => this.Any(t => t.HasRequired);
 
         public void AcceptChanges()
         {

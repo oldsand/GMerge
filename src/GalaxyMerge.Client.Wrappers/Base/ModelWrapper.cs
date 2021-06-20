@@ -15,39 +15,40 @@ namespace GalaxyMerge.Client.Wrappers.Base
     /// 
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class ModelWrapper<T> : ObservableErrorInfo, IValidatableChangeTracking, IValidatableObject
+    public abstract class ModelWrapper<T> : ObservableErrorInfo, ITrackingObject, IValidatableObject
     {
-        private readonly Dictionary<string, object> _originalValues;
-        private readonly Dictionary<string, IValidatableChangeTracking> _trackingObjects;
+        private readonly Dictionary<string, object> _originalValues = new();
+        private readonly Dictionary<string, ITrackingObject> _trackingObjects = new();
+        private readonly List<string> _requiredProperties = new();
+        private readonly Dictionary<string, RequiredAttribute> _requiredAttributes = new();
 
         /// <summary>
-        /// Base constructor for the ModelWrapper. This constructor optionally performs registration by making
-        /// a call to the overridable Register method. By default the Register method uses reflection to attempt
-        /// registering any IValidatableChangeTracking objects with the parent model so that the root IsChanged property can
-        /// be kept in sync with child model object changes. Consumers should override Register in models that contain
-        /// complex properties or collections to perform initialization prior to registration.
-        /// Consumers may also manually call RegisterChangeTracking to bypass the default reflection implementation.
-        /// Any collection members can also call RegisterCollection in the overridable Register method.
+        /// Base constructor for the ModelWrapper. This constructor optionally performs initialization by making
+        /// a call to the virtual Initialize method. The base initialize method uses reflection to attempt to register
+        /// any ITrackingObjects members and update required properties that have the RequiredAttribute data annotation.
+        /// This can be disabled by setting callInitialize to false. Since Initialize would be called before the deriving
+        /// class constructor, any member initialization should be done in Initialize by overriding the method.
+        /// Otherwise null member references will not be automatically register for change tracking.
         /// </summary>
-        /// <param name="model"></param>
-        /// <param name="callRegister"></param>
-        /// <exception cref="ArgumentNullException">Thrown when the model property is null</exception>
-        protected ModelWrapper(T model, bool callRegister = false)
+        /// <param name="model">The model instance to wrap</param>
+        /// <param name="callInitialize">Calls virtual Initialize method on construction of base class</param>
+        protected ModelWrapper(T model, bool callInitialize = true)
         {
             Model = model;
-            _originalValues = new Dictionary<string, object>();
-            _trackingObjects = new Dictionary<string, IValidatableChangeTracking>();
 
-            if (callRegister)
-                RunRegistration(model);
+            if (callInitialize)
+                RunInitialization(model);
         }
 
         public T Model { get; }
 
-        public bool IsChanged =>
-            _originalValues.Count > 0 || _trackingObjects.Select(t => t.Value).Any(t => t.IsChanged);
+        public bool IsChanged => _originalValues.Count > 0 ||
+                                 _trackingObjects.Select(t => t.Value).Any(t => t.IsChanged);
 
         public bool IsValid => !HasErrors && _trackingObjects.Select(t => t.Value).All(t => t.IsValid);
+
+        public bool HasRequired => _requiredProperties.Any() ||
+                                   _trackingObjects.Select(t => t.Value).Any(t => t.HasRequired);
 
         public void AcceptChanges()
         {
@@ -75,8 +76,10 @@ namespace GalaxyMerge.Client.Wrappers.Base
 
         public TValue GetOriginalValue<TValue>(Expression<Func<T, TValue>> propertyExpression)
         {
-            var expression = (MemberExpression) propertyExpression.Body;
-            var propertyName = expression.Member.Name;
+            if (propertyExpression.Body is not MemberExpression memberExpression)
+                throw new InvalidOperationException("");
+
+            var propertyName = memberExpression.Member.Name;
 
             return _originalValues.ContainsKey(propertyName)
                 ? (TValue) _originalValues[propertyName]
@@ -85,10 +88,22 @@ namespace GalaxyMerge.Client.Wrappers.Base
 
         public bool GetIsChanged<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
         {
-            var expression = (MemberExpression) propertyExpression.Body;
-            var propertyName = expression.Member.Name;
+            if (propertyExpression.Body is not MemberExpression memberExpression)
+                throw new InvalidOperationException("");
+
+            var propertyName = memberExpression.Member.Name;
 
             return _originalValues.ContainsKey(propertyName);
+        }
+
+        public bool GetIsRequired<TProperty>(Expression<Func<T, TProperty>> propertyExpression)
+        {
+            if (propertyExpression.Body is not MemberExpression memberExpression)
+                throw new InvalidOperationException("");
+
+            var propertyName = memberExpression.Member.Name;
+
+            return _requiredProperties.Contains(propertyName);
         }
 
         public IEnumerable<string> GetErrors(Expression<Func<T, object>> propertyExpression)
@@ -104,41 +119,19 @@ namespace GalaxyMerge.Client.Wrappers.Base
             yield break;
         }
 
-        protected void RunValidation()
-        {
-            ValidateObject();
-        }
-        
-        protected void RunValidation(string propertyName)
-        {
-            ValidateProperty(propertyName);
-        }
-
-        protected virtual void Register(T model)
-        {
-            var properties = GetType().GetProperties();
-
-            foreach (var property in properties)
-            {
-                var value = property.GetValue(this);
-                if (value is IValidatableChangeTracking tracking)
-                    RegisterTrackingObjectInternal(property.Name, tracking);
-            }
-        }
-
         protected TValue GetValue<TValue>([CallerMemberName] string propertyName = null)
         {
-            var propertyInfo = GetPropertyInfo(propertyName);
+            var propertyInfo = GetModelPropertyInfo(propertyName);
             return (TValue) propertyInfo?.GetValue(Model);
         }
 
         protected void SetValue<TValue>(TValue newValue, Action<T, TValue> setValue = null, Action onChanged = null,
             [CallerMemberName] string propertyName = null)
         {
-            var propertyInfo = GetPropertyInfo(propertyName);
+            var propertyInfo = GetModelPropertyInfo(propertyName);
             var currentValue = propertyInfo?.GetValue(Model);
 
-            if (newValue.Equals(currentValue)) return;
+            if (Equals(currentValue, newValue)) return;
 
             UpdateOriginalValue(currentValue, newValue, propertyName);
 
@@ -147,6 +140,7 @@ namespace GalaxyMerge.Client.Wrappers.Base
             else
                 propertyInfo?.SetValue(Model, newValue);
             
+            UpdateRequiredProperty(propertyName, newValue);
             ValidateProperty(propertyName);
 
             onChanged?.Invoke();
@@ -155,38 +149,54 @@ namespace GalaxyMerge.Client.Wrappers.Base
             RaisePropertyChanged(propertyName + "IsChanged");
         }
 
-        protected void SetValue<TWrapper, TModel>(TWrapper newValue, 
-            Action<T, TModel> setValue = null,
+        protected void SetValue<TWrapper, TModel>(ref TWrapper storage, TWrapper newValue,
             Action onChanged = null,
             Func<TModel, TModel, bool> comparer = null,
             bool autoRegister = true,
             [CallerMemberName] string propertyName = null)
             where TWrapper : ModelWrapper<TModel>
         {
-            var propertyInfo = GetPropertyInfo(propertyName);
-            var currentValue = propertyInfo?.GetValue(Model);
+            var propertyInfo = GetModelPropertyInfo(propertyName);
+            var currentValue = (TModel) propertyInfo?.GetValue(Model);
 
-            if (AreEqual(newValue, (TModel) currentValue, comparer)) return;
+            if (AreEqual(newValue, currentValue, comparer)) return;
 
-            UpdateOriginalValue((TModel) currentValue, newValue, propertyName);
+            UpdateOriginalValue(currentValue, newValue, propertyName);
 
             if (autoRegister)
                 RegisterTrackingObjectInternal(propertyName, newValue);
-
-            if (setValue != null)
-                setValue.Invoke(Model, newValue.Model);
-            else
-                propertyInfo?.SetValue(Model, newValue.Model);
-
-            ValidateProperty(propertyName);
             
+            storage = newValue;
+            
+            //todo not sure if you'd do these in this scenario
+            /*UpdateRequiredProperty(propertyName, newValue);
+            ValidateProperty(propertyName);*/
+
             onChanged?.Invoke();
 
             RaisePropertyChanged(propertyName);
             RaisePropertyChanged(propertyName + "IsChanged");
         }
 
-        protected void RegisterTrackingObject(string propertyName, IValidatableChangeTracking trackingObject)
+        protected virtual void Initialize(T model)
+        {
+            var properties = GetType().GetProperties();
+
+            foreach (var property in properties)
+            {
+                var value = property.GetValue(this);
+                
+                if (value is ITrackingObject tracking)
+                    RegisterTrackingObjectInternal(property.Name, tracking);
+
+                var requiredAttribute = property.GetCustomAttribute<RequiredAttribute>();
+                if (requiredAttribute == null) continue;
+                RegisterRequired(property.Name, requiredAttribute);
+                UpdateRequiredProperty(property.Name, value);
+            }
+        }
+
+        protected void RegisterTrackingObject(string propertyName, ITrackingObject trackingObject)
         {
             RegisterTrackingObjectInternal(propertyName, trackingObject);
         }
@@ -223,6 +233,30 @@ namespace GalaxyMerge.Client.Wrappers.Base
             collection.CollectionChanged += (_, _) => ValidateObject();
         }
 
+        protected void RegisterRequired(string propertyName, RequiredAttribute requiredAttribute = null)
+        {
+            requiredAttribute ??= new RequiredAttribute();
+            
+            if (_requiredAttributes.ContainsKey(propertyName))
+            {
+                var current = _requiredAttributes[propertyName];
+                if (ReferenceEquals(current, requiredAttribute)) return;
+                _requiredAttributes.Remove(propertyName);
+            }
+
+            _requiredAttributes.Add(propertyName, requiredAttribute);
+        }
+
+        protected void RunValidation()
+        {
+            ValidateObject();
+        }
+
+        protected void RunValidation(string propertyName)
+        {
+            ValidateProperty(propertyName);
+        }
+
         private void ValidateObject()
         {
             ClearErrors();
@@ -230,7 +264,7 @@ namespace GalaxyMerge.Client.Wrappers.Base
             var results = new List<ValidationResult>();
             var context = new ValidationContext(this);
             Validator.TryValidateObject(this, context, results, true);
-            
+
             if (results.Any())
             {
                 var propertyNames = results.SelectMany(r => r.MemberNames).Distinct().ToList();
@@ -248,14 +282,13 @@ namespace GalaxyMerge.Client.Wrappers.Base
 
             RaisePropertyChanged(nameof(IsValid));
         }
-        
+
         private void ValidateProperty(string propertyName)
         {
             var results = new List<ValidationResult>();
-            var context = new ValidationContext(this) { MemberName = propertyName};
+            var context = new ValidationContext(this) {MemberName = propertyName};
             Validator.TryValidateObject(this, context, results, true);
-            //Validator.TryValidateProperty(newValue, context, results);
-            
+
             var propertyErrors = results.Where(r => r.MemberNames.Contains(propertyName)).ToList();
 
             if (propertyErrors.Any())
@@ -272,7 +305,7 @@ namespace GalaxyMerge.Client.Wrappers.Base
             }
         }
 
-        private void RegisterTrackingObjectInternal(string propertyName, IValidatableChangeTracking trackingObject)
+        private void RegisterTrackingObjectInternal(string propertyName, ITrackingObject trackingObject)
         {
             if (_trackingObjects.ContainsKey(propertyName))
             {
@@ -288,7 +321,7 @@ namespace GalaxyMerge.Client.Wrappers.Base
 
         private void TrackingObjectOnPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName is nameof(IsChanged) or nameof(IsValid))
+            if (e.PropertyName is nameof(IsChanged) or nameof(IsValid) or nameof(HasRequired))
                 RaisePropertyChanged(e.PropertyName);
         }
 
@@ -301,7 +334,7 @@ namespace GalaxyMerge.Client.Wrappers.Base
                 return;
             }
 
-            if (!newValue.Equals(_originalValues[propertyName])) return;
+            if (!Equals(_originalValues[propertyName], newValue)) return;
             _originalValues.Remove(propertyName);
             RaisePropertyChanged(nameof(IsChanged));
         }
@@ -320,6 +353,25 @@ namespace GalaxyMerge.Client.Wrappers.Base
             if (!AreEqual(newValue, (TModel) _originalValues[propertyName], comparer)) return;
             _originalValues.Remove(propertyName);
             RaisePropertyChanged(nameof(IsChanged));
+        }
+
+        private void UpdateRequiredProperty(string propertyName, object value)
+        {
+            if (!_requiredAttributes.ContainsKey(propertyName)) return;
+
+            var required = _requiredAttributes[propertyName];
+
+            if (required.IsValid(value))
+            {
+                if (!_requiredProperties.Contains(propertyName)) return;
+                _requiredProperties.Remove(propertyName);
+                RaisePropertyChanged(nameof(HasRequired));
+                return;
+            }
+
+            if (_requiredProperties.Contains(propertyName)) return;
+            _requiredProperties.Add(propertyName);
+            RaisePropertyChanged(nameof(HasRequired));
         }
 
         private static bool AreEqual<TWrapper, TModel>(TWrapper newValue, TModel currentValue,
@@ -350,13 +402,10 @@ namespace GalaxyMerge.Client.Wrappers.Base
                 select c).Any();
         }
 
-        private PropertyInfo GetPropertyInfo(string propertyName)
+        private PropertyInfo GetModelPropertyInfo(string propertyName)
         {
             if (propertyName == null)
                 throw new ArgumentNullException(nameof(propertyName), "Property name can not be null");
-
-            /*if (Model == null)
-                throw new InvalidOperationException("Model object is null. Cannot get property information");*/
 
             var propertyInfo = Model.GetType().GetProperty(propertyName);
 
@@ -366,9 +415,9 @@ namespace GalaxyMerge.Client.Wrappers.Base
             return propertyInfo;
         }
 
-        private void RunRegistration(T model)
+        private void RunInitialization(T model)
         {
-            Register(model);
+            Initialize(model);
         }
     }
 }

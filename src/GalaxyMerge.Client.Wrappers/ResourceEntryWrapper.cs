@@ -32,10 +32,9 @@ namespace GalaxyMerge.Client.Wrappers
             get => GetValue<string>();
             set => SetValue(value);
         }
-
-        [Required(ErrorMessage = "Resource type is required")]
+        
         public ResourceType ResourceType => Model.ResourceType;
-
+        
         public DateTime AddedOn => Model.AddedOn;
 
         public string AddedBy => Model.AddedBy;
@@ -46,7 +45,7 @@ namespace GalaxyMerge.Client.Wrappers
 
         public DirectoryResourceWrapper Directory => new(Model.Directory);
 
-        protected override void Register(ResourceEntry model)
+        protected override void Initialize(ResourceEntry model)
         {
             if (Model.Connection != null)
                 Connection = new ConnectionResourceWrapper(Model.Connection);
@@ -54,7 +53,7 @@ namespace GalaxyMerge.Client.Wrappers
             if (Model.Archive != null)
                 Archive = new ArchiveResourceWrapper(Model.Archive);
 
-            base.Register(model);
+            base.Initialize(model);
         }
 
         public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

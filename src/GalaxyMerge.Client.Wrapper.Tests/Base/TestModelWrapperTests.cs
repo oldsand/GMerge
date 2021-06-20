@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
@@ -38,6 +39,8 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Base
 
             Assert.NotNull(wrapper);
             Assert.NotNull(wrapper.Model);
+            Assert.NotNull(wrapper.ComplexType);
+            //Assert.NotNull(wrapper.TestItems);
         }
 
         [Test]
@@ -70,8 +73,8 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Base
             var wrapper = new TestModelWrapper(_model);
             Assert.NotNull(wrapper);
             Assert.NotNull(wrapper.Model);
-            Assert.NotNull(wrapper.ComplexType);
-            Assert.Null(wrapper.ComplexType.Model);
+            Assert.Null(wrapper.ComplexType);
+            //Assert.Null(wrapper.ComplexType.Model);
         }
 
         [Test]
@@ -107,7 +110,6 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Base
             Assert.That(changed, Contains.Item(nameof(wrapper.Name)));
             Assert.That(changed, Contains.Item("NameIsChanged"));
             Assert.That(changed, Contains.Item(nameof(wrapper.IsChanged)));
-            Assert.That(changed, Contains.Item(nameof(wrapper.IsValid)));
         }
         
         [Test]
@@ -145,7 +147,6 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Base
             Assert.That(changed, Contains.Item(nameof(wrapper.ComplexType)));
             Assert.That(changed, Contains.Item("ComplexTypeIsChanged"));
             Assert.That(changed, Contains.Item(nameof(wrapper.IsChanged)));
-            Assert.That(changed, Contains.Item(nameof(wrapper.IsValid)));
         }
 
         [Test]
@@ -219,7 +220,6 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Base
             Assert.That(changed, Contains.Item(nameof(wrapper.ComplexType)));
             Assert.That(changed, Contains.Item("ComplexTypeIsChanged"));
             Assert.That(changed, Contains.Item(nameof(wrapper.IsChanged)));
-            Assert.That(changed, Contains.Item(nameof(wrapper.IsValid)));
 
             changed.Clear();
             wrapper.ComplexType = new TestComplexTypeWrapper(new TestComplexType {Id = 1, Name = "Complex"});
@@ -228,7 +228,6 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Base
             Assert.That(changed, Contains.Item(nameof(wrapper.ComplexType)));
             Assert.That(changed, Contains.Item("ComplexTypeIsChanged"));
             Assert.That(changed, Contains.Item(nameof(wrapper.IsChanged)));
-            Assert.That(changed, Contains.Item(nameof(wrapper.IsValid)));
         }
 
         [Test]
@@ -241,6 +240,108 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Base
             wrapper.ComplexType = new TestComplexTypeWrapper(new TestComplexType {Id = 2, Name = "SomeName"});
 
             Assert.IsNotEmpty(changed);
+        }
+
+        [Test]
+        public void GetIsRequired_EmptyRequiredProperty_ReturnsTrue()
+        {
+            _model.Name = "";
+            var wrapper = new TestModelWrapper(_model);
+            
+            Assert.True(wrapper.GetIsRequired(m => m.Name));
+        }
+        
+        [Test]
+        public void GetIsRequired_NonEmptyRequiredProperty_ReturnsFalse()
+        {
+            var wrapper = new TestModelWrapper(_model);
+            
+            Assert.False(wrapper.GetIsRequired(m => m.Name));
+        }
+        
+        [Test]
+        public void GetIsRequired_NonRequiredProperty_ReturnsFalse()
+        {
+            var wrapper = new TestModelWrapper(_model);
+            
+            Assert.False(wrapper.GetIsRequired(m => m.Description));
+        }
+        
+        [Test]
+        public void GetIsRequired_RequiredPropertySetEmptyAndBack_ReturnsExpectedValue()
+        {
+            var wrapper = new TestModelWrapper(_model);
+            Assert.False(wrapper.GetIsRequired(m => m.Name));
+
+            wrapper.Name = "";
+            Assert.True(wrapper.GetIsRequired(m => m.Name));
+            
+            wrapper.Name = "NonEmpty";
+            Assert.False(wrapper.GetIsRequired(m => m.Name));
+        }
+        
+        [Test]
+        public void HasRequired_ChangingNameProperty_ReturnsExpected()
+        {
+            _model.Name = "";
+            var wrapper = new TestModelWrapper(_model);
+            Assert.True(wrapper.HasRequired);
+
+            wrapper.Name = "NotEmpty";
+            Assert.False(wrapper.HasRequired);
+            
+            wrapper.Name = null;
+            Assert.True(wrapper.HasRequired);
+        }
+
+        [Test]
+        public void HasRequired_UpdatingNameProperty_RaisesHasRequiredPropertyChanged()
+        {
+            var wrapper = new TestModelWrapper(_model);
+            var changed = new List<string>();
+            wrapper.PropertyChanged += (_, e) => changed.Add(e.PropertyName);
+
+            wrapper.Name = "";
+            Assert.True(changed.Contains(nameof(wrapper.HasRequired)));
+            
+            changed.Clear();
+            wrapper.Name = null;
+            Assert.False(changed.Contains(nameof(wrapper.HasRequired)));
+            
+            changed.Clear();
+            wrapper.Name = "NotEmpty";
+            Assert.True(changed.Contains(nameof(wrapper.HasRequired)));
+        }
+
+        [Test]
+        public void RequiredTest_TrackingObjectProperty_PerformsAsExpected()
+        {
+            var wrapper = new TestModelWrapper(_model);
+            var changed = new List<string>();
+            wrapper.PropertyChanged += (_, e) => changed.Add(e.PropertyName);
+            
+            Assert.False(wrapper.HasRequired);
+            Assert.False(wrapper.ComplexType.GetIsRequired(m => m.Name));
+
+            wrapper.ComplexType.Name = string.Empty;
+            Assert.True(wrapper.HasRequired);
+            Assert.True(wrapper.ComplexType.HasRequired);
+            Assert.True(wrapper.ComplexType.GetIsRequired(m => m.Name));
+            Assert.True(changed.Contains(nameof(wrapper.HasRequired)));
+            
+            changed.Clear();
+            wrapper.ComplexType.Name = null;
+            Assert.True(wrapper.HasRequired);
+            Assert.True(wrapper.ComplexType.HasRequired);
+            Assert.True(wrapper.ComplexType.GetIsRequired(m => m.Name));
+            Assert.False(changed.Contains(nameof(wrapper.HasRequired)));
+            
+            changed.Clear();
+            wrapper.ComplexType.Name = "NotEmpty";
+            Assert.False(wrapper.HasRequired);
+            Assert.False(wrapper.ComplexType.HasRequired);
+            Assert.False(wrapper.ComplexType.GetIsRequired(m => m.Name));
+            Assert.True(changed.Contains(nameof(wrapper.HasRequired)));
         }
     }
 }
