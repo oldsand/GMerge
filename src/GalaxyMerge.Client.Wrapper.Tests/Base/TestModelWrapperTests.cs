@@ -33,14 +33,21 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Base
         }
 
         [Test]
-        public void Constructor_ValidObject_ReturnsInstance()
+        public void Constructor_ValidReference_ReturnsInstance()
         {
             var wrapper = new TestModelWrapper(_model);
 
             Assert.NotNull(wrapper);
             Assert.NotNull(wrapper.Model);
-            Assert.NotNull(wrapper.ComplexType);
-            //Assert.NotNull(wrapper.TestItems);
+        }
+        
+        [Test]
+        public void Constructor_NullReference_ThrowsArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                var wrapper = new TestModelWrapper(null);
+            });
         }
 
         [Test]
@@ -74,7 +81,6 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Base
             Assert.NotNull(wrapper);
             Assert.NotNull(wrapper.Model);
             Assert.Null(wrapper.ComplexType);
-            //Assert.Null(wrapper.ComplexType.Model);
         }
 
         [Test]
@@ -113,12 +119,12 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Base
         }
         
         [Test]
-        public void SetValue_SetToInstanceFromNull_WrapperMatchesModel()
+        public void SetValue_ComplexPropertyNullToInstance_WrapperMatchesModel()
         {
             var complexType = _model.ComplexType;
             _model.ComplexType = null;
             var wrapper = new TestModelWrapper(_model);
-            Assert.Null(wrapper.ComplexType.Model);
+            Assert.Null(wrapper.ComplexType);
 
             wrapper.ComplexType = new TestComplexTypeWrapper(complexType);
 
@@ -131,9 +137,9 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Base
             Assert.AreEqual(wrapper.ComplexType.Id, _model.ComplexType.Id);
             Assert.AreEqual(wrapper.ComplexType.Name, _model.ComplexType.Name);
         }
-
+        
         [Test]
-        public void SetValue_ComplexFromNullToInstance_ShouldRaiseEvent()
+        public void SetValue_ComplexPropertyNullToInstance_ShouldRaiseEvent()
         {
             var complexType = _model.ComplexType;
             _model.ComplexType = null;
@@ -148,12 +154,25 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Base
             Assert.That(changed, Contains.Item("ComplexTypeIsChanged"));
             Assert.That(changed, Contains.Item(nameof(wrapper.IsChanged)));
         }
-
+        
         [Test]
-        public void SetValue_ComplexNewInstanceAndProperties_WrapperMatchesModel()
+        public void SetValue_ComplexPropertyToNullFromInstance_WrapperMatchesModel()
         {
             var wrapper = new TestModelWrapper(_model);
+            Assert.NotNull(wrapper.ComplexType);
+            Assert.NotNull(wrapper.ComplexType.Model);
 
+            wrapper.ComplexType = null;
+
+            Assert.Null(wrapper.ComplexType);
+            Assert.Null(_model.ComplexType);
+        }
+        
+        [Test]
+        public void SetValue_ComplexPropertyNewInstanceAndProperties_WrapperMatchesModel()
+        {
+            var wrapper = new TestModelWrapper(_model);
+            
             wrapper.ComplexType = new TestComplexTypeWrapper(new TestComplexType {Id = 2, Name = "SomeName"});
 
             Assert.AreSame(wrapper.ComplexType.Model, _model.ComplexType);
@@ -162,7 +181,7 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Base
         }
 
         [Test]
-        public void SetValue_ComplexNewInstanceNewValues_DoesNotRaiseEventsOrIsChangedForThatType()
+        public void SetValue_ComplexPropertyNewInstanceAndProperties_DoesNotRaiseEventsOrIsChangedForThatType()
         {
             var wrapper = new TestModelWrapper(_model);
             var changed = new List<string>();
@@ -175,10 +194,10 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Base
         }
 
         [Test]
-        public void SetValue_ComplexNewInstanceSameProperties_WrapperMatchesModel()
+        public void SetValue_ComplexPropertyNewInstanceSameProperties_WrapperMatchesModel()
         {
             var wrapper = new TestModelWrapper(_model);
-
+            
             wrapper.ComplexType = new TestComplexTypeWrapper(new TestComplexType {Id = 1, Name = "Complex"});
 
             Assert.AreSame(wrapper.ComplexType.Model, _model.ComplexType);
@@ -187,7 +206,24 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Base
         }
 
         [Test]
-        public void SetValue_ComplexNewInstanceSameProperties_IsChangedReturnsFalse()
+        public void SetValue_ComplexPropertyNewInstanceSamePropertiesThenUpdate_WrapperMatchesModel()
+        {
+            var wrapper = new TestModelWrapper(_model);
+
+            wrapper.ComplexType = new TestComplexTypeWrapper(new TestComplexType {Id = 1, Name = "Complex"});
+            Assert.AreSame(wrapper.ComplexType.Model, _model.ComplexType);
+            Assert.AreEqual(wrapper.ComplexType.Id, _model.ComplexType.Id);
+            Assert.AreEqual(wrapper.ComplexType.Name, _model.ComplexType.Name);
+            
+            wrapper.ComplexType.Name = "new Name";
+            Assert.AreEqual(wrapper.ComplexType.Id, _model.ComplexType.Id);
+            Assert.AreEqual(wrapper.ComplexType.Name, _model.ComplexType.Name);
+            
+
+        }
+
+        [Test]
+        public void SetValue_ComplexPropertyNewInstanceSameProperties_IsChangedReturnsFalse()
         {
             var wrapper = new TestModelWrapper(_model);
 
@@ -197,7 +233,7 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Base
         }
 
         [Test]
-        public void SetValue_ComplexNewInstanceSameProperties_DoesNotRaisePropertyChanged()
+        public void SetValue_ComplexPropertyNewInstanceSameProperties_DoesNotRaisePropertyChanged()
         {
             var wrapper = new TestModelWrapper(_model);
             var changed = new List<string>();
@@ -209,7 +245,7 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Base
         }
 
         [Test]
-        public void SetValue_ComplexDifferentThenBack_IsChangedBecomesFalse()
+        public void SetValue_ComplexPropertyDifferentThenBack_ReturnsExpectedValues()
         {
             var wrapper = new TestModelWrapper(_model);
             var changed = new List<string>();

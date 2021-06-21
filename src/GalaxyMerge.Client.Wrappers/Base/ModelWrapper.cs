@@ -34,7 +34,7 @@ namespace GalaxyMerge.Client.Wrappers.Base
         /// <param name="callInitialize">Calls virtual Initialize method on construction of base class</param>
         protected ModelWrapper(T model, bool callInitialize = true)
         {
-            Model = model;
+            Model = model ?? throw new ArgumentNullException(nameof(model), "Model cannot be null");
 
             if (callInitialize)
                 RunInitialization(model);
@@ -144,12 +144,12 @@ namespace GalaxyMerge.Client.Wrappers.Base
             ValidateProperty(propertyName);
 
             onChanged?.Invoke();
-
             RaisePropertyChanged(propertyName);
             RaisePropertyChanged(propertyName + "IsChanged");
         }
 
         protected void SetValue<TWrapper, TModel>(ref TWrapper storage, TWrapper newValue,
+            Action<T, TModel> setValue = null,
             Action onChanged = null,
             Func<TModel, TModel, bool> comparer = null,
             bool autoRegister = true,
@@ -157,22 +157,32 @@ namespace GalaxyMerge.Client.Wrappers.Base
             where TWrapper : ModelWrapper<TModel>
             where TModel : class
         {
-            if (storage != null)
-            {
-                if (AreEqual(storage.Model, newValue.Model, comparer)) return;
-                UpdateOriginalValue(storage.Model, newValue.Model, propertyName);    
-            }
-
+            if (!EqualityComparer<TWrapper>.Default.Equals(storage, newValue))
+                storage = newValue;
+            
+            var propertyInfo = GetModelPropertyInfo(propertyName);
+            var currentModel = (TModel) propertyInfo?.GetValue(Model);
+            var newModel = newValue?.Model;
+            
+            if (ReferenceEquals(currentModel, newModel)) return;
+            
+            if (!ModelEquals(currentModel, newModel, comparer))
+                UpdateOriginalValue(currentModel, newModel, propertyName);
+            
             if (autoRegister)
                 RegisterTrackingObjectInternal(propertyName, newValue);
             
-            storage = newValue;
-            
+            if (setValue != null)
+                setValue.Invoke(Model, newModel);
+            else
+                propertyInfo?.SetValue(Model, newModel);
+
             UpdateRequiredProperty(propertyName, newValue);
             ValidateProperty(propertyName);
 
+            if (ModelEquals(currentModel, newModel, comparer)) return;
+            
             onChanged?.Invoke();
-
             RaisePropertyChanged(propertyName);
             RaisePropertyChanged(propertyName + "IsChanged");
         }
@@ -314,6 +324,7 @@ namespace GalaxyMerge.Client.Wrappers.Base
                 _trackingObjects.Remove(propertyName);
             }
 
+            if (trackingObject == null) return;
             _trackingObjects.Add(propertyName, trackingObject);
             trackingObject.PropertyChanged += TrackingObjectOnPropertyChanged;
         }
@@ -322,6 +333,25 @@ namespace GalaxyMerge.Client.Wrappers.Base
         {
             if (e.PropertyName is nameof(IsChanged) or nameof(IsValid) or nameof(HasRequired))
                 RaisePropertyChanged(e.PropertyName);
+        }
+
+        private void UpdateRequiredProperty(string propertyName, object value)
+        {
+            if (!_requiredAttributes.ContainsKey(propertyName)) return;
+
+            var required = _requiredAttributes[propertyName];
+
+            if (required.IsValid(value))
+            {
+                if (!_requiredProperties.Contains(propertyName)) return;
+                _requiredProperties.Remove(propertyName);
+                RaisePropertyChanged(nameof(HasRequired));
+                return;
+            }
+
+            if (_requiredProperties.Contains(propertyName)) return;
+            _requiredProperties.Add(propertyName);
+            RaisePropertyChanged(nameof(HasRequired));
         }
 
         private void UpdateOriginalValue(object currentValue, object newValue, string propertyName)
@@ -349,47 +379,12 @@ namespace GalaxyMerge.Client.Wrappers.Base
                 return;
             }
 
-            if (!AreEqual(newValue, (TModel) _originalValues[propertyName], comparer)) return;
+            if (!ModelEquals(newValue, (TModel) _originalValues[propertyName], comparer)) return;
             _originalValues.Remove(propertyName);
             RaisePropertyChanged(nameof(IsChanged));
         }
 
-        private void UpdateRequiredProperty(string propertyName, object value)
-        {
-            if (!_requiredAttributes.ContainsKey(propertyName)) return;
-
-            var required = _requiredAttributes[propertyName];
-
-            if (required.IsValid(value))
-            {
-                if (!_requiredProperties.Contains(propertyName)) return;
-                _requiredProperties.Remove(propertyName);
-                RaisePropertyChanged(nameof(HasRequired));
-                return;
-            }
-
-            if (_requiredProperties.Contains(propertyName)) return;
-            _requiredProperties.Add(propertyName);
-            RaisePropertyChanged(nameof(HasRequired));
-        }
-
-        /*private static bool AreEqual<TWrapper, TModel>(TWrapper newValue, TModel currentValue,
-            Func<TModel, TModel, bool> comparer = null) where TWrapper : ModelWrapper<TModel>
-        {
-            if (comparer != null)
-                return comparer.Invoke(currentValue, newValue.Model);
-
-            // ReSharper disable once SuspiciousTypeConversion.Global because maybe there are no implementations?
-            if (newValue is IEquatable<TModel> equatable)
-                return equatable.Equals(currentValue);
-
-            if (ReferenceEquals(newValue.Model, currentValue)) return true;
-            if (ReferenceEquals(newValue.Model, null) && ReferenceEquals(currentValue, null)) return true;
-            if (ReferenceEquals(newValue.Model, null) || ReferenceEquals(currentValue, null)) return false;
-            return currentValue.GetType() == newValue.Model.GetType() && PropertiesEquate(newValue, currentValue);
-        }*/
-        
-        private static bool AreEqual<TModel>(TModel a, TModel b, Func<TModel, TModel, bool> comparer = null)
+        private static bool ModelEquals<TModel>(TModel a, TModel b, Func<TModel, TModel, bool> comparer = null)
             where TModel : class
         {
             if (comparer != null)
@@ -398,8 +393,8 @@ namespace GalaxyMerge.Client.Wrappers.Base
             // ReSharper disable once SuspiciousTypeConversion.Global because maybe there are no implementations?
             if (a is IEquatable<TModel> equatable)
                 return equatable.Equals(b);
-
-            if (ReferenceEquals(a, b)) return true;
+            
+            if (ReferenceEquals(a, null) && ReferenceEquals(b, null)) return true;
             if (ReferenceEquals(a, null) || ReferenceEquals(b, null)) return false;
             return b.GetType() == a.GetType() && PropertiesEquate(a, b);
         }
@@ -415,18 +410,6 @@ namespace GalaxyMerge.Client.Wrappers.Base
                 where !Equals(x, y)
                 select x).Any();
         }
-
-        /*private static bool PropertiesEquate<TWrapper, TModel>(TWrapper newValue, TModel currentValue)
-            where TWrapper : ModelWrapper<TModel>
-        {
-            var currentProperties = currentValue.GetType().GetProperties();
-
-            return !(from property in currentProperties
-                let c = property.GetValue(currentValue)
-                let n = property.GetValue(newValue.Model)
-                where !Equals(c, n)
-                select c).Any();
-        }*/
 
         private PropertyInfo GetModelPropertyInfo(string propertyName)
         {
