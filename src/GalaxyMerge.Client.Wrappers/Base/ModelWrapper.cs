@@ -155,22 +155,21 @@ namespace GalaxyMerge.Client.Wrappers.Base
             bool autoRegister = true,
             [CallerMemberName] string propertyName = null)
             where TWrapper : ModelWrapper<TModel>
+            where TModel : class
         {
-            var propertyInfo = GetModelPropertyInfo(propertyName);
-            var currentValue = (TModel) propertyInfo?.GetValue(Model);
-
-            if (AreEqual(newValue, currentValue, comparer)) return;
-
-            UpdateOriginalValue(currentValue, newValue, propertyName);
+            if (storage != null)
+            {
+                if (AreEqual(storage.Model, newValue.Model, comparer)) return;
+                UpdateOriginalValue(storage.Model, newValue.Model, propertyName);    
+            }
 
             if (autoRegister)
                 RegisterTrackingObjectInternal(propertyName, newValue);
             
             storage = newValue;
             
-            //todo not sure if you'd do these in this scenario
-            /*UpdateRequiredProperty(propertyName, newValue);
-            ValidateProperty(propertyName);*/
+            UpdateRequiredProperty(propertyName, newValue);
+            ValidateProperty(propertyName);
 
             onChanged?.Invoke();
 
@@ -339,9 +338,9 @@ namespace GalaxyMerge.Client.Wrappers.Base
             RaisePropertyChanged(nameof(IsChanged));
         }
 
-        private void UpdateOriginalValue<TWrapper, TModel>(TModel currentValue, TWrapper newValue, string propertyName,
+        private void UpdateOriginalValue<TModel>(TModel currentValue, TModel newValue, string propertyName,
             Func<TModel, TModel, bool> comparer = null)
-            where TWrapper : ModelWrapper<TModel>
+            where TModel : class
         {
             if (!_originalValues.ContainsKey(propertyName))
             {
@@ -374,7 +373,7 @@ namespace GalaxyMerge.Client.Wrappers.Base
             RaisePropertyChanged(nameof(HasRequired));
         }
 
-        private static bool AreEqual<TWrapper, TModel>(TWrapper newValue, TModel currentValue,
+        /*private static bool AreEqual<TWrapper, TModel>(TWrapper newValue, TModel currentValue,
             Func<TModel, TModel, bool> comparer = null) where TWrapper : ModelWrapper<TModel>
         {
             if (comparer != null)
@@ -388,9 +387,36 @@ namespace GalaxyMerge.Client.Wrappers.Base
             if (ReferenceEquals(newValue.Model, null) && ReferenceEquals(currentValue, null)) return true;
             if (ReferenceEquals(newValue.Model, null) || ReferenceEquals(currentValue, null)) return false;
             return currentValue.GetType() == newValue.Model.GetType() && PropertiesEquate(newValue, currentValue);
+        }*/
+        
+        private static bool AreEqual<TModel>(TModel a, TModel b, Func<TModel, TModel, bool> comparer = null)
+            where TModel : class
+        {
+            if (comparer != null)
+                return comparer.Invoke(b, a);
+
+            // ReSharper disable once SuspiciousTypeConversion.Global because maybe there are no implementations?
+            if (a is IEquatable<TModel> equatable)
+                return equatable.Equals(b);
+
+            if (ReferenceEquals(a, b)) return true;
+            if (ReferenceEquals(a, null) || ReferenceEquals(b, null)) return false;
+            return b.GetType() == a.GetType() && PropertiesEquate(a, b);
+        }
+        
+        private static bool PropertiesEquate<TModel>(TModel a, TModel b)
+            where TModel : class
+        {
+            var properties = b.GetType().GetProperties();
+
+            return !(from property in properties
+                let x = property.GetValue(b)
+                let y = property.GetValue(a)
+                where !Equals(x, y)
+                select x).Any();
         }
 
-        private static bool PropertiesEquate<TWrapper, TModel>(TWrapper newValue, TModel currentValue)
+        /*private static bool PropertiesEquate<TWrapper, TModel>(TWrapper newValue, TModel currentValue)
             where TWrapper : ModelWrapper<TModel>
         {
             var currentProperties = currentValue.GetType().GetProperties();
@@ -400,7 +426,7 @@ namespace GalaxyMerge.Client.Wrappers.Base
                 let n = property.GetValue(newValue.Model)
                 where !Equals(c, n)
                 select c).Any();
-        }
+        }*/
 
         private PropertyInfo GetModelPropertyInfo(string propertyName)
         {

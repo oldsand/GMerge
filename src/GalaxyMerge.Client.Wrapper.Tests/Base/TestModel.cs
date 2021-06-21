@@ -30,7 +30,7 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Base
 
     public class TestModelWrapper : ModelWrapper<TestModel>
     {
-        public TestModelWrapper(TestModel model) : base(model, true)
+        public TestModelWrapper(TestModel model) : base(model)
         {
         }
 
