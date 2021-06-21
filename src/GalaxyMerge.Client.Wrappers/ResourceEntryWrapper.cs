@@ -10,17 +10,16 @@ namespace GalaxyMerge.Client.Wrappers
     {
         private readonly List<string> _existingNames;
 
-        public ResourceEntryWrapper(ResourceEntry model) : base(model, true)
+        public ResourceEntryWrapper(ResourceEntry model) : base(model)
         {
             _existingNames = new List<string>();
         }
 
-        public ResourceEntryWrapper(ResourceEntry model, List<string> existingNames) : base(model, true)
+        public ResourceEntryWrapper(ResourceEntry model, List<string> existingNames) : base(model)
         {
             _existingNames = existingNames;
         }
-
-        [Required(ErrorMessage = "Resource name is required")]
+        
         public string ResourceName
         {
             get => GetValue<string>();
@@ -43,15 +42,20 @@ namespace GalaxyMerge.Client.Wrappers
 
         public ArchiveResourceWrapper Archive { get; private set; }
 
-        public DirectoryResourceWrapper Directory => new(Model.Directory);
+        public DirectoryResourceWrapper Directory { get; private set; }
 
         protected override void Initialize(ResourceEntry model)
         {
-            if (Model.Connection != null)
-                Connection = new ConnectionResourceWrapper(Model.Connection);
+            RequireProperty(nameof(ResourceName));
+            
+            if (model.Connection != null)
+                Connection = new ConnectionResourceWrapper(model.Connection);
 
-            if (Model.Archive != null)
-                Archive = new ArchiveResourceWrapper(Model.Archive);
+            if (model.Archive != null)
+                Archive = new ArchiveResourceWrapper(model.Archive);
+            
+            if (model.Directory != null)
+                Directory = new DirectoryResourceWrapper(model.Directory);
 
             base.Initialize(model);
         }

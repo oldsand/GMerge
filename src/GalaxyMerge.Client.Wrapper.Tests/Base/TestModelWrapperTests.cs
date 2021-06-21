@@ -218,8 +218,6 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Base
             wrapper.ComplexType.Name = "new Name";
             Assert.AreEqual(wrapper.ComplexType.Id, _model.ComplexType.Id);
             Assert.AreEqual(wrapper.ComplexType.Name, _model.ComplexType.Name);
-            
-
         }
 
         [Test]
@@ -317,6 +315,22 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Base
         }
         
         [Test]
+        public void HasRequired_InitialBlankProperty_ReturnsTrue()
+        {
+            _model.Name = string.Empty;
+            var wrapper = new TestModelWrapper(_model);
+            Assert.True(wrapper.HasRequired);
+        }
+        
+        [Test]
+        public void HasRequired_InitialBlankComplexProperty_ReturnsTrue()
+        {
+            _model.ComplexType.Name = string.Empty;
+            var wrapper = new TestModelWrapper(_model);
+            Assert.True(wrapper.HasRequired);
+        }
+        
+        [Test]
         public void HasRequired_ChangingNameProperty_ReturnsExpected()
         {
             _model.Name = "";
@@ -350,7 +364,7 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Base
         }
 
         [Test]
-        public void RequiredTest_TrackingObjectProperty_PerformsAsExpected()
+        public void HasRequired_TrackingObjectProperty_PerformsAsExpected()
         {
             var wrapper = new TestModelWrapper(_model);
             var changed = new List<string>();

@@ -199,9 +199,10 @@ namespace GalaxyMerge.Client.Wrappers.Base
                     RegisterTrackingObjectInternal(property.Name, tracking);
 
                 var requiredAttribute = property.GetCustomAttribute<RequiredAttribute>();
-                if (requiredAttribute == null) continue;
-                RegisterRequired(property.Name, requiredAttribute);
-                UpdateRequiredProperty(property.Name, value);
+                if (requiredAttribute != null && !_requiredAttributes.ContainsKey(property.Name))
+                    RequireProperty(property.Name, requiredAttribute);
+            
+                UpdateRequiredProperty(property.Name, property.GetValue(this));
             }
         }
 
@@ -242,7 +243,7 @@ namespace GalaxyMerge.Client.Wrappers.Base
             collection.CollectionChanged += (_, _) => ValidateObject();
         }
 
-        protected void RegisterRequired(string propertyName, RequiredAttribute requiredAttribute = null)
+        protected void RequireProperty(string propertyName, RequiredAttribute requiredAttribute = null)
         {
             requiredAttribute ??= new RequiredAttribute();
             
@@ -335,6 +336,21 @@ namespace GalaxyMerge.Client.Wrappers.Base
                 RaisePropertyChanged(e.PropertyName);
         }
 
+        private void RegisterRequired(PropertyInfo property)
+        {
+            if (_requiredAttributes.ContainsKey(property.Name))
+            {
+             
+                return;
+            }
+            
+            var requiredAttribute = property.GetCustomAttribute<RequiredAttribute>();
+            if (requiredAttribute != null)
+                RequireProperty(property.Name, requiredAttribute);
+            
+            UpdateRequiredProperty(property.Name, property.GetValue(this));
+        }
+
         private void UpdateRequiredProperty(string propertyName, object value)
         {
             if (!_requiredAttributes.ContainsKey(propertyName)) return;
@@ -388,7 +404,7 @@ namespace GalaxyMerge.Client.Wrappers.Base
             where TModel : class
         {
             if (comparer != null)
-                return comparer.Invoke(b, a);
+                return comparer.Invoke(a, b);
 
             // ReSharper disable once SuspiciousTypeConversion.Global because maybe there are no implementations?
             if (a is IEquatable<TModel> equatable)
@@ -396,10 +412,10 @@ namespace GalaxyMerge.Client.Wrappers.Base
             
             if (ReferenceEquals(a, null) && ReferenceEquals(b, null)) return true;
             if (ReferenceEquals(a, null) || ReferenceEquals(b, null)) return false;
-            return b.GetType() == a.GetType() && PropertiesEquate(a, b);
+            return b.GetType() == a.GetType() && PropertyEquals(a, b);
         }
         
-        private static bool PropertiesEquate<TModel>(TModel a, TModel b)
+        private static bool PropertyEquals<TModel>(TModel a, TModel b)
             where TModel : class
         {
             var properties = b.GetType().GetProperties();

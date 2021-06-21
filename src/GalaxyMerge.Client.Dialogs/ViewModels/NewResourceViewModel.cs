@@ -99,7 +99,7 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
         public DelegateCommand SaveResourceCommand =>
             _saveResourceCommand ??= new DelegateCommand(ExecuteSaveResourceCommand, CanExecuteSaveResourceCommand)
                 .ObservesProperty(() => ResourceEntry.IsValid)
-                .ObservesProperty(() => ResourceEntry.IsChanged);
+                .ObservesProperty(() => ResourceEntry.HasRequired);
 
         private void ExecuteSaveResourceCommand()
         {
@@ -127,7 +127,7 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
 
         private bool CanExecuteSaveResourceCommand()
         {
-            return ResourceEntry is {IsValid: true, IsChanged: true};
+            return ResourceEntry is {IsValid: true, HasRequired: false};
         }
     }
 }

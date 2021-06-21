@@ -6,6 +6,8 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Base
 {
     public class TestModelWrapper : ModelWrapper<TestModel>
     {
+        private TestComplexTypeWrapper _complexType;
+
         public TestModelWrapper(TestModel model) : base(model)
         {
         }
@@ -15,8 +17,7 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Base
             get => GetValue<int>();
             set => SetValue(value);
         }
-
-        [Required(ErrorMessage = "Name is required")]
+        
         public string Name
         {
             get => GetValue<string>();
@@ -29,7 +30,6 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Base
             set => SetValue(value);
         }
 
-        private TestComplexTypeWrapper _complexType;
         public TestComplexTypeWrapper ComplexType
         {
             get => _complexType;
@@ -40,6 +40,8 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Base
 
         protected override void Initialize(TestModel model)
         {
+            RequireProperty(nameof(Name));
+            
             if (model.ComplexType != null)
                 ComplexType = new TestComplexTypeWrapper(model.ComplexType);
             
@@ -74,7 +76,7 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Base
 
         protected override void Initialize(TestComplexType model)
         {
-            RegisterRequired(nameof(Name));
+            RequireProperty(nameof(Name));
             
             base.Initialize(model);
         }

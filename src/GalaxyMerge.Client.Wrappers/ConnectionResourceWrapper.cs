@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using GalaxyMerge.Client.Data.Entities;
 using GalaxyMerge.Client.Wrappers.Base;
 
@@ -9,25 +8,25 @@ namespace GalaxyMerge.Client.Wrappers
         public ConnectionResourceWrapper(ConnectionResource model) : base(model)
         {
         }
-
-        [Required(ErrorMessage = "Node name is required")]
+        
         public string NodeName
         {
             get => GetValue<string>();
             set => SetValue(value);
         }
-
-        [Required(ErrorMessage = "Galaxy name is required")]
+        
         public string GalaxyName
         {
             get => GetValue<string>();
             set => SetValue(value);
         }
 
-        public string Version
+        protected override void Initialize(ConnectionResource model)
         {
-            get => GetValue<string>();
-            set => SetValue(value);
+            RequireProperty(nameof(NodeName));
+            RequireProperty(nameof(GalaxyName));
+            
+            base.Initialize(model);
         }
     }
 }

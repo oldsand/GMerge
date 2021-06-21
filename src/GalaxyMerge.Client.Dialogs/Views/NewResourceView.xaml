@@ -246,7 +246,7 @@
           
           <StackPanel Grid.Row="1" Margin="0 20 0 0">
             <TextBlock Text="Description" Margin="0 5" />
-            <TextBox Text="{Binding ResourceEntry.ResourceDescription, ValidatesOnNotifyDataErrors={Binding ResourceEntry.ErrorsEnabled}}"
+            <TextBox Text="{Binding ResourceEntry.ResourceDescription}"
                      Height="60" Padding="10 3 0 0"
                      VerticalContentAlignment="Top"/>
             <TextBlock Text="Add a description to let people know more about the purpose of this resource"

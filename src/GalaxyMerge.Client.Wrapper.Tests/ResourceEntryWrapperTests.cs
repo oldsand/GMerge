@@ -23,8 +23,8 @@ namespace GalaxyMerge.Client.Wrapper.Tests
             Assert.NotNull(wrapper);
             Assert.NotNull(wrapper.Model);
             Assert.NotNull(wrapper.Connection);
-            Assert.NotNull(wrapper.Archive);
-            Assert.NotNull(wrapper.Directory);
+            Assert.Null(wrapper.Archive);
+            Assert.Null(wrapper.Directory);
             Assert.AreEqual(wrapper.ResourceName, _model.ResourceName);
             Assert.AreEqual(wrapper.ResourceDescription, _model.ResourceDescription);
             Assert.AreEqual(wrapper.ResourceType, _model.ResourceType);
@@ -47,7 +47,6 @@ namespace GalaxyMerge.Client.Wrapper.Tests
             Assert.That(changed, Contains.Item(nameof(wrapper.ResourceName)));
             Assert.That(changed, Contains.Item("ResourceNameIsChanged"));
             Assert.That(changed, Contains.Item(nameof(wrapper.IsChanged)));
-            Assert.That(changed, Contains.Item(nameof(wrapper.IsValid)));
         }
         
         [Test]
@@ -64,7 +63,6 @@ namespace GalaxyMerge.Client.Wrapper.Tests
             Assert.That(changed, Contains.Item(nameof(wrapper.ResourceDescription)));
             Assert.That(changed, Contains.Item("ResourceDescriptionIsChanged"));
             Assert.That(changed, Contains.Item(nameof(wrapper.IsChanged)));
-            Assert.That(changed, Contains.Item(nameof(wrapper.IsValid)));
         }
         
         [Test]
@@ -76,14 +74,10 @@ namespace GalaxyMerge.Client.Wrapper.Tests
 
             wrapper.Connection.NodeName = "Node";
             wrapper.Connection.GalaxyName = "Galaxy";
-
-            Assert.NotNull(wrapper.Connection);
-            Assert.AreSame(wrapper.Model.Connection, _model.Connection);
+            
             Assert.AreEqual(wrapper.Connection.NodeName, "Node");
             Assert.AreEqual(wrapper.Connection.GalaxyName, "Galaxy");
-            Assert.IsNotEmpty(changed);
             Assert.That(changed, Contains.Item(nameof(wrapper.IsChanged)));
-            Assert.That(changed, Contains.Item(nameof(wrapper.IsValid)));
         }
     }
 }
