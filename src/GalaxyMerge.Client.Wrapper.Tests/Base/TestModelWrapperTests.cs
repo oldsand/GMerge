@@ -33,12 +33,20 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Base
         }
 
         [Test]
-        public void Constructor_ValidReference_ReturnsInstance()
+        public void Constructor_ValidReference_ReturnsInstanceWithInitializedMembers()
         {
             var wrapper = new TestModelWrapper(_model);
 
             Assert.NotNull(wrapper);
             Assert.NotNull(wrapper.Model);
+            Assert.AreEqual(_model, wrapper.Model);
+            Assert.NotNull(wrapper.ComplexType);
+            Assert.NotNull(wrapper.ComplexType.Model);
+            Assert.AreEqual(_model.ComplexType, wrapper.ComplexType.Model);
+            Assert.NotNull(wrapper.TestItems);
+            Assert.AreEqual(_model.Items.Count, wrapper.TestItems.Count);
+            Assert.IsTrue(_model.Items.All(item =>
+                wrapper.TestItems.Any(itemWrapper => itemWrapper.Model == item)));
         }
         
         [Test]
@@ -51,7 +59,7 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Base
         }
 
         [Test]
-        public void Constructor_ValidObject_ModeMatchesWrapper()
+        public void Constructor_ValidReference_ModeMatchesWrapper()
         {
             var wrapper = new TestModelWrapper(_model);
             
@@ -84,17 +92,18 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Base
         }
 
         [Test]
-        public void SetValue_NameProperty_WrapperMatchedModel()
+        public void SetValue_NamePropertyNewValue_WrapperMatchesModel()
         {
             var wrapper = new TestModelWrapper(_model);
 
             wrapper.Name = "New Name";
             
+            Assert.AreEqual("New Name", _model.Name);
             Assert.AreEqual(wrapper.Name, _model.Name);
         }
         
         [Test]
-        public void SetValue_NameProperty_IsChangedReturnsTrue()
+        public void SetValue_NamePropertyNewValue_IsChangedReturnsTrue()
         {
             var wrapper = new TestModelWrapper(_model);
 
@@ -104,7 +113,7 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Base
         }
         
         [Test]
-        public void SetValue_NameProperty_RaisesPropertyChanged()
+        public void SetValue_NamePropertyNewValue_RaisesPropertyChanged()
         {
             var wrapper = new TestModelWrapper(_model);
             var changed = new List<string>();
@@ -116,6 +125,106 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Base
             Assert.That(changed, Contains.Item(nameof(wrapper.Name)));
             Assert.That(changed, Contains.Item("NameIsChanged"));
             Assert.That(changed, Contains.Item(nameof(wrapper.IsChanged)));
+        }
+        
+        [Test]
+        public void SetValue_NamePropertyNewValueThenBack_IsChangedReturnsFalse()
+        {
+            var wrapper = new TestModelWrapper(_model);
+
+            wrapper.Name = "New Name";
+            wrapper.Name = "Generic";
+            
+            Assert.False(wrapper.IsChanged);
+        }
+        
+        [Test]
+        public void SetValue_NamePropertyNewValueThenBack_RaisesPropertyChanged()
+        {
+            var wrapper = new TestModelWrapper(_model);
+            var changed = new List<string>();
+            wrapper.PropertyChanged += (_, e) => changed.Add(e.PropertyName);
+            
+            wrapper.Name = "New Name";
+            changed.Clear();
+            wrapper.Name = "Generic";
+            
+            Assert.IsNotEmpty(changed);
+            Assert.That(changed, Contains.Item(nameof(wrapper.Name)));
+            Assert.That(changed, Contains.Item("NameIsChanged"));
+            Assert.That(changed, Contains.Item(nameof(wrapper.IsChanged)));
+        }
+        
+        [Test]
+        public void SetValue_NamePropertySameValue_IsChangedReturnsFalse()
+        {
+            var wrapper = new TestModelWrapper(_model);
+
+            wrapper.Name = "Generic";
+            
+            Assert.False(wrapper.IsChanged);
+        }
+        
+        [Test]
+        public void SetValue_NamePropertySameValue_DoesNotRaisePropertyChanged()
+        {
+            var wrapper = new TestModelWrapper(_model);
+            var changed = new List<string>();
+            wrapper.PropertyChanged += (_, e) => changed.Add(e.PropertyName);
+            
+            wrapper.Name = "Generic";
+            
+            Assert.IsEmpty(changed);
+        }
+
+        [Test]
+        public void SetValue_SimpleNonModelProperty_ReturnsSetValue()
+        {
+            var wrapper = new TestModelWrapper(_model);
+            
+            wrapper.CreatedOn = DateTime.Today;
+            
+            Assert.AreEqual(DateTime.Today, wrapper.CreatedOn);
+        }
+        
+        [Test]
+        public void SetValue_CreatedOn_DoesNotRegisterChange()
+        {
+            var wrapper = new TestModelWrapper(_model);
+            var changed = new List<string>();
+            wrapper.PropertyChanged += (_, e) => changed.Add(e.PropertyName);
+            
+            wrapper.CreatedOn = DateTime.Now;
+            
+            Assert.False(wrapper.IsChanged);
+            Assert.IsEmpty(changed);
+        }
+
+        [Test]
+        public void SetValue_ComplexProperty_ModelMatchesWrapper()
+        {
+            var wrapper = new TestModelWrapper(_model);
+
+            wrapper.ComplexType.Name = "Test Name";
+            
+            Assert.AreEqual("Test Name", _model.ComplexType.Name);
+            Assert.AreEqual(_model.ComplexType.Name, wrapper.ComplexType.Name);
+        }
+        
+        [Test]
+        public void SetValue_ComplexProperty_RaisesPropertyChangedOnRootAndChild()
+        {
+            var wrapper = new TestModelWrapper(_model);
+            var changed = new List<string>();
+            wrapper.PropertyChanged += (_, e) => changed.Add(e.PropertyName);
+            wrapper.ComplexType.PropertyChanged += (_, e) => changed.Add(e.PropertyName);
+            
+            wrapper.ComplexType.Name = "Test Name";
+            
+            Assert.IsNotEmpty(changed);
+            Assert.True(changed.Contains(nameof(wrapper.ComplexType.Name)));
+            Assert.True(changed.Contains(nameof(wrapper.ComplexType.IsChanged)));
+            Assert.True(changed.Contains(nameof(wrapper.IsChanged)));
         }
         
         [Test]
@@ -156,7 +265,7 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Base
         }
         
         [Test]
-        public void SetValue_ComplexPropertyToNullFromInstance_WrapperMatchesModel()
+        public void SetValue_ComplexPropertyInstanceToNull_WrapperMatchesModel()
         {
             var wrapper = new TestModelWrapper(_model);
             Assert.NotNull(wrapper.ComplexType);
@@ -178,6 +287,18 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Base
             Assert.AreSame(wrapper.ComplexType.Model, _model.ComplexType);
             Assert.AreEqual(wrapper.ComplexType.Id, _model.ComplexType.Id);
             Assert.AreEqual(wrapper.ComplexType.Name, _model.ComplexType.Name);
+        }
+
+        [Test]
+        public void SetValue_ComplexPropertyNewInstanceAndProperties_ShouldRaiseEventOnRoot()
+        {
+            var wrapper = new TestModelWrapper(_model);
+            var changed = new List<string>();
+            wrapper.PropertyChanged += (_, e) => changed.Add(e.PropertyName);
+
+            wrapper.ComplexType = new TestComplexTypeWrapper(new TestComplexType {Id = 2, Name = "SomeName"});
+
+            Assert.IsNotEmpty(changed);
         }
 
         [Test]
@@ -265,15 +386,99 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Base
         }
 
         [Test]
-        public void PropertyChanged_SetComplexPropertyWithNewInstance_ShouldRaiseEventOnRoot()
+        public void CollectionPropertyAdd_ValidReference_WrapperMatchedModel()
         {
             var wrapper = new TestModelWrapper(_model);
-            var changed = new List<string>();
-            wrapper.PropertyChanged += (_, e) => changed.Add(e.PropertyName);
+            var item = new TestItemWrapper(new TestItem() {Id = 123, Item = "TestAdd", Value = 1.234});
+            
+            wrapper.TestItems.Add(item);
+            
+            Assert.AreEqual(_model.Items.Count, wrapper.TestItems.Count);
+            Assert.True(_model.Items.All(i => wrapper.TestItems.Any(w => w.Model == i)));
+        }
+        
+        [Test]
+        public void CollectionPropertyRemove_ValidReference_WrapperMatchedModel()
+        {
+            var wrapper = new TestModelWrapper(_model);
+            var item = wrapper.TestItems.First();
+            
+            wrapper.TestItems.Remove(item);
+            
+            Assert.AreEqual(_model.Items.Count, wrapper.TestItems.Count);
+            Assert.True(_model.Items.All(i => wrapper.TestItems.Any(w => w.Model == i)));
+        }
+        
+        [Test]
+        public void CollectionPropertyClear_WhenCalled_WrapperMatchedModel()
+        {
+            var wrapper = new TestModelWrapper(_model);
 
-            wrapper.ComplexType = new TestComplexTypeWrapper(new TestComplexType {Id = 2, Name = "SomeName"});
+            wrapper.TestItems.Clear();
+            
+            Assert.AreEqual(_model.Items.Count, wrapper.TestItems.Count);
+            Assert.True(_model.Items.All(i => wrapper.TestItems.Any(w => w.Model == i)));
+        }
 
-            Assert.IsNotEmpty(changed);
+        [Test]
+        public void GetOriginalValue_UnChangedProperty_ReturnsCurrentValue()
+        {
+            var wrapper = new TestModelWrapper(_model);
+
+            var originalValue = wrapper.GetOriginalValue(m => m.Name);
+            
+            Assert.AreEqual(wrapper.Name, originalValue);
+        }
+        
+        [Test]
+        public void GetOriginalValue_ChangedProperty_ReturnsOriginalValue()
+        {
+            var wrapper = new TestModelWrapper(_model);
+
+            wrapper.Name = "New Value";
+            
+            var originalValue = wrapper.GetOriginalValue(m => m.Name);
+            
+            Assert.AreNotEqual(wrapper.Name, originalValue);
+            Assert.AreEqual("Generic", originalValue);
+        }
+        
+        [Test]
+        public void GetOriginalValue_ChangedPropertyMultipleTimes_ReturnsOriginalValue()
+        {
+            var wrapper = new TestModelWrapper(_model);
+
+            wrapper.Name = "New Value";
+            
+            var originalValue = wrapper.GetOriginalValue(w => w.Name);
+            
+            Assert.AreNotEqual(wrapper.Name, originalValue);
+            Assert.AreEqual("Generic", originalValue);
+
+            wrapper.Name = "Some Other Value";
+
+            originalValue = wrapper.GetOriginalValue(w => w.Name);
+            
+            Assert.AreNotEqual(wrapper.Name, originalValue);
+            Assert.AreEqual("Generic", originalValue);
+        }
+        
+        [Test]
+        public void GetOriginalValue_ChangedPropertyChangeBack_ReturnsOriginalValue()
+        {
+            var wrapper = new TestModelWrapper(_model);
+
+            wrapper.Name = "New Value";
+            
+            var originalValue = wrapper.GetOriginalValue(w => w.Name);
+            
+            Assert.AreNotEqual(wrapper.Name, originalValue);
+            Assert.AreEqual("Generic", originalValue);
+
+            wrapper.Name = "Generic";
+
+            Assert.AreEqual(wrapper.Name, originalValue);
+            Assert.AreEqual("Generic", originalValue);
         }
 
         [Test]
@@ -312,6 +517,51 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Base
             
             wrapper.Name = "NonEmpty";
             Assert.False(wrapper.GetIsRequired(m => m.Name));
+        }
+
+        [Test]
+        public void IsChanged_AfterInitialization_ReturnsFalse()
+        {
+            var wrapper = new TestModelWrapper(_model);
+            Assert.False(wrapper.IsChanged);
+        }
+        
+        [Test]
+        public void IsChanged_ChangedSimpleProperty_ReturnsTrue()
+        {
+            var wrapper = new TestModelWrapper(_model);
+            wrapper.Description = "New Value";
+            Assert.True(wrapper.IsChanged);
+        }
+        
+        [Test]
+        public void IsChanged_ChangedSimplePropertyChangeBack_ReturnsExpected()
+        {
+            var wrapper = new TestModelWrapper(_model);
+            
+            wrapper.Description = "New Value";
+            Assert.True(wrapper.IsChanged);
+            
+            wrapper.Description = "This is a test";
+            Assert.False(wrapper.IsChanged);
+        }
+        
+        [Test]
+        public void IsChanged_ChangedComplexProperty_ReturnsTrueForRootAndChild()
+        {
+            var wrapper = new TestModelWrapper(_model);
+            wrapper.ComplexType.Name = "Changed Name";
+            Assert.True(wrapper.IsChanged);
+            Assert.True(wrapper.ComplexType.IsChanged);
+        }
+        
+        [Test]
+        public void IsChanged_ChangedCollectionProperty_ReturnsTrueForRootAndChild()
+        {
+            var wrapper = new TestModelWrapper(_model);
+            wrapper.TestItems.First().Item = "Changed Item";
+            Assert.True(wrapper.IsChanged);
+            Assert.True(wrapper.TestItems.First().IsChanged);
         }
         
         [Test]
@@ -392,6 +642,78 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Base
             Assert.False(wrapper.ComplexType.HasRequired);
             Assert.False(wrapper.ComplexType.GetIsRequired(m => m.Name));
             Assert.True(changed.Contains(nameof(wrapper.HasRequired)));
+        }
+        
+        [Test]
+        public void AcceptChanges_SimpleProperty_OriginalReturnsUpdatedAndIsChangedFalse()
+        {
+            var wrapper = new TestModelWrapper(_model);
+            wrapper.Name = "New Name";
+            Assert.AreEqual("New Name", wrapper.Name);
+            Assert.AreEqual("Generic", wrapper.GetOriginalValue(w => w.Name));
+            Assert.IsTrue(wrapper.IsChanged);
+
+            wrapper.AcceptChanges();
+
+            Assert.AreEqual("New Name", wrapper.Name);
+            Assert.AreEqual("New Name", wrapper.GetOriginalValue(w => w.Name));
+            Assert.IsFalse(wrapper.IsChanged);
+        }
+
+        [Test]
+        public void RejectChanges_SimpleProperty_PropertyRevertedIsChangedFalse()
+        {
+            var wrapper = new TestModelWrapper(_model);
+            wrapper.Name = "New Name";
+            Assert.AreEqual("New Name", wrapper.Name);
+            Assert.AreEqual("Generic", wrapper.GetOriginalValue(w => w.Name));
+            Assert.IsTrue(wrapper.IsChanged);
+
+            wrapper.RejectChanges();
+
+            Assert.AreEqual("Generic", wrapper.Name);
+            Assert.AreEqual("Generic", wrapper.GetOriginalValue(w => w.Name));
+            Assert.IsFalse(wrapper.IsChanged);
+        }
+        
+        [Test]
+        public void AcceptChanges_ComplexProperty_OriginalReturnsUpdatedAndIsChangedFalse()
+        {
+            var wrapper = new TestModelWrapper(_model);
+            
+            wrapper.ComplexType.Name = "New Name";
+            
+            Assert.AreEqual("New Name", wrapper.ComplexType.Name);
+            Assert.AreEqual("Complex", wrapper.ComplexType.GetOriginalValue(w => w.Name));
+            Assert.True(wrapper.ComplexType.IsChanged);
+            Assert.True(wrapper.IsChanged);
+
+            wrapper.AcceptChanges();
+
+            Assert.AreEqual("New Name", wrapper.ComplexType.Name);
+            Assert.AreEqual("New Name", wrapper.ComplexType.GetOriginalValue(w => w.Name));
+            Assert.False(wrapper.ComplexType.IsChanged);
+            Assert.False(wrapper.IsChanged);
+        }
+
+        [Test]
+        public void RejectChanges_ComplexProperty_PropertyRevertedIsChangedFalse()
+        {
+            var wrapper = new TestModelWrapper(_model);
+            
+            wrapper.ComplexType.Name = "New Name";
+            
+            Assert.AreEqual("New Name", wrapper.ComplexType.Name);
+            Assert.AreEqual("Complex", wrapper.ComplexType.GetOriginalValue(w => w.Name));
+            Assert.True(wrapper.ComplexType.IsChanged);
+            Assert.True(wrapper.IsChanged);
+
+            wrapper.RejectChanges();
+
+            Assert.AreEqual("Complex", wrapper.ComplexType.Name);
+            Assert.AreEqual("Complex", wrapper.ComplexType.GetOriginalValue(w => w.Name));
+            Assert.False(wrapper.ComplexType.IsChanged);
+            Assert.False(wrapper.IsChanged);
         }
     }
 }

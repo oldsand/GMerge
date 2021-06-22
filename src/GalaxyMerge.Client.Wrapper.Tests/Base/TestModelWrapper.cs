@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using GalaxyMerge.Client.Wrappers.Base;
@@ -29,6 +30,8 @@ namespace GalaxyMerge.Client.Wrapper.Tests.Base
             get => GetValue<string>();
             set => SetValue(value);
         }
+
+        public DateTime CreatedOn { get; set; }
 
         public TestComplexTypeWrapper ComplexType
         {

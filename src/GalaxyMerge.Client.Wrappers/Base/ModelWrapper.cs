@@ -70,7 +70,7 @@ namespace GalaxyMerge.Client.Wrappers.Base
             foreach (var trackingObject in _trackingObjects.Values)
                 trackingObject.RejectChanges();
 
-            ValidateObject();
+            ValidateObjectInternal();
             RaisePropertyChanged($"");
         }
 
@@ -119,6 +119,25 @@ namespace GalaxyMerge.Client.Wrappers.Base
             yield break;
         }
 
+        protected virtual void Initialize(T model)
+        {
+            var properties = GetType().GetProperties();
+
+            foreach (var property in properties)
+            {
+                var value = property.GetValue(this);
+
+                if (value is ITrackingObject tracking)
+                    RegisterTrackingObjectInternal(property.Name, tracking);
+
+                var requiredAttribute = property.GetCustomAttribute<RequiredAttribute>();
+                if (requiredAttribute != null && !_requiredAttributes.ContainsKey(property.Name))
+                    RequirePropertyInternal(property.Name, requiredAttribute);
+
+                UpdateRequiredProperty(property.Name, property.GetValue(this));
+            }
+        }
+
         protected TValue GetValue<TValue>([CallerMemberName] string propertyName = null)
         {
             var propertyInfo = GetModelPropertyInfo(propertyName);
@@ -139,9 +158,9 @@ namespace GalaxyMerge.Client.Wrappers.Base
                 setValue.Invoke(Model, newValue);
             else
                 propertyInfo?.SetValue(Model, newValue);
-            
+
             UpdateRequiredProperty(propertyName, newValue);
-            ValidateProperty(propertyName);
+            ValidatePropertyInternal(propertyName);
 
             onChanged?.Invoke();
             RaisePropertyChanged(propertyName);
@@ -159,51 +178,32 @@ namespace GalaxyMerge.Client.Wrappers.Base
         {
             if (!EqualityComparer<TWrapper>.Default.Equals(storage, newValue))
                 storage = newValue;
-            
+
             var propertyInfo = GetModelPropertyInfo(propertyName);
             var currentModel = (TModel) propertyInfo?.GetValue(Model);
             var newModel = newValue?.Model;
-            
+
             if (ReferenceEquals(currentModel, newModel)) return;
-            
+
             if (!ModelEquals(currentModel, newModel, comparer))
                 UpdateOriginalValue(currentModel, newModel, propertyName);
-            
+
             if (autoRegister)
                 RegisterTrackingObjectInternal(propertyName, newValue);
-            
+
             if (setValue != null)
                 setValue.Invoke(Model, newModel);
             else
                 propertyInfo?.SetValue(Model, newModel);
 
             UpdateRequiredProperty(propertyName, newValue);
-            ValidateProperty(propertyName);
+            ValidatePropertyInternal(propertyName);
 
             if (ModelEquals(currentModel, newModel, comparer)) return;
-            
+
             onChanged?.Invoke();
             RaisePropertyChanged(propertyName);
             RaisePropertyChanged(propertyName + "IsChanged");
-        }
-
-        protected virtual void Initialize(T model)
-        {
-            var properties = GetType().GetProperties();
-
-            foreach (var property in properties)
-            {
-                var value = property.GetValue(this);
-                
-                if (value is ITrackingObject tracking)
-                    RegisterTrackingObjectInternal(property.Name, tracking);
-
-                var requiredAttribute = property.GetCustomAttribute<RequiredAttribute>();
-                if (requiredAttribute != null && !_requiredAttributes.ContainsKey(property.Name))
-                    RequireProperty(property.Name, requiredAttribute);
-            
-                UpdateRequiredProperty(property.Name, property.GetValue(this));
-            }
         }
 
         protected void RegisterTrackingObject(string propertyName, ITrackingObject trackingObject)
@@ -232,7 +232,7 @@ namespace GalaxyMerge.Client.Wrappers.Base
                     modelCollection.Clear();
                 }
 
-                ValidateObject();
+                ValidateObjectInternal();
             };
         }
 
@@ -240,79 +240,63 @@ namespace GalaxyMerge.Client.Wrappers.Base
             NotifyCollectionChangedEventHandler changedHandler)
         {
             collection.CollectionChanged += changedHandler;
-            collection.CollectionChanged += (_, _) => ValidateObject();
+            collection.CollectionChanged += (_, _) => ValidateObjectInternal();
         }
 
         protected void RequireProperty(string propertyName, RequiredAttribute requiredAttribute = null)
         {
-            requiredAttribute ??= new RequiredAttribute();
-            
-            if (_requiredAttributes.ContainsKey(propertyName))
-            {
-                var current = _requiredAttributes[propertyName];
-                if (ReferenceEquals(current, requiredAttribute)) return;
-                _requiredAttributes.Remove(propertyName);
-            }
-
-            _requiredAttributes.Add(propertyName, requiredAttribute);
+            RequirePropertyInternal(propertyName, requiredAttribute);
         }
 
-        protected void RunValidation()
+        //todo perhaps make public
+        protected void ValidateObject()
         {
-            ValidateObject();
+            ValidateObjectInternal();
         }
 
-        protected void RunValidation(string propertyName)
+        protected void ValidateProperty(string propertyName)
         {
-            ValidateProperty(propertyName);
+            ValidatePropertyInternal(propertyName);
         }
 
-        private void ValidateObject()
+        private PropertyInfo GetModelPropertyInfo(string propertyName)
         {
-            ClearErrors();
+            if (propertyName == null)
+                throw new ArgumentNullException(nameof(propertyName), "Property name can not be null");
 
-            var results = new List<ValidationResult>();
-            var context = new ValidationContext(this);
-            Validator.TryValidateObject(this, context, results, true);
+            var propertyInfo = Model.GetType().GetProperty(propertyName);
 
-            if (results.Any())
-            {
-                var propertyNames = results.SelectMany(r => r.MemberNames).Distinct().ToList();
-                foreach (var propertyName in propertyNames)
-                {
-                    Errors[propertyName] = results
-                        .Where(r => r.MemberNames.Contains(propertyName))
-                        .Select(r => r.ErrorMessage)
-                        .Distinct()
-                        .ToList();
+            if (propertyInfo == null)
+                throw new InvalidOperationException($"Could not retrieve property info for {propertyName}");
 
-                    RaiseErrorsChanged(propertyName);
-                }
-            }
-
-            RaisePropertyChanged(nameof(IsValid));
+            return propertyInfo;
         }
 
-        private void ValidateProperty(string propertyName)
+        private static bool ModelEquals<TModel>(TModel a, TModel b, Func<TModel, TModel, bool> comparer = null)
+            where TModel : class
         {
-            var results = new List<ValidationResult>();
-            var context = new ValidationContext(this) {MemberName = propertyName};
-            Validator.TryValidateObject(this, context, results, true);
+            if (comparer != null)
+                return comparer.Invoke(a, b);
 
-            var propertyErrors = results.Where(r => r.MemberNames.Contains(propertyName)).ToList();
+            // ReSharper disable once SuspiciousTypeConversion.Global because maybe there are no implementations?
+            if (a is IEquatable<TModel> equatable)
+                return equatable.Equals(b);
 
-            if (propertyErrors.Any())
-            {
-                Errors[propertyName] = propertyErrors.Select(r => r.ErrorMessage).Distinct().ToList();
-                RaiseErrorsChanged(propertyName);
-                RaisePropertyChanged(nameof(IsValid));
-            }
-            else if (Errors.ContainsKey(propertyName))
-            {
-                Errors.Remove(propertyName);
-                RaiseErrorsChanged(propertyName);
-                RaisePropertyChanged(nameof(IsValid));
-            }
+            if (ReferenceEquals(a, null) && ReferenceEquals(b, null)) return true;
+            if (ReferenceEquals(a, null) || ReferenceEquals(b, null)) return false;
+            return b.GetType() == a.GetType() && PropertyEquals(a, b);
+        }
+
+        private static bool PropertyEquals<TModel>(TModel a, TModel b)
+            where TModel : class
+        {
+            var properties = b.GetType().GetProperties();
+
+            return !(from property in properties
+                let x = property.GetValue(b)
+                let y = property.GetValue(a)
+                where !Equals(x, y)
+                select x).Any();
         }
 
         private void RegisterTrackingObjectInternal(string propertyName, ITrackingObject trackingObject)
@@ -336,38 +320,18 @@ namespace GalaxyMerge.Client.Wrappers.Base
                 RaisePropertyChanged(e.PropertyName);
         }
 
-        private void RegisterRequired(PropertyInfo property)
+        private void RequirePropertyInternal(string propertyName, RequiredAttribute requiredAttribute = null)
         {
-            if (_requiredAttributes.ContainsKey(property.Name))
+            requiredAttribute ??= new RequiredAttribute();
+
+            if (_requiredAttributes.ContainsKey(propertyName))
             {
-             
-                return;
-            }
-            
-            var requiredAttribute = property.GetCustomAttribute<RequiredAttribute>();
-            if (requiredAttribute != null)
-                RequireProperty(property.Name, requiredAttribute);
-            
-            UpdateRequiredProperty(property.Name, property.GetValue(this));
-        }
-
-        private void UpdateRequiredProperty(string propertyName, object value)
-        {
-            if (!_requiredAttributes.ContainsKey(propertyName)) return;
-
-            var required = _requiredAttributes[propertyName];
-
-            if (required.IsValid(value))
-            {
-                if (!_requiredProperties.Contains(propertyName)) return;
-                _requiredProperties.Remove(propertyName);
-                RaisePropertyChanged(nameof(HasRequired));
-                return;
+                var current = _requiredAttributes[propertyName];
+                if (ReferenceEquals(current, requiredAttribute)) return;
+                _requiredAttributes.Remove(propertyName);
             }
 
-            if (_requiredProperties.Contains(propertyName)) return;
-            _requiredProperties.Add(propertyName);
-            RaisePropertyChanged(nameof(HasRequired));
+            _requiredAttributes.Add(propertyName, requiredAttribute);
         }
 
         private void UpdateOriginalValue(object currentValue, object newValue, string propertyName)
@@ -400,44 +364,71 @@ namespace GalaxyMerge.Client.Wrappers.Base
             RaisePropertyChanged(nameof(IsChanged));
         }
 
-        private static bool ModelEquals<TModel>(TModel a, TModel b, Func<TModel, TModel, bool> comparer = null)
-            where TModel : class
+        private void UpdateRequiredProperty(string propertyName, object value)
         {
-            if (comparer != null)
-                return comparer.Invoke(a, b);
+            if (!_requiredAttributes.ContainsKey(propertyName)) return;
 
-            // ReSharper disable once SuspiciousTypeConversion.Global because maybe there are no implementations?
-            if (a is IEquatable<TModel> equatable)
-                return equatable.Equals(b);
-            
-            if (ReferenceEquals(a, null) && ReferenceEquals(b, null)) return true;
-            if (ReferenceEquals(a, null) || ReferenceEquals(b, null)) return false;
-            return b.GetType() == a.GetType() && PropertyEquals(a, b);
-        }
-        
-        private static bool PropertyEquals<TModel>(TModel a, TModel b)
-            where TModel : class
-        {
-            var properties = b.GetType().GetProperties();
+            var required = _requiredAttributes[propertyName];
 
-            return !(from property in properties
-                let x = property.GetValue(b)
-                let y = property.GetValue(a)
-                where !Equals(x, y)
-                select x).Any();
+            if (required.IsValid(value))
+            {
+                if (!_requiredProperties.Contains(propertyName)) return;
+                _requiredProperties.Remove(propertyName);
+                RaisePropertyChanged(nameof(HasRequired));
+                return;
+            }
+
+            if (_requiredProperties.Contains(propertyName)) return;
+            _requiredProperties.Add(propertyName);
+            RaisePropertyChanged(nameof(HasRequired));
         }
 
-        private PropertyInfo GetModelPropertyInfo(string propertyName)
+        private void ValidateObjectInternal()
         {
-            if (propertyName == null)
-                throw new ArgumentNullException(nameof(propertyName), "Property name can not be null");
+            ClearErrors();
 
-            var propertyInfo = Model.GetType().GetProperty(propertyName);
+            var results = new List<ValidationResult>();
+            var context = new ValidationContext(this);
+            Validator.TryValidateObject(this, context, results, true);
 
-            if (propertyInfo == null)
-                throw new InvalidOperationException($"Could not retrieve property info for {propertyName}");
+            if (results.Any())
+            {
+                var propertyNames = results.SelectMany(r => r.MemberNames).Distinct().ToList();
+                foreach (var propertyName in propertyNames)
+                {
+                    Errors[propertyName] = results
+                        .Where(r => r.MemberNames.Contains(propertyName))
+                        .Select(r => r.ErrorMessage)
+                        .Distinct()
+                        .ToList();
 
-            return propertyInfo;
+                    RaiseErrorsChanged(propertyName);
+                }
+            }
+
+            RaisePropertyChanged(nameof(IsValid));
+        }
+
+        private void ValidatePropertyInternal(string propertyName)
+        {
+            var results = new List<ValidationResult>();
+            var context = new ValidationContext(this) {MemberName = propertyName};
+            Validator.TryValidateObject(this, context, results, true);
+
+            var propertyErrors = results.Where(r => r.MemberNames.Contains(propertyName)).ToList();
+
+            if (propertyErrors.Any())
+            {
+                Errors[propertyName] = propertyErrors.Select(r => r.ErrorMessage).Distinct().ToList();
+                RaiseErrorsChanged(propertyName);
+                RaisePropertyChanged(nameof(IsValid));
+            }
+            else if (Errors.ContainsKey(propertyName))
+            {
+                Errors.Remove(propertyName);
+                RaiseErrorsChanged(propertyName);
+                RaisePropertyChanged(nameof(IsValid));
+            }
         }
 
         private void RunInitialization(T model)
