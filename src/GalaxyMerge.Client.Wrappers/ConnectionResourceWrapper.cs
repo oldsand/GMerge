@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using GalaxyMerge.Client.Data.Entities;
 using GalaxyMerge.Client.Wrappers.Base;
 

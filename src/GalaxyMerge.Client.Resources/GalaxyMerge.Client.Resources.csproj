@@ -48,6 +48,9 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Controls\Icon.cs" />
+        <Compile Include="Controls\LabelledTextBox.xaml.cs">
+          <DependentUpon>LabelledTextBox.xaml</DependentUpon>
+        </Compile>
         <Compile Include="Properties\AssemblyInfo.cs">
             <SubType>Code</SubType>
         </Compile>
@@ -73,6 +76,7 @@
         </EmbeddedResource>
     </ItemGroup>
     <ItemGroup>
+      <Page Include="Controls\LabelledTextBox.xaml" />
       <Page Include="Icons\AnimatedIcons.xaml" />
       <Page Include="Icons\FilledIcons.xaml" />
       <Page Include="Icons\GalaxyIcons.xaml" />
@@ -83,7 +87,9 @@
       <Page Include="Styles\CheckBoxStyles.xaml" />
       <Page Include="Styles\ComboBoxStyles.xaml" />
       <Page Include="Styles\ContentControlStyles.xaml" />
+      <Page Include="Styles\ControlStyles.xaml" />
       <Page Include="Styles\DialogStyles.xaml" />
+      <Page Include="Styles\FocusStyles.xaml" />
       <Page Include="Styles\FontStyles.xaml" />
       <Page Include="Styles\GroupBoxStyles.xaml" />
       <Page Include="Styles\IconStyles.xaml" />

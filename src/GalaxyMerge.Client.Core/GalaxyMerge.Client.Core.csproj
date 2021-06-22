@@ -47,7 +47,7 @@
         <Reference Include="PresentationFramework" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="AttachedProperties\ButtonProperties.cs" />
+        <Compile Include="AttachedProperties\BorderProperties.cs" />
         <Compile Include="AttachedProperties\TabControlProperties.cs" />
         <Compile Include="AttachedProperties\TextBoxProperties.cs" />
         <Compile Include="Behaviors\BehaviorsCollection.cs" />
@@ -56,6 +56,7 @@
         <Compile Include="Behaviors\Interactions.cs" />
         <Compile Include="Behaviors\TreeViewMultipleSelectionBehavior.cs" />
         <Compile Include="Behaviors\TriggersCollection.cs" />
+        <Compile Include="Converters\CornerRadiusAdjuster.cs" />
         <Compile Include="Converters\Operator.cs" />
         <Compile Include="Converters\StringEmptyOrNullVisibilityConverter.cs" />
         <Compile Include="Converters\ThicknessAdjuster.cs" />

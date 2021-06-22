@@ -66,6 +66,7 @@
               Height="30" Width="100"
               Content="Primary"
               HorizontalAlignment="Left"
+              Style="{StaticResource Style.Button.Primary}"
               IsEnabled="{Binding ElementName=EnabledInput, Path=IsChecked}" />
             <Button
               Margin="10"
@@ -74,13 +75,17 @@
               HorizontalAlignment="Left"
               Style="{StaticResource Style.Button.Secondary}"
               IsEnabled="{Binding ElementName=EnabledInput, Path=IsChecked}" />
-            <Button
-              Margin="10"
-              Height="30" Width="100"
-              Content="Ternary"
-              HorizontalAlignment="Left"
-              Style="{StaticResource Style.Button.Ternary}"
-              IsEnabled="{Binding ElementName=EnabledInput, Path=IsChecked}" />
+            
+            <Border x:Name="FocusBorder" 
+                    Height="30" Width="100"
+                    HorizontalAlignment="Left"
+                    CornerRadius="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(ui:BorderProperties.CornerRadius)}"
+                    BorderBrush="Blue"
+                    BorderThickness="2">
+              <Border.Effect>
+                <BlurEffect Radius="5" KernelType="Box" />
+              </Border.Effect>
+            </Border>
 
             <CheckBox
               Margin="10"
@@ -137,6 +142,11 @@
                      IsEnabled="{Binding ElementName=EnabledInput, Path=IsChecked}"
                      Height="30" />
 
+            <ui:LabelledTextBox Margin="10" 
+                                ui:TextBoxProperties.DefaultText="First Name"
+                                LabelText="Label" CaptionText="This is the caption"
+                                IsEnabled="{Binding ElementName=EnabledInput, Path=IsChecked}">
+            </ui:LabelledTextBox>
           </StackPanel>
         </Grid>
 

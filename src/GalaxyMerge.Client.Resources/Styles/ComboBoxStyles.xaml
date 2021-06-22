@@ -68,7 +68,7 @@
             Background="{TemplateBinding Background}"
             BorderBrush="{TemplateBinding BorderBrush}"
             BorderThickness="{TemplateBinding BorderThickness}"
-            CornerRadius="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(ui:ButtonProperties.CornerRadius)}"
+            CornerRadius="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(ui:BorderProperties.CornerRadius)}"
             SnapsToDevicePixels="true">
       <Border x:Name="splitBorder"
               Width="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}"
@@ -92,7 +92,7 @@
   <Style x:Key="Style.ComboBox.ToggleButton" TargetType="{x:Type ToggleButton}">
     <Setter Property="OverridesDefaultStyle" Value="true" />
     <Setter Property="IsTabStop" Value="false" />
-    <Setter Property="ui:ButtonProperties.CornerRadius" Value="2" />
+    <Setter Property="ui:BorderProperties.CornerRadius" Value="2" />
     <Setter Property="Focusable" Value="false" />
     <Setter Property="ClickMode" Value="Press" />
     <Setter Property="Template" Value="{StaticResource Template.ComboBox.ToggleButton}" />
@@ -121,7 +121,7 @@
                   MinWidth="{Binding ActualWidth, ElementName=templateRoot}"
                   MaxHeight="{TemplateBinding MaxDropDownHeight}"
                   Background="{t:ThemeResource ResourceKey=ControlBackground}"
-                  CornerRadius="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(ui:ButtonProperties.CornerRadius)}"
+                  CornerRadius="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(ui:BorderProperties.CornerRadius)}"
                   BorderThickness="0">
             <ScrollViewer x:Name="DropDownScrollViewer">
               <Grid x:Name="grid"
@@ -177,7 +177,7 @@
               Grid.ColumnSpan="2"
               BorderBrush="{t:ThemeResource ResourceKey=ControlFocusBorder}"
               BorderThickness="2"
-              CornerRadius="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(ui:ButtonProperties.CornerRadius)}"
+              CornerRadius="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(ui:BorderProperties.CornerRadius)}"
               Visibility="Collapsed" />
     </Grid>
     <ControlTemplate.Triggers>
@@ -342,7 +342,7 @@
     <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=ControlForeground}" />
     <Setter Property="BorderBrush" Value="{t:ThemeResource ResourceKey=ControlBorder}" />
     <Setter Property="BorderThickness" Value="1" />
-    <Setter Property="ui:ButtonProperties.CornerRadius" Value="2" />
+    <Setter Property="ui:BorderProperties.CornerRadius" Value="2" />
     <Setter Property="VerticalContentAlignment" Value="Center" />
     <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
     <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />

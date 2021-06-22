@@ -110,14 +110,21 @@
         <!--New Resource-->
         <Button Width="60"
                 Height="26"
+                BorderThickness="0"
                 Command="{Binding NewResourceCommand}">
           <StackPanel Orientation="Horizontal">
             <ui:Icon Template="{DynamicResource Icon.Outlined.Add}"
                      Foreground="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
-                     Margin="0 0 5 0" />
+                     Height="14" Width="14"
+                     Margin="0 0 5 0"/>
             <TextBlock Text="New"
                        Foreground="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}" />
           </StackPanel>
+          <Button.Style>
+            <Style BasedOn="{StaticResource Style.Button.Primary}" TargetType="{x:Type Button}">
+              <Setter Property="Template" Value="{StaticResource Template.Button.Simple}" />
+            </Style>
+          </Button.Style>
         </Button>
 
         <!--Spacer Border-->

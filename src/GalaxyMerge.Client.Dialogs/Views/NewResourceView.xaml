@@ -234,15 +234,12 @@
             <RowDefinition Height="Auto" />
           </Grid.RowDefinitions>
 
-          <StackPanel Grid.Row="0" Margin="0 20 0 0">
-            <TextBlock Text="Name" Margin="0 5" />
-            <TextBox Text="{Binding ResourceEntry.ResourceName, UpdateSourceTrigger=PropertyChanged}"
-                     ui:TextBoxProperties.DefaultText="Name"/>
-            <TextBlock Text="Enter a name that will identify the new resource"
-                       Margin="2"
-                       TextWrapping="Wrap"
-                       Style="{StaticResource Text.Caption}" />
-          </StackPanel>
+          <ui:LabelledTextBox Margin="0 5"
+                              ui:TextBoxProperties.DefaultText="Name*"
+                              Text="{Binding ResourceEntry.ResourceName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              LabelMargin="0 5"
+                              LabelText="Name" 
+                              CaptionText="Enter a name that will identify the new resource" />
           
           <StackPanel Grid.Row="1" Margin="0 20 0 0">
             <TextBlock Text="Description" Margin="0 5" />
@@ -375,7 +372,8 @@
           <Button Width="70" Height="26"
                   Margin="10 0 0 0"
                   Content="Save"
-                  Command="{Binding SaveResourceCommand}" />
+                  Command="{Binding SaveResourceCommand}" 
+                  Style="{StaticResource Style.Button.Primary}" />
           <Button Width="70" Height="26"
                   Margin="10 0 0 0"
                   Content="Back"
