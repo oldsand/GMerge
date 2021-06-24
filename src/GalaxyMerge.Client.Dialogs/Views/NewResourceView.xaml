@@ -20,7 +20,6 @@
       <design:DesignViewModels x:Key="DesignViewModels" />
 
       <Style x:Key="LocalDialogStyle" BasedOn="{StaticResource DialogStyle}" TargetType="{x:Type Window}">
-        <Setter Property="Title" Value="Select New Resource" />
         <Setter Property="Height" Value="600" />
         <Setter Property="Width" Value="450" />
         <Setter Property="prism:Dialog.WindowStartupLocation" Value="CenterScreen" />
@@ -70,15 +69,15 @@
       <Grid Margin="20">
         <Grid.RowDefinitions>
           <RowDefinition />
-          <RowDefinition Height="2.5*"/>
-          <RowDefinition Height="2.5*"/>
-          <RowDefinition Height="2.5*"/>
+          <RowDefinition Height="2.5*" />
+          <RowDefinition Height="2.5*" />
+          <RowDefinition Height="2.5*" />
         </Grid.RowDefinitions>
 
         <Border Grid.Row="0"
                 BorderBrush="Transparent"
                 BorderThickness="2">
-          <TextBlock 
+          <TextBlock
             VerticalAlignment="Center"
             Margin="10 0"
             Text="Select from one of the following resources:"
@@ -119,7 +118,7 @@
                                 Archestra objects and graphics."
                        Style="{StaticResource Text.Caption}"
                        TextWrapping="Wrap" />
-            
+
             <ui:Icon Grid.Row="0"
                      Grid.Column="2"
                      Template="{DynamicResource Icon.Info}" />
@@ -161,7 +160,7 @@
                                 Archestra objects and graphics."
                        Style="{StaticResource Text.Caption}"
                        TextWrapping="Wrap" />
-            
+
             <ui:Icon Grid.Row="0"
                      Grid.Column="2"
                      Template="{DynamicResource Icon.Info}" />
@@ -203,7 +202,7 @@
                                 Archestra objects and graphics."
                        Style="{StaticResource Text.Caption}"
                        TextWrapping="Wrap" />
-            
+
             <ui:Icon Grid.Row="0"
                      Grid.Column="2"
                      Template="{DynamicResource Icon.Info}" />
@@ -212,66 +211,56 @@
       </Grid>
     </Grid>
 
-    <Grid Grid.Row="0" x:Name="GalaxyConnectionGrid"
+    <Grid x:Name="GalaxyConnectionGrid"
+          Grid.Row="0"
           Visibility="{Binding SelectedResourceType, 
           Converter={ui:EnumVisibilityConverter}, ConverterParameter=Connection}"
           d:Visibility="Hidden">
+
       <Grid Margin="20">
         <Grid.RowDefinitions>
-          <RowDefinition Height="40" />
+          <RowDefinition />
           <RowDefinition />
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0"
-                   VerticalAlignment="Center"
-                   Text="Input the following information:" />
+        <GroupBox Grid.Row="0" Header="General">
+          <StackPanel>
+            <ui:FormControl LabelText="Name"
+                            CaptionText="Enter a name that will uniquely identify this resource"
+                            Margin="0 5">
+              <TextBox Margin="-1 5 0 3"
+                       ui:TextBoxProperties.DefaultText="Name*"
+                       Text="{Binding ResourceEntry.ResourceName, UpdateSourceTrigger=PropertyChanged, NotifyOnValidationError=True}" />
+            </ui:FormControl>
 
-        <Grid Grid.Row="1">
-          <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-          </Grid.RowDefinitions>
-
-          <ui:LabelledTextBox Margin="0 5"
-                              ui:TextBoxProperties.DefaultText="Name*"
-                              Text="{Binding ResourceEntry.ResourceName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                              LabelMargin="0 5"
-                              LabelText="Name" 
-                              CaptionText="Enter a name that will identify the new resource" />
-          
-          <StackPanel Grid.Row="1" Margin="0 20 0 0">
-            <TextBlock Text="Description" Margin="0 5" />
-            <TextBox Text="{Binding ResourceEntry.ResourceDescription}"
-                     Height="60" Padding="10 3 0 0"
-                     VerticalContentAlignment="Top"/>
-            <TextBlock Text="Add a description to let people know more about the purpose of this resource"
-                       Margin="2"
-                       TextWrapping="Wrap"
-                       Style="{StaticResource Text.Caption}" />
+            <ui:FormControl LabelText="Description"
+                            CaptionText="Add a description to help identify the purpose of this resource"
+                            Margin="0 5">
+              <TextBox Height="60" VerticalContentAlignment="Top" Margin="-1 5 0 3"
+                       Text="{Binding ResourceEntry.ResourceDescription, UpdateSourceTrigger=PropertyChanged}" />
+            </ui:FormControl>
           </StackPanel>
+        </GroupBox>
+        
+        <GroupBox Grid.Row="1" Header="Details">
+          <StackPanel >
+            <ui:FormControl LabelText="Node Name"
+                            CaptionText="Enter the machine name on which the galaxy repository is located"
+                            Margin="0 5">
+              <TextBox Margin="-1 5 0 3"
+                       ui:TextBoxProperties.DefaultText="Node Name*"
+                       Text="{Binding ResourceEntry.Connection.NodeName, UpdateSourceTrigger=PropertyChanged, NotifyOnValidationError=True}" />
+            </ui:FormControl>
 
-          <StackPanel Grid.Row="2" Margin="0 20 0 0">
-            <TextBlock Text="Node Name" Margin="0 5" />
-            <TextBox Text="{Binding ResourceEntry.Connection.NodeName, UpdateSourceTrigger=PropertyChanged}" 
-                     ui:TextBoxProperties.DefaultText="Node Name"/>
-            <TextBlock Text="Enter the machine name on which the galaxy repository is located"
-                       Margin="2"
-                       TextWrapping="Wrap"
-                       Style="{StaticResource Text.Caption}" />
+            <ui:FormControl LabelText="Galaxy Name"
+                            CaptionText="Enter the name of the galaxy repository"
+                            Margin="0 5">
+              <TextBox Margin="-1 5 0 3"
+                       ui:TextBoxProperties.DefaultText="Galaxy Name*"
+                       Text="{Binding ResourceEntry.Connection.GalaxyName, UpdateSourceTrigger=PropertyChanged, NotifyOnValidationError=True}" />
+            </ui:FormControl>
           </StackPanel>
-
-          <StackPanel Grid.Row="3" Margin="0 20 0 0">
-            <TextBlock Text="Galaxy Name" Margin="0 5" />
-            <TextBox Text="{Binding ResourceEntry.Connection.GalaxyName, UpdateSourceTrigger=PropertyChanged}" 
-                     ui:TextBoxProperties.DefaultText="Node Name"/>
-            <TextBlock Text="Enter the name of the galaxy repository to connect to"
-                       Margin="2"
-                       TextWrapping="Wrap"
-                       Style="{StaticResource Text.Caption}"/>
-          </StackPanel>
-        </Grid>
+        </GroupBox>
       </Grid>
     </Grid>
 
@@ -372,7 +361,7 @@
           <Button Width="70" Height="26"
                   Margin="10 0 0 0"
                   Content="Save"
-                  Command="{Binding SaveResourceCommand}" 
+                  Command="{Binding SaveResourceCommand}"
                   Style="{StaticResource Style.Button.Primary}" />
           <Button Width="70" Height="26"
                   Margin="10 0 0 0"
@@ -388,6 +377,5 @@
       </Grid>
 
     </Border>
-
   </Grid>
 </UserControl>

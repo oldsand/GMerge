@@ -8,16 +8,22 @@
   d:DesignHeight="450"
   d:DesignWidth="800"
   mc:Ignorable="d">
-  
-  <Grid>
-    <ScrollViewer
-      Width="500"
-      Height="500"
-      HorizontalScrollBarVisibility="Visible">
-    <Rectangle
-        Width="1000"
-        Height="1000"
-        Fill="LightSeaGreen" />
-    </ScrollViewer>
-  </Grid>
+    <UserControl.Resources>
+        <Style x:Key="HeaderedContentControlStyle1" TargetType="{x:Type HeaderedContentControl}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type HeaderedContentControl}">
+                        <StackPanel>
+                            <ContentPresenter ContentSource="Header"/>
+                            <ContentPresenter/>
+                        </StackPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <HeaderedContentControl Style="{DynamicResource HeaderedContentControlStyle1}">
+
+    </HeaderedContentControl>
 </UserControl>

@@ -49,7 +49,7 @@ namespace GalaxyMerge.Client.Resources.Theming
                     //Generic
                     SetResource(ThemeResourceKey.PanelBackground.ToString(), new SolidColorBrush(ColorFromHex("#FFEAEBEC")));
                     SetResource(ThemeResourceKey.IconForeground.ToString(), new SolidColorBrush(ColorFromHex("#FF616A7A")));
-                    SetResource(ThemeResourceKey.LabelForeground.ToString(), new SolidColorBrush(ColorFromHex("#FFB1B4B9")));
+                    SetResource(ThemeResourceKey.LabelForeground.ToString(), new SolidColorBrush(ColorFromHex("#FF87898D")));
                     SetResource(ThemeResourceKey.CaptionForeground.ToString(), new SolidColorBrush(ColorFromHex("#FFB1B4B9")));
                     SetResource(ThemeResourceKey.ErrorBrush.ToString(), new SolidColorBrush(ColorFromHex("#FFFB6161")));
                     

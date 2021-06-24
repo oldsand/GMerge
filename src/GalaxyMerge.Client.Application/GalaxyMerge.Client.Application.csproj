@@ -52,6 +52,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Configurations\LoggerConfiguration.cs" />
+    <Compile Include="Controls\ResourceItem.xaml.cs">
+      <DependentUpon>ResourceItem.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Design\DesignViewModels.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -72,6 +75,7 @@
     <Compile Include="Views\ShellFooterView.xaml.cs">
       <DependentUpon>ShellFooterView.xaml</DependentUpon>
     </Compile>
+    <Page Include="Controls\ResourceItem.xaml" />
     <Page Include="Views\ShellHeaderView.xaml" />
     <Page Include="Views\Shell.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -87,7 +91,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <PackageReference Include="NLog" Version="4.7.10" />
     <PackageReference Include="Prism.Core" Version="8.1.97" />

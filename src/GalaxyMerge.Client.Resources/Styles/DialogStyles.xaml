@@ -31,7 +31,7 @@
               VerticalAlignment="Center"
               DockPanel.Dock="Left"
               Foreground="{t:ThemeResource ResourceKey=WindowHeaderForeground}"
-              Text="{TemplateBinding Title}" />
+              Text="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=Title}" />
             <Button x:Name="CloseButton"
                     Click="OnCloseClick"
                     DockPanel.Dock="Right"

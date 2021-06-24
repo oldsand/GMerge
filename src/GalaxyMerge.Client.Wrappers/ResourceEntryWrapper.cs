@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using GalaxyMerge.Client.Data.Entities;
 using GalaxyMerge.Client.Wrappers.Base;
 
@@ -62,8 +63,8 @@ namespace GalaxyMerge.Client.Wrappers
 
         public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (_existingNames.Contains(ResourceName))
-                yield return new ValidationResult($"{ResourceName} is taken. Resource Name must be unique.",
+            if (_existingNames.Select(n => n.ToLower()).Contains(ResourceName.ToLower()))
+                yield return new ValidationResult($"'{ResourceName}' is taken. Resource Name must be unique",
                     new[] {nameof(ResourceName)});
         }
     }

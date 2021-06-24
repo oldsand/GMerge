@@ -80,6 +80,7 @@
         <Compile Include="Extensions\DependencyObjectExtensions.cs" />
         <Compile Include="Extensions\EnumBindingSourceExtension.cs" />
         <Compile Include="Extensions\TreeViewItemExtensions.cs" />
+        <Compile Include="Extensions\ValidationBinding.cs" />
         <Compile Include="Mvvm\DialogViewModelBase.cs" />
         <Compile Include="Mvvm\NavigationViewModelBase.cs" />
         <Compile Include="Mvvm\ViewModelBase.cs" />

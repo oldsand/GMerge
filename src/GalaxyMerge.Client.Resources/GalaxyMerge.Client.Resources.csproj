@@ -48,8 +48,8 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Controls\Icon.cs" />
-        <Compile Include="Controls\LabelledTextBox.xaml.cs">
-          <DependentUpon>LabelledTextBox.xaml</DependentUpon>
+        <Compile Include="Controls\FormControl.xaml.cs">
+          <DependentUpon>FormControl.xaml</DependentUpon>
         </Compile>
         <Compile Include="Properties\AssemblyInfo.cs">
             <SubType>Code</SubType>
@@ -76,7 +76,7 @@
         </EmbeddedResource>
     </ItemGroup>
     <ItemGroup>
-      <Page Include="Controls\LabelledTextBox.xaml" />
+      <Page Include="Controls\FormControl.xaml" />
       <Page Include="Icons\AnimatedIcons.xaml" />
       <Page Include="Icons\FilledIcons.xaml" />
       <Page Include="Icons\GalaxyIcons.xaml" />
