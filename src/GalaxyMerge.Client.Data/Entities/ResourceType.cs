@@ -62,7 +62,7 @@ namespace GalaxyMerge.Client.Data.Entities
 
             public override string GetIconTemplateName()
             {
-                return "Icon.Filled.Galaxy";
+                return "Icon.Filled.Plug";
             }
         }
         

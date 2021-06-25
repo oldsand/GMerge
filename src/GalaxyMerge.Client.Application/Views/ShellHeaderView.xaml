@@ -110,16 +110,12 @@
                 BorderThickness="1" />
 
         <!--Resource Buttons-->
-        <Button Style="{StaticResource Style.Button.Transparent}"
-                Margin="5 0 0 0"
-                Command="{Binding OpenSettingsCommand}">
-          <ui:Icon Template="{StaticResource Icon.Filled.Cog}" />
-        </Button>
-        <Button Style="{StaticResource Style.Button.Transparent}"
-                Margin="5 0 0 0"
-                Command="{Binding DeleteResourceCommand}">
-          <ui:Icon Template="{StaticResource Icon.Filled.Delete}" />
-        </Button>
+        <ui:IconButton DefaultIcon="{StaticResource Icon.Filled.Cog}"
+                       Command="{Binding OpenSettingsCommand}"
+                       Margin="5 0 0 0"/>
+        <ui:IconButton DefaultIcon="{StaticResource Icon.Filled.Delete}"
+                       Command="{Binding DeleteResourceCommand}"
+                       Margin="5 0 0 0"/>
         <!--<Button Style="{StaticResource Style.Button.Transparent}"
                 Margin="5 0 0 0">
           <ui:Icon Template="{StaticResource Icon.Refresh}" />

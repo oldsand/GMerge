@@ -51,6 +51,7 @@
         <Compile Include="Controls\FormControl.xaml.cs">
           <DependentUpon>FormControl.xaml</DependentUpon>
         </Compile>
+        <Compile Include="Controls\IconButton.cs" />
         <Compile Include="Properties\AssemblyInfo.cs">
             <SubType>Code</SubType>
         </Compile>

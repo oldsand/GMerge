@@ -149,7 +149,7 @@
         <Button Height="26" Width="80" Margin="5 0"
                 Content="Cancel"
                 Style="{StaticResource Style.Button.Secondary}"
-                Command="{Binding CancelDialogCommand}" />
+                Command="{Binding CancelCommand}" />
         <Button Height="26" Width="80" Margin="5 0"
                 Content="Apply" />
       </StackPanel>

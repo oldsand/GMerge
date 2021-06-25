@@ -3,11 +3,11 @@
                     xmlns:controls="clr-namespace:GalaxyMerge.Client.Resources.Controls"
                     xmlns:t="clr-namespace:GalaxyMerge.Client.Resources.Theming">
 
-  <Style x:Key="IconStyle" TargetType="{x:Type controls:Icon}">
+  <Style x:Key="Style.Icon" TargetType="{x:Type controls:Icon}">
     <Setter Property="Height" Value="16" />
     <Setter Property="Width" Value="16" />
     <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=IconForeground}" />
   </Style>
-  <Style BasedOn="{StaticResource IconStyle}" TargetType="{x:Type controls:Icon}" />
+  <Style BasedOn="{StaticResource Style.Icon}" TargetType="{x:Type controls:Icon}" />
 
 </ResourceDictionary>

@@ -11,12 +11,17 @@
         PrimaryBackground,
         PrimaryForeground,
         PrimaryBorder,
+        ErrorBrush,
         
         PanelBackground,
-        IconForeground,
         LabelForeground,
         CaptionForeground,
-        ErrorBrush,
+
+        IconForeground,
+        IconMouseOverForeground,
+        IconMouseOverBackground,
+        IconPressedBackground,
+        IconPressedBorder,
         
         ControlBackground,
         ControlForeground,
@@ -41,8 +46,6 @@
         ButtonSecondaryBorder,
         ButtonSecondaryMouseOverBackground,
         ButtonSecondaryPressedBackground,
-        ButtonTransparentBorder,
-        ButtonTransparentActiveBackground,
 
         CheckBoxChecked,
         GlyphForeground,

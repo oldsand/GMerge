@@ -3,11 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:design="clr-namespace:GalaxyMerge.Client.Dialogs.Design"
+             
              xmlns:prism="http://prismlibrary.com/"
              xmlns:ui="http://gmerge.com/ui/wpf"
              xmlns:controls="clr-namespace:GalaxyMerge.Client.Dialogs.Controls"
+             xmlns:viewModels="clr-namespace:GalaxyMerge.Client.Dialogs.ViewModels"
              prism:ViewModelLocator.AutoWireViewModel="True"
+             d:DataContext="{d:DesignInstance viewModels:NewResourceSelectionViewModel, IsDesignTimeCreatable=True}"
              mc:Ignorable="d"
              d:DesignHeight="600"
              d:DesignWidth="450">
@@ -17,8 +19,7 @@
       <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/GalaxyMerge.Client.Resources;component/Resources.xaml" />
       </ResourceDictionary.MergedDictionaries>
-      <design:DesignModels x:Key="DesignModels" />
-
+      
       <Style TargetType="{x:Type RadioButton}">
         <Setter Property="Background" Value="{ui:ThemeResource ResourceKey=ControlBackground}" />
         <Setter Property="BorderBrush" Value="Transparent" />
@@ -47,7 +48,7 @@
     </ResourceDictionary>
   </UserControl.Resources>
 
-  <Grid d:DataContext="{Binding Source={StaticResource DesignModels}, Path=NewResourceSelectionViewModel}">
+  <Grid>
     <Grid Grid.Row="0" Margin="20">
       <Grid.RowDefinitions>
         <RowDefinition />

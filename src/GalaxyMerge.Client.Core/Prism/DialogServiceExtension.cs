@@ -7,17 +7,41 @@ namespace GalaxyMerge.Client.Core.Prism
 {
     public static class DialogServiceExtension
     {
-        public static void ShowConfirmation(this IDialogService dialogService, string message, Action<IDialogResult> callBack)
-        {
-            dialogService.ShowDialog(DialogName.ConfirmationDialog, new DialogParameters($"message={message}"),
-                callBack);
-        }
-
-        public static void ShowNotification(this IDialogService dialogService, string message,
+        public static void ShowConfirmation(this IDialogService dialogService, string title, string message,
             Action<IDialogResult> callBack)
         {
-            dialogService.ShowDialog("NotificationDialog", new DialogParameters($"message={message}"), callBack,
-                "notificationWindow");
+            var parameters = new DialogParameters
+            {
+                {"title", title},
+                {"message", message}
+            };
+            
+            dialogService.ShowDialog(DialogName.ConfirmationDialog, parameters, callBack);
+        }
+
+        public static void ShowNotification(this IDialogService dialogService, string title, string message,
+            Action<IDialogResult> callBack)
+        {
+            var parameters = new DialogParameters
+            {
+                {"title", title},
+                {"message", message}
+            };
+            
+            dialogService.ShowDialog(DialogName.ConfirmationDialog, parameters, callBack);
+        }
+
+        public static void ShowError(this IDialogService dialogService, string title, string message, Exception ex,
+            Action<IDialogResult> callBack)
+        {
+            var parameters = new DialogParameters
+            {
+                {"title", title},
+                {"message", message},
+                {"error", ex}
+            };
+
+            dialogService.ShowDialog(DialogName.ErrorDialog, parameters, callBack);
         }
     }
 }

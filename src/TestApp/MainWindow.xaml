@@ -28,18 +28,21 @@
                   Content="IsEnabled"
                   IsChecked="True"
                   Foreground="{ui:ThemeResource ResourceKey=PrimaryForeground}" />
-        <Button
+        <ui:IconButton
           Margin="10 0"
-          Style="{StaticResource Style.Button.Transparent}"
-          IsEnabled="{Binding ElementName=EnabledInput, Path=IsChecked}">
-          <ui:Icon Template="{StaticResource Icon.Filled.Cog}" />
-        </Button>
-        <Button
+          DefaultIcon="{StaticResource Icon.Filled.Cog}"
+          IsEnabled="{Binding ElementName=EnabledInput, Path=IsChecked}"/>
+        <ui:IconButton
           Margin="10 0"
-          Style="{StaticResource Style.Button.Transparent}"
-          IsEnabled="{Binding ElementName=EnabledInput, Path=IsChecked}">
-          <ui:Icon Template="{StaticResource Icon.Outlined.Cube}" />
-        </Button>
+          DefaultIcon="{StaticResource Icon.Outlined.Database}"
+          MouseOverIcon="{StaticResource Icon.Filled.Database}"
+          IsEnabled="{Binding ElementName=EnabledInput, Path=IsChecked}" />
+        <ui:IconButton
+          Margin="10 0"
+          DefaultIcon="{StaticResource Icon.Outlined.Plug}"
+          MouseOverIcon="{StaticResource Icon.Filled.Plug}"
+          IsEnabled="{Binding ElementName=EnabledInput, Path=IsChecked}" />
+        
       </StackPanel>
     </Border>
 

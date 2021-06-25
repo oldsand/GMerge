@@ -2,6 +2,7 @@
 using GalaxyMerge.Client.Application.Configurations;
 using GalaxyMerge.Client.Application.Views;
 using GalaxyMerge.Client.Core.Prism;
+using GalaxyMerge.Client.Core.Prism.RegionBehaviors;
 using GalaxyMerge.Client.Data.Abstractions;
 using GalaxyMerge.Client.Data.Repositories;
 using GalaxyMerge.Client.Dialogs;
@@ -45,6 +46,7 @@ namespace GalaxyMerge.Client.Application
         protected override void ConfigureDefaultRegionBehaviors(IRegionBehaviorFactory regionBehaviors)
         {
             regionBehaviors.AddIfMissing(RegionManagerAwareBehavior.BehaviorKey, typeof(RegionManagerAwareBehavior));
+            regionBehaviors.AddIfMissing(DependentViewRegionBehavior.BehaviorKey, typeof(DependentViewRegionBehavior));
             base.ConfigureDefaultRegionBehaviors(regionBehaviors);
         }
     }

@@ -17,11 +17,9 @@
       <StackPanel Orientation="Horizontal"
                   HorizontalAlignment="Left"
                   Margin="10 0">
-        <Button Style="{StaticResource Style.Button.Transparent}"
-                Command="{Binding ShowHideEventLogCommand}"
-                Width="24" Height="24">
-          <ui:Icon Template="{DynamicResource Icon.Outlined.Notification}"/>
-        </Button>
+        <ui:IconButton DefaultIcon="{StaticResource Icon.Outlined.Notification}"
+                       Command="{Binding ShowHideEventLogCommand}"
+                       Width="24" Height="24"/>
         <TextBlock Text="{Binding PreviousLogMessage}"
                    VerticalAlignment="Center"
                    Margin="5 0 0 0"/>

@@ -83,15 +83,19 @@
         <Compile Include="Extensions\ValidationBinding.cs" />
         <Compile Include="Mvvm\DialogViewModelBase.cs" />
         <Compile Include="Mvvm\NavigationViewModelBase.cs" />
+        <Compile Include="Mvvm\MvvmHelper.cs" />
         <Compile Include="Mvvm\ViewModelBase.cs" />
         <Compile Include="Naming\DialogName.cs" />
         <Compile Include="Naming\RegionName.cs" />
         <Compile Include="Naming\ViewName.cs" />
+        <Compile Include="Prism\DependentViewAttribute.cs" />
         <Compile Include="Prism\DialogServiceExtension.cs" />
         <Compile Include="Prism\ICreateScopedRegionManager.cs" />
         <Compile Include="Prism\IRegionManagerAware.cs" />
+        <Compile Include="Prism\ISupportDataContext.cs" />
+        <Compile Include="Prism\RegionBehaviors\DependentViewRegionBehavior.cs" />
+        <Compile Include="Prism\RegionBehaviors\RegionManagerAwareBehavior.cs" />
         <Compile Include="Prism\RegionManagerAware.cs" />
-        <Compile Include="Prism\RegionManagerAwareBehavior.cs" />
         <Compile Include="Prism\ScopedRegionNavigationContentLoader.cs" />
         <Compile Include="Properties\AssemblyInfo.cs">
             <SubType>Code</SubType>

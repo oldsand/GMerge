@@ -13,6 +13,7 @@ namespace GalaxyMerge.Client.Core.Naming
         public const string TabRegion = nameof(TabRegion);
         public const string NavigationRegion = nameof(NavigationRegion);
         public const string DetailsRegion = nameof(DetailsRegion);
+        public const string ButtonRegion = nameof(ButtonRegion);
         
         
         public const string ResourceSettingsTabRegion = nameof(ResourceSettingsTabRegion);

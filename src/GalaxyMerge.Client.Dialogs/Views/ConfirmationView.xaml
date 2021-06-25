@@ -51,15 +51,15 @@
     <StackPanel Grid.Row="2"
                 Orientation="Horizontal"
                 HorizontalAlignment="Right">
-      <Button Content="OK"
+      <Button Content="Yes"
               Height="26" Width="80"
               Margin="5"
-              Command="{Binding ConfirmCommand}" 
+              Command="{Binding YesCommand}" 
               Style="{StaticResource Style.Button.Primary}"/>
-      <Button Content="Cancel"
+      <Button Content="No"
               Height="26" Width="80"
               Margin="5"
-              Command="{Binding CancelDialogCommand}"
+              Command="{Binding NoCommand}"
               Style="{StaticResource Style.Button.Secondary}" />
     </StackPanel>
   </Grid>

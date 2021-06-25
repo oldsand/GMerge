@@ -1,4 +1,5 @@
 using GalaxyMerge.Client.Core.Naming;
+using GalaxyMerge.Client.Dialogs.Commands;
 using GalaxyMerge.Client.Dialogs.ViewModels;
 using GalaxyMerge.Client.Dialogs.Views;
 using Prism.Ioc;
@@ -9,15 +10,11 @@ namespace GalaxyMerge.Client.Dialogs
 {
     public class DialogModule : IModule
     {
-        private readonly IRegionManager _regionManager;
-
-        public DialogModule(IRegionManager regionManager)
-        {
-            _regionManager = regionManager;
-        }
-
+        
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
+            containerRegistry.RegisterSingleton<IDialogCommands, DialogCommands>();
+        
             containerRegistry.RegisterDialog<ConfirmationView, ConfirmationViewModel>(DialogName.ConfirmationDialog);
             containerRegistry.RegisterDialog<NewResourceDialog, NewResourceDialogModel>(DialogName.NewResourceDialog);
             containerRegistry.RegisterDialog<ResourceSettingsView, ResourceSettingsViewModel>(DialogName

@@ -7,6 +7,7 @@ using GalaxyMerge.Client.Core.Naming;
 using GalaxyMerge.Client.Core.Prism;
 using GalaxyMerge.Client.Data.Abstractions;
 using GalaxyMerge.Client.Data.Entities;
+using GalaxyMerge.Client.Events;
 using GalaxyMerge.Client.Wrappers;
 using GalaxyMerge.Client.Wrappers.Base;
 using NLog;
@@ -99,13 +100,22 @@ namespace GalaxyMerge.Client.Application.ViewModels
             
             _dialogService.ShowDialog(DialogName.NewResourceDialog, dialogResult =>
             {
-                Logger.Trace("Entering new resource command callback with result {ButtonResult}", dialogResult.Result);
+                Logger.Trace("Entering new resource command callback with result {Result}", dialogResult.Result);
+
+                if (dialogResult.Result == ButtonResult.Abort)
+                {
+                    //todo show error dialog
+                    return;
+                }
+                
                 if (dialogResult.Result != ButtonResult.OK) return;
 
                 var resource = dialogResult.Parameters.GetValue<ResourceEntryWrapper>("resource");
+                
+                Logger.Trace("Adding new resource {ResourceName} to resources collection", resource.ResourceName);
                 Resources.Add(resource);
                 Resources.AcceptChanges();
-                Logger.Trace("Added new resource {ResourceName} to resources collection", resource.ResourceName);
+                SelectedResourceEntry = resource;
             });
         }
 
@@ -139,11 +149,12 @@ namespace GalaxyMerge.Client.Application.ViewModels
                 SelectedResourceEntry.ResourceName);
 
             _dialogService.ShowConfirmation(
+                "Delete Resource Confirmation",
                 $"Are you sure you want to delete the resource '{SelectedResourceEntry.ResourceName}'?",
                 dialogResult =>
                 {
                     Logger.Trace("Entering delete resource command callback with result {ButtonResult}", dialogResult.Result);
-                    if (dialogResult.Result != ButtonResult.OK) return;
+                    if (dialogResult.Result != ButtonResult.Yes) return;
 
                     var resource = SelectedResourceEntry;
                     var resourceName = SelectedResourceEntry.ResourceName;

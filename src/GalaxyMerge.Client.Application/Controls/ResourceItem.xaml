@@ -49,7 +49,7 @@
 
       <ui:Icon Grid.Row="0" Grid.Column="0"
                Margin="10 0"
-               Template="{StaticResource Icon.Galaxy}" />
+               Template="{Binding ResourceType, Converter={ui:ResourceTypeIconConverter}}" />
 
       <TextBlock Grid.Row="0" Grid.Column="1"
                  Text="{Binding ResourceName}"

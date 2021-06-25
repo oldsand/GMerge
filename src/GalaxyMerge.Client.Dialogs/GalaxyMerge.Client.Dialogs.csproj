@@ -47,6 +47,8 @@
         <Reference Include="PresentationFramework" />
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Commands\DialogCommands.cs" />
+        <Compile Include="Commands\IDialogCommands.cs" />
         <Compile Include="Controls\SelectionControl.xaml.cs">
           <DependentUpon>SelectionControl.xaml</DependentUpon>
         </Compile>
@@ -60,6 +62,7 @@
             <DesignTime>True</DesignTime>
             <DependentUpon>Resources.resx</DependentUpon>
         </Compile>
+        <Compile Include="ViewModels\ButtonSaveBackViewModel.cs" />
         <Compile Include="ViewModels\ConfirmationViewModel.cs" />
         <Compile Include="ViewModels\NewResourceInfoViewModel.cs" />
         <Compile Include="ViewModels\NewResourceSelectionViewModel.cs" />
@@ -67,6 +70,9 @@
         <Compile Include="ViewModels\ResourceSettingsGeneralViewModel.cs" />
         <Compile Include="ViewModels\ResourceSettingsOptionsViewModel.cs" />
         <Compile Include="ViewModels\ResourceSettingsViewModel.cs" />
+        <Compile Include="Views\ButtonSaveBackView.xaml.cs">
+          <DependentUpon>ButtonSaveBackView.xaml</DependentUpon>
+        </Compile>
         <Compile Include="Views\ConfirmationView.xaml.cs">
           <DependentUpon>ConfirmationView.xaml</DependentUpon>
         </Compile>
@@ -101,6 +107,7 @@
     </ItemGroup>
     <ItemGroup>
       <Page Include="Controls\SelectionControl.xaml" />
+      <Page Include="Views\ButtonSaveBackView.xaml" />
       <Page Include="Views\ConfirmationView.xaml" />
       <Page Include="Views\NewResourceInfoView.xaml" />
       <Page Include="Views\NewResourceDialog.xaml" />
@@ -146,6 +153,9 @@
         <Project>{dd496472-fb15-4ffc-86ca-2ac8f0e6cf3c}</Project>
         <Name>GalaxyMerge.Core</Name>
       </ProjectReference>
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Events" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
