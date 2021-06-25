@@ -97,7 +97,7 @@ namespace GalaxyMerge.Client.Application.ViewModels
         {
             Logger.Trace("Executing new resource command. Showing dialog {DialogName}", DialogName.NewResourceDialog);
             
-            _dialogService.Show(DialogName.NewResourceDialog, dialogResult =>
+            _dialogService.ShowDialog(DialogName.NewResourceDialog, dialogResult =>
             {
                 Logger.Trace("Entering new resource command callback with result {ButtonResult}", dialogResult.Result);
                 if (dialogResult.Result != ButtonResult.OK) return;

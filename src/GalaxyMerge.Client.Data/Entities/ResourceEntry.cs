@@ -26,6 +26,8 @@ namespace GalaxyMerge.Client.Data.Entities
 
         public string ResourceDescription { get; set; }
 
+        public string ResourcePath => ResourceType.GetFormattedPath(this);
+
         public ResourceType ResourceType { get; }
 
         public DateTime AddedOn { get; }
@@ -40,21 +42,19 @@ namespace GalaxyMerge.Client.Data.Entities
 
         private void InitializeResource(ResourceType resourceType)
         {
-            switch (resourceType)
+            if (resourceType == ResourceType.Connection)
             {
-                case ResourceType.None:
-                    throw new InvalidOperationException("Cannot initialize resource entry with type set to 'None'");
-                case ResourceType.Connection:
-                    Connection = new ConnectionResource(this);
-                    break;
-                case ResourceType.Archive:
-                    Archive = new ArchiveResource(this);
-                    break;
-                case ResourceType.Directory:
-                    Directory = new DirectoryResource(this);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(resourceType), resourceType, null);
+                Connection = new ConnectionResource(this);
+            }
+
+            if (resourceType == ResourceType.Archive)
+            {
+                Archive = new ArchiveResource(this);
+            }
+            
+            if (resourceType == ResourceType.Directory)
+            {
+                Directory = new DirectoryResource(this);
             }
         }
     }

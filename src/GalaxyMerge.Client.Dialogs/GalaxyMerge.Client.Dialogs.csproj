@@ -47,7 +47,10 @@
         <Reference Include="PresentationFramework" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Design\DesignViewModels.cs" />
+        <Compile Include="Controls\SelectionControl.xaml.cs">
+          <DependentUpon>SelectionControl.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Design\DesignModels.cs" />
         <Compile Include="DialogModule.cs" />
         <Compile Include="Properties\AssemblyInfo.cs">
             <SubType>Code</SubType>
@@ -58,15 +61,23 @@
             <DependentUpon>Resources.resx</DependentUpon>
         </Compile>
         <Compile Include="ViewModels\ConfirmationViewModel.cs" />
-        <Compile Include="ViewModels\NewResourceViewModel.cs" />
+        <Compile Include="ViewModels\NewResourceInfoViewModel.cs" />
+        <Compile Include="ViewModels\NewResourceSelectionViewModel.cs" />
+        <Compile Include="ViewModels\NewResourceDialogModel.cs" />
         <Compile Include="ViewModels\ResourceSettingsGeneralViewModel.cs" />
         <Compile Include="ViewModels\ResourceSettingsOptionsViewModel.cs" />
         <Compile Include="ViewModels\ResourceSettingsViewModel.cs" />
         <Compile Include="Views\ConfirmationView.xaml.cs">
           <DependentUpon>ConfirmationView.xaml</DependentUpon>
         </Compile>
-        <Compile Include="Views\NewResourceView.xaml.cs">
-          <DependentUpon>NewResourceView.xaml</DependentUpon>
+        <Compile Include="Views\NewResourceInfoView.xaml.cs">
+          <DependentUpon>NewResourceInfoView.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Views\NewResourceDialog.xaml.cs">
+          <DependentUpon>NewResourceDialog.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Views\NewResourceSelectionView.xaml.cs">
+          <DependentUpon>NewResourceSelectionView.xaml</DependentUpon>
         </Compile>
         <Compile Include="Views\ResourceSettingsGeneralView.xaml.cs">
           <DependentUpon>ResourceSettingsGeneralView.xaml</DependentUpon>
@@ -85,11 +96,15 @@
     <ItemGroup>
       <PackageReference Include="NLog" Version="4.7.10" />
       <PackageReference Include="Prism.Core" Version="8.1.97" />
+      <PackageReference Include="Prism.DryIoc" Version="8.1.97" />
       <PackageReference Include="Prism.Wpf" Version="8.1.97" />
     </ItemGroup>
     <ItemGroup>
+      <Page Include="Controls\SelectionControl.xaml" />
       <Page Include="Views\ConfirmationView.xaml" />
-      <Page Include="Views\NewResourceView.xaml" />
+      <Page Include="Views\NewResourceInfoView.xaml" />
+      <Page Include="Views\NewResourceDialog.xaml" />
+      <Page Include="Views\NewResourceSelectionView.xaml" />
       <Page Include="Views\ResourceSettingsGeneralView.xaml" />
       <Page Include="Views\ResourceSettingsOptionsView.xaml" />
       <Page Include="Views\ResourceSettingsView.xaml" />
@@ -126,6 +141,10 @@
       <ProjectReference Include="..\GalaxyMerge.Client.Resources\GalaxyMerge.Client.Resources.csproj">
         <Project>{0db6d056-eee8-49e1-8ff5-c6edce7c48fc}</Project>
         <Name>GalaxyMerge.Client.Resources</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\GalaxyMerge.Core\GalaxyMerge.Core.csproj">
+        <Project>{dd496472-fb15-4ffc-86ca-2ac8f0e6cf3c}</Project>
+        <Name>GalaxyMerge.Core</Name>
       </ProjectReference>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

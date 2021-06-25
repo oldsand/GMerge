@@ -32,7 +32,9 @@ namespace GalaxyMerge.Client.Wrappers
             get => GetValue<string>();
             set => SetValue(value);
         }
-        
+
+        public string ResourcePath => Model.ResourcePath;
+
         public ResourceType ResourceType => Model.ResourceType;
         
         public DateTime AddedOn => Model.AddedOn;

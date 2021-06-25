@@ -1,0 +1,92 @@
+<UserControl x:Class="GalaxyMerge.Client.Dialogs.Views.NewResourceSelectionView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:design="clr-namespace:GalaxyMerge.Client.Dialogs.Design"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:ui="http://gmerge.com/ui/wpf"
+             xmlns:controls="clr-namespace:GalaxyMerge.Client.Dialogs.Controls"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             mc:Ignorable="d"
+             d:DesignHeight="600"
+             d:DesignWidth="450">
+
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/GalaxyMerge.Client.Resources;component/Resources.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+      <design:DesignModels x:Key="DesignModels" />
+
+      <Style TargetType="{x:Type RadioButton}">
+        <Setter Property="Background" Value="{ui:ThemeResource ResourceKey=ControlBackground}" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="Margin" Value="10" />
+        <Setter Property="Template">
+          <Setter.Value>
+            <ControlTemplate TargetType="{x:Type RadioButton}">
+              <Border Background="{TemplateBinding Background}"
+                      BorderBrush="{TemplateBinding BorderBrush}"
+                      BorderThickness="{TemplateBinding BorderThickness}">
+                <ContentPresenter Margin="{TemplateBinding Padding}" />
+              </Border>
+              <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                  <Setter Property="BorderBrush" Value="{ui:ThemeResource ResourceKey=ControlFocusBorder}" />
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                  <Setter Property="Opacity" Value="{ui:ThemeResource ResourceKey=ControlDisabledOpacity}" />
+                </Trigger>
+              </ControlTemplate.Triggers>
+            </ControlTemplate>
+          </Setter.Value>
+        </Setter>
+      </Style>
+    </ResourceDictionary>
+  </UserControl.Resources>
+
+  <Grid d:DataContext="{Binding Source={StaticResource DesignModels}, Path=NewResourceSelectionViewModel}">
+    <Grid Grid.Row="0" Margin="20">
+      <Grid.RowDefinitions>
+        <RowDefinition />
+        <RowDefinition />
+        <RowDefinition />
+      </Grid.RowDefinitions>
+
+      <RadioButton Grid.Row="0"
+                   Margin="20"
+                   Padding="10"
+                   GroupName="ResourceSelection"
+                   Command="{Binding ResourceTypeSelectionCommand}" CommandParameter="Connection">
+        <controls:SelectionControl
+          SelectionTitle="Galaxy Connection"
+          SelectionDescription="Connect to a local or remote galaxy repository. This resource will allow you to browse and manage both Archestra objects and graphics."
+          IconTemplate="{StaticResource Icon.Filled.Plug}" />
+      </RadioButton>
+
+      <RadioButton Grid.Row="1"
+                   Margin="20"
+                   Padding="10"
+                   GroupName="ResourceSelection"
+                   Command="{Binding ResourceTypeSelectionCommand}" CommandParameter="Archive">
+        <controls:SelectionControl
+          SelectionTitle="Archive Database"
+          SelectionDescription="Connect to a local or remote galaxy repository. This resource will allow you to browse and manage both Archestra objects and graphics."
+          IconTemplate="{StaticResource Icon.Filled.Database}" />
+      </RadioButton>
+
+      <RadioButton Grid.Row="2"
+                   Margin="20"
+                   Padding="10"
+                   GroupName="ResourceSelection"
+                   Command="{Binding ResourceTypeSelectionCommand}" CommandParameter="Directory">
+        <controls:SelectionControl
+          SelectionTitle="File Directory"
+          SelectionDescription="Connect to a local or remote galaxy repository. This resource will allow you to browse and manage both Archestra objects and graphics."
+          IconTemplate="{StaticResource Icon.Filled.Folder}" />
+      </RadioButton>
+    </Grid>
+  </Grid>
+</UserControl>

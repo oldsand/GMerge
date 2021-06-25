@@ -39,7 +39,7 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
         {
             var parameters = new NavigationParameters {{"resource", ResourceEntry}};
 
-            switch (ResourceEntry.ResourceType)
+            /*switch (ResourceEntry.ResourceType)
             {
                 case ResourceType.None:
                     break;
@@ -55,7 +55,7 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
-            }
+            }*/
         }
 
         public void OnNavigatedTo(NavigationContext navigationContext)

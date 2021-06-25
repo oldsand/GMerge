@@ -71,6 +71,10 @@
         <Project>{04b42b6e-dd66-49a8-84e8-bb2743293330}</Project>
         <Name>GalaxyMerge.Client.Data</Name>
       </ProjectReference>
+      <ProjectReference Include="..\GalaxyMerge.Core\GalaxyMerge.Core.csproj">
+        <Project>{dd496472-fb15-4ffc-86ca-2ac8f0e6cf3c}</Project>
+        <Name>GalaxyMerge.Core</Name>
+      </ProjectReference>
       <ProjectReference Include="..\GalaxyMerge.Primitives\GalaxyMerge.Primitives.csproj">
         <Project>{446fe87c-5122-4344-9df9-9f641e81a476}</Project>
         <Name>GalaxyMerge.Primitives</Name>

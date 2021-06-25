@@ -16,7 +16,7 @@
       <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/GalaxyMerge.Client.Resources;component/Resources.xaml" />
       </ResourceDictionary.MergedDictionaries>
-      <design:DesignViewModels x:Key="DesignModels" />
+      <design:DesignModels x:Key="DesignModels" />
 
       <Style x:Key="LocalDialogStyle" BasedOn="{StaticResource DialogStyle}" TargetType="{x:Type Window}">
         <Setter Property="Title" Value="Select New Resource" />

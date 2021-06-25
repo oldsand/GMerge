@@ -14,14 +14,7 @@ namespace GalaxyMerge.Client.Converters
             if (value is not ResourceType resourceType)
                 throw new InvalidOperationException("Value must be of type ResourceType");
 
-            return resourceType switch
-            {
-                ResourceType.Connection => ResourceFinder.Find<ControlTemplate>("Icon.Filled.Plug"),
-                ResourceType.Archive => ResourceFinder.Find<ControlTemplate>("Icon.Filled.Database"),
-                ResourceType.Directory => ResourceFinder.Find<ControlTemplate>("Icon.Filled.Folder"),
-                ResourceType.None => ResourceFinder.Find<ControlTemplate>("Icon.Blank"),
-                _ => throw new ArgumentOutOfRangeException()
-            };
+            return ResourceFinder.Find<ControlTemplate>(resourceType.GetIconTemplateName());
         }
 
         public override object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

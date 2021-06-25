@@ -1,6 +1,6 @@
 namespace GalaxyMerge.Client.Data.Entities
 {
-    public class ConnectionResource
+    public class ConnectionResource : IResourceInfo
     {
         public ConnectionResource()
         {

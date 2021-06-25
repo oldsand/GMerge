@@ -74,11 +74,12 @@
                    VerticalAlignment="Center"
                    TextTrimming="CharacterEllipsis"
                    ToolTip="{Binding ResourceDescription}"/>
-        <TextBlock Grid.Row="1" Text="ResourcePath"
+        <TextBlock Grid.Row="1" Text="{Binding ResourcePath}"
                    Style="{StaticResource Text.Label}"
                    VerticalAlignment="Center"
                    Margin="0 2"
-                   TextTrimming="CharacterEllipsis"/>
+                   TextTrimming="CharacterEllipsis"
+                   ToolTip="{Binding ResourcePath}"/>
       </Grid>
     </Grid>
 

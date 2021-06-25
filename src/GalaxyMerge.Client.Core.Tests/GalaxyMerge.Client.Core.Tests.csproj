@@ -52,6 +52,10 @@
         <Project>{a52fad8f-28b0-4527-9937-ad3885eeccc9}</Project>
         <Name>GalaxyMerge.Client.Core</Name>
       </ProjectReference>
+      <ProjectReference Include="..\GalaxyMerge.Client.Data\GalaxyMerge.Client.Data.csproj">
+        <Project>{04b42b6e-dd66-49a8-84e8-bb2743293330}</Project>
+        <Name>GalaxyMerge.Client.Data</Name>
+      </ProjectReference>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

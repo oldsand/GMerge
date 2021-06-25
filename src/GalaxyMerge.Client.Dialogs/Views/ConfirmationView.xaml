@@ -54,7 +54,8 @@
       <Button Content="OK"
               Height="26" Width="80"
               Margin="5"
-              Command="{Binding ConfirmCommand}" />
+              Command="{Binding ConfirmCommand}" 
+              Style="{StaticResource Style.Button.Primary}"/>
       <Button Content="Cancel"
               Height="26" Width="80"
               Margin="5"

@@ -1,17 +1,21 @@
 ﻿using System;
+using GalaxyMerge.Client.Core.Prism;
 using Prism.Commands;
+using Prism.Regions;
 using Prism.Services.Dialogs;
 
 namespace GalaxyMerge.Client.Core.Mvvm
 {
-    public class DialogViewModelBase : ViewModelBase, IDialogAware
+    public class DialogViewModelBase : ViewModelBase, IDialogAware, IRegionManagerAware
     {
         private DelegateCommand _cancelDialogCommand;
-
         public DelegateCommand CancelDialogCommand =>
             _cancelDialogCommand ??= new DelegateCommand(ExecuteCancelDialog);
+        
+        public IRegionManager RegionManager { get; set; }
 
         public event Action<IDialogResult> RequestClose;
+
 
         protected virtual void ExecuteCancelDialog()
         {
