@@ -6,21 +6,44 @@
              xmlns:ui="http://gmerge.com/ui/wpf"
              xmlns:prism="http://prismlibrary.com/"
              xmlns:vm="clr-namespace:GalaxyMerge.Client.Dialogs.ViewModels"
+             xmlns:design="clr-namespace:GalaxyMerge.Client.Dialogs.Design"
              prism:ViewModelLocator.AutoWireViewModel="True"
              d:DataContext="{d:DesignInstance vm:ResourceSettingsGeneralViewModel, IsDesignTimeCreatable=True}"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="400" d:DesignWidth="500">
   <UserControl.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/GalaxyMerge.Client.Resources;component/Resources.xaml" />
       </ResourceDictionary.MergedDictionaries>
+      <design:DesignModels x:Key="DesignModel" />
     </ResourceDictionary>
   </UserControl.Resources>
-  
-  <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center"
-              Background="{ui:ThemeResource ResourceKey=PrimaryBackground}">
-    <TextBlock Text="General View" Margin="10"/>
-    <TextBlock Text="{Binding ResourceEntryWrapper.ResourceName}" Margin="10" />
-  </StackPanel>
+
+  <Grid d:DataContext="{Binding Source={StaticResource DesignModel}, Path=ResourceSettingsGeneralViewModel}"
+        Background="{ui:ThemeResource ResourceKey=PrimaryBackground}">
+    
+
+    <StackPanel x:Name="ConnectionPanel"
+                Visibility="{Binding ResourceEntry.ResourceType, Converter={ui:EnumVisibilityConverter}, ConverterParameter=Connection}" >
+      <ui:FormControl LabelText="Host" Orientation="Horizontal">
+        <TextBox Text="{Binding ResourceEntry.Connection.NodeName}"
+                 Margin="10 0" />
+      </ui:FormControl>
+      <ui:FormControl LabelText="Galaxy" Orientation="Horizontal">
+        <TextBox Text="{Binding ResourceEntry.Connection.GalaxyName}"
+                 Margin="10 0" />
+      </ui:FormControl>
+    </StackPanel>
+    
+    <StackPanel x:Name="ArchivePanel"
+                Visibility="{Binding ResourceEntry.ResourceType, Converter={ui:EnumVisibilityConverter}, ConverterParameter=Archive}" >
+      <ui:FormControl LabelText="File" Orientation="Horizontal">
+        <TextBox Text="{Binding ResourceEntry.ResourceName}"
+                 Margin="10 0" />
+      </ui:FormControl>
+    </StackPanel>
+
+  </Grid>
+
 </UserControl>

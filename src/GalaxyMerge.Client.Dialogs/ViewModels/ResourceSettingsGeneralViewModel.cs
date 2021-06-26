@@ -1,3 +1,4 @@
+using System;
 using GalaxyMerge.Client.Core.Mvvm;
 using GalaxyMerge.Client.Data.Entities;
 using GalaxyMerge.Client.Wrappers;
@@ -7,26 +8,27 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
 {
     public class ResourceSettingsGeneralViewModel : NavigationViewModelBase
     {
-        private string _tabLabel = "General";
-        private ResourceEntryWrapper _resourceEntryWrapper;
+        
+        private ResourceEntryWrapper _resourceEntry;
 
-        public string TabLabel
+        public ResourceEntryWrapper ResourceEntry
         {
-            get => _tabLabel;
-            set => SetProperty(ref _tabLabel, value);
-        }
-
-        public ResourceEntryWrapper ResourceEntryWrapper
-        {
-            get => _resourceEntryWrapper;
-            set => SetProperty(ref _resourceEntryWrapper, value);
+            get => _resourceEntry;
+            set => SetProperty(ref _resourceEntry, value);
         }
         
 
         public override void OnNavigatedTo(NavigationContext navigationContext)
         {
+            Title = "General";
+            
             var resource = navigationContext.Parameters.GetValue<ResourceEntry>("resource");
-            ResourceEntryWrapper = new ResourceEntryWrapper(resource);
+            if (resource == null)
+                throw new ArgumentNullException(nameof(resource), @"ResourceEntryWrapper cannot be null");
+            
+            ResourceEntry = new ResourceEntryWrapper(resource);
         }
+        
+        
     }
 }

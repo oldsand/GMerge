@@ -17,7 +17,7 @@ namespace GalaxyMerge.Client.Dialogs
         
             containerRegistry.RegisterDialog<ConfirmationView, ConfirmationViewModel>(DialogName.ConfirmationDialog);
             containerRegistry.RegisterDialog<NewResourceDialog, NewResourceDialogModel>(DialogName.NewResourceDialog);
-            containerRegistry.RegisterDialog<ResourceSettingsView, ResourceSettingsViewModel>(DialogName
+            containerRegistry.RegisterDialog<ResourceSettingsDialog, ResourceSettingsDialogModel>(DialogName
                 .ResourceSettingsDialog);
 
 
@@ -25,7 +25,7 @@ namespace GalaxyMerge.Client.Dialogs
                 ViewName.NewResourceSelectionView);
             containerRegistry.RegisterForNavigation<NewResourceInfoView, NewResourceInfoViewModel>(
                 ViewName.NewResourceInfoView);
-            containerRegistry.RegisterForNavigation<ResourceSettingsView, ResourceSettingsViewModel>(
+            containerRegistry.RegisterForNavigation<ResourceSettingsDialog, ResourceSettingsDialogModel>(
                 ViewName.ResourceSettingsView);
             containerRegistry.RegisterForNavigation<ResourceSettingsGeneralView, ResourceSettingsGeneralViewModel>(
                 ViewName.ResourceSettingsGeneralView);

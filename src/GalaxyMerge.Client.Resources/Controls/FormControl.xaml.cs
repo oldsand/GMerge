@@ -1,3 +1,4 @@
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Markup;
@@ -13,28 +14,28 @@ namespace GalaxyMerge.Client.Resources.Controls
 
         public static readonly DependencyProperty OrientationProperty =
             DependencyProperty.Register(nameof(Orientation), typeof(Orientation), typeof(FormControl),
-                new PropertyMetadata(Orientation.Vertical));
+                new PropertyMetadata(Orientation.Vertical, OnOrientationChanged));
 
         public static readonly DependencyProperty LabelTextProperty =
             DependencyProperty.Register(nameof(LabelText), typeof(string), typeof(FormControl),
-                new PropertyMetadata("Label"));
+                new PropertyMetadata(default(string)));
 
         public static readonly DependencyProperty CaptionTextProperty =
             DependencyProperty.Register(nameof(CaptionText), typeof(string), typeof(FormControl),
-                new PropertyMetadata("Caption"));
+                new PropertyMetadata(default(string)));
 
         public static readonly DependencyProperty HasErrorProperty =
             DependencyProperty.Register(nameof(HasError), typeof(bool), typeof(FormControl),
                 new PropertyMetadata(default(bool)));
 
-        public string Error
+        public string ErrorMessage
         {
-            get => (string) GetValue(ErrorProperty);
-            set => SetValue(ErrorProperty, value);
+            get => (string) GetValue(ErrorMessageProperty);
+            set => SetValue(ErrorMessageProperty, value);
         }
 
-        public static readonly DependencyProperty ErrorProperty =
-            DependencyProperty.Register(nameof(Error), typeof(string), typeof(FormControl),
+        public static readonly DependencyProperty ErrorMessageProperty =
+            DependencyProperty.Register(nameof(ErrorMessage), typeof(string), typeof(FormControl),
                 new PropertyMetadata(default(string)));
 
         public FormControl()
@@ -47,7 +48,7 @@ namespace GalaxyMerge.Client.Resources.Controls
         private void OnValidationError(object sender, ValidationErrorEventArgs e)
         {
             HasError = e.Action == ValidationErrorEventAction.Added;
-            Error = e.Error.ErrorContent.ToString();
+            ErrorMessage = e.Error.ErrorContent.ToString();
         }
 
         public new object Content
@@ -80,9 +81,17 @@ namespace GalaxyMerge.Client.Resources.Controls
             set => SetValue(HasErrorProperty, value);
         }
 
-        /*public string this[string columnName] =>
-            Validation.GetHasError(this) ? Validation.GetErrors(this)[0].ErrorContent.ToString() : null;
+        private static void OnOrientationChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is not UserControl control) return;
+            
+            var formLabel = control.FindName("FormLabel");
+            if (formLabel is not Label label) return;
+            
+            var orientation = (Orientation) e.NewValue;
 
-        public string Error { get; private set; }*/
+            Grid.SetRow(label, orientation == Orientation.Horizontal ? 1 : 0);
+            Grid.SetColumn(label, orientation == Orientation.Horizontal ? 0 : 1);
+        }
     }
 }

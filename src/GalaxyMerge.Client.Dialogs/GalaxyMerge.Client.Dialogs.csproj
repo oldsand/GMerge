@@ -69,7 +69,7 @@
         <Compile Include="ViewModels\NewResourceDialogModel.cs" />
         <Compile Include="ViewModels\ResourceSettingsGeneralViewModel.cs" />
         <Compile Include="ViewModels\ResourceSettingsOptionsViewModel.cs" />
-        <Compile Include="ViewModels\ResourceSettingsViewModel.cs" />
+        <Compile Include="ViewModels\ResourceSettingsDialogModel.cs" />
         <Compile Include="Views\ButtonSaveBackView.xaml.cs">
           <DependentUpon>ButtonSaveBackView.xaml</DependentUpon>
         </Compile>
@@ -91,8 +91,8 @@
         <Compile Include="Views\ResourceSettingsOptionsView.xaml.cs">
           <DependentUpon>ResourceSettingsOptionsView.xaml</DependentUpon>
         </Compile>
-        <Compile Include="Views\ResourceSettingsView.xaml.cs">
-          <DependentUpon>ResourceSettingsView.xaml</DependentUpon>
+        <Compile Include="Views\ResourceSettingsDialog.xaml.cs">
+          <DependentUpon>ResourceSettingsDialog.xaml</DependentUpon>
         </Compile>
         <EmbeddedResource Include="Properties\Resources.resx">
             <Generator>ResXFileCodeGenerator</Generator>
@@ -114,7 +114,7 @@
       <Page Include="Views\NewResourceSelectionView.xaml" />
       <Page Include="Views\ResourceSettingsGeneralView.xaml" />
       <Page Include="Views\ResourceSettingsOptionsView.xaml" />
-      <Page Include="Views\ResourceSettingsView.xaml" />
+      <Page Include="Views\ResourceSettingsDialog.xaml" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\GalaxyMerge.Client.Contracts\GalaxyMerge.Client.Contracts.csproj">
@@ -153,9 +153,6 @@
         <Project>{dd496472-fb15-4ffc-86ca-2ac8f0e6cf3c}</Project>
         <Name>GalaxyMerge.Core</Name>
       </ProjectReference>
-    </ItemGroup>
-    <ItemGroup>
-      <Folder Include="Events" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

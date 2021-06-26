@@ -1,15 +1,26 @@
 using GalaxyMerge.Client.Core.Mvvm;
+using GalaxyMerge.Client.Wrappers;
+using Prism.Regions;
 
 namespace GalaxyMerge.Client.Dialogs.ViewModels
 {
-    public class ResourceSettingsOptionsViewModel : ViewModelBase
+    public class ResourceSettingsOptionsViewModel : NavigationViewModelBase
     {
-        private string _tabLabel = "Options";
+        private ResourceEntryWrapper _resourceEntry;
 
-        public string TabLabel
+        public ResourceEntryWrapper ResourceEntry
         {
-            get => _tabLabel;
-            set => SetProperty(ref _tabLabel, value);
+            get => _resourceEntry;
+            set => SetProperty(ref _resourceEntry, value);
+        }
+
+        public override void OnNavigatedTo(NavigationContext navigationContext)
+        {
+            Title = "Options";
+            
+            var resource = navigationContext.Parameters.GetValue<ResourceEntryWrapper>("resource");
+            if (resource == null) return;
+            ResourceEntry = resource;
         }
     }
 }

@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:t="clr-namespace:GalaxyMerge.Client.Resources.Theming"
              xmlns:ui="http://gmerge.com/ui/wpf"
+             xmlns:controls="clr-namespace:GalaxyMerge.Client.Resources.Controls"
              x:Name="FormControlRoot"
              Validation.ErrorTemplate="{x:Null}"
              mc:Ignorable="d"
@@ -30,38 +31,58 @@
           <Trigger Property="IsEnabled" Value="False">
             <Setter Property="Opacity" Value="{t:ThemeResource ResourceKey=ControlDisabledOpacity}" />
           </Trigger>
+          <!--<DataTrigger Binding="{Binding ElementName=FormControlRoot, Path=HasError}" Value="True">
+            <Setter Property="Content" Value="{Binding ElementName=FormControlRoot, Path=ErrorMessage}" />
+            <Setter Property="Foreground" Value="{t:ThemeResource ErrorBrush}" />
+          </DataTrigger>-->
         </Style.Triggers>
       </Style>
     </ResourceDictionary>
   </UserControl.Resources>
 
-  <StackPanel Orientation="{Binding ElementName=FormControlRoot, Path=Orientation}">
-    <Label
-      Content="{Binding ElementName=FormControlRoot, Path=LabelText}"
-      IsEnabled="{Binding ElementName=FormControlRoot, Path=IsEnabled}"
-      Style="{StaticResource LabelStyle}" 
-      Padding="0"/>
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition />
+      <RowDefinition />
+    </Grid.RowDefinitions>
 
-    <StackPanel>
-      <ContentPresenter HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch"
-                        Content="{Binding ElementName=FormControlRoot, 
-                        Path=Content}"/>
-      <Grid>
-        <Label
-          Content="{Binding ElementName=FormControlRoot, Path=CaptionText}"
-          Style="{StaticResource CaptionStyle}"
-          IsEnabled="{Binding ElementName=FormControlRoot, Path=IsEnabled}"
-          Visibility="{Binding ElementName=FormControlRoot, Path=HasError, Converter={ui:BooleanVisibilityConverter IsInverse=True}}" 
-          Padding="0"/>
-        <Label
-          Content="{Binding ElementName=FormControlRoot, Path=Error}"
-          Style="{StaticResource CaptionStyle}"
-          Foreground="{t:ThemeResource ResourceKey=ErrorBrush}"
-          IsEnabled="{Binding ElementName=FormControlRoot, Path=IsEnabled}"
-          Visibility="{Binding ElementName=FormControlRoot, Path=HasError, Converter={ui:BooleanVisibilityConverter}}"
-          Padding="0"/>
-      </Grid>
-    </StackPanel>
-  </StackPanel>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="Auto" />
+      <ColumnDefinition />
+    </Grid.ColumnDefinitions>
+
+    <Label x:Name="FormLabel"
+           Grid.Row="0"
+           Grid.Column="1"
+           VerticalAlignment="Center"
+           HorizontalAlignment="Left"
+           Content="{Binding ElementName=FormControlRoot, Path=LabelText}"
+           IsEnabled="{Binding ElementName=FormControlRoot, Path=IsEnabled}"
+           Style="{StaticResource LabelStyle}"
+           Padding="0" />
+
+    <ContentPresenter Grid.Row="1"
+                      Grid.Column="1"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch"
+                      Content="{Binding ElementName=FormControlRoot, Path=Content}" />
+
+    <Grid Grid.Row="2"
+          Grid.Column="1">
+      <Label
+        Content="{Binding ElementName=FormControlRoot, Path=CaptionText}"
+        Style="{StaticResource CaptionStyle}"
+        IsEnabled="{Binding ElementName=FormControlRoot, Path=IsEnabled}"
+        Visibility="{Binding ElementName=FormControlRoot, Path=HasError, Converter={ui:BooleanVisibilityConverter IsInverse=True}}"
+        Padding="0" />
+      <Label
+        Content="{Binding ElementName=FormControlRoot, Path=ErrorMessage}"
+        Style="{StaticResource CaptionStyle}"
+        Foreground="{t:ThemeResource ResourceKey=ErrorBrush}"
+        IsEnabled="{Binding ElementName=FormControlRoot, Path=IsEnabled}"
+        Visibility="{Binding ElementName=FormControlRoot, Path=HasError, Converter={ui:BooleanVisibilityConverter}}"
+        Padding="0" />
+    </Grid>
+  </Grid>
 </UserControl>

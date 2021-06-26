@@ -24,7 +24,6 @@
         </Trigger>
       </Style.Triggers>
     </Style>
-
   </UserControl.Style>
 
   <Grid d:DataContext="{Binding Source={StaticResource DesignModels}, Path=ResourceEntry}">

@@ -31,7 +31,7 @@
         <ui:IconButton
           Margin="10 0"
           DefaultIcon="{StaticResource Icon.Filled.Cog}"
-          IsEnabled="{Binding ElementName=EnabledInput, Path=IsChecked}"/>
+          IsEnabled="{Binding ElementName=EnabledInput, Path=IsChecked}" />
         <ui:IconButton
           Margin="10 0"
           DefaultIcon="{StaticResource Icon.Outlined.Database}"
@@ -42,7 +42,7 @@
           DefaultIcon="{StaticResource Icon.Outlined.Plug}"
           MouseOverIcon="{StaticResource Icon.Filled.Plug}"
           IsEnabled="{Binding ElementName=EnabledInput, Path=IsChecked}" />
-        
+
       </StackPanel>
     </Border>
 
@@ -134,11 +134,21 @@
                      IsEnabled="{Binding ElementName=EnabledInput, Path=IsChecked}"
                      Height="30" />
 
-            <ui:FormControl Margin="10"
-                            Orientation="Horizontal"
+            <ui:FormControl x:Name="FormControl"
+                            Margin="10"
+                            LabelText="Name:"
                             IsEnabled="{Binding ElementName=EnabledInput, Path=IsChecked}">
-              <TextBox Height="60" Margin="0 3 0 1"/> 
+              <TextBox Margin="0 5 0 3" Height="26" />
             </ui:FormControl>
+
+            <Button x:Name="Button"
+                    Click="Button_OnClick"
+                    Margin="10"
+                    Height="30" Width="100"
+              Content="Change Orientation"
+              HorizontalAlignment="Left"
+              Style="{StaticResource Style.Button.Secondary}"
+              IsEnabled="{Binding ElementName=EnabledInput, Path=IsChecked}" />
           </StackPanel>
         </Grid>
 
@@ -150,29 +160,29 @@
             <ColumnDefinition />
             <ColumnDefinition />
           </Grid.ColumnDefinitions>
-          
+
           <GroupBox Grid.Column="0" Header="Standard">
             <WrapPanel>
               <ui:Icon Margin="5" Template="{StaticResource Icon.Filled.Plug}" />
-              <ui:Icon Margin="5" Template="{StaticResource Icon.Filled.Database}" />  
+              <ui:Icon Margin="5" Template="{StaticResource Icon.Filled.Database}" />
             </WrapPanel>
           </GroupBox>
-          
+
           <GroupBox Grid.Column="1" Header="Filled">
             <WrapPanel>
               <ui:Icon Margin="5" Template="{StaticResource Icon.Filled.Plug}" />
-              <ui:Icon Margin="5" Template="{StaticResource Icon.Filled.Database}" />  
+              <ui:Icon Margin="5" Template="{StaticResource Icon.Filled.Database}" />
             </WrapPanel>
           </GroupBox>
-          
+
           <GroupBox Grid.Column="2" Header="Outlined">
             <WrapPanel>
               <ui:Icon Margin="5" Template="{StaticResource Icon.Filled.Plug}" />
-              <ui:Icon Margin="5" Template="{StaticResource Icon.Filled.Database}" />  
+              <ui:Icon Margin="5" Template="{StaticResource Icon.Filled.Database}" />
             </WrapPanel>
           </GroupBox>
         </Grid>
-        
+
       </TabItem>
       <TabItem Height="30" Width="80" Header="Lists" />
       <TabItem Height="30" Width="80" Header="DataGrid" />
