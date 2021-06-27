@@ -34,11 +34,11 @@ namespace GalaxyMerge.Client.Data.Entities
 
         public string AddedBy { get; }
 
-        public virtual ConnectionResource Connection { get; private set; }
+        public ConnectionResource Connection { get; private set; }
 
-        public virtual ArchiveResource Archive { get; private set; }
+        public ArchiveResource Archive { get; private set; }
 
-        public virtual DirectoryResource Directory { get; private set; }
+        public DirectoryResource Directory { get; private set; }
 
         private void InitializeResource(ResourceType resourceType)
         {

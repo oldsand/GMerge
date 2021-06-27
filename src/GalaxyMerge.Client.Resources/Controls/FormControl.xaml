@@ -31,10 +31,6 @@
           <Trigger Property="IsEnabled" Value="False">
             <Setter Property="Opacity" Value="{t:ThemeResource ResourceKey=ControlDisabledOpacity}" />
           </Trigger>
-          <!--<DataTrigger Binding="{Binding ElementName=FormControlRoot, Path=HasError}" Value="True">
-            <Setter Property="Content" Value="{Binding ElementName=FormControlRoot, Path=ErrorMessage}" />
-            <Setter Property="Foreground" Value="{t:ThemeResource ErrorBrush}" />
-          </DataTrigger>-->
         </Style.Triggers>
       </Style>
     </ResourceDictionary>
@@ -42,14 +38,14 @@
 
   <Grid>
     <Grid.RowDefinitions>
-      <RowDefinition Height="Auto" />
-      <RowDefinition />
-      <RowDefinition />
+      <RowDefinition x:Name="Row1" Height="Auto" />
+      <RowDefinition x:Name="Row2" />
+      <RowDefinition x:Name="Row3" />
     </Grid.RowDefinitions>
 
     <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="Auto" />
-      <ColumnDefinition />
+      <ColumnDefinition x:Name="Column1" Width="Auto" />
+      <ColumnDefinition x:Name="Column2"/>
     </Grid.ColumnDefinitions>
 
     <Label x:Name="FormLabel"

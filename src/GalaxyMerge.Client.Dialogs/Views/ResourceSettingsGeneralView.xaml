@@ -26,20 +26,38 @@
 
     <StackPanel x:Name="ConnectionPanel"
                 Visibility="{Binding ResourceEntry.ResourceType, Converter={ui:EnumVisibilityConverter}, ConverterParameter=Connection}" >
-      <ui:FormControl LabelText="Host" Orientation="Horizontal">
-        <TextBox Text="{Binding ResourceEntry.Connection.NodeName}"
+      <ui:FormControl LabelText="Host" 
+                      Orientation="Horizontal"
+                      Margin="20 0 20 20"
+                      LabelWidth="100">
+        <TextBox Text="{Binding ResourceEntry.Connection.NodeName, UpdateSourceTrigger=PropertyChanged}"
+                 Height="26" 
+                 Width="200"
+                 HorizontalAlignment="Left"
                  Margin="10 0" />
       </ui:FormControl>
-      <ui:FormControl LabelText="Galaxy" Orientation="Horizontal">
-        <TextBox Text="{Binding ResourceEntry.Connection.GalaxyName}"
+      <ui:FormControl LabelText="Galaxy" 
+                      Orientation="Horizontal"
+                      Margin="20 0 20 20"
+                      LabelWidth="100">
+        <TextBox Text="{Binding ResourceEntry.Connection.GalaxyName, UpdateSourceTrigger=PropertyChanged}"
+                 Height="26" 
+                 Width="200"
+                 HorizontalAlignment="Left"
                  Margin="10 0" />
       </ui:FormControl>
     </StackPanel>
     
     <StackPanel x:Name="ArchivePanel"
                 Visibility="{Binding ResourceEntry.ResourceType, Converter={ui:EnumVisibilityConverter}, ConverterParameter=Archive}" >
-      <ui:FormControl LabelText="File" Orientation="Horizontal">
-        <TextBox Text="{Binding ResourceEntry.ResourceName}"
+      <ui:FormControl LabelText="File" 
+                      Orientation="Horizontal"
+                      Margin="20 0 20 20"
+                      LabelWidth="100">
+        <TextBox Text="{Binding ResourceEntry.Archive.FileName}"
+                 Height="26" 
+                 Width="200"
+                 HorizontalAlignment="Left"
                  Margin="10 0" />
       </ui:FormControl>
     </StackPanel>

@@ -22,11 +22,8 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
         {
             Title = "General";
             
-            var resource = navigationContext.Parameters.GetValue<ResourceEntry>("resource");
-            if (resource == null)
-                throw new ArgumentNullException(nameof(resource), @"ResourceEntryWrapper cannot be null");
-            
-            ResourceEntry = new ResourceEntryWrapper(resource);
+            var resource = navigationContext.Parameters.GetValue<ResourceEntryWrapper>("resource");
+            ResourceEntry = resource ?? throw new ArgumentNullException(nameof(resource), @"ResourceEntryWrapper cannot be null");
         }
         
         

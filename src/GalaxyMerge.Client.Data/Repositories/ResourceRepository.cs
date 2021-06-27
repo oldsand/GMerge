@@ -61,7 +61,11 @@ namespace GalaxyMerge.Client.Data.Repositories
 
         public async Task<IEnumerable<ResourceEntry>> GetAllAsync()
         {
-            return await _context.Set<ResourceEntry>().ToListAsync();
+            return await _context.Set<ResourceEntry>()
+                .Include(x => x.Connection)
+                .Include(x => x.Archive)
+                .Include(x => x.Directory)
+                .ToListAsync();
         }
 
         public void Add(ResourceEntry resourceEntry)

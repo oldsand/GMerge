@@ -1,3 +1,4 @@
+using System;
 using GalaxyMerge.Client.Core.Mvvm;
 using GalaxyMerge.Client.Wrappers;
 using Prism.Regions;
@@ -19,8 +20,7 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
             Title = "Options";
             
             var resource = navigationContext.Parameters.GetValue<ResourceEntryWrapper>("resource");
-            if (resource == null) return;
-            ResourceEntry = resource;
+            ResourceEntry = resource ?? throw new ArgumentNullException(nameof(resource), @"ResourceEntryWrapper cannot be null");
         }
     }
 }

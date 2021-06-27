@@ -36,33 +36,40 @@
     </Grid.RowDefinitions>
     
     <StackPanel Grid.Row="0" Margin="0 20">
-      <ui:FormControl LabelText="Name" Orientation="Horizontal"
-                      Margin="20 0 20 20">
-        <TextBox Text="{Binding ResourceEntry.ResourceName}"
+      <ui:FormControl LabelText="Name" 
+                      Orientation="Horizontal"
+                      Margin="20 0 20 20"
+                      LabelWidth="100">
+        <TextBox Text="{Binding ResourceEntry.ResourceName, UpdateSourceTrigger=PropertyChanged}"
                  Height="26" 
                  Width="200"
+                 HorizontalAlignment="Left"
                  Margin="10 0" />
       </ui:FormControl>
       
-      <ui:FormControl LabelText="Description" Orientation="Horizontal"
-                      Margin="20 0 20 20">
-        <TextBox Text="{Binding ResourceEntry.ResourceDescription}"
-                 Height="26"
-                 Margin="10 0" />
-      </ui:FormControl>
-      
-      <ui:FormControl LabelText="AddedBy" 
+      <ui:FormControl LabelText="Description" 
                       Orientation="Horizontal"
-                      Margin="20 0 20 20">
+                      Margin="20 0 20 20"
+                      LabelWidth="100">
+        <TextBox Text="{Binding ResourceEntry.ResourceDescription, UpdateSourceTrigger=PropertyChanged}"
+                 Height="26"
+                 Margin="10 0"/>
+      </ui:FormControl>
+      
+      <ui:FormControl LabelText="Added By" 
+                      Orientation="Horizontal"
+                      Margin="20 0 20 20"
+                      LabelWidth="100">
         <TextBlock Text="{Binding ResourceEntry.AddedBy}"
                    VerticalAlignment="Center"
                    Margin="10 0" />
       </ui:FormControl>
       
-      <ui:FormControl LabelText="AddedBy" 
+      <ui:FormControl LabelText="Added On" 
                       Orientation="Horizontal"
-                      Margin="20 0 20 20">
-        <TextBlock Text="{Binding ResourceEntry.AddedBy}"
+                      Margin="20 0 20 20"
+                      LabelWidth="100">
+        <TextBlock Text="{Binding ResourceEntry.AddedOn}"
                    VerticalAlignment="Center"
                    Margin="10 0" />
       </ui:FormControl>
@@ -71,7 +78,6 @@
     <TabControl Grid.Row="1"
                 BorderThickness="0 1 0 0"
                 Padding="20"
-                ui:TabControlProperties.HeaderBackground="Transparent"
                 prism:RegionManager.RegionName="{x:Static naming:RegionName.TabRegion}">
       <TabControl.ItemContainerStyle>
         <Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource Style.TabItem.SelectedBorder}">

@@ -20,6 +20,10 @@ namespace GalaxyMerge.Client.Resources.Controls
             DependencyProperty.Register(nameof(LabelText), typeof(string), typeof(FormControl),
                 new PropertyMetadata(default(string)));
 
+        public static readonly DependencyProperty LabelWidthProperty =
+            DependencyProperty.Register(nameof(LabelWidth), typeof(double), typeof(FormControl),
+                new PropertyMetadata(default(double), OnLabelWidthChanged));
+
         public static readonly DependencyProperty CaptionTextProperty =
             DependencyProperty.Register(nameof(CaptionText), typeof(string), typeof(FormControl),
                 new PropertyMetadata(default(string)));
@@ -27,12 +31,6 @@ namespace GalaxyMerge.Client.Resources.Controls
         public static readonly DependencyProperty HasErrorProperty =
             DependencyProperty.Register(nameof(HasError), typeof(bool), typeof(FormControl),
                 new PropertyMetadata(default(bool)));
-
-        public string ErrorMessage
-        {
-            get => (string) GetValue(ErrorMessageProperty);
-            set => SetValue(ErrorMessageProperty, value);
-        }
 
         public static readonly DependencyProperty ErrorMessageProperty =
             DependencyProperty.Register(nameof(ErrorMessage), typeof(string), typeof(FormControl),
@@ -43,12 +41,6 @@ namespace GalaxyMerge.Client.Resources.Controls
             InitializeComponent();
             
             Validation.AddErrorHandler(this, OnValidationError);
-        }
-
-        private void OnValidationError(object sender, ValidationErrorEventArgs e)
-        {
-            HasError = e.Action == ValidationErrorEventAction.Added;
-            ErrorMessage = e.Error.ErrorContent.ToString();
         }
 
         public new object Content
@@ -69,6 +61,12 @@ namespace GalaxyMerge.Client.Resources.Controls
             set => SetValue(LabelTextProperty, value);
         }
 
+        public double LabelWidth
+        {
+            get => (double) GetValue(LabelWidthProperty);
+            set => SetValue(LabelWidthProperty, value);
+        }
+
         public string CaptionText
         {
             get => (string) GetValue(CaptionTextProperty);
@@ -79,6 +77,18 @@ namespace GalaxyMerge.Client.Resources.Controls
         {
             get => (bool) GetValue(HasErrorProperty);
             set => SetValue(HasErrorProperty, value);
+        }
+
+        public string ErrorMessage
+        {
+            get => (string) GetValue(ErrorMessageProperty);
+            set => SetValue(ErrorMessageProperty, value);
+        }
+
+        private void OnValidationError(object sender, ValidationErrorEventArgs e)
+        {
+            HasError = e.Action == ValidationErrorEventAction.Added;
+            ErrorMessage = e.Error.ErrorContent.ToString();
         }
 
         private static void OnOrientationChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -92,6 +102,22 @@ namespace GalaxyMerge.Client.Resources.Controls
 
             Grid.SetRow(label, orientation == Orientation.Horizontal ? 1 : 0);
             Grid.SetColumn(label, orientation == Orientation.Horizontal ? 0 : 1);
+        }
+
+        private static void OnLabelWidthChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is not FormControl formControl) return;
+
+            var target = formControl.FindName("Column1");
+            if (target is not ColumnDefinition columnDefinition) return;
+
+            if (formControl.Orientation == Orientation.Horizontal && formControl.LabelWidth > 0)
+            {
+                columnDefinition.Width = new GridLength(formControl.LabelWidth);
+                return;
+            }
+            
+            columnDefinition.Width = GridLength.Auto;
         }
     }
 }
