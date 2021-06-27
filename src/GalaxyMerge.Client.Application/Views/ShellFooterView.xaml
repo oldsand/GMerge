@@ -9,21 +9,20 @@
              prism:ViewModelLocator.AutoWireViewModel="True"
              d:DataContext="{d:DesignInstance Type=viewModels:ShellFooterViewModel}"
              mc:Ignorable="d"
-             d:DesignHeight="20" d:DesignWidth="1000">
+             d:DesignHeight="30" d:DesignWidth="1000">
 
-  <Grid Background="{ui:ThemeResource ResourceKey=PanelBackground}">
-    <Border x:Name="RootBorder" BorderThickness="0 1 0 0"
-            BorderBrush="{ui:ThemeResource ResourceKey=PrimaryBorder}">
-      <StackPanel Orientation="Horizontal"
-                  HorizontalAlignment="Left"
-                  Margin="10 0">
-        <ui:IconButton DefaultIcon="{StaticResource Icon.Outlined.Notification}"
-                       Command="{Binding ShowHideEventLogCommand}"
-                       Width="24" Height="24"/>
-        <TextBlock Text="{Binding PreviousLogMessage}"
-                   VerticalAlignment="Center"
-                   Margin="5 0 0 0"/>
-      </StackPanel>
-    </Border>
-  </Grid>
+  <Border Background="{ui:ThemeResource PanelBackground}"
+          BorderBrush="{ui:ThemeResource ResourceKey=PrimaryBorder}"
+          BorderThickness="0 1 0 0">
+    <StackPanel Orientation="Horizontal"
+                HorizontalAlignment="Left"
+                Margin="5 0">
+      <ui:IconButton DefaultIcon="{StaticResource Icon.Outlined.Notification}"
+                     Command="{Binding ShowHideEventLogCommand}"
+                     Width="24" Height="24" />
+      <TextBlock Text="{Binding PreviousLogMessage}"
+                 VerticalAlignment="Center"
+                 Margin="5 0 0 0" />
+    </StackPanel>
+  </Border>
 </UserControl>

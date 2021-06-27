@@ -56,6 +56,10 @@
             <DesignTime>True</DesignTime>
             <DependentUpon>Resources.resx</DependentUpon>
         </Compile>
+        <Compile Include="ViewModels\ConnectionViewModel.cs" />
+        <Compile Include="Views\ConnectionView.xaml.cs">
+          <DependentUpon>ConnectionView.xaml</DependentUpon>
+        </Compile>
         <EmbeddedResource Include="Properties\Resources.resx">
             <Generator>ResXFileCodeGenerator</Generator>
             <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -102,8 +106,9 @@
     </ItemGroup>
     <ItemGroup>
       <Folder Include="Design" />
-      <Folder Include="ViewModels" />
-      <Folder Include="Views" />
+    </ItemGroup>
+    <ItemGroup>
+      <Page Include="Views\ConnectionView.xaml" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

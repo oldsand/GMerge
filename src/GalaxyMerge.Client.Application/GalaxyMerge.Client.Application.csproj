@@ -61,9 +61,13 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\EventLogViewModel.cs" />
     <Compile Include="ViewModels\ShellFooterViewModel.cs" />
     <Compile Include="ViewModels\ShellHeaderViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
+    <Compile Include="Views\EventLogView.xaml.cs">
+      <DependentUpon>EventLogView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ShellHeaderView.xaml.cs">
       <DependentUpon>ShellHeaderView.xaml</DependentUpon>
     </Compile>
@@ -76,6 +80,7 @@
       <DependentUpon>ShellFooterView.xaml</DependentUpon>
     </Compile>
     <Page Include="Controls\ResourceItem.xaml" />
+    <Page Include="Views\EventLogView.xaml" />
     <Page Include="Views\ShellHeaderView.xaml" />
     <Page Include="Views\Shell.xaml">
       <Generator>MSBuild:Compile</Generator>

@@ -60,6 +60,7 @@ using System.Windows.Markup;
 [assembly: XmlnsDefinition("http://gmerge.com/ui/wpf", "GalaxyMerge.Client.Core.Converters")]
 [assembly: XmlnsDefinition("http://gmerge.com/ui/wpf", "GalaxyMerge.Client.Core.Extensions")]
 [assembly: XmlnsDefinition("http://gmerge.com/ui/wpf", "GalaxyMerge.Client.Core.Mvvm")]
+[assembly: XmlnsDefinition("http://gmerge.com/ui/wpf", "GalaxyMerge.Client.Core.Naming")]
 [assembly: XmlnsDefinition("http://gmerge.com/ui/wpf", "GalaxyMerge.Client.Core.Selectors")]
 [assembly: XmlnsDefinition("http://gmerge.com/ui/wpf", "GalaxyMerge.Client.Core.Utilities")]
 

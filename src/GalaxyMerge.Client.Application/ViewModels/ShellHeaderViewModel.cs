@@ -7,12 +7,11 @@ using GalaxyMerge.Client.Core.Naming;
 using GalaxyMerge.Client.Core.Prism;
 using GalaxyMerge.Client.Data.Abstractions;
 using GalaxyMerge.Client.Data.Entities;
-using GalaxyMerge.Client.Events;
 using GalaxyMerge.Client.Wrappers;
 using GalaxyMerge.Client.Wrappers.Base;
 using NLog;
 using Prism.Commands;
-using Prism.Events;
+using Prism.Regions;
 using Prism.Services.Dialogs;
 
 namespace GalaxyMerge.Client.Application.ViewModels
@@ -20,6 +19,7 @@ namespace GalaxyMerge.Client.Application.ViewModels
     public sealed class ShellHeaderViewModel : ViewModelBase
     {
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+        private readonly IRegionManager _regionManager;
         private readonly IDialogService _dialogService;
         private readonly IResourceRepository _resourceRepository;
         private ResourceEntryWrapper _selectedResourceEntry;
@@ -32,11 +32,12 @@ namespace GalaxyMerge.Client.Application.ViewModels
         {
         }
 
-        public ShellHeaderViewModel(IDialogService dialogService,
+        public ShellHeaderViewModel(IRegionManager regionManager, IDialogService dialogService,
             IResourceRepository resourceRepository)
         {
             Logger.Trace("Initializing Shell Header ViewModel");
 
+            _regionManager = regionManager;
             _dialogService = dialogService;
             _resourceRepository = resourceRepository;
             
@@ -46,7 +47,21 @@ namespace GalaxyMerge.Client.Application.ViewModels
         public ResourceEntryWrapper SelectedResourceEntry
         {
             get => _selectedResourceEntry;
-            set => SetProperty(ref _selectedResourceEntry, value);
+            set => SetProperty(ref _selectedResourceEntry, value, OnSelectionChanged);
+        }
+
+        private void OnSelectionChanged()
+        {
+            var parameters = new NavigationParameters {{"resource", SelectedResourceEntry}};
+
+            if (SelectedResourceEntry.ResourceType == ResourceType.Connection)
+            {
+                _regionManager.RequestNavigate(RegionName.ShellContentRegion, ViewName.ConnectionView, parameters);
+                return;
+            }
+                
+            
+            _regionManager.Regions[RegionName.ShellContentRegion].RemoveAll();
         }
 
         public ChangeTrackingCollection<ResourceEntryWrapper> Resources

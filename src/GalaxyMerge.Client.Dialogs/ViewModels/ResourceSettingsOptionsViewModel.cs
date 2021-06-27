@@ -9,6 +9,11 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
     {
         private ResourceEntryWrapper _resourceEntry;
 
+        public ResourceSettingsOptionsViewModel()
+        {
+            Title = "Options";
+        }
+
         public ResourceEntryWrapper ResourceEntry
         {
             get => _resourceEntry;
@@ -17,8 +22,6 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
 
         public override void OnNavigatedTo(NavigationContext navigationContext)
         {
-            Title = "Options";
-            
             var resource = navigationContext.Parameters.GetValue<ResourceEntryWrapper>("resource");
             ResourceEntry = resource ?? throw new ArgumentNullException(nameof(resource), @"ResourceEntryWrapper cannot be null");
         }

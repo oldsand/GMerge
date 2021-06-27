@@ -35,17 +35,9 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
         {
             var parameters = new NavigationParameters {{"resource", ResourceEntry}};
 
-            if (ResourceEntry.ResourceType == ResourceType.Connection)
-            {
-                RegionManager.RequestNavigate(RegionName.TabRegion, ViewName.ResourceSettingsGeneralView, parameters);
-                RegionManager.RequestNavigate(RegionName.TabRegion, ViewName.ResourceSettingsOptionsView, parameters);    
-            }
-
-            if (ResourceEntry.ResourceType == ResourceType.Archive)
-            {
-                RegionManager.RequestNavigate(RegionName.TabRegion, ViewName.ResourceSettingsGeneralView, parameters);
-                RegionManager.RequestNavigate(RegionName.TabRegion, ViewName.ResourceSettingsOptionsView, parameters);
-            }
+            RegionManager.RegisterViewWithRegion(RegionName.TabRegion, ViewName.ResourceSettingsGeneralView);
+            RegionManager.RequestNavigate(RegionName.TabRegion, ViewName.ResourceSettingsOptionsView, parameters);
+            RegionManager.RequestNavigate(RegionName.TabRegion, ViewName.ResourceSettingsGeneralView, parameters);
         }
     }
 }

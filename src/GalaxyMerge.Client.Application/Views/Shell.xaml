@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ui="http://gmerge.com/ui/wpf"
         xmlns:prism="http://prismlibrary.com/"
-        xmlns:naming="clr-namespace:GalaxyMerge.Client.Core.Naming;assembly=GalaxyMerge.Client.Core"
+        xmlns:viewModels="clr-namespace:GalaxyMerge.Client.Application.ViewModels"
         prism:ViewModelLocator.AutoWireViewModel="True"
+        d:DataContext="{d:DesignInstance viewModels:ShellViewModel, IsDesignTimeCreatable=True}"
         mc:Ignorable="d"
         Title="GMerge" Height="800" Width="1400"
         WindowStartupLocation="CenterOwner"
@@ -16,13 +17,24 @@
     <Grid.RowDefinitions>
       <RowDefinition Height="50" />
       <RowDefinition />
+      <RowDefinition Height="Auto" />
+      <ui:CollapsibleRowDefinition Height="Auto" Visible="{Binding ShowEventLog}"/>
       <RowDefinition Height="30" />
     </Grid.RowDefinitions>
     <ContentControl Grid.Row="0"
-                    prism:RegionManager.RegionName="{x:Static naming:RegionName.ShellHeaderRegion}" />
+                    prism:RegionManager.RegionName="{x:Static ui:RegionName.ShellHeaderRegion}" />
     <ContentControl Grid.Row="1"
-                    prism:RegionManager.RegionName="{x:Static naming:RegionName.ShellContentRegion}" />
-    <ContentControl Grid.Row="2"
-                    prism:RegionManager.RegionName="{x:Static naming:RegionName.ShellFooterRegion}" />
+                    prism:RegionManager.RegionName="{x:Static ui:RegionName.ShellContentRegion}" />
+    <GridSplitter Grid.Row="2" 
+                  Height="5"
+                  Margin="-3 0 -2 0 " 
+                  HorizontalAlignment="Stretch"
+                  ResizeDirection="Rows"
+                  Background="Transparent"
+                  Panel.ZIndex="1"/>
+    <ContentControl Grid.Row="3"
+                    prism:RegionManager.RegionName="{x:Static ui:RegionName.EventLogRegion}" />
+    <ContentControl Grid.Row="4"
+                    prism:RegionManager.RegionName="{x:Static ui:RegionName.ShellFooterRegion}" />
   </Grid>
 </Window>

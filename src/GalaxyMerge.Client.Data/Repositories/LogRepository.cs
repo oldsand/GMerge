@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using GalaxyMerge.Client.Data.Abstractions;
 using GalaxyMerge.Client.Data.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -56,7 +57,12 @@ namespace GalaxyMerge.Client.Data.Repositories
         {
             return _logs.Where(x => x.LevelId > level.Ordinal).ToList();
         }
-        
+
+        public async Task<IEnumerable<LogEntry>> GetEventLogsAsync()
+        {
+            return await _logs.Where(x => x.LevelId > 2).ToListAsync();
+        }
+
         public IEnumerable<LogEntry> FindBelowLevel(LogLevel level)
         {
             return _logs.Where(x => x.LevelId < level.Ordinal).ToList();

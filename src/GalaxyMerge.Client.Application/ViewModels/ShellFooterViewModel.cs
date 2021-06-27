@@ -1,22 +1,27 @@
 using GalaxyMerge.Client.Core.Mvvm;
+using GalaxyMerge.Client.Core.Naming;
+using GalaxyMerge.Client.Events;
 using GalaxyMerge.Core.Logging;
 using ImTools;
 using NLog;
 using Prism.Commands;
+using Prism.Events;
+using Prism.Regions;
 
 namespace GalaxyMerge.Client.Application.ViewModels
 {
     public class ShellFooterViewModel : ViewModelBase
     {
+        private readonly IRegionManager _regionManager;
         private LogEventInfo _previousLogEventInfo;
         private string _previousLogMessage;
         private bool _showEventLog;
         private DelegateCommand _showHideEventLogCommand;
         private readonly MemoryEventTarget _logTarget;
 
-
-        public ShellFooterViewModel()
+        public ShellFooterViewModel(IRegionManager regionManager)
         {
+            _regionManager = regionManager;
             _logTarget = LogManager.Configuration.FindTargetByName<MemoryEventTarget>("NotificationTarget");
             _logTarget.EventReceived += LogEventReceived;
         }
@@ -35,7 +40,7 @@ namespace GalaxyMerge.Client.Application.ViewModels
         public bool ShowEventLog
         {
             get => _showEventLog;
-            set => SetProperty(ref _showEventLog, value);
+            set => SetProperty(ref _showEventLog, value, OnShowEventLogChanged);
         }
 
         public LogEventInfo PreviousLogEventInfo
@@ -56,6 +61,11 @@ namespace GalaxyMerge.Client.Application.ViewModels
         private void ExecuteShowHideEventLogCommand()
         {
             ShowEventLog = !ShowEventLog;
+        }
+
+        private void OnShowEventLogChanged()
+        {
+            _regionManager.RequestNavigate(RegionName.EventLogRegion, ViewName.EventLogView);
         }
     }
 }

@@ -3,8 +3,12 @@ namespace GalaxyMerge.Client.Core.Naming
     public class ViewName
     {
         //Main Application
+        public const string ShellHeaderView = nameof(ShellHeaderView);
+        public const string ShellFooterView = nameof(ShellFooterView);
+        public const string EventLogView = nameof(EventLogView);
         
         //Connection Module
+        public const string ConnectionView = nameof(ConnectionView);
         
         //Dialog Module
         public const string NewResourceSelectionView = nameof(NewResourceSelectionView);

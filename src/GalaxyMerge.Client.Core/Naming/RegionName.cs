@@ -14,19 +14,8 @@ namespace GalaxyMerge.Client.Core.Naming
         public const string NavigationRegion = nameof(NavigationRegion);
         public const string DetailsRegion = nameof(DetailsRegion);
         public const string ButtonRegion = nameof(ButtonRegion);
-        
-        
-        public const string ResourceSettingsTabRegion = nameof(ResourceSettingsTabRegion);
-        /*public const string ConnectionRegion = nameof(ConnectionRegion);
-        public const string ConnectionNavigationRegion = nameof(ConnectionNavigationRegion);
-        public const string ConnectionContentRegion = nameof(ConnectionContentRegion);
-        public const string ConnectionContentDetailsRegion = nameof(ConnectionContentDetailsRegion);
-        public const string GalaxyDetailsRegion = nameof(GalaxyDetailsRegion);
-        public const string ChangeLogRegion = nameof(ChangeLogRegion);
-        public const string GalaxySyncLogRegion = nameof(GalaxySyncLogRegion);
-        public const string RepositoryRegion = nameof(RepositoryRegion);
-        public const string RepositoryNavigationRegion = nameof(RepositoryNavigationRegion);
-        public const string RepositoryContentRegion = nameof(RepositoryContentRegion);
-        public const string CompareRegion = nameof(CompareRegion);*/
+
+        //Application Specific
+        public const string EventLogRegion = nameof(EventLogRegion);
     }
 }
