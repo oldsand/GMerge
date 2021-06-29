@@ -6,6 +6,10 @@ namespace GalaxyMerge.Data.Entities
 {
     public class ChangeOperation
     {
+        private ChangeOperation()
+        {
+        }
+        
         public int OperationId { get; private set; }
         public string OperationName { get; private set; }
     }

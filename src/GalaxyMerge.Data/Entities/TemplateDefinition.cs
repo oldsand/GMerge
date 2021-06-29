@@ -8,7 +8,7 @@ namespace GalaxyMerge.Data.Entities
 {
     public class TemplateDefinition
     {
-        internal TemplateDefinition()
+        private TemplateDefinition()
         {
         }
         

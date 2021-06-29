@@ -112,13 +112,13 @@ namespace GalaxyMerge.Services
         private GObject GetGObject(int objectId)
         {
             using var objectRepo = new ObjectRepository(_galaxyName);
-            return objectRepo.FindInclude(x => x.ObjectId == objectId, x => x.Template);
+            return objectRepo.FindInclude(x => x.ObjectId == objectId, x => x.TemplateDefinition);
         }
         
         private GObject GetGObject(string tagName)
         {
             using var objectRepo = new ObjectRepository(_galaxyName);
-            return objectRepo.FindAllInclude(x => x.TagName == tagName, x => x.Template).FirstOrDefault();
+            return objectRepo.FindAllInclude(x => x.TagName == tagName, x => x.TemplateDefinition).FirstOrDefault();
         }
         
         private byte[] GetObjectData(string tagName)

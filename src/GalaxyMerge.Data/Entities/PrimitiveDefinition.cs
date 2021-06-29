@@ -8,7 +8,7 @@ namespace GalaxyMerge.Data.Entities
 {
     public class PrimitiveDefinition
     {
-        internal PrimitiveDefinition()
+        private PrimitiveDefinition()
         {
         }
 

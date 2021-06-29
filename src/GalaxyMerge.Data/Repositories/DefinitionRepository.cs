@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using GalaxyMerge.Core.Utilities;
 using GalaxyMerge.Data.Abstractions;
@@ -11,6 +12,16 @@ namespace GalaxyMerge.Data.Repositories
     {
         public DefinitionRepository(string galaxyName) 
             : base(GalaxyContext.Create(DbStringBuilder.BuildGalaxy(galaxyName)))
+        {
+        }
+        
+        public DefinitionRepository(string hostName, string galaxyName) 
+            : base(GalaxyContext.Create(DbStringBuilder.BuildGalaxy(hostName, galaxyName)))
+        {
+        }
+        
+        public DefinitionRepository(DbConnectionStringBuilder connectionStringBuilder) 
+            : base(GalaxyContext.Create(connectionStringBuilder.ConnectionString))
         {
         }
 

@@ -7,7 +7,7 @@ namespace GalaxyMerge.Data.Entities
 {
     public class AttributeDefinition
     {
-        internal AttributeDefinition()
+        private AttributeDefinition()
         {
         }
 

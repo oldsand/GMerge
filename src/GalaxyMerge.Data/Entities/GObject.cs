@@ -9,8 +9,13 @@ namespace GalaxyMerge.Data.Entities
 {
     public class GObject
     {
-        protected GObject()
+        private GObject()
         {
+            Derivations = new List<GObject>();
+            ContainedObjects = new List<GObject>();
+            AreaObjects = new List<GObject>();
+            HostedObjects = new List<GObject>();
+            ChangeLogs = new List<ChangeLog>();
         }
         
         public int ObjectId { get; private set; }
@@ -33,7 +38,7 @@ namespace GalaxyMerge.Data.Entities
         public bool IsHidden { get; private set; }
         public short HostingTreeLevel { get; private set; }
         public bool DeploymentPending { get; private set; }
-        public TemplateDefinition Template { get; private set; }
+        public TemplateDefinition TemplateDefinition { get; private set; }
         public GObject DerivedFrom { get; private set; }
         public IEnumerable<GObject> Derivations { get; private set; }
         public GObject Container { get; private set; }
@@ -41,6 +46,8 @@ namespace GalaxyMerge.Data.Entities
         public GObject Area { get; private set; }
         public IEnumerable<GObject> AreaObjects { get; private set; }
         public GObject Host { get; private set; }
+        internal FolderObjectLink FolderObjectLink { get; private set; }
+        public Folder Folder => FolderObjectLink.Folder;
         public IEnumerable<GObject> HostedObjects { get; private set; }
         public IEnumerable<ChangeLog> ChangeLogs { get; private set; }
     }

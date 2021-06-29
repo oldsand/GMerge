@@ -15,7 +15,7 @@ namespace GalaxyMerge.Client.Converters
                 throw new InvalidOperationException("Value must be of type LogLevel");
 
             if (logLevel == LogLevel.Info)
-                return (SolidColorBrush) Theme.GetResource(ThemeResourceKey.PrimaryBackground);
+                return (SolidColorBrush) Theme.GetResource(ThemeResourceKey.PrimaryForeground);
             if (logLevel == LogLevel.Warn)
                 return (SolidColorBrush) Theme.GetResource(ThemeResourceKey.ErrorBrush);
             if (logLevel == LogLevel.Error)

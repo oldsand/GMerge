@@ -8,6 +8,10 @@ namespace GalaxyMerge.Data.Entities
 {
     public class UserProfile
     {
+        private UserProfile()
+        {
+        }
+        
         public int UserId { get; private set; }
         public Guid UserGuid { get; private set; }
         public string UserName { get; private set; }

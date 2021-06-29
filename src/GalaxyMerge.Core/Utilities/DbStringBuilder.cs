@@ -16,6 +16,16 @@ namespace GalaxyMerge.Core.Utilities
                 IntegratedSecurity = true
             }.ConnectionString;
         }
+        
+        public static string BuildGalaxy(string hostName, string galaxyName)
+        {
+            return new SqlConnectionStringBuilder
+            {
+                DataSource = hostName,
+                InitialCatalog = galaxyName,
+                IntegratedSecurity = true
+            }.ConnectionString;
+        }
 
         public static string BuildArchive(string galaxyName)
         {

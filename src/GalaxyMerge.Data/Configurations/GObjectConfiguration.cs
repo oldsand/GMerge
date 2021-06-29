@@ -32,12 +32,15 @@ namespace GalaxyMerge.Data.Configurations
             builder.Property(x => x.HostingTreeLevel).HasColumnName("hosting_tree_level");
             builder.Property(x => x.DeploymentPending).HasColumnName("deployment_pending_status");
 
-            builder.HasOne(x => x.Template).WithMany(t => t.Derivations).HasForeignKey(x => x.TemplateId);
+            builder.Ignore(x => x.Folder);
+
+            builder.HasOne(x => x.TemplateDefinition).WithMany(t => t.Derivations).HasForeignKey(x => x.TemplateId);
             builder.HasOne(x => x.DerivedFrom).WithMany(t => t.Derivations).HasForeignKey(x => x.DerivedFromId);
             builder.HasOne(x => x.Container).WithMany(t => t.ContainedObjects).HasForeignKey(x => x.ContainedById);
             builder.HasOne(x => x.Area).WithMany(t => t.AreaObjects).HasForeignKey(x => x.AreaId);
             builder.HasOne(x => x.Host).WithMany(t => t.HostedObjects).HasForeignKey(x => x.HostId);
             builder.HasMany(x => x.ChangeLogs).WithOne(c => c.GObject).HasForeignKey(x => x.ObjectId);
+            builder.HasOne(x => x.FolderObjectLink).WithOne(x => x.GObject).HasForeignKey<FolderObjectLink>(x => x.ObjectId);
         }
     }
 }

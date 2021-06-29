@@ -1,3 +1,4 @@
+using System.Data.Common;
 using System.Linq;
 using GalaxyMerge.Core.Utilities;
 using GalaxyMerge.Data.Abstractions;
@@ -12,7 +13,16 @@ namespace GalaxyMerge.Data.Repositories
             : base(GalaxyContext.Create(DbStringBuilder.BuildGalaxy(galaxyName)))
         {
         }
-
+        
+        public ChangeLogRepository(string hostName, string galaxyName) 
+            : base(GalaxyContext.Create(DbStringBuilder.BuildGalaxy(hostName, galaxyName)))
+        {
+        }
+        
+        public ChangeLogRepository(DbConnectionStringBuilder connectionStringBuilder) 
+            : base(GalaxyContext.Create(connectionStringBuilder.ConnectionString))
+        {
+        }
 
         public ChangeLog GetLatest(int objectId)
         {

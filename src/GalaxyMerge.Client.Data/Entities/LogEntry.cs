@@ -2,8 +2,6 @@ using System;
 using System.Runtime.CompilerServices;
 using NLog;
 
-// ReSharper disable UnusedAutoPropertyAccessor.Local
-[assembly: InternalsVisibleTo("GalaxyMerge.Client.Data.Tests")]
 namespace GalaxyMerge.Client.Data.Entities
 {
     public class LogEntry
@@ -12,11 +10,36 @@ namespace GalaxyMerge.Client.Data.Entities
         {
         }
 
-        public LogEntry(string message, LogLevel level)
+        public LogEntry(LogLevel level, string message)
         {
-            Message = message;
             Logged = DateTime.Now;
             LevelId = level.Ordinal;
+            Message = message;
+            MachineName = Environment.MachineName;
+            Identity = Environment.UserName;
+        }
+        
+        public LogEntry(LogEventInfo logEventInfo)
+        {
+            if (logEventInfo == null)
+                throw new ArgumentNullException(nameof(logEventInfo), "LogEventInfo cannot be null");
+            
+            LogId = logEventInfo.SequenceID;
+            Logged = logEventInfo.TimeStamp;
+            LevelId = logEventInfo.Level.Ordinal;
+            Level = logEventInfo.Level.Name;
+            Message = logEventInfo.Message;
+            FormattedMessage = logEventInfo.FormattedMessage;
+            Logger = logEventInfo.LoggerName;
+            Properties = logEventInfo.Properties.ToString();
+            Callsite = logEventInfo.CallerMemberName;
+            FileName = logEventInfo.CallerFilePath;
+            LineNumber = logEventInfo.CallerLineNumber;
+            Stacktrace = logEventInfo.StackTrace.ToString();
+            MachineName = Environment.MachineName;
+            Identity = Environment.UserName;
+            Exception = logEventInfo.Exception?.ToString();
+            
         }
 
         public int LogId { get; private set; }
@@ -25,6 +48,7 @@ namespace GalaxyMerge.Client.Data.Entities
         public string Level { get; private set; }
         public LogLevel LogLevel => LogLevel.FromOrdinal(LevelId);
         public string Message { get; private set; }
+        public string FormattedMessage { get; private set; }
         public string Logger { get; private set; }
         public string Properties { get; private set; }
         public string Callsite { get; private set; }

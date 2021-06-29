@@ -42,7 +42,7 @@ namespace GalaxyMerge.Client.Data.Tests
         private void SeedData()
         {
             using var context = new AppContext(_options);
-            context.Logs.Add(new LogEntry("This is a test", LogLevel.Debug));
+            context.Logs.Add(new LogEntry(LogLevel.Debug, "This is a test"));
             context.SaveChanges();
         }
     }

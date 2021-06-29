@@ -14,16 +14,16 @@ namespace GalaxyMerge.Client.Application.Design
 
         public static EventLogViewModel EventLogViewModel => new()
         {
-            Logs = new ObservableCollection<LogEventWrapper>()
+            Logs = new ObservableCollection<LogEntryWrapper>()
             {
-                new(new LogEventInfo(LogLevel.Info, LoggerName.NotificationLogger, "This is a Log Message")),
-                new(new LogEventInfo(LogLevel.Warn, LoggerName.NotificationLogger, "This is an error message. Something went wrong")),
-                new(new LogEventInfo(LogLevel.Error, LoggerName.NotificationLogger, "This is an warning message. Something is not doing alright but we still good")),
-                new(new LogEventInfo(LogLevel.Info, LoggerName.NotificationLogger, "This is a Log Message")),
-                new(new LogEventInfo(LogLevel.Info, LoggerName.NotificationLogger, "This is a Log Message"))
+                new(new LogEntry(LogLevel.Info, "This is a Log Message")),
+                new(new LogEntry(LogLevel.Warn, "This is an error message. Something went wrong")),
+                new(new LogEntry(LogLevel.Error, "This is an warning message. Something is not doing alright but we still good")),
+                new(new LogEntry(LogLevel.Info, "This is a Log Message")),
+                new(new LogEntry(LogLevel.Info, "This is a Log Message"))
             }
         };
         
-        public static LogEventWrapper LogEventWrapper => new(new LogEventInfo(LogLevel.Info, LoggerName.NotificationTarget, "This is a test message for a log event entry"));
+        public static LogEntryWrapper LogEntryWrapper => new(new LogEntry(LogLevel.Info, "This is a test message for a log event entry"));
     }
 }

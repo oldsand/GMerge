@@ -8,6 +8,10 @@ namespace GalaxyMerge.Data.Entities
 {
     public class ChangeLog
     {
+        private ChangeLog()
+        {
+        }
+        
         public int ChangeLogId { get; private set; }
         public int ObjectId { get; private set; }
         public DateTime ChangeDate { get; private set; }

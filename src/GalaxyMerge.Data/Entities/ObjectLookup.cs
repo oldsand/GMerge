@@ -6,6 +6,10 @@ namespace GalaxyMerge.Data.Entities
 {
     public class ObjectLookup
     {
+        private ObjectLookup()
+        {
+        }
+        
         public int ObjectId { get; private set;  }
         public int DerivedFromId { get; private set;  }
         public string TagName { get; private set;  }

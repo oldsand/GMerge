@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Linq;
 using GalaxyMerge.Core.Utilities;
 using GalaxyMerge.Data.Abstractions;
@@ -12,12 +13,22 @@ namespace GalaxyMerge.Data.Repositories
     public class LookupRepository : ILookupRepository
     {
         private readonly GalaxyContext _context;
-
+        
         public LookupRepository(string galaxyName)
         {
             _context = GalaxyContext.Create(DbStringBuilder.BuildGalaxy(galaxyName));
         }
         
+        public LookupRepository(string hostName, string galaxyName)
+        {
+            _context = GalaxyContext.Create(DbStringBuilder.BuildGalaxy(hostName, galaxyName));
+        }
+        
+        public LookupRepository(DbConnectionStringBuilder connectionStringBuilder)
+        {
+            _context = GalaxyContext.Create(connectionStringBuilder.ConnectionString);
+        }
+
         public IEnumerable<ObjectLookup> FindAncestors(int objectId, bool excludeSelf = true)
         {
             return _context.ObjectLookups
