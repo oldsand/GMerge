@@ -1,7 +1,7 @@
 ﻿
 namespace GalaxyMerge.Client.Core.Naming
 {
-    public class RegionName
+    public static class RegionName
     {
         //Root Shell Regions
         public const string ShellHeaderRegion = nameof(ShellHeaderRegion);

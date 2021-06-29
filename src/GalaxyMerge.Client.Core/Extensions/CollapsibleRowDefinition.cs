@@ -8,17 +8,13 @@ namespace GalaxyMerge.Client.Core.Extensions
         static CollapsibleRowDefinition()
         {
             VisibleProperty = DependencyProperty.Register(nameof(Visible),
-                typeof(bool),
-                typeof(CollapsibleRowDefinition),
-                new PropertyMetadata(true, OnVisibleChanged));
+                typeof(bool), typeof(CollapsibleRowDefinition), new PropertyMetadata(true, OnVisibleChanged));
             
-            HeightProperty.OverrideMetadata(typeof(CollapsibleColumnDefinition),
-                new FrameworkPropertyMetadata(new GridLength(1, GridUnitType.Star), null,
-                    CoerceHeight));
+            HeightProperty.OverrideMetadata(typeof(CollapsibleRowDefinition),
+                new FrameworkPropertyMetadata(new GridLength(1, GridUnitType.Star), null, CoerceHeight));
 
-            MinHeightProperty.OverrideMetadata(typeof(CollapsibleColumnDefinition),
-                new FrameworkPropertyMetadata(0d, null,
-                    CoerceMinHeight));
+            MinHeightProperty.OverrideMetadata(typeof(CollapsibleRowDefinition),
+                new FrameworkPropertyMetadata(0d, null, CoerceMinHeight));
         }
 
         public static readonly DependencyProperty VisibleProperty;

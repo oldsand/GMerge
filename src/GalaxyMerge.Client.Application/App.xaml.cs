@@ -1,6 +1,9 @@
 ﻿using System.Windows;
+using System.Windows.Navigation;
 using GalaxyMerge.Client.Application.Configurations;
+using GalaxyMerge.Client.Application.ViewModels;
 using GalaxyMerge.Client.Application.Views;
+using GalaxyMerge.Client.Core.Naming;
 using GalaxyMerge.Client.Core.Prism;
 using GalaxyMerge.Client.Core.Prism.RegionBehaviors;
 using GalaxyMerge.Client.Data.Abstractions;

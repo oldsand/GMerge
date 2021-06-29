@@ -15,7 +15,7 @@
 
   <UserControl.Resources>
     <ResourceDictionary>
-      <design:DesignViewModels x:Key="DesignModels" />
+      <design:DesignModels x:Key="DesignModels" />
       
       <DataTemplate x:Key="ResourceSelectedItemTemplate">
         <Grid d:DataContext="{Binding Source={StaticResource DesignModels}, Path=ResourceEntry}">

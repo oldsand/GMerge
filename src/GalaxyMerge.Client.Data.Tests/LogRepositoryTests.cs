@@ -2,6 +2,7 @@ using System.Linq;
 using GalaxyMerge.Client.Data.Entities;
 using GalaxyMerge.Client.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
+using NLog;
 using NUnit.Framework;
 
 namespace GalaxyMerge.Client.Data.Tests
@@ -41,7 +42,7 @@ namespace GalaxyMerge.Client.Data.Tests
         private void SeedData()
         {
             using var context = new AppContext(_options);
-            context.Logs.Add(new LogEntry("This is a test"));
+            context.Logs.Add(new LogEntry("This is a test", LogLevel.Debug));
             context.SaveChanges();
         }
     }

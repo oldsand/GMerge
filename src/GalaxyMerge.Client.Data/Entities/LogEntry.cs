@@ -12,9 +12,11 @@ namespace GalaxyMerge.Client.Data.Entities
         {
         }
 
-        internal LogEntry(string message)
+        public LogEntry(string message, LogLevel level)
         {
-            
+            Message = message;
+            Logged = DateTime.Now;
+            LevelId = level.Ordinal;
         }
 
         public int LogId { get; private set; }

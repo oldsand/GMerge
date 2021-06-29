@@ -1,6 +1,6 @@
 namespace GalaxyMerge.Client.Core.Naming
 {
-    public class ViewName
+    public static class ViewName
     {
         //Main Application
         public const string ShellHeaderView = nameof(ShellHeaderView);

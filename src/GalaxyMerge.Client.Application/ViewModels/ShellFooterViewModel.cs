@@ -12,17 +12,16 @@ namespace GalaxyMerge.Client.Application.ViewModels
 {
     public class ShellFooterViewModel : ViewModelBase
     {
-        private readonly IRegionManager _regionManager;
-        private LogEventInfo _previousLogEventInfo;
+        private readonly IEventAggregator _eventAggregator;
         private string _previousLogMessage;
         private bool _showEventLog;
         private DelegateCommand _showHideEventLogCommand;
         private readonly MemoryEventTarget _logTarget;
 
-        public ShellFooterViewModel(IRegionManager regionManager)
+        public ShellFooterViewModel(IEventAggregator eventAggregator)
         {
-            _regionManager = regionManager;
-            _logTarget = LogManager.Configuration.FindTargetByName<MemoryEventTarget>("NotificationTarget");
+            _eventAggregator = eventAggregator;
+            _logTarget = LogManager.Configuration.FindTargetByName<MemoryEventTarget>(LoggerName.NotificationTarget);
             _logTarget.EventReceived += LogEventReceived;
         }
 
@@ -43,18 +42,11 @@ namespace GalaxyMerge.Client.Application.ViewModels
             set => SetProperty(ref _showEventLog, value, OnShowEventLogChanged);
         }
 
-        public LogEventInfo PreviousLogEventInfo
-        {
-            get => _previousLogEventInfo;
-            set => SetProperty(ref _previousLogEventInfo, value);
-        }
-
         public DelegateCommand ShowHideEventLogCommand =>
             _showHideEventLogCommand ??= new DelegateCommand(ExecuteShowHideEventLogCommand);
 
         private void LogEventReceived(LogEventInfo logInfo)
         {
-            PreviousLogEventInfo = logInfo;
             PreviousLogMessage = $"{logInfo.FormattedMessage} at {logInfo.TimeStamp.ToLongTimeString()}";
         }
 
@@ -65,7 +57,7 @@ namespace GalaxyMerge.Client.Application.ViewModels
 
         private void OnShowEventLogChanged()
         {
-            _regionManager.RequestNavigate(RegionName.EventLogRegion, ViewName.EventLogView);
+            _eventAggregator.GetEvent<ShowEventLogChangedEvent>().Publish(ShowEventLog);
         }
     }
 }

@@ -15,6 +15,8 @@ namespace GalaxyMerge.Client.Application.Configurations
             ConfigurationItemFactory.Default.Targets.RegisterDefinition("MemoryEvent", typeof(MemoryEventTarget));
 
             var config = new LoggingConfiguration();
+            
+            //var fileTarget = new FileTarget()
 
             var notificationTarget = new MemoryEventTarget(LoggerName.NotificationTarget);
             config.AddTarget(notificationTarget);
@@ -47,7 +49,7 @@ namespace GalaxyMerge.Client.Application.Configurations
             };
 
             config.AddTarget(databaseTarget);
-            config.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, databaseTarget));
+            config.LoggingRules.Add(new LoggingRule("*", LogLevel.Debug, databaseTarget));
 
             LogManager.ThrowExceptions = true;
             LogManager.Configuration = config;

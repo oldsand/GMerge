@@ -1,6 +1,6 @@
 ﻿namespace GalaxyMerge.Core.Logging
 {
-    public class LoggerName
+    public static class LoggerName
     {
         public const string NotificationTarget = nameof(NotificationTarget);
         public const string DatabaseTarget = nameof(DatabaseTarget);

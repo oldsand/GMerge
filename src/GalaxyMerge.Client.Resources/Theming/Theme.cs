@@ -4,7 +4,7 @@ using System.Windows.Media;
 
 namespace GalaxyMerge.Client.Resources.Theming
 {
-    public sealed class Theme
+    public static class Theme
     {
         [ThreadStatic]
         private static ResourceDictionary _resourceDictionary;

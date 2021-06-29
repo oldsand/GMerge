@@ -1,34 +1,34 @@
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 using GalaxyMerge.Client.Core.Mvvm;
-using GalaxyMerge.Client.Data.Abstractions;
-using GalaxyMerge.Client.Data.Entities;
+using GalaxyMerge.Client.Wrappers;
+using GalaxyMerge.Core.Logging;
+using NLog;
 
 namespace GalaxyMerge.Client.Application.ViewModels
 {
     public class EventLogViewModel : ViewModelBase
     {
-        private readonly ILogRepository _logRepository;
-        private ObservableCollection<LogEntry> _logs;
+        private ObservableCollection<LogEventWrapper> _logs;
 
-        public EventLogViewModel(ILogRepository logRepository)
+        public EventLogViewModel()
         {
-            _logRepository = logRepository;
-            Logs = new ObservableCollection<LogEntry>();
-            LoadAsync().Await(OnLoadComplete, OnLoadError);
+            Title = "Event Log";
+            Logs = new ObservableCollection<LogEventWrapper>();
+
+            var target = LogManager.Configuration.FindTargetByName<MemoryEventTarget>(LoggerName.NotificationTarget);
+            target.EventReceived += LogEventReceived;
         }
 
-        public ObservableCollection<LogEntry> Logs
+        public ObservableCollection<LogEventWrapper> Logs
         {
             get => _logs;
             set => SetProperty(ref _logs, value);
         }
 
-        protected override async Task LoadAsync()
+        private void LogEventReceived(LogEventInfo log)
         {
-            var logs = await _logRepository.GetEventLogsAsync();
-            Logs.Clear();
-            Logs.AddRange(logs);
+            var wrapper = new LogEventWrapper(log);
+            Logs.Add(wrapper);
         }
     }
 }

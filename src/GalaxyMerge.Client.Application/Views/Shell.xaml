@@ -17,22 +17,24 @@
     <Grid.RowDefinitions>
       <RowDefinition Height="50" />
       <RowDefinition />
-      <RowDefinition Height="Auto" />
       <ui:CollapsibleRowDefinition Height="Auto" Visible="{Binding ShowEventLog}"/>
+      <ui:CollapsibleRowDefinition Height="200" Visible="{Binding ShowEventLog}"/>
       <RowDefinition Height="30" />
     </Grid.RowDefinitions>
     <ContentControl Grid.Row="0"
                     prism:RegionManager.RegionName="{x:Static ui:RegionName.ShellHeaderRegion}" />
     <ContentControl Grid.Row="1"
                     prism:RegionManager.RegionName="{x:Static ui:RegionName.ShellContentRegion}" />
-    <GridSplitter Grid.Row="2" 
-                  Height="5"
-                  Margin="-3 0 -2 0 " 
+    <GridSplitter Grid.Row="2"
+                  Height="30"
+                  Visibility="{Binding ShowEventLog, Converter={ui:BooleanVisibilityConverter}}"
+                  Margin="0 0 0 -30" 
                   HorizontalAlignment="Stretch"
                   ResizeDirection="Rows"
                   Background="Transparent"
                   Panel.ZIndex="1"/>
     <ContentControl Grid.Row="3"
+                    Background="Gray"
                     prism:RegionManager.RegionName="{x:Static ui:RegionName.EventLogRegion}" />
     <ContentControl Grid.Row="4"
                     prism:RegionManager.RegionName="{x:Static ui:RegionName.ShellFooterRegion}" />

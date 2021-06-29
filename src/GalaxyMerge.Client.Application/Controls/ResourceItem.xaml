@@ -12,7 +12,7 @@
              d:DesignHeight="100" d:DesignWidth="200">
   <UserControl.Resources>
     <ResourceDictionary>
-      <design:DesignViewModels x:Key="DesignModels" />
+      <design:DesignModels x:Key="DesignModels" />
     </ResourceDictionary>
   </UserControl.Resources>
 
