@@ -80,7 +80,7 @@
                 Padding="20"
                 prism:RegionManager.RegionName="{x:Static naming:RegionName.TabRegion}">
       <TabControl.ItemContainerStyle>
-        <Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource Style.TabItem.SelectedBorder}">
+        <Style TargetType="{x:Type TabItem}" BasedOn="{StaticResource Style.TabItem}">
           <Setter Property="Header" Value="{Binding DataContext}"/>
         </Style>
       </TabControl.ItemContainerStyle>

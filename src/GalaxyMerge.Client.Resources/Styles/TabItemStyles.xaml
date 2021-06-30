@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:t="clr-namespace:GalaxyMerge.Client.Resources.Theming">
 
-  <ControlTemplate x:Key="Template.TabItem.SelectedBorder" TargetType="{x:Type TabItem}">
+  <ControlTemplate x:Key="Template.TabItem" TargetType="{x:Type TabItem}">
     <Grid x:Name="templateRoot" SnapsToDevicePixels="true">
       <Border
         x:Name="border"
@@ -51,69 +51,15 @@
     </ControlTemplate.Triggers>
   </ControlTemplate>
 
-  <Style x:Key="Style.TabItem.SelectedBorder" TargetType="{x:Type TabItem}">
+  <Style x:Key="Style.TabItem" TargetType="{x:Type TabItem}">
     <Setter Property="Background" Value="{t:ThemeResource ResourceKey=PrimaryBackground}" />
     <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=ControlDefaultForeground}" />
     <Setter Property="BorderThickness" Value="0" />
-    <Setter Property="Height" Value="30" />
-    <Setter Property="Width" Value="80" />
     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
     <Setter Property="VerticalContentAlignment" Value="Stretch" />
     <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-    <Setter Property="Template" Value="{StaticResource Template.TabItem.SelectedBorder}" />
+    <Setter Property="Template" Value="{StaticResource Template.TabItem}" />
   </Style>
-  <Style BasedOn="{StaticResource Style.TabItem.SelectedBorder}" TargetType="{x:Type TabItem}" />
-
-  <ControlTemplate x:Key="TabItemTemplate.SelectedBackground" TargetType="{x:Type TabItem}">
-    <Grid x:Name="templateRoot" SnapsToDevicePixels="true">
-      <Border
-        x:Name="border"
-        Background="{TemplateBinding Background}"
-        BorderBrush="{TemplateBinding BorderBrush}"
-        BorderThickness="0">
-        <ContentPresenter
-          x:Name="contentPresenter"
-          Margin="{TemplateBinding Padding}"
-          HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-          VerticalAlignment="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-          ContentSource="Header"
-          Focusable="False"
-          RecognizesAccessKey="True"
-          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-      </Border>
-      <!--<Border
-            x:Name="FocusBorder"
-            BorderBrush="{ui:ThemeResource ResourceKey=ControlFocusBorder}"
-            Visibility="Collapsed" />-->
-    </Grid>
-    <ControlTemplate.Triggers>
-      <Trigger SourceName="border" Property="IsMouseOver" Value="True">
-        <Setter TargetName="border" Property="Background"
-                Value="{t:ThemeResource ResourceKey=TabItemMouseOverBackground}" />
-      </Trigger>
-      <Trigger Property="IsSelected" Value="True">
-        <Setter TargetName="border" Property="Background"
-                Value="{t:ThemeResource ResourceKey=TabItemSelectedBackground}" />
-        <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=TabItemSelectedForeground}" />
-      </Trigger>
-      <!--<Trigger Property="IsFocused" Value="true">
-            <Setter TargetName="FocusBorder" Property="Visibility" Value="Visible" />
-          </Trigger>-->
-      <Trigger Property="IsEnabled" Value="false">
-        <Setter Property="Opacity" Value="{t:ThemeResource ResourceKey=ControlDisabledOpacity}" />
-      </Trigger>
-    </ControlTemplate.Triggers>
-  </ControlTemplate>
-
-  <Style x:Key="TabItemStyle.SelectedBackground" TargetType="{x:Type TabItem}">
-    <Setter Property="Foreground" Value="{t:ThemeResource ResourceKey=ControlDefaultForeground}" />
-    <Setter Property="Background" Value="{t:ThemeResource ResourceKey=PrimaryBackground}" />
-    <Setter Property="Margin" Value="0" />
-    <Setter Property="Padding" Value="0" />
-    <Setter Property="BorderThickness" Value="0" />
-    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-    <Setter Property="VerticalContentAlignment" Value="Stretch" />
-    <Setter Property="Template" Value="{StaticResource TabItemTemplate.SelectedBackground}" />
-  </Style>
+  <Style BasedOn="{StaticResource Style.TabItem}" TargetType="{x:Type TabItem}" />
 
 </ResourceDictionary>

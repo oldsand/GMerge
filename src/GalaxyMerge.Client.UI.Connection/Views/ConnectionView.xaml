@@ -5,25 +5,109 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:prism="http://prismlibrary.com/"
              xmlns:ui="http://gmerge.com/ui/wpf"
-             xmlns:naming="clr-namespace:GalaxyMerge.Client.Core.Naming;assembly=GalaxyMerge.Client.Core"
+             xmlns:viewModels="clr-namespace:GalaxyMerge.Client.UI.Connection.ViewModels"
              prism:ViewModelLocator.AutoWireViewModel="True"
+             d:DataContext="{d:DesignInstance viewModels:ConnectionViewModel, IsDesignTimeCreatable=True}"
              mc:Ignorable="d"
              d:DesignHeight="800" d:DesignWidth="1000">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/GalaxyMerge.Client.Resources;component/Resources.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+      
+      <ControlTemplate x:Key="TabItemTemplate" TargetType="{x:Type TabItem}" >
+        <Border x:Name="Border"
+          Background="{TemplateBinding Background}"
+          BorderBrush="{TemplateBinding BorderBrush}"
+          BorderThickness="{TemplateBinding BorderThickness}">
+          <ContentPresenter
+            Margin="{TemplateBinding Padding}"
+            HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+            VerticalAlignment="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+            KeyboardNavigation.TabNavigation="None"
+            ContentSource="Header"
+            Focusable="False"
+            RecognizesAccessKey="True"
+            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+        </Border>
+        <ControlTemplate.Triggers>
+          <Trigger Property="IsEnabled" Value="False">
+            <Setter Property="Opacity" Value="{ui:ThemeResource ResourceKey=ControlDisabledOpacity}" />
+          </Trigger>
+          <Trigger SourceName="Border" Property="IsMouseOver" Value="True">
+            <Setter TargetName="Border" Property="Background" Value="{ui:ThemeResource ResourceKey=ControlMouseOverBackground}" />
+          </Trigger>
+          <Trigger Property="IsSelected" Value="True">
+            <Setter Property="Foreground" Value="{ui:ThemeResource ResourceKey=ControlForeground}" />
+          </Trigger>
+        </ControlTemplate.Triggers>
+      </ControlTemplate>
+    
+      <Style TargetType="{x:Type TabItem}">
+        <Setter Property="Background" Value="{ui:ThemeResource ResourceKey=PrimaryBackground}" />
+        <Setter Property="Foreground" Value="{ui:ThemeResource ResourceKey=ControlDefaultForeground}" />
+        <Setter Property="Template" Value="{StaticResource TabItemTemplate}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Stretch" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+      </Style>
+    </ResourceDictionary>
+  </UserControl.Resources>
+
   <Grid>
-    <Grid.RowDefinitions>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition />
-    </Grid.RowDefinitions>
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="Auto"/>
-      <ColumnDefinition Width="Auto"/>
-      <ColumnDefinition />
-    </Grid.ColumnDefinitions>
-    
-    <Rectangle Grid.Row="1" Grid.Column="0" Fill="LightCoral" Width="20" />
-    <Rectangle Grid.Row="1" Grid.Column="1" Fill="LightBlue" Width="200" />
-    <Rectangle Grid.Row="1" Grid.Column="2" Fill="LightSeaGreen" />
-    
-    
+    <TabControl TabStripPlacement="Left"
+                BorderThickness="1 0 0 0"
+                ui:TabControlProperties.HeaderBackground="{ui:ThemeResource ResourceKey=PanelBackground}">
+      <TabItem Background="{ui:ThemeResource ResourceKey=PanelBackground}"
+               Height="60">
+        <TabItem.Header>
+          <StackPanel>
+            <ui:Icon Height="20"
+                     Width="20"
+                     Template="{StaticResource Icon.Galaxy}"
+                     Foreground="{Binding RelativeSource={RelativeSource AncestorType=TabItem}, Path=Foreground}" />
+            <TextBlock Text="Galaxy"
+                       Margin="0 3 0 0"
+                       FontSize="10"
+                       VerticalAlignment="Center" />
+          </StackPanel>
+        </TabItem.Header>
+        <ContentControl prism:RegionManager.RegionName="{x:Static ui:RegionName.ConnectionBrowseRegion}" />
+      </TabItem>
+
+      <TabItem Background="{ui:ThemeResource ResourceKey=PanelBackground}"
+               Height="60">
+        <TabItem.Header>
+          <StackPanel>
+            <ui:Icon Height="20"
+                     Width="20"
+                     Template="{StaticResource Icon.Change}"
+                     Foreground="{Binding RelativeSource={RelativeSource AncestorType=TabItem}, Path=Foreground}" />
+            <TextBlock Text="Changes"
+                       Margin="0 3 0 0"
+                       FontSize="10"
+                       VerticalAlignment="Center" />
+          </StackPanel>
+        </TabItem.Header>
+      </TabItem>
+
+      <TabItem Background="{ui:ThemeResource ResourceKey=PanelBackground}"
+               Height="60">
+        <TabItem.Header>
+          <StackPanel>
+            <ui:Icon Height="20"
+                     Width="20"
+                     Template="{StaticResource Icon.Archive}"
+                     Foreground="{Binding RelativeSource={RelativeSource AncestorType=TabItem}, Path=Foreground}" />
+            <TextBlock Text="Archive"
+                       Margin="0 3 0 0"
+                       FontSize="10"
+                       VerticalAlignment="Center" />
+          </StackPanel>
+        </TabItem.Header>
+      </TabItem>
+    </TabControl>
   </Grid>
 </UserControl>

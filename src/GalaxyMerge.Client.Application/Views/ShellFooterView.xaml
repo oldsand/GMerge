@@ -11,7 +11,7 @@
              mc:Ignorable="d"
              d:DesignHeight="30" d:DesignWidth="1000">
 
-  <Border Background="{ui:ThemeResource PanelBackground}"
+  <Border Background="{ui:ThemeResource ResourceKey=PanelBackground}"
           BorderBrush="{ui:ThemeResource ResourceKey=PrimaryBorder}"
           BorderThickness="0 1 0 0">
     <StackPanel Orientation="Horizontal"

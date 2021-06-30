@@ -15,6 +15,8 @@ namespace GalaxyMerge.Client.Core.Naming
         public const string DetailsRegion = nameof(DetailsRegion);
         public const string ButtonRegion = nameof(ButtonRegion);
 
+        public const string ConnectionBrowseRegion = nameof(ConnectionBrowseRegion);
+        
         //Application Specific
         public const string EventLogRegion = nameof(EventLogRegion);
     }
