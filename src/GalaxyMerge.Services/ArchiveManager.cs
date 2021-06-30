@@ -9,6 +9,8 @@ using GalaxyMerge.Archive.Entities;
 using GalaxyMerge.Archive.Repositories;
 using GalaxyMerge.Contracts;
 using GalaxyMerge.Core.Extensions;
+using GalaxyMerge.Core.Utilities;
+using GalaxyMerge.Data.Abstractions;
 using GalaxyMerge.Primitives;
 
 namespace GalaxyMerge.Services
@@ -16,16 +18,23 @@ namespace GalaxyMerge.Services
     public class ArchiveManager : IArchiveService
     {
         private readonly IGalaxyRepositoryProvider _galaxyRepositoryProvider;
+        private readonly IGalaxyDataRepositoryFactory _dataRepositoryFactory;
         private IGalaxyRepository _grSession;
+        private IGalaxyDataRepository _dataRepository;
 
-        public ArchiveManager(IGalaxyRepositoryProvider galaxyRepositoryProvider)
+        public ArchiveManager(IGalaxyRepositoryProvider galaxyRepositoryProvider, IGalaxyDataRepositoryFactory dataRepositoryFactory)
         {
             _galaxyRepositoryProvider = galaxyRepositoryProvider;
+            _dataRepositoryFactory = dataRepositoryFactory;
         }
         
         public bool Connect(string galaxyName)
         {
+            var galaxyConnectionString = DbStringBuilder.BuildGalaxy(Environment.MachineName, galaxyName);
+            _dataRepository = _dataRepositoryFactory.Create(galaxyConnectionString);
+            
             _grSession = _galaxyRepositoryProvider.GetClientInstance(galaxyName);
+            
             return _grSession.Name == galaxyName && _grSession.Connected;
         }
         
@@ -92,7 +101,7 @@ namespace GalaxyMerge.Services
 
         public void AddObject(int objectId)
         {
-            var archiver = new ArchiveProcessor(_grSession);
+            var archiver = new ArchiveProcessor(_grSession, _dataRepository);
             archiver.Archive(objectId);
         }
 
@@ -104,7 +113,7 @@ namespace GalaxyMerge.Services
 
         public void ArchiveObject(int objectId, bool force = false)
         {
-            var archiver = new ArchiveProcessor(_grSession);
+            var archiver = new ArchiveProcessor(_grSession, _dataRepository);
             archiver.Archive(objectId);
         }
 

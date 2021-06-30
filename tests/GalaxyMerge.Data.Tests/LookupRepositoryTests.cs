@@ -1,5 +1,6 @@
 using GalaxyMerge.Data.Repositories;
 using GalaxyMerge.Testing;
+using Microsoft.Data.SqlClient;
 using NUnit.Framework;
 
 namespace GalaxyMerge.Data.Tests
@@ -7,14 +8,29 @@ namespace GalaxyMerge.Data.Tests
     [TestFixture]
     public class LookupRepositoryTests
     {
+        private const string HostName = Settings.CurrentTestHost;
+        private const string DatabaseName = Settings.CurrentTestGalaxy;
+        private string _connectionString;
+
+        [SetUp]
+        public void Setup()
+        {
+            _connectionString = new SqlConnectionStringBuilder
+            {
+                DataSource = HostName, 
+                InitialCatalog = DatabaseName, 
+                IntegratedSecurity = true
+            }.ConnectionString;
+        }
+        
         [Test]
         [TestCase(13317)] //$Test_Template in ButaneDev2014
         [TestCase(829)] //$AnalogInput_v3 in ButaneDev2014
         public void FindAncestors_ValidObjectId_ReturnsExpectedAncestors(int objectId)
         {
-            var repo = new LookupRepository(Settings.CurrentTestGalaxy);
+            var repo = new GalaxyDataRepository(_connectionString);
 
-            var ancestors = repo.FindAncestors(objectId);
+            var ancestors = repo.Lookup.FindAncestors(objectId);
             
             Assert.IsNotEmpty(ancestors);
         }
@@ -22,9 +38,9 @@ namespace GalaxyMerge.Data.Tests
         [Test]
         public void FindAncestors_InvalidId_ReturnsEmptyList()
         {
-            var repo = new LookupRepository(Settings.CurrentTestGalaxy);
+            var repo = new GalaxyDataRepository(_connectionString);
 
-            var ancestors = repo.FindAncestors(0);
+            var ancestors = repo.Lookup.FindAncestors(0);
 
             Assert.IsEmpty(ancestors);
         }
@@ -34,9 +50,9 @@ namespace GalaxyMerge.Data.Tests
         [TestCase(829)] //$AnalogInput_v3 in ButaneDev2014
         public void FindDescendants_ValidObjectId_ReturnsExpectedAncestors(int objectId)
         {
-            var repo = new LookupRepository(Settings.CurrentTestGalaxy);
+            var repo = new GalaxyDataRepository(_connectionString);
 
-            var descendants = repo.FindDescendants(objectId);
+            var descendants = repo.Lookup.FindDescendants(objectId);
             
             Assert.IsNotEmpty(descendants);
         }
@@ -44,9 +60,9 @@ namespace GalaxyMerge.Data.Tests
         [Test]
         public void FindDescendants_InvalidId_ReturnsEmptyList()
         {
-            var repo = new LookupRepository(Settings.CurrentTestGalaxy);
+            var repo = new GalaxyDataRepository(_connectionString);
 
-            var descendants = repo.FindDescendants(0);
+            var descendants = repo.Lookup.FindDescendants(0);
 
             Assert.IsEmpty(descendants);
         }
@@ -56,9 +72,9 @@ namespace GalaxyMerge.Data.Tests
         [TestCase(38107, "_InTouch_Demo_\\Shared primitives\\Alarms")]
         public void GetFolderPath_ValidId_ReturnsExpectedFolderPath(int objectId, string expectedPath)
         {
-            var repo = new LookupRepository(Settings.CurrentTestGalaxy);
+            var repo = new GalaxyDataRepository(_connectionString);
 
-            var path = repo.GetFolderPath(objectId);
+            var path = repo.Lookup.GetFolderPath(objectId);
             
             Assert.AreEqual(expectedPath, path);
         }

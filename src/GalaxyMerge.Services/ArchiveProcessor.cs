@@ -5,6 +5,7 @@ using GalaxyMerge.Archive.Entities;
 using GalaxyMerge.Archive.Repositories;
 using GalaxyMerge.Core;
 using GalaxyMerge.Core.Extensions;
+using GalaxyMerge.Data.Abstractions;
 using GalaxyMerge.Data.Entities;
 using GalaxyMerge.Data.Repositories;
 using GalaxyMerge.Primitives;
@@ -15,15 +16,19 @@ namespace GalaxyMerge.Services
     {
         private readonly string _galaxyName;
         private readonly IGalaxyRepository _galaxyRepository;
+        private readonly IGalaxyDataRepository _dataRepository;
 
-        public ArchiveProcessor(IGalaxyRepository galaxyRepository)
+        public ArchiveProcessor(IGalaxyRepository galaxyRepository, IGalaxyDataRepository dataRepository)
         {
-            _galaxyRepository = galaxyRepository ?? throw new ArgumentNullException(nameof(galaxyRepository), "Value cannot be null");
+            _galaxyRepository = galaxyRepository ??
+                                throw new ArgumentNullException(nameof(galaxyRepository), "Value cannot be null");
+            _dataRepository = dataRepository ??
+                              throw new ArgumentNullException(nameof(dataRepository), "Value cannot be null");
 
             if (!galaxyRepository.Connected)
                 throw new ArgumentException("Galaxy Repository must be connect in order to initialize this object",
                     nameof(galaxyRepository));
-            
+
             _galaxyName = _galaxyRepository.Name;
         }
 
@@ -32,7 +37,7 @@ namespace GalaxyMerge.Services
             var gObject = GetGObject(objectId);
             ArchiveObject(gObject, changeLogId, forceArchive);
         }
-        
+
         public void Archive(string tagName, int? changeLogId = null, bool forceArchive = false)
         {
             var gObject = GetGObject(tagName);
@@ -47,26 +52,26 @@ namespace GalaxyMerge.Services
                 UpdateArchiveObject(gObject, changeLogId);
                 return;
             }
-            
+
             AddArchiveObject(gObject, changeLogId);
         }
 
         private void AddArchiveObject(GObject gObject, int? changeLogId)
         {
             using var archiveRepo = new ArchiveRepository(_galaxyName);
-            
+
             var template = Enumeration.FromId<Template>(gObject.TemplateId);
             if (template == null) throw new InvalidOperationException("Cannot Archive Unknown Template Type");
-            
+
             var archiveObject = new ArchiveObject(gObject.ObjectId, gObject.TagName, gObject.ConfigVersion, template);
-            
+
             var data = IsSymbol(gObject) ? GetSymbolData(gObject.TagName) : GetObjectData(gObject.TagName);
             archiveObject.AddEntry(data, changeLogId);
-            
+
             archiveRepo.AddObject(archiveObject);
             archiveRepo.Save();
         }
-        
+
         private void UpdateArchiveObject(GObject gObject, int? changeLogId)
         {
             using var archiveRepo = new ArchiveRepository(_galaxyName);
@@ -75,10 +80,10 @@ namespace GalaxyMerge.Services
 
             if (gObject.TagName != archiveObject.TagName)
                 archiveObject.UpdateTagName(gObject.TagName);
-            
+
             if (gObject.ConfigVersion != archiveObject.Version)
                 archiveObject.UpdateVersion(gObject.ConfigVersion);
-            
+
             var data = IsSymbol(gObject) ? GetSymbolData(gObject.TagName) : GetObjectData(gObject.TagName);
             archiveObject.AddEntry(data, changeLogId);
 
@@ -97,10 +102,10 @@ namespace GalaxyMerge.Services
             using var archiveRepo = new ArchiveRepository(_galaxyName);
             var latest = archiveRepo.GetLatestEntry(gObject.ObjectId);
             
-            using var changeLogRepo = new ChangeLogRepository(_galaxyName);
-            var changeLog = changeLogRepo.GetLatestByOperation(gObject.ObjectId, Operation.CheckInSuccess);
-            
-            return latest != null && changeLog.ConfigurationVersion == latest.Version && changeLog.ChangeDate <= latest.ArchivedOn;
+            var changeLog = _dataRepository.ChangeLogs.GetLatestByOperation(gObject.ObjectId, Operation.CheckInSuccess);
+
+            return latest != null && changeLog.ConfigurationVersion == latest.Version &&
+                   changeLog.ChangeDate <= latest.ArchivedOn;
         }
 
         private bool Exists(int objectId)
@@ -108,19 +113,17 @@ namespace GalaxyMerge.Services
             using var repo = new ArchiveRepository(_galaxyName);
             return repo.ObjectExists(objectId);
         }
-        
+
         private GObject GetGObject(int objectId)
         {
-            using var objectRepo = new ObjectRepository(_galaxyName);
-            return objectRepo.FindInclude(x => x.ObjectId == objectId, x => x.TemplateDefinition);
+            return _dataRepository.Objects.FindInclude(x => x.ObjectId == objectId, x => x.TemplateDefinition);
         }
-        
+
         private GObject GetGObject(string tagName)
         {
-            using var objectRepo = new ObjectRepository(_galaxyName);
-            return objectRepo.FindAllInclude(x => x.TagName == tagName, x => x.TemplateDefinition).FirstOrDefault();
+            return _dataRepository.Objects.FindAllInclude(x => x.TagName == tagName, x => x.TemplateDefinition).FirstOrDefault();
         }
-        
+
         private byte[] GetObjectData(string tagName)
         {
             var galaxyObject = _galaxyRepository.GetObject(tagName);

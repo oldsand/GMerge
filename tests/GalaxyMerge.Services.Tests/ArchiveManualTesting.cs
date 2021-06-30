@@ -1,6 +1,7 @@
 using System.Security.Principal;
 using GalaxyMerge.Archestra;
 using GalaxyMerge.Archive;
+using GalaxyMerge.Data.Repositories;
 using GalaxyMerge.Testing;
 using NUnit.Framework;
 
@@ -14,13 +15,15 @@ namespace GalaxyMerge.Services.Tests
         {
             var gr = new GalaxyRepository(Settings.CurrentTestGalaxy);
             gr.Login(WindowsIdentity.GetCurrent().Name);
+            
+            using var dataRepo = new GalaxyDataRepository(Settings.CurrentTestHost, Settings.CurrentTestGalaxy);
 
             var config =
                 ArchiveConfigurationBuilder.Default(gr.Name, gr.VersionNumber, gr.CdiVersion, gr.VersionString);
             var builder = new ArchiveBuilder();
             builder.Build(config);
 
-            var archiver = new ArchiveProcessor(gr);
+            var archiver = new ArchiveProcessor(gr, dataRepo);
             archiver.Archive("$Test_Template", null, true);
             archiver.Archive("DatabaseAccess", null, true);
             archiver.Archive("$AnalogInput_v3", null, true);

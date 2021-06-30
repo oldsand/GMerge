@@ -23,8 +23,8 @@ namespace GalaxyMerge.Services
         
         private bool HasValidInclusionOption(int objectId)
         {
-            using var objectRepository = new ObjectRepository(_galaxyName);
-            var gObject = objectRepository.FindInclude(x => x.ObjectId == objectId, x => x.TemplateDefinition);
+            using var dataRepository = new GalaxyDataRepository(Environment.MachineName, _galaxyName);
+            var gObject = dataRepository.Objects.FindInclude(x => x.ObjectId == objectId, x => x.TemplateDefinition);
             
             using var archiveRepository = new ArchiveRepository(_galaxyName);
             var inclusionSetting = archiveRepository.GetInclusionSetting(gObject.TemplateId);

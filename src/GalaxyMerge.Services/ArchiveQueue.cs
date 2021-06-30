@@ -5,7 +5,9 @@ using System.Threading;
 using GalaxyMerge.Archestra.Abstractions;
 using GalaxyMerge.Archive.Entities;
 using GalaxyMerge.Archive.Repositories;
+using GalaxyMerge.Data.Abstractions;
 using GalaxyMerge.Data.Entities;
+using GalaxyMerge.Data.Repositories;
 using GalaxyMerge.Primitives;
 using NLog;
 
@@ -14,14 +16,15 @@ namespace GalaxyMerge.Services
     public class ArchiveQueue
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private readonly BlockingCollection<QueuedEntry> _jobQueue = new BlockingCollection<QueuedEntry>();
+        private readonly BlockingCollection<QueuedEntry> _jobQueue = new();
         private readonly IGalaxyRepository _galaxyRepository;
         private readonly ArchiveProcessor _archiveProcessor;
 
         public ArchiveQueue(IGalaxyRepository galaxyRepository)
         {
             _galaxyRepository = galaxyRepository;
-            _archiveProcessor = new ArchiveProcessor(galaxyRepository);
+            var dataRepository = new GalaxyDataRepository(Environment.MachineName, galaxyRepository.Name);
+            _archiveProcessor = new ArchiveProcessor(galaxyRepository, dataRepository);
             var thread = new Thread(ProcessJobs) {IsBackground = true};
             thread.Start();
         }

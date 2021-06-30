@@ -11,11 +11,18 @@ namespace GalaxyMerge.Client.Core.Mvvm
 
         private string _title;
         private ControlTemplate _icon;
+        private bool _loading;
 
-        public string Title
+        public virtual string Title
         {
             get => _title;
             set => SetProperty(ref _title, value);
+        }
+
+        public virtual bool Loading
+        {
+            get => _loading;
+            set => SetProperty(ref _loading, value);
         }
 
         public ControlTemplate Icon
@@ -30,21 +37,23 @@ namespace GalaxyMerge.Client.Core.Mvvm
 
         protected virtual void Load()
         {
+            Loading = true;
         }
         
         protected virtual Task LoadAsync()
         {
+            Loading = true;
             return Task.CompletedTask;
         }
 
         protected virtual void OnLoadError(Exception ex)
         {
-            
+            Loading = false;
         }
         
         protected virtual void OnLoadComplete()
         {
-            
+            Loading = false;
         }
     }
 }

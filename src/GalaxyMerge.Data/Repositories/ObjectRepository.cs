@@ -1,8 +1,6 @@
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Linq;
 using System.Threading.Tasks;
-using GalaxyMerge.Core.Utilities;
 using GalaxyMerge.Data.Abstractions;
 using GalaxyMerge.Data.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -11,18 +9,11 @@ namespace GalaxyMerge.Data.Repositories
 {
     public class ObjectRepository : Repository<GObject>, IObjectRepository
     {
-        public ObjectRepository(string galaxyName) 
-            : base(GalaxyContext.Create(DbStringBuilder.BuildGalaxy(galaxyName)))
+        internal ObjectRepository(DbContext context) : base (context)
         {
         }
-        
-        public ObjectRepository(string hostName, string galaxyName) 
-            : base(GalaxyContext.Create(DbStringBuilder.BuildGalaxy(hostName, galaxyName)))
-        {
-        }
-        
-        public ObjectRepository(DbConnectionStringBuilder connectionStringBuilder) 
-            : base(GalaxyContext.Create(connectionStringBuilder.ConnectionString))
+
+        public ObjectRepository(string connectionString) : base(GalaxyContext.Create(connectionString))
         {
         }
 

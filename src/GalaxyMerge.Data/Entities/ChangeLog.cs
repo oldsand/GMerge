@@ -8,7 +8,7 @@ namespace GalaxyMerge.Data.Entities
 {
     public class ChangeLog
     {
-        private ChangeLog()
+        public ChangeLog()
         {
         }
         

@@ -1,27 +1,14 @@
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Linq;
-using GalaxyMerge.Core.Utilities;
 using GalaxyMerge.Data.Abstractions;
 using GalaxyMerge.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace GalaxyMerge.Data.Repositories
 {
-    public class DefinitionRepository : Repository<TemplateDefinition>, IDefinitionRepository
+    internal class DefinitionRepository : Repository<TemplateDefinition>, IDefinitionRepository
     {
-        public DefinitionRepository(string galaxyName) 
-            : base(GalaxyContext.Create(DbStringBuilder.BuildGalaxy(galaxyName)))
-        {
-        }
-        
-        public DefinitionRepository(string hostName, string galaxyName) 
-            : base(GalaxyContext.Create(DbStringBuilder.BuildGalaxy(hostName, galaxyName)))
-        {
-        }
-        
-        public DefinitionRepository(DbConnectionStringBuilder connectionStringBuilder) 
-            : base(GalaxyContext.Create(connectionStringBuilder.ConnectionString))
+        public DefinitionRepository(DbContext context) : base(context)
         {
         }
 

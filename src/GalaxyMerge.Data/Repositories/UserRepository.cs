@@ -3,23 +3,13 @@ using System.Linq;
 using GalaxyMerge.Core.Utilities;
 using GalaxyMerge.Data.Abstractions;
 using GalaxyMerge.Data.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace GalaxyMerge.Data.Repositories
 {
-    public class UserRepository : Repository<UserProfile>, IUserRepository
+    internal class UserRepository : Repository<UserProfile>, IUserRepository
     {
-        public UserRepository(string galaxyName) 
-            : base(GalaxyContext.Create(DbStringBuilder.BuildGalaxy(galaxyName)))
-        {
-        }
-        
-        public UserRepository(string hostName, string galaxyName) 
-            : base(GalaxyContext.Create(DbStringBuilder.BuildGalaxy(hostName, galaxyName)))
-        {
-        }
-        
-        public UserRepository(DbConnectionStringBuilder connectionStringBuilder) 
-            : base(GalaxyContext.Create(connectionStringBuilder.ConnectionString))
+        public UserRepository(DbContext context) : base(context)
         {
         }
 

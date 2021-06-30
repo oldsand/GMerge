@@ -1,32 +1,39 @@
+using System;
 using System.ServiceModel;
 using GalaxyMerge.Archestra.Abstractions;
-using GalaxyMerge.Archestra.Entities;
 using GalaxyMerge.Contracts;
-using GalaxyMerge.Data.Repositories;
+using GalaxyMerge.Core.Utilities;
+using GalaxyMerge.Data.Abstractions;
 
 namespace GalaxyMerge.Services
 {
     [ServiceBehavior(IncludeExceptionDetailInFaults = true)]
-    public class GalaxyManager : IGalaxyService
+    public class GalaxyManager : IGalaxyService, IDisposable
     {
         private readonly IGalaxyRepositoryProvider _galaxyRepositoryProvider;
+        private readonly IGalaxyDataRepositoryFactory _dataRepositoryFactory;
         private IGalaxyRepository _clientGrSession;
+        private IGalaxyDataRepository _dataRepository;
 
-        public GalaxyManager(IGalaxyRepositoryProvider galaxyRepositoryProvider)
+        public GalaxyManager(IGalaxyRepositoryProvider galaxyRepositoryProvider, IGalaxyDataRepositoryFactory dataRepositoryFactory)
         {
             _galaxyRepositoryProvider = galaxyRepositoryProvider;
+            _dataRepositoryFactory = dataRepositoryFactory;
         }
 
         public bool Connect(string galaxyName)
         {
+            var galaxyConnectionString = DbStringBuilder.BuildGalaxy(Environment.MachineName, galaxyName);
+            _dataRepository = _dataRepositoryFactory.Create(galaxyConnectionString);
+            
             _clientGrSession = _galaxyRepositoryProvider.GetClientInstance(galaxyName);
+            
             return _clientGrSession.Name == galaxyName && _clientGrSession.Connected;
         }
 
         public GalaxyObjectData GetObjectById(int objectId)
         {
-            using var objectRepository = new ObjectRepository(_clientGrSession.Name);
-            var tagName = objectRepository.GetTagName(objectId);
+            var tagName = _dataRepository.Objects.GetTagName(objectId);
             var galaxyObject = _clientGrSession.GetObject(tagName);
             return DataMapper.Map(galaxyObject);
         }
@@ -39,8 +46,7 @@ namespace GalaxyMerge.Services
 
         public GalaxySymbolData GetSymbolById(int objectId)
         {
-            using var objectRepository = new ObjectRepository(_clientGrSession.Name);
-            var tagName = objectRepository.GetTagName(objectId);
+            var tagName = _dataRepository.Objects.GetTagName(objectId);
             var galaxySymbol = _clientGrSession.GetSymbol(tagName);
             return DataMapper.Map(galaxySymbol);
         }
@@ -49,6 +55,11 @@ namespace GalaxyMerge.Services
         {
             var galaxySymbol = _clientGrSession.GetSymbol(tagName);
             return DataMapper.Map(galaxySymbol);
+        }
+
+        public void Dispose()
+        {
+            _dataRepository?.Dispose();
         }
     }
 }

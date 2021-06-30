@@ -1,6 +1,6 @@
-using System.ComponentModel.DataAnnotations;
 using GalaxyMerge.Client.Data.Entities;
 using GalaxyMerge.Client.Wrappers.Base;
+using GalaxyMerge.Core.Utilities;
 
 namespace GalaxyMerge.Client.Wrappers
 {
@@ -28,6 +28,11 @@ namespace GalaxyMerge.Client.Wrappers
             RequireProperty(nameof(GalaxyName));
             
             base.Initialize(model);
+        }
+        
+        public string GetConnectionString()
+        {
+            return DbStringBuilder.BuildGalaxy(NodeName, GalaxyName);
         }
     }
 }

@@ -1,4 +1,5 @@
 using GalaxyMerge.Archive.Repositories;
+using GalaxyMerge.Data.Abstractions;
 using NUnit.Framework;
 
 namespace GalaxyMerge.Services.Tests
@@ -19,7 +20,7 @@ namespace GalaxyMerge.Services.Tests
         [Test]
         public void GetArchiveEntryAndConvertToGalaxyObjectData()
         {
-            var manager = new ArchiveManager(_provider);
+            var manager = new ArchiveManager(_provider, new GalaxyDataRepositoryFactory());
             manager.Connect("ButaneDev2014");
             
             var data = manager.GetGalaxyObject(46885);

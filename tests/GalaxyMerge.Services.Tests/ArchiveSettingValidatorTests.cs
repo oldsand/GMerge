@@ -14,7 +14,7 @@ namespace GalaxyMerge.Services.Tests
     [TestFixture]
     public class ArchiveSettingValidatorTests
     { 
-        [SetUp]
+        /*[SetUp]
         public void Setup()
         {
             var builder = new ArchiveBuilder();
@@ -36,7 +36,7 @@ namespace GalaxyMerge.Services.Tests
         public void TearDown()
         {
             File.Delete($"{ApplicationPath.Archives}\\{Settings.CurrentTestGalaxy}.db");
-        }
+        }*/
 
         /*[Test]
         public void HasValidInclusionOption_IsConfigured_ReturnsTrue()

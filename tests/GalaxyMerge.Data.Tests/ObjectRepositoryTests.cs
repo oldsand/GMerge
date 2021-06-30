@@ -1,7 +1,9 @@
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using GalaxyMerge.Data.Repositories;
+using GalaxyMerge.Testing;
 using NUnit.Framework;
 
 namespace GalaxyMerge.Data.Tests
@@ -9,31 +11,51 @@ namespace GalaxyMerge.Data.Tests
     [TestFixture]
     public class ObjectRepositoryTests
     {
-        private const string HostName = "ETDEVGR1";
-        private const string DatabaseName = "ButaneDev2014";
-        private SqlConnectionStringBuilder _connectionStringBuilder;
+        private const string HostName = Settings.CurrentTestHost;
+        private const string DatabaseName = Settings.CurrentTestGalaxy;
+        private string _connectionString;
 
         [SetUp]
         public void Setup()
         {
-            _connectionStringBuilder = new SqlConnectionStringBuilder
+            _connectionString = new SqlConnectionStringBuilder
             {
                 DataSource = HostName, 
                 InitialCatalog = DatabaseName, 
                 IntegratedSecurity = true
-            };
+            }.ConnectionString;
         }
 
         [Test]
         [TestCase("$UserDefined")]
         [TestCase("$ViewEngine")]
         [TestCase("$AppEngine")]
-        public void FindByTagName_ValidObject_ReturnsObjectWithCorrectName(string tagName)
+        public void FindByTagName_UsingGalaxyDataRepository_ReturnsObjectWithCorrectName(string tagName)
         {
-            var repo = new ObjectRepository(_connectionStringBuilder);
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+            using var repo = new GalaxyDataRepository(_connectionString);
+
+            var result = repo.Objects.FindByTagName(tagName);
+            stopwatch.Stop();
+            
+            Assert.NotNull(result);
+            Assert.AreEqual(tagName, result.TagName);
+        }
+        
+        [Test]
+        [TestCase("$UserDefined")]
+        [TestCase("$ViewEngine")]
+        [TestCase("$AppEngine")]
+        public void FindByTagName_UsingObjectRepository_ReturnsObjectWithCorrectName(string tagName)
+        {   
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+            using var repo = new ObjectRepository(_connectionString);
 
             var result = repo.FindByTagName(tagName);
-
+            stopwatch.Stop();
+            
             Assert.NotNull(result);
             Assert.AreEqual(tagName, result.TagName);
         }
@@ -44,9 +66,9 @@ namespace GalaxyMerge.Data.Tests
         [TestCase("AppEngine")]
         public void FindByTagName_InvalidObject_ReturnsNull(string tagName)
         {
-            var repo = new ObjectRepository(_connectionStringBuilder);
+            var repo = new GalaxyDataRepository(_connectionString);
 
-            var result = repo.FindByTagName(tagName);
+            var result = repo.Objects.FindByTagName(tagName);
 
             Assert.IsNull(result);
         }
@@ -54,9 +76,9 @@ namespace GalaxyMerge.Data.Tests
         [Test]
         public void Find_ValidId_ReturnsObject()
         {
-            var repo = new ObjectRepository(_connectionStringBuilder);
+            var repo = new GalaxyDataRepository(_connectionString);
 
-            var result = repo.Find(x => x.ObjectId == 14);
+            var result = repo.Objects.Find(x => x.ObjectId == 14);
 
             Assert.NotNull(result);
             Assert.AreEqual("$UserDefined", result.TagName);
@@ -68,9 +90,9 @@ namespace GalaxyMerge.Data.Tests
         [TestCase("$AppEngine")]
         public void FindIncludeTemplate_ValidObject_ReturnsObjectWithTemplateNotNull(string tagName)
         {
-            var repo = new ObjectRepository(_connectionStringBuilder);
+            var repo = new GalaxyDataRepository(_connectionString);
 
-            var result = repo.FindInclude(x => x.TagName == tagName, g => g.TemplateDefinition);
+            var result = repo.Objects.FindInclude(x => x.TagName == tagName, g => g.TemplateDefinition);
 
             Assert.NotNull(result);
             Assert.AreEqual(tagName, result.TagName);
@@ -81,9 +103,9 @@ namespace GalaxyMerge.Data.Tests
         [TestCase("SUN_GEN_Site_Data")]
         public void FindIncludeArea_ValidObject_ReturnsObjectWithAreaNotNull(string tagName)
         {
-            var repo = new ObjectRepository(_connectionStringBuilder);
+            var repo = new GalaxyDataRepository(_connectionString);
 
-            var result = repo.FindInclude(x => x.TagName == tagName, g => g.Area);
+            var result = repo.Objects.FindInclude(x => x.TagName == tagName, g => g.Area);
 
             Assert.NotNull(result);
             Assert.AreEqual(tagName, result.TagName);
@@ -94,9 +116,9 @@ namespace GalaxyMerge.Data.Tests
         [TestCase("SUN_GEN_Site_Data")]
         public void FindIncludeHost_ValidObject_ReturnsObjectWithHostNotNull(string tagName)
         {
-            var repo = new ObjectRepository(_connectionStringBuilder);
+            var repo = new GalaxyDataRepository(_connectionString);
 
-            var result = repo.FindInclude(x => x.TagName == tagName, g => g.Host);
+            var result = repo.Objects.FindInclude(x => x.TagName == tagName, g => g.Host);
 
             Assert.NotNull(result);
             Assert.AreEqual(tagName, result.TagName);
@@ -107,9 +129,9 @@ namespace GalaxyMerge.Data.Tests
         [TestCase("$UserDefined")]
         public void FindIncludeDerivations_ValidObject_ReturnsObjectWithDerivedObject(string tagName)
         {
-            var repo = new ObjectRepository(_connectionStringBuilder);
+            var repo = new GalaxyDataRepository(_connectionString);
 
-            var result = repo.FindInclude(x => x.TagName == tagName, g => g.Derivations);
+            var result = repo.Objects.FindInclude(x => x.TagName == tagName, g => g.Derivations);
 
             Assert.NotNull(result);
             Assert.AreEqual(tagName, result.TagName);
@@ -120,9 +142,9 @@ namespace GalaxyMerge.Data.Tests
         [TestCase("$UserDefined")]
         public void FindIncludeAllDerivations_ValidObject_ReturnsObjectWithDerivedObject(string tagName)
         {
-            var repo = new ObjectRepository(_connectionStringBuilder);
+            var repo = new GalaxyDataRepository(_connectionString);
 
-            var result = repo.FindIncludeDescendants(tagName);
+            var result = repo.Objects.FindIncludeDescendants(tagName);
 
             Assert.NotNull(result);
             Assert.AreEqual(tagName, result.TagName);
@@ -132,9 +154,9 @@ namespace GalaxyMerge.Data.Tests
         [Test]
         public void FindIncludeChangeLogs_WhenCalled_ReturnsObjectWithChangeLogs()
         {
-            var repo = new ObjectRepository(_connectionStringBuilder);
+            var repo = new GalaxyDataRepository(_connectionString);
 
-            var result = repo.FindInclude(x => x.TagName == "$Test_Template", x => x.ChangeLogs);
+            var result = repo.Objects.FindInclude(x => x.TagName == "$Test_Template", x => x.ChangeLogs);
             
             Assert.NotNull(result);
             Assert.IsNotEmpty(result.ChangeLogs);
@@ -143,9 +165,9 @@ namespace GalaxyMerge.Data.Tests
         [Test]
         public async Task GetDerivationHierarchy_WhenCalled_ReturnsNotEmpty()
         {
-            var repo = new ObjectRepository(_connectionStringBuilder);
+            var repo = new GalaxyDataRepository(_connectionString);
 
-            var derivations = (await repo.GetDerivationHierarchy()).ToList();
+            var derivations = (await repo.Objects.GetDerivationHierarchy()).ToList();
             
             Assert.NotNull(derivations);
             Assert.IsNotEmpty(derivations);
@@ -155,9 +177,9 @@ namespace GalaxyMerge.Data.Tests
         [TestCase("FormatString")]
         public void FindIncludeFolder_ValidSymbol_ReturnsValidFolderObject(string tagName)
         {
-            var repo = new ObjectRepository(_connectionStringBuilder);
+            var repo = new GalaxyDataRepository(_connectionString);
 
-            var result = repo.FindIncludeFolder(tagName);
+            var result = repo.Objects.FindIncludeFolder(tagName);
             Assert.NotNull(result);
             Assert.NotNull(result.Folder);
         }

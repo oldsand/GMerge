@@ -10,23 +10,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GalaxyMerge.Data.Repositories
 {
-    public class LookupRepository : ILookupRepository
+    internal class LookupRepository : ILookupRepository
     {
         private readonly GalaxyContext _context;
         
-        public LookupRepository(string galaxyName)
+        public LookupRepository(GalaxyContext context)
         {
-            _context = GalaxyContext.Create(DbStringBuilder.BuildGalaxy(galaxyName));
-        }
-        
-        public LookupRepository(string hostName, string galaxyName)
-        {
-            _context = GalaxyContext.Create(DbStringBuilder.BuildGalaxy(hostName, galaxyName));
-        }
-        
-        public LookupRepository(DbConnectionStringBuilder connectionStringBuilder)
-        {
-            _context = GalaxyContext.Create(connectionStringBuilder.ConnectionString);
+            _context = context;
         }
 
         public IEnumerable<ObjectLookup> FindAncestors(int objectId, bool excludeSelf = true)

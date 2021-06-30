@@ -6,6 +6,8 @@
              xmlns:prism="http://prismlibrary.com/"
              xmlns:ui="http://gmerge.com/ui/wpf"
              xmlns:vm="clr-namespace:GalaxyMerge.Client.UI.Connection.ViewModels"
+             xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:entities="clr-namespace:GalaxyMerge.Data.Entities;assembly=GalaxyMerge.Data"
              prism:ViewModelLocator.AutoWireViewModel="True"
              d:DataContext="{d:DesignInstance vm:GalaxyTreeViewModel, IsDesignTimeCreatable=True}"
              mc:Ignorable="d"
@@ -60,10 +62,43 @@
       </StackPanel>
     </Border>
     
-    <Border Grid.Row="2" Background="LightSteelBlue">
-      <TextBlock Text="TreeView" 
-                 VerticalAlignment="Center"
-                 HorizontalAlignment="Center"/>  
+    <Border Grid.Row="2">
+      <TreeView x:Name="DerivationTree"
+                Background="{ui:ThemeResource ResourceKey=ControlBackground}"
+                BorderThickness="0"
+                Padding="0"
+                d:Visibility="{Binding SelectedObjectTreeType, Converter={ui:EnumVisibilityConverter}, ConverterParameter=Derivation}"
+                ItemsSource="{Binding Derivations}"
+                VirtualizingStackPanel.IsVirtualizing="True">
+        <TreeView.Resources>
+          <ui:TriggersCollection x:Key="TreeViewTriggers" x:Shared="False">
+            <ui:HandlingEventTrigger EventName="MouseDoubleClick">
+              <b:InvokeCommandAction
+                Command="{Binding ElementName=DerivationTree, Path=DataContext.OpenObjectViewCommand}"
+                CommandParameter="{Binding ElementName=DerivationTree, Path=SelectedItem}" />
+            </ui:HandlingEventTrigger>
+          </ui:TriggersCollection>
+          <HierarchicalDataTemplate ItemsSource="{Binding Derivations}"
+                                    DataType="{x:Type entities:GObject}">
+            <StackPanel Orientation="Horizontal">
+              <ui:Icon Height="14" Width="14" Margin="0 0 2 0">
+                <ui:Icon.Template>
+                  <MultiBinding Converter="{ui:ObjectCategoryToIconConverter}">
+                    <Binding Path="TemplateDefinition.CategoryId" />
+                    <Binding Path="TemplateDefinition.ObjectId" />
+                  </MultiBinding>
+                </ui:Icon.Template>
+              </ui:Icon>
+              <TextBlock Text="{Binding HierarchicalName}" />
+            </StackPanel>
+          </HierarchicalDataTemplate>
+        </TreeView.Resources>
+        <TreeView.ItemContainerStyle>
+          <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource TreeViewItemStyle.Default}">
+            <Setter Property="ui:Interactions.Triggers" Value="{StaticResource TreeViewTriggers}" />
+          </Style>
+        </TreeView.ItemContainerStyle>
+      </TreeView>
     </Border>
   </Grid>
 </UserControl>

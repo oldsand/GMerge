@@ -1,31 +1,19 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Markup;
+using GalaxyMerge.Client.Core.Converters;
 using GalaxyMerge.Client.Core.Utilities;
 using GalaxyMerge.Primitives;
 
 namespace GalaxyMerge.Client.Converters
 {
-    public class ObjectCategoryToIconConverter : MarkupExtension, IMultiValueConverter
+    public class ObjectCategoryToIconConverter : MultiValueConverter
     {
-        private ObjectCategoryToIconConverter _converter;
-      
-
-        public override object ProvideValue(IServiceProvider serviceProvider)
+        public override object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            _converter = new ObjectCategoryToIconConverter();
-            return _converter;
-        }
-
-        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (!(values[0] is ObjectCategory))
-                return null;
+            if (values[0] is not ObjectCategory) return null;
             
-            if (!(values[1] is int))
-                return null;
+            if (values[1] is not int) return null;
 
             var category = (ObjectCategory) values[0];
             var baseType = (int) values[1];
@@ -62,11 +50,6 @@ namespace GalaxyMerge.Client.Converters
 
             //Default to application object icon for unknown types
             return ResourceFinder.Find<ControlTemplate>("Icon.Galaxy.ApplicationObject");
-        }
-
-        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
         }
     }
 }

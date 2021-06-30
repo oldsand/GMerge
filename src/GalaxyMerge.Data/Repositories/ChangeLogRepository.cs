@@ -1,26 +1,14 @@
-using System.Data.Common;
 using System.Linq;
-using GalaxyMerge.Core.Utilities;
 using GalaxyMerge.Data.Abstractions;
 using GalaxyMerge.Data.Entities;
 using GalaxyMerge.Primitives;
+using Microsoft.EntityFrameworkCore;
 
 namespace GalaxyMerge.Data.Repositories
 {
-    public class ChangeLogRepository : Repository<ChangeLog>, IChangeLogRepository
+    internal class ChangeLogRepository : Repository<ChangeLog>, IChangeLogRepository
     {
-        public ChangeLogRepository(string galaxyName) 
-            : base(GalaxyContext.Create(DbStringBuilder.BuildGalaxy(galaxyName)))
-        {
-        }
-        
-        public ChangeLogRepository(string hostName, string galaxyName) 
-            : base(GalaxyContext.Create(DbStringBuilder.BuildGalaxy(hostName, galaxyName)))
-        {
-        }
-        
-        public ChangeLogRepository(DbConnectionStringBuilder connectionStringBuilder) 
-            : base(GalaxyContext.Create(connectionStringBuilder.ConnectionString))
+        public ChangeLogRepository(DbContext context) : base (context)
         {
         }
 

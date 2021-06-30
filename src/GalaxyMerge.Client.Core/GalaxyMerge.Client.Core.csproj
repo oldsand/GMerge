@@ -57,6 +57,7 @@
         <Compile Include="Behaviors\TreeViewMultipleSelectionBehavior.cs" />
         <Compile Include="Behaviors\TriggersCollection.cs" />
         <Compile Include="Converters\CornerRadiusAdjuster.cs" />
+        <Compile Include="Converters\MultiValueConverter.cs" />
         <Compile Include="Converters\Operator.cs" />
         <Compile Include="Converters\StringEmptyOrNullVisibilityConverter.cs" />
         <Compile Include="Converters\ThicknessAdjuster.cs" />

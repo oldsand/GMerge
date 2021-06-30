@@ -35,10 +35,11 @@ namespace GalaxyMerge.Services.Tests
             var galaxyRepo = new GalaxyRepository(Settings.CurrentTestGalaxy);
             galaxyRepo.Login("");
             
-            var archiver = new ArchiveProcessor(galaxyRepo);
-
-            using var objectRepo = new ObjectRepository(Settings.CurrentTestGalaxy);
-            var gObject = objectRepo.FindByTagName(tagName);
+            using var dataRepo = new GalaxyDataRepository(Settings.CurrentTestHost, Settings.CurrentTestGalaxy);
+            
+            var archiver = new ArchiveProcessor(galaxyRepo, dataRepo);
+            
+            var gObject = dataRepo.Objects.FindByTagName(tagName);
 
             archiver.Archive(gObject.ObjectId);
 
