@@ -1,0 +1,47 @@
+<UserControl x:Class="GalaxyMerge.Client.UI.Connection.Views.GalaxyView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:ui="http://gmerge.com/ui/wpf"
+             xmlns:vm="clr-namespace:GalaxyMerge.Client.UI.Connection.ViewModels"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             d:DataContext="{d:DesignInstance vm:GalaxyViewModel, IsDesignTimeCreatable=True}"
+             mc:Ignorable="d"
+             d:DesignHeight="800" d:DesignWidth="1000">
+
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/GalaxyMerge.Client.Resources;component/Resources.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
+
+  <Grid Background="{ui:ThemeResource ResourceKey=PrimaryBackground}">
+    <Grid.ColumnDefinitions>
+      <ui:CollapsibleColumnDefinition Width="300" />
+      <ui:CollapsibleColumnDefinition Width="Auto" />
+      <ColumnDefinition />
+    </Grid.ColumnDefinitions>
+
+    <Border Grid.Column="0"
+            BorderBrush="{ui:ThemeResource ResourceKey=PrimaryBorder}"
+            BorderThickness="0 0 1 0">
+      <ContentControl prism:RegionManager.RegionName="{x:Static ui:RegionName.NavigationRegion}" />
+    </Border>
+
+    <GridSplitter Grid.Column="1"
+                  Width="5"
+                  Margin="-3 0 -2 0"
+                  HorizontalAlignment="Stretch"
+                  ResizeDirection="Columns"
+                  Background="Transparent"
+                  Panel.ZIndex="1" />
+
+    <TabControl Grid.Column="2"
+                BorderThickness="0 1 0 0"
+                prism:RegionManager.RegionName="{x:Static ui:RegionName.ContentRegion}" />
+  </Grid>
+</UserControl>

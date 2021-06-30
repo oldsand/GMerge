@@ -1,0 +1,69 @@
+<UserControl x:Class="GalaxyMerge.Client.UI.Connection.Views.GalaxyTreeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:ui="http://gmerge.com/ui/wpf"
+             xmlns:vm="clr-namespace:GalaxyMerge.Client.UI.Connection.ViewModels"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             d:DataContext="{d:DesignInstance vm:GalaxyTreeViewModel, IsDesignTimeCreatable=True}"
+             mc:Ignorable="d"
+             d:DesignHeight="800" d:DesignWidth="300">
+  
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/GalaxyMerge.Client.Resources;component/Resources.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </UserControl.Resources>
+  
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="30" />
+      <RowDefinition Height="30" />
+      <RowDefinition />
+    </Grid.RowDefinitions>
+    
+    <Border Grid.Row="0"
+            BorderBrush="{ui:ThemeResource ResourceKey=PrimaryBorder}"
+            Background="{ui:ThemeResource ResourceKey=PanelBackground}"
+            BorderThickness="0 0 0 1">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition />
+          <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        
+        
+        <StackPanel Grid.Column="2"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="5 0">
+          <ui:IconButton DefaultIcon="{StaticResource Icon.Window.Minimize}" />
+        </StackPanel>
+      </Grid>
+    </Border>
+    
+    <Border Grid.Row="1"
+            BorderBrush="{ui:ThemeResource ResourceKey=PrimaryBorder}"
+            Background="{ui:ThemeResource ResourceKey=PanelBackground}"
+            BorderThickness="0 0 0 1">
+      <StackPanel Orientation="Horizontal"
+                  HorizontalAlignment="Left"
+                  Margin="5 0">
+        <ui:IconButton DefaultIcon="{StaticResource Icon.Compare}"/>
+        <ui:IconButton DefaultIcon="{StaticResource Icon.Edit}"/>
+        <ui:IconButton DefaultIcon="{StaticResource Icon.Filled.Cog}"/>
+      </StackPanel>
+    </Border>
+    
+    <Border Grid.Row="2" Background="LightSteelBlue">
+      <TextBlock Text="TreeView" 
+                 VerticalAlignment="Center"
+                 HorizontalAlignment="Center"/>  
+    </Border>
+  </Grid>
+</UserControl>

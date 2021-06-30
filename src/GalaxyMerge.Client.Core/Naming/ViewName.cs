@@ -9,7 +9,7 @@ namespace GalaxyMerge.Client.Core.Naming
         
         //Connection Module
         public const string ConnectionView = nameof(ConnectionView);
-        
+
         //Dialog Module
         public const string NewResourceSelectionView = nameof(NewResourceSelectionView);
         public const string NewResourceInfoView = nameof(NewResourceInfoView);

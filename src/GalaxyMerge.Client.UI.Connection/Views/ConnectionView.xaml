@@ -5,9 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:prism="http://prismlibrary.com/"
              xmlns:ui="http://gmerge.com/ui/wpf"
-             xmlns:viewModels="clr-namespace:GalaxyMerge.Client.UI.Connection.ViewModels"
+             xmlns:vm="clr-namespace:GalaxyMerge.Client.UI.Connection.ViewModels"
+             xmlns:u="clr-namespace:GalaxyMerge.Client.UI.Connection.Utilities"
              prism:ViewModelLocator.AutoWireViewModel="True"
-             d:DataContext="{d:DesignInstance viewModels:ConnectionViewModel, IsDesignTimeCreatable=True}"
+             d:DataContext="{d:DesignInstance vm:ConnectionViewModel, IsDesignTimeCreatable=True}"
              mc:Ignorable="d"
              d:DesignHeight="800" d:DesignWidth="1000">
   <UserControl.Resources>
@@ -37,6 +38,7 @@
           </Trigger>
           <Trigger SourceName="Border" Property="IsMouseOver" Value="True">
             <Setter TargetName="Border" Property="Background" Value="{ui:ThemeResource ResourceKey=ControlMouseOverBackground}" />
+            <Setter Property="Foreground" Value="{ui:ThemeResource ResourceKey=ControlForeground}" />
           </Trigger>
           <Trigger Property="IsSelected" Value="True">
             <Setter Property="Foreground" Value="{ui:ThemeResource ResourceKey=ControlForeground}" />
@@ -74,7 +76,7 @@
                        VerticalAlignment="Center" />
           </StackPanel>
         </TabItem.Header>
-        <ContentControl prism:RegionManager.RegionName="{x:Static ui:RegionName.ConnectionBrowseRegion}" />
+        <ContentControl prism:RegionManager.RegionName="{x:Static u:ScopedNames.GalaxyRegion}" />
       </TabItem>
 
       <TabItem Background="{ui:ThemeResource ResourceKey=PanelBackground}"
@@ -91,6 +93,7 @@
                        VerticalAlignment="Center" />
           </StackPanel>
         </TabItem.Header>
+        <ContentControl prism:RegionManager.RegionName="{x:Static u:ScopedNames.ChangeLogRegion}" />
       </TabItem>
 
       <TabItem Background="{ui:ThemeResource ResourceKey=PanelBackground}"
@@ -107,6 +110,7 @@
                        VerticalAlignment="Center" />
           </StackPanel>
         </TabItem.Header>
+        <ContentControl prism:RegionManager.RegionName="{x:Static u:ScopedNames.ArchiveRegion}" />
       </TabItem>
     </TabControl>
   </Grid>
