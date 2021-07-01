@@ -68,13 +68,13 @@
         <Project>{a5993bff-2469-4b9d-a4cd-be795a13d4f6}</Project>
         <Name>GalaxyMerge.Archive</Name>
       </ProjectReference>
+      <ProjectReference Include="..\GalaxyMerge.Contracts\GalaxyMerge.Contracts.csproj">
+        <Project>{b72fb577-363e-493f-b9c7-66b6dd8720ae}</Project>
+        <Name>GalaxyMerge.Contracts</Name>
+      </ProjectReference>
       <ProjectReference Include="..\GalaxyMerge.Primitives\GalaxyMerge.Primitives.csproj">
         <Project>{446fe87c-5122-4344-9df9-9f641e81a476}</Project>
         <Name>GalaxyMerge.Primitives</Name>
-      </ProjectReference>
-      <ProjectReference Include="..\GalaxyMerge.Contracts\GalaxyMerge.Contracts.csproj">
-        <Project>{a1de5d14-c80e-4f06-af43-a0a7b3b24072}</Project>
-        <Name>GalaxyMerge.Contracts</Name>
       </ProjectReference>
       <ProjectReference Include="..\GalaxyMerge.Core\GalaxyMerge.Core.csproj">
         <Project>{dd496472-fb15-4ffc-86ca-2ac8f0e6cf3c}</Project>

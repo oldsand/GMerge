@@ -1,17 +1,19 @@
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Xml.Linq;
 
 namespace GalaxyMerge.Contracts
 {
+    [DataContract(Namespace = "http://www.gmerge.com/Contracts")]
     public class GalaxySymbolData
     {
-        public string TagName { get; set; }
-        public XElement Root { get; set; }
-        public IEnumerable<CustomPropertyData> CustomProperties { get; set; }
-        public IEnumerable<PredefinedScriptData> PredefinedScripts { get; set; }
-        public IEnumerable<NamedScriptData> NamedScripts { get; set; }
-        public XElement VisualTree { get; set; }
-        public IEnumerable<WizardOptionData> WizardOptions { get; set; }
-        public IEnumerable<WizardLayerData> WizardLayers { get; set; }
+        [DataMember] public string TagName { get; set; }
+        [DataMember] public XElement Root { get; set; }
+        [DataMember] public IEnumerable<CustomPropertyData> CustomProperties { get; set; }
+        [DataMember] public IEnumerable<PredefinedScriptData> PredefinedScripts { get; set; }
+        [DataMember] public IEnumerable<NamedScriptData> NamedScripts { get; set; }
+        [DataMember] public XElement VisualTree { get; set; }
+        [DataMember] public IEnumerable<WizardOptionData> WizardOptions { get; set; }
+        [DataMember] public IEnumerable<WizardLayerData> WizardLayers { get; set; }
     }
 }

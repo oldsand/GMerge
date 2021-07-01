@@ -4,12 +4,12 @@
     <PropertyGroup>
         <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
         <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-        <ProjectGuid>{A34225E1-5B53-4464-B66C-05F8B0E2BFF0}</ProjectGuid>
+        <ProjectGuid>{E866834A-A961-4B15-B138-4F95EE55C194}</ProjectGuid>
         <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
         <OutputType>Library</OutputType>
         <AppDesignerFolder>Properties</AppDesignerFolder>
-        <RootNamespace>GalaxyMerge.Client.Converters.Tests</RootNamespace>
-        <AssemblyName>GalaxyMerge.Client.Converters.Tests</AssemblyName>
+        <RootNamespace>GalaxyMerge.Client.Core.Tests</RootNamespace>
+        <AssemblyName>GalaxyMerge.Client.Core.Tests</AssemblyName>
         <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
     </PropertyGroup>
@@ -34,7 +34,6 @@
     </PropertyGroup>
     <ItemGroup>
         <Reference Include="PresentationCore" />
-        <Reference Include="PresentationFramework" />
         <Reference Include="System" />
         <Reference Include="System.Core" />
         <Reference Include="System.Data" />
@@ -45,19 +44,15 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="ConverterTest.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
-        <Compile Include="ResourceTypeIconConverterTests.cs" />
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\GalaxyMerge.Client.Converters\GalaxyMerge.Client.Converters.csproj">
-        <Project>{710ea881-acd9-4c06-97e6-6c88e395e821}</Project>
-        <Name>GalaxyMerge.Client.Converters</Name>
-      </ProjectReference>
-      <ProjectReference Include="..\GalaxyMerge.Client.Core\GalaxyMerge.Client.Core.csproj">
+      <ProjectReference Include="..\..\src\GalaxyMerge.Client.Core\GalaxyMerge.Client.Core.csproj">
         <Project>{a52fad8f-28b0-4527-9937-ad3885eeccc9}</Project>
         <Name>GalaxyMerge.Client.Core</Name>
       </ProjectReference>
-      <ProjectReference Include="..\GalaxyMerge.Client.Data\GalaxyMerge.Client.Data.csproj">
+      <ProjectReference Include="..\..\src\GalaxyMerge.Client.Data\GalaxyMerge.Client.Data.csproj">
         <Project>{04b42b6e-dd66-49a8-84e8-bb2743293330}</Project>
         <Name>GalaxyMerge.Client.Data</Name>
       </ProjectReference>

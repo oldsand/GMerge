@@ -1,10 +1,9 @@
 using System.Collections.Generic;
 using System.ServiceModel;
-using GalaxyMerge.Archive.Entities;
 
 namespace GalaxyMerge.Contracts
 {
-    [ServiceContract(Namespace = "http://www.gmerge.com/2014/Contracts")]
+    [ServiceContract(Namespace = "http://www.gmerge.com/Contracts")]
     public interface IArchiveService
     {
         [OperationContract]
@@ -26,10 +25,10 @@ namespace GalaxyMerge.Contracts
         GalaxySymbolData GetGalaxySymbol(int objectId);
 
         [OperationContract]
-        IEnumerable<EventSetting> GetEventSettings();
+        IEnumerable<EventSettingData> GetEventSettings();
         
         [OperationContract]
-        IEnumerable<InclusionSetting> GetInclusionSettings();
+        IEnumerable<InclusionSettingData> GetInclusionSettings();
 
         [OperationContract]
         void AddObject(int objectId);
@@ -41,9 +40,9 @@ namespace GalaxyMerge.Contracts
         void ArchiveObject(int objectId, bool force = false);
 
         [OperationContract]
-        void UpdateEventSetting(IEnumerable<EventSetting> eventSettings);
+        void UpdateEventSetting(IEnumerable<EventSettingData> eventSettings);
 
         [OperationContract]
-        void UpdateInclusionSetting(IEnumerable<InclusionSetting> inclusionSettings);
+        void UpdateInclusionSetting(IEnumerable<InclusionSettingData> inclusionSettings);
     }
 }

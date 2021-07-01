@@ -1,17 +1,19 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using GalaxyMerge.Primitives;
 
 namespace GalaxyMerge.Contracts
 {
+    [DataContract(Namespace = "http://www.gmerge.com/Contracts")]
     public class ArchiveObjectData
     {
-        public int ObjectId { get; set; }
-        public string TagName { get; set; }
-        public int Version { get; set; }
-        public Template Template { get; set; }
-        public DateTime AddedOn { get; set; }
-        public DateTime ModifiedOn { get; set; }
-        public IEnumerable<ArchiveEntryData> Entries { get; set; }
+        [DataMember] public int ObjectId { get; set; }
+        [DataMember] public string TagName { get; set; }
+        [DataMember] public int Version { get; set; }
+        [DataMember] public Template Template { get; set; }
+        [DataMember] public DateTime AddedOn { get; set; }
+        [DataMember] public DateTime ModifiedOn { get; set; }
+        [DataMember] public IEnumerable<ArchiveEntryData> Entries { get; set; }
     }
 }

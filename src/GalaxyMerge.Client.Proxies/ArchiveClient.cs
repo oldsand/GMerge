@@ -1,12 +1,17 @@
 using System.Collections.Generic;
 using System.ServiceModel;
-using GalaxyMerge.Client.Contracts;
+using System.ServiceModel.Channels;
 using GalaxyMerge.Contracts;
 
 namespace GalaxyMerge.Client.Proxies
 {
-    public class ArchiveProxy : ClientBase<IArchiveService>, IArchiveService
+    public class ArchiveClient : ClientBase<IArchiveService>, IArchiveService
     {
+        public ArchiveClient(Binding binding, EndpointAddress address)
+            : base(binding, address)
+        {
+        }
+        
         public bool Connect(string galaxyName)
         {
             return Channel.Connect(galaxyName);

@@ -4,6 +4,8 @@
         <TargetFramework>netcoreapp3.1</TargetFramework>
 
         <IsPackable>false</IsPackable>
+
+        <RootNamespace>GalaxyMerge.Client.Wrapper.Tests</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -13,7 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\GalaxyMerge.Client.Data\GalaxyMerge.Client.Data.csproj" />
+      <ProjectReference Include="..\..\src\GalaxyMerge.Client.Wrappers\GalaxyMerge.Client.Wrappers.csproj" />
     </ItemGroup>
 
 </Project>

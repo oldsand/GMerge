@@ -87,16 +87,16 @@ namespace GalaxyMerge.Services
             return MaterializeSymbol(latest);
         }
 
-        public IEnumerable<EventSetting> GetEventSettings()
+        public IEnumerable<EventSettingData> GetEventSettings()
         {
             using var repo = new ArchiveRepository(_grSession.Name);
-            return repo.GetEventSettings();
+            return repo.GetEventSettings().Select(DataMapper.Map);
         }
 
-        public IEnumerable<InclusionSetting> GetInclusionSettings()
+        public IEnumerable<InclusionSettingData> GetInclusionSettings()
         {
             using var repo = new ArchiveRepository(_grSession.Name);
-            return repo.GetInclusionSettings();
+            return repo.GetInclusionSettings().Select(DataMapper.Map);
         }
 
         public void AddObject(int objectId)
@@ -117,16 +117,16 @@ namespace GalaxyMerge.Services
             archiver.Archive(objectId);
         }
 
-        public void UpdateEventSetting(IEnumerable<EventSetting> eventSettings)
+        public void UpdateEventSetting(IEnumerable<EventSettingData> eventSettings)
         {
             using var repo = new ArchiveRepository(_grSession.Name);
-            repo.UpdateEventSettings(eventSettings);
+            repo.UpdateEventSettings(eventSettings.Select(x => new EventSetting(x.Operation, x.IsArchiveTrigger)));
         }
 
-        public void UpdateInclusionSetting(IEnumerable<InclusionSetting> inclusionSettings)
+        public void UpdateInclusionSetting(IEnumerable<InclusionSettingData> inclusionSettings)
         {
             using var repo = new ArchiveRepository(_grSession.Name);
-            repo.UpdateInclusionSettings(inclusionSettings);
+            repo.UpdateInclusionSettings(inclusionSettings.Select(x => new InclusionSetting(x.Template, x.InclusionOption, x.IncludeInstances)));
         }
         
         private static GalaxyObjectData MaterializeObject(ArchiveEntry latest)

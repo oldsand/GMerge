@@ -63,7 +63,7 @@
       <Name>GalaxyMerge.Archive</Name>
     </ProjectReference>
     <ProjectReference Include="..\GalaxyMerge.Contracts\GalaxyMerge.Contracts.csproj">
-      <Project>{a1de5d14-c80e-4f06-af43-a0a7b3b24072}</Project>
+      <Project>{b72fb577-363e-493f-b9c7-66b6dd8720ae}</Project>
       <Name>GalaxyMerge.Contracts</Name>
     </ProjectReference>
     <ProjectReference Include="..\GalaxyMerge.Core\GalaxyMerge.Core.csproj">

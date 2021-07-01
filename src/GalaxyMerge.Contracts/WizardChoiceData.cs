@@ -1,8 +1,11 @@
+using System.Runtime.Serialization;
+
 namespace GalaxyMerge.Contracts
 {
+    [DataContract(Namespace = "http://www.gmerge.com/Contracts")]
     public class WizardChoiceData
     {
-        public string Name { get; set; }
-        public string Rule { get; set; }
+        [DataMember] public string Name { get; set; }
+        [DataMember] public string Rule { get; set; }
     }
 }

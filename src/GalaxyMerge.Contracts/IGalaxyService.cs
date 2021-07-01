@@ -2,7 +2,7 @@ using System.ServiceModel;
 
 namespace GalaxyMerge.Contracts
 {
-    [ServiceContract(Namespace = "http://www.gmerge.com/2014/Contracts")]
+    [ServiceContract(Namespace = "http://www.gmerge.com/Contracts")]
     public interface IGalaxyService
     {
         [OperationContract]
