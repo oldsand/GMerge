@@ -62,6 +62,7 @@
         <Compile Include="ViewModels\ArchiveViewModel.cs" />
         <Compile Include="ViewModels\ChangeLogViewModel.cs" />
         <Compile Include="ViewModels\ConnectionViewModel.cs" />
+        <Compile Include="ViewModels\GalaxyObjectViewModel.cs" />
         <Compile Include="ViewModels\GalaxyTreeViewModel.cs" />
         <Compile Include="ViewModels\GalaxyViewModel.cs" />
         <Compile Include="Views\ArchiveView.xaml.cs">
@@ -72,6 +73,9 @@
         </Compile>
         <Compile Include="Views\ConnectionView.xaml.cs">
           <DependentUpon>ConnectionView.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Views\GalaxyObjectView.xaml.cs">
+          <DependentUpon>GalaxyObjectView.xaml</DependentUpon>
         </Compile>
         <Compile Include="Views\GalaxyTreeView.xaml.cs">
           <DependentUpon>GalaxyTreeView.xaml</DependentUpon>
@@ -142,6 +146,7 @@
       <Page Include="Views\ArchiveView.xaml" />
       <Page Include="Views\ChangeLogView.xaml" />
       <Page Include="Views\ConnectionView.xaml" />
+      <Page Include="Views\GalaxyObjectView.xaml" />
       <Page Include="Views\GalaxyTreeView.xaml" />
       <Page Include="Views\GalaxyView.xaml" />
     </ItemGroup>

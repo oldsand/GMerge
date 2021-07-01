@@ -9,7 +9,7 @@ namespace GalaxyMerge.Data.Repositories
 {
     internal class FolderRepository : Repository<Folder>, IFolderRepository
     {
-        public FolderRepository(DbContext context) : base(context)
+        internal FolderRepository(DbContext context) : base(context)
         {
         }
 

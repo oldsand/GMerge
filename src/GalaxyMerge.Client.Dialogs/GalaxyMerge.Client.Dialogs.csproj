@@ -64,6 +64,7 @@
         </Compile>
         <Compile Include="ViewModels\ButtonSaveBackViewModel.cs" />
         <Compile Include="ViewModels\ConfirmationViewModel.cs" />
+        <Compile Include="ViewModels\ErrorDialogViewModel.cs" />
         <Compile Include="ViewModels\NewResourceInfoViewModel.cs" />
         <Compile Include="ViewModels\NewResourceSelectionViewModel.cs" />
         <Compile Include="ViewModels\NewResourceDialogModel.cs" />
@@ -75,6 +76,9 @@
         </Compile>
         <Compile Include="Views\ConfirmationView.xaml.cs">
           <DependentUpon>ConfirmationView.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Views\ErrorDialogView.xaml.cs">
+          <DependentUpon>ErrorDialogView.xaml</DependentUpon>
         </Compile>
         <Compile Include="Views\NewResourceInfoView.xaml.cs">
           <DependentUpon>NewResourceInfoView.xaml</DependentUpon>
@@ -104,11 +108,13 @@
       <PackageReference Include="Prism.Core" Version="8.1.97" />
       <PackageReference Include="Prism.DryIoc" Version="8.1.97" />
       <PackageReference Include="Prism.Wpf" Version="8.1.97" />
+      <PackageReference Include="WpfAnimatedGif" Version="2.0.0" />
     </ItemGroup>
     <ItemGroup>
       <Page Include="Controls\SelectionControl.xaml" />
       <Page Include="Views\ButtonSaveBackView.xaml" />
       <Page Include="Views\ConfirmationView.xaml" />
+      <Page Include="Views\ErrorDialogView.xaml" />
       <Page Include="Views\NewResourceInfoView.xaml" />
       <Page Include="Views\NewResourceDialog.xaml" />
       <Page Include="Views\NewResourceSelectionView.xaml" />
@@ -153,6 +159,11 @@
         <Project>{dd496472-fb15-4ffc-86ca-2ac8f0e6cf3c}</Project>
         <Name>GalaxyMerge.Core</Name>
       </ProjectReference>
+    </ItemGroup>
+    <ItemGroup>
+      <Resource Include="Images\error.gif">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Resource>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

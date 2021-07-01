@@ -14,20 +14,33 @@ namespace GalaxyMerge.Client.Core.Mvvm
         private DelegateCommand _cancelCommand;
         private DelegateCommand _yesCommand;
         private DelegateCommand _noCommand;
+        private DelegateCommand _retryCommand;
+        private DelegateCommand _abortCommand;
 
         public virtual DelegateCommand ApplyCommand =>
             _applyCommand ??= new DelegateCommand(ExecuteApplyCommand, ExecuteCanApplyCommand);
+
         public virtual DelegateCommand SaveCommand =>
             _saveCommand ??= new DelegateCommand(ExecuteSaveCommand, ExecuteCanSaveCommand);
+
         public virtual DelegateCommand OkCommand =>
             _okCommand ??= new DelegateCommand(ExecuteOkCommand);
+
         public virtual DelegateCommand CancelCommand =>
             _cancelCommand ??= new DelegateCommand(ExecuteCancelCommand);
+
         public virtual DelegateCommand YesCommand =>
             _yesCommand ??= new DelegateCommand(ExecuteYesCommand);
+
         public virtual DelegateCommand NoCommand =>
             _noCommand ??= new DelegateCommand(ExecuteNoCommand);
-        
+
+        public virtual DelegateCommand RetryCommand =>
+            _retryCommand ??= new DelegateCommand(ExecuteRetryCommand);
+
+        public DelegateCommand AbortCommand =>
+            _abortCommand ??= new DelegateCommand(ExecuteAbortCommand);
+
         public IRegionManager RegionManager { get; set; }
 
         public event Action<IDialogResult> RequestClose;
@@ -52,45 +65,54 @@ namespace GalaxyMerge.Client.Core.Mvvm
             
         }
 
-        public virtual void ExecuteApplyCommand()
+        protected virtual void ExecuteApplyCommand()
         {
             throw new NotImplementedException();
         }
 
-        public virtual bool ExecuteCanApplyCommand()
+        protected virtual bool ExecuteCanApplyCommand()
         {
             return false;
         }
 
-        public virtual void ExecuteSaveCommand()
+        protected virtual void ExecuteSaveCommand()
         {
             throw new NotImplementedException();
         }
 
-        public virtual bool ExecuteCanSaveCommand()
+        protected virtual bool ExecuteCanSaveCommand()
         {
             return false;
         }
-        
-        public virtual void ExecuteOkCommand()
+
+        protected virtual void ExecuteOkCommand()
         {
             RaiseRequestClose(new DialogResult(ButtonResult.OK));
         }
 
-        public virtual void ExecuteCancelCommand()
+        protected virtual void ExecuteCancelCommand()
         {
             RaiseRequestClose(new DialogResult(ButtonResult.Cancel));
         }
-        
-        public virtual void ExecuteYesCommand()
+
+        protected virtual void ExecuteYesCommand()
         {
             RaiseRequestClose(new DialogResult(ButtonResult.Yes));
         }
-        
-        public virtual void ExecuteNoCommand()
+
+        protected virtual void ExecuteNoCommand()
         {
             RaiseRequestClose(new DialogResult(ButtonResult.No));
         }
 
+        protected virtual void ExecuteRetryCommand()
+        {
+            RaiseRequestClose(new DialogResult(ButtonResult.Retry));
+        }
+
+        protected virtual void ExecuteAbortCommand()
+        {
+            RaiseRequestClose(new DialogResult(ButtonResult.Abort));
+        }
     }
 }

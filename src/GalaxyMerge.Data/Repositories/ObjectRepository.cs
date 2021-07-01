@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GalaxyMerge.Data.Repositories
 {
-    public class ObjectRepository : Repository<GObject>, IObjectRepository
+    internal class ObjectRepository : Repository<GObject>, IObjectRepository
     {
         internal ObjectRepository(DbContext context) : base (context)
         {

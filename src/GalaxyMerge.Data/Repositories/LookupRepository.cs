@@ -14,7 +14,7 @@ namespace GalaxyMerge.Data.Repositories
     {
         private readonly GalaxyContext _context;
         
-        public LookupRepository(GalaxyContext context)
+        internal LookupRepository(GalaxyContext context)
         {
             _context = context;
         }

@@ -38,7 +38,7 @@ namespace GalaxyMerge.Client.Core.Prism
             {
                 {"title", title},
                 {"message", message},
-                {"error", ex}
+                {"exception", ex}
             };
 
             dialogService.ShowDialog(DialogName.ErrorDialog, parameters, callBack);

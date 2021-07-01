@@ -8,7 +8,7 @@ namespace GalaxyMerge.Data.Repositories
 {
     internal class DefinitionRepository : Repository<TemplateDefinition>, IDefinitionRepository
     {
-        public DefinitionRepository(DbContext context) : base(context)
+        internal DefinitionRepository(DbContext context) : base(context)
         {
         }
 

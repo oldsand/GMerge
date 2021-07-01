@@ -10,7 +10,7 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
         public string Message
         {
             get => _message;
-            set => SetProperty(ref _message, value);
+            private set => SetProperty(ref _message, value);
         }
 
         public override void OnDialogOpened(IDialogParameters parameters)

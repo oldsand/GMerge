@@ -9,7 +9,7 @@ namespace GalaxyMerge.Data.Repositories
 {
     internal class UserRepository : Repository<UserProfile>, IUserRepository
     {
-        public UserRepository(DbContext context) : base(context)
+        internal UserRepository(DbContext context) : base(context)
         {
         }
 

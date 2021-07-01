@@ -13,13 +13,13 @@ namespace GalaxyMerge.Client.Core.Mvvm
         private ControlTemplate _icon;
         private bool _loading;
 
-        public virtual string Title
+        public string Title
         {
             get => _title;
             set => SetProperty(ref _title, value);
         }
 
-        public virtual bool Loading
+        public bool Loading
         {
             get => _loading;
             set => SetProperty(ref _loading, value);

@@ -30,30 +30,13 @@ namespace GalaxyMerge.Data.Tests
         [TestCase("$UserDefined")]
         [TestCase("$ViewEngine")]
         [TestCase("$AppEngine")]
-        public void FindByTagName_UsingGalaxyDataRepository_ReturnsObjectWithCorrectName(string tagName)
+        public void FindByTagName_ValidObjects_ReturnsObjectWithCorrectName(string tagName)
         {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             using var repo = new GalaxyDataRepository(_connectionString);
 
             var result = repo.Objects.FindByTagName(tagName);
-            stopwatch.Stop();
-            
-            Assert.NotNull(result);
-            Assert.AreEqual(tagName, result.TagName);
-        }
-        
-        [Test]
-        [TestCase("$UserDefined")]
-        [TestCase("$ViewEngine")]
-        [TestCase("$AppEngine")]
-        public void FindByTagName_UsingObjectRepository_ReturnsObjectWithCorrectName(string tagName)
-        {   
-            var stopwatch = new Stopwatch();
-            stopwatch.Start();
-            using var repo = new ObjectRepository(_connectionString);
-
-            var result = repo.FindByTagName(tagName);
             stopwatch.Stop();
             
             Assert.NotNull(result);

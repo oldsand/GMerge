@@ -8,7 +8,7 @@ namespace GalaxyMerge.Data.Repositories
 {
     internal class ChangeLogRepository : Repository<ChangeLog>, IChangeLogRepository
     {
-        public ChangeLogRepository(DbContext context) : base (context)
+        internal ChangeLogRepository(DbContext context) : base (context)
         {
         }
 

@@ -16,6 +16,7 @@ namespace GalaxyMerge.Client.UI.Connection
             containerRegistry.RegisterForNavigation<ChangeLogView, ChangeLogViewModel>(ScopedNames.ChangeLogView);
             containerRegistry.RegisterForNavigation<ArchiveView, ArchiveViewModel>(ScopedNames.ArchiveView);
             containerRegistry.RegisterForNavigation<GalaxyTreeView, GalaxyTreeViewModel>(ScopedNames.GalaxyTreeView);
+            containerRegistry.RegisterForNavigation<GalaxyObjectView, GalaxyObjectViewModel>(ScopedNames.GalaxyObjectView);
         }
 
         public void OnInitialized(IContainerProvider containerProvider)

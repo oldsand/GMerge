@@ -16,6 +16,7 @@ namespace GalaxyMerge.Client.Dialogs
             containerRegistry.RegisterSingleton<IDialogCommands, DialogCommands>();
         
             containerRegistry.RegisterDialog<ConfirmationView, ConfirmationViewModel>(DialogName.ConfirmationDialog);
+            containerRegistry.RegisterDialog<ErrorDialogView, ErrorDialogViewModel>(DialogName.ErrorDialog);
             containerRegistry.RegisterDialog<NewResourceDialog, NewResourceDialogModel>(DialogName.NewResourceDialog);
             containerRegistry.RegisterDialog<ResourceSettingsDialog, ResourceSettingsDialogModel>(DialogName
                 .ResourceSettingsDialog);

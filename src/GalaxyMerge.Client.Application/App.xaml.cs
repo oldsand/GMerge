@@ -1,9 +1,9 @@
-﻿using System.Windows;
-using System.Windows.Navigation;
+﻿using System;
+using System.Diagnostics;
+using System.Threading.Tasks;
+using System.Windows;
 using GalaxyMerge.Client.Application.Configurations;
-using GalaxyMerge.Client.Application.ViewModels;
 using GalaxyMerge.Client.Application.Views;
-using GalaxyMerge.Client.Core.Naming;
 using GalaxyMerge.Client.Core.Prism;
 using GalaxyMerge.Client.Core.Prism.RegionBehaviors;
 using GalaxyMerge.Client.Data.Abstractions;
@@ -15,13 +15,14 @@ using NLog;
 using Prism.Ioc;
 using Prism.Modularity;
 using Prism.Regions;
+using Prism.Services.Dialogs;
 
 namespace GalaxyMerge.Client.Application
 {
     public partial class App
     {
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
-        
+
         protected override Window CreateShell()
         {
             LoggerConfiguration.Apply();
@@ -53,6 +54,70 @@ namespace GalaxyMerge.Client.Application
             regionBehaviors.AddIfMissing(RegionManagerAwareBehavior.BehaviorKey, typeof(RegionManagerAwareBehavior));
             regionBehaviors.AddIfMissing(DependentViewRegionBehavior.BehaviorKey, typeof(DependentViewRegionBehavior));
             base.ConfigureDefaultRegionBehaviors(regionBehaviors);
+        }
+
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+        }
+
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            RegisterUnhandledExceptions();
+            base.OnStartup(e);
+        }
+
+        /// <summary>
+        /// Attaches event handlers to prompt user when a unhandled exception occurs 
+        /// </summary>
+        private void RegisterUnhandledExceptions()
+        {
+            // Catch exceptions from all threads in the AppDomain.
+            AppDomain.CurrentDomain.UnhandledException += (_, e) => 
+                ShowException((Exception) e.ExceptionObject, nameof(AppDomain.CurrentDomain.UnhandledException), true);
+            
+            // Catch exceptions from each AppDomain that uses a task scheduler for async operations.
+            TaskScheduler.UnobservedTaskException += (sender, args) =>
+                ShowException(args.Exception, nameof(TaskScheduler.UnobservedTaskException), false);
+            
+            //Catch exceptions from the main UI dispatcher thread.
+            Current.DispatcherUnhandledException += (sender, args) =>
+            {
+                if (Debugger.IsAttached) return;
+                args.Handled = true;
+                ShowException(args.Exception, nameof(Current.DispatcherUnhandledException), true);
+            };
+        }
+
+        /// <summary>
+        /// Shows user current unhandled exception 
+        /// </summary>
+        private void ShowException(Exception e, string unhandledType, bool promptUser)
+        {
+            var title = $"Unexpected Error Occurred: {unhandledType}";
+            var message = $"The following exception occurred:\n\n{e.Message}";
+
+            if (!promptUser) return;
+
+            message += "\n\nNormally the app would die now. Should we let it die?";
+
+            var dialogService = Container.Resolve<IDialogService>();
+            if (dialogService != null)
+            {
+              dialogService.ShowError(title, message, e, result =>
+              {
+                  if (result.Result == ButtonResult.Yes)
+                      Current.Shutdown();
+              });  
+              
+              return;
+            }
+            
+            const MessageBoxButton buttons = MessageBoxButton.YesNo;
+            if (MessageBox.Show(message, title, buttons) == MessageBoxResult.Yes)
+            {
+                Current.Shutdown();      
+            }
         }
     }
 }

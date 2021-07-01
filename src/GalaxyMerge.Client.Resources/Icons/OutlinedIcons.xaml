@@ -2,6 +2,18 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:controls="clr-namespace:GalaxyMerge.Client.Resources.Controls">
   
+  <ControlTemplate x:Key="Icon.Outlined.Copy" TargetType="{x:Type controls:Icon}">
+    <Viewbox>
+      <Path
+        Fill="{TemplateBinding Foreground}"
+        Stretch="Uniform"
+        SnapsToDevicePixels="False"
+        UseLayoutRounding="False"
+        Data="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z" />
+
+    </Viewbox>
+  </ControlTemplate>
+  
   <ControlTemplate x:Key="Icon.Outlined.Plug" TargetType="{x:Type controls:Icon}">
     <Viewbox>
       <Path

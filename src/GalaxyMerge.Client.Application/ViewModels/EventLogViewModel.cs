@@ -1,3 +1,5 @@
+using System;
+using System.Windows;
 using System.Collections.ObjectModel;
 using GalaxyMerge.Client.Core.Mvvm;
 using GalaxyMerge.Client.Data.Entities;
@@ -45,7 +47,14 @@ namespace GalaxyMerge.Client.Application.ViewModels
         {
             var entry = new LogEntry(log);
             var wrapper = new LogEntryWrapper(entry);
-            Logs.Add(wrapper);
+
+            System.Windows.Application.Current.Dispatcher.Invoke(() =>
+            {
+                if (Logs.Count >= 50) 
+                    Logs.RemoveAt(Logs.Count - 1);
+                
+                Logs.Add(wrapper);
+            });
         }
     }
 }

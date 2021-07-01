@@ -47,22 +47,16 @@
               BorderBrush="{TemplateBinding BorderBrush}"
               BorderThickness="{TemplateBinding BorderThickness}"
               Padding="{TemplateBinding Padding}">
-        <Border.InputBindings>
-          <MouseBinding MouseAction="LeftDoubleClick"
-                        Command="{}">
-          </MouseBinding>
-        </Border.InputBindings>
         <Grid
-          Margin="{Binding Converter={StaticResource LengthConverter},
-                    RelativeSource={RelativeSource TemplatedParent}}">
+          Margin="{Binding RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource LengthConverter}}">
           <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20" />
             <ColumnDefinition />
           </Grid.ColumnDefinitions>
-          <ToggleButton Grid.Column="0" x:Name="Expander"
+          <ToggleButton Grid.Column="0" 
+                        x:Name="Expander"
                         Style="{StaticResource ExpandCollapseToggleStyle}"
-                        IsChecked="{Binding Path=IsExpanded,
-                    RelativeSource={RelativeSource TemplatedParent}}"
+                        IsChecked="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsExpanded}"
                         ClickMode="Press" />
           <ContentPresenter x:Name="PART_Header"
                             Grid.Column="1"
@@ -81,8 +75,7 @@
         <Setter TargetName="Expander" Property="Visibility" Value="Hidden" />
       </Trigger>
       <Trigger Property="IsSelected" Value="true">
-        <Setter TargetName="Bd" Property="Background"
-                Value="{t:ThemeResource ResourceKey=ListItemSelectedActiveBackground}" />
+        <Setter TargetName="Bd" Property="Background" Value="{t:ThemeResource ResourceKey=ControlSelectedBackground}" />
         <!--<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />-->
       </Trigger>
       <MultiTrigger>
@@ -90,8 +83,7 @@
           <Condition Property="IsSelected" Value="true" />
           <Condition Property="IsSelectionActive" Value="false" />
         </MultiTrigger.Conditions>
-        <Setter TargetName="Bd" Property="Background"
-                Value="{t:ThemeResource ResourceKey=ListItemSelectedInactiveBackground}" />
+        <Setter TargetName="Bd" Property="Background" Value="{t:ThemeResource ResourceKey=ControlSelectedBackground}" />
         <!--<Setter Property="Foreground"
                 Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}}" />-->
       </MultiTrigger>
