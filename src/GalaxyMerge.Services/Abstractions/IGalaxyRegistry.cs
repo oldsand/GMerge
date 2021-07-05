@@ -11,6 +11,8 @@ namespace GalaxyMerge.Services
         IGalaxyRepository GetGalaxy(string galaxyName, string userName);
         IEnumerable<IGalaxyRepository> GetByName(string galaxyName);
         IEnumerable<IGalaxyRepository> GetByUser(string userName);
+        IEnumerable<IGalaxyRepository> GetByCurrentIdentity();
+        IGalaxyRepository GetByCurrentIdentity(string galaxyName);
         IEnumerable<IGalaxyRepository> GetAll();
         void Register(string galaxyName);
         void Register(string galaxyName, string userName);

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
+using System.ServiceModel.Security;
 using ArchestrA.GRAccess;
 using GalaxyMerge.Archestra.Exceptions;
 
@@ -8,6 +10,41 @@ namespace GalaxyMerge.Archestra.Extensions
 {
     public static class GalaxyExtensions
     {
+        /// <summary>
+        /// In testing the Login method, it appears that it does not actually validate the user against Archestra
+        /// security settings. In fact, it appears that login will always succeed regardless of the provided string parameters.
+        /// Login does, however, need to be called prior to any call on the IGalaxy interface.
+        /// Therefore, we will login with provided username and empty string, and subsequently validate the user against the
+        /// security settings obtained by the IGalaxySecurity interface.
+        /// </summary>
+        /// <param name="galaxy">The current galaxy object</param>
+        /// <param name="userName">The Username to login with</param>
+        /// <param name="password">The password is optional and the user name will still be authorized against galaxy
+        /// security settings after login</param>
+        public static void SecureLogin(this IGalaxy galaxy, string userName, string password = null)
+        {
+            password ??= string.Empty;
+            galaxy.Login(userName, password);
+            galaxy.CommandResult.Process();
+
+            var security = galaxy.GetReadOnlySecurity();
+            galaxy.CommandResult.Process();
+
+            if (security.AuthenticationMode == EAUTHMODE.eNone) return;
+
+            if (security == null)
+                throw new InvalidOperationException(
+                    "Could not obtain IGalaxySecurity instance. Unable to authorize user");
+
+            // ReSharper disable once ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
+            // GRAccess interface does not implement IEnumerable
+            foreach (IGalaxyUser user in security.UsersAvailable)
+                if (user.UserName == userName)
+                    return;
+
+            throw new SecurityAccessDeniedException($"User '{userName}' does not have access to '{galaxy.Name}'");
+        }
+
         /// <summary>
         /// Depth first recursive check-in of all object instances and templates that are descendents of the specified tag name.
         /// This extension provides a simple API for checking in objects without having to worry about checked out descendents,
@@ -20,7 +57,7 @@ namespace GalaxyMerge.Archestra.Extensions
         public static void DeepCheckIn(this IGalaxy galaxy, string tagName)
         {
             if (tagName == null) throw new ArgumentNullException(nameof(tagName), "Value cannot be null");
-            
+
             var current = galaxy.GetObjectByName(tagName);
 
             galaxy.DeepCheckIn(current);
@@ -38,7 +75,7 @@ namespace GalaxyMerge.Archestra.Extensions
         public static void DeepCheckIn(this IGalaxy galaxy, IEnumerable<string> tagNames)
         {
             if (tagNames == null) throw new ArgumentNullException(nameof(tagNames), "Value cannot be null");
-            
+
             var objects = galaxy.GetObjectsByName(tagNames);
 
             foreach (IgObject gObject in objects)
@@ -249,7 +286,8 @@ namespace GalaxyMerge.Archestra.Extensions
         /// <exception cref="GalaxyException">Thrown when command result is not successful</exception>
         public static IgObjects GetDescendents(this IGalaxy galaxy, string templateName)
         {
-            if (templateName == null) throw new ArgumentNullException(nameof(templateName), "templateName cannot be null");
+            if (templateName == null)
+                throw new ArgumentNullException(nameof(templateName), "templateName cannot be null");
 
             var collection = galaxy.CreategObjectCollection();
 
@@ -278,8 +316,9 @@ namespace GalaxyMerge.Archestra.Extensions
         public static bool ObjectIsDescendentOf(this IGalaxy galaxy, string tagName, string templateName)
         {
             if (tagName == null) throw new ArgumentNullException(nameof(tagName), "tagName cannot be null");
-            if (templateName == null) throw new ArgumentNullException(nameof(templateName), "templateName cannot be null");
-            
+            if (templateName == null)
+                throw new ArgumentNullException(nameof(templateName), "templateName cannot be null");
+
             var parent = galaxy.GetObjectByName(templateName);
             if (parent == null)
                 throw new InvalidOperationException($"Could not find template object with name '{templateName}'");
@@ -319,17 +358,18 @@ namespace GalaxyMerge.Archestra.Extensions
         public static ITemplate CreateTemplate(this IGalaxy galaxy, string tagName, string templateName)
         {
             if (tagName == null) throw new ArgumentNullException(nameof(tagName), "tagName cannot be null");
-            if (templateName == null) throw new ArgumentNullException(nameof(templateName), "templateName cannot be null");
+            if (templateName == null)
+                throw new ArgumentNullException(nameof(templateName), "templateName cannot be null");
 
             tagName = NormalizeTemplateName(tagName);
-            
+
             var parent = galaxy.GetTemplateByName(templateName);
             if (parent == null)
                 throw new InvalidOperationException($"Could not find template object with name '{templateName}'");
 
             var derived = parent.CreateTemplate(tagName);
             parent.CommandResult.Process();
-            
+
             return derived;
         }
 
@@ -345,7 +385,7 @@ namespace GalaxyMerge.Archestra.Extensions
         public static IInstance CreateInstance(this IGalaxy galaxy, string tagName, string templateName)
         {
             if (tagName == null) throw new ArgumentNullException(nameof(tagName), "tagName cannot be null");
-            
+
             var parent = galaxy.GetTemplateByName(templateName);
             if (parent == null)
                 throw new InvalidOperationException($"Could not find template object with name '{templateName}'");
@@ -367,7 +407,7 @@ namespace GalaxyMerge.Archestra.Extensions
         public static void DeepDelete(this IGalaxy galaxy, string tagName)
         {
             if (tagName == null) throw new ArgumentNullException(nameof(tagName), "tagName cannot be null");
-            
+
             var current = galaxy.GetObjectByName(tagName);
             if (current == null) return;
 
@@ -406,7 +446,7 @@ namespace GalaxyMerge.Archestra.Extensions
             instances.Container = string.Empty;
             instances.CommandResults.Process();
         }
-        
+
         /// <summary>
         /// Recursively checks in object and all is it's descendents.
         /// </summary>
@@ -417,17 +457,17 @@ namespace GalaxyMerge.Archestra.Extensions
         private static void DeepCheckIn(this IGalaxy galaxy, IgObject gObject)
         {
             if (gObject == null) throw new ArgumentNullException(nameof(gObject), "Value cannot be null");
-            
+
             var derivations = galaxy.GetDerivedObjects(gObject.Tagname);
             foreach (IgObject derived in derivations)
                 galaxy.DeepCheckIn(derived);
 
             if (!gObject.IsCheckedOut()) return;
-            
+
             gObject.CheckIn();
             gObject.CommandResult.Process();
         }
-        
+
         /// <summary>
         /// Recursively deletes object and all of it's descendents.
         /// </summary>

@@ -176,6 +176,27 @@ namespace GalaxyMerge.Archive.Tests
 
         }
 
+        [Test]
+        public void GetInclusionSetting_ValidTemplateId_ReturnsExpectedInstance()
+        {
+            using var repo = new ArchiveRepository(GalaxyName);
+
+            var setting = repo.GetInclusionSetting(14);
+            
+            Assert.AreEqual(14, setting.TemplateId);
+        }
+
+        [Test]
+        public void GetEventSetting_ValidOperationId_ReturnsExpectedResult()
+        {
+            using var repo = new ArchiveRepository(GalaxyName);
+
+            var setting = repo.GetEventSetting(0);
+            
+            Assert.AreEqual(0, setting.OperationId);
+            Assert.True(setting.IsArchiveTrigger);
+        }
+
         private void SeedArchiveObjects()
         {
             using var context = new ArchiveContext(_configBuilder.ContextOptions);

@@ -45,7 +45,7 @@ namespace GalaxyMerge.Services
             using var archiveRepository = new ArchiveRepository(_galaxyName);
             var eventSetting = archiveRepository.GetEventSetting(operationId);
 
-            return eventSetting.IsArchiveTrigger;
+            return eventSetting != null && eventSetting.IsArchiveTrigger;
         }
     }
 }

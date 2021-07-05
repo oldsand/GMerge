@@ -1,34 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ServiceModel;
 using Autofac;
 using Autofac.Integration.Wcf;
-using GalaxyMerge.Host.Configurations;
 using GalaxyMerge.Services;
 using NLog;
 using Topshelf;
 using Topshelf.Autofac;
 using Topshelf.HostConfigurators;
 
-// ReSharper disable ClassNeverInstantiated.Global
-
-namespace GalaxyMerge.Host
+namespace GalaxyMerge.Host.Messaging
 {
-    public class GalaxyMergeService
+    // ReSharper disable once ClassNeverInstantiated.Global - Instantiated by Topshelf
+    public class MessagingService
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private ServiceHost _galaxyManagerHost;
         private ServiceHost _archiveManagerHost;
-        private readonly List<GalaxyWatcher> _galaxyWatchers = new List<GalaxyWatcher>();
         private static IContainer _container;
 
         public static void Main(string[] args)
         {
-            LoggerConfiguration.Apply();
-
-            var bootstrapper = new Bootstrapper();
-            bootstrapper.Bootstrap();
-            _container = bootstrapper.GetContainer();
+            //LoggerConfiguration.Apply();
+            
+            _container = BuildContainer();
 
             HostFactory.Run(GenerateConfiguration);
         }
@@ -38,7 +32,7 @@ namespace GalaxyMerge.Host
             config.UseAutofacContainer(_container);
             config.UseNLog();
 
-            config.Service<GalaxyMergeService>(instance =>
+            config.Service<MessagingService>(instance =>
             {
                 instance.ConstructUsingAutofacContainer();
                 instance.WhenStarted(x => x.OnStart());
@@ -47,18 +41,18 @@ namespace GalaxyMerge.Host
             
             config.OnException(OnServiceException);
             
-            config.SetServiceName("gmerge");
-            config.SetDisplayName("Galaxy Merge");
-            config.SetDescription(@"Service host for the Galaxy Merge application.
-                                  This service provides retrieval, archiving, and modification of System Platform
-                                  Archestra objects and graphics hosted on this machine's galaxy repositories.");
+            config.SetServiceName("GMessaging");
+            config.SetDisplayName("Galaxy Merge Messaging Service");
+            config.SetDescription(@"WCF Service host for the Galaxy Merge application. 
+                                    This service provides client access for managing, processing,
+                                     and retrieving galaxy data.");
             
             config.SetStartTimeout(TimeSpan.FromSeconds(60));
             config.SetStopTimeout(TimeSpan.FromSeconds(30));
             config.RunAsLocalSystem();
             config.StartAutomatically();
         }
-
+        
         private void OnStart()
         {
             _galaxyManagerHost?.Close();
@@ -67,19 +61,17 @@ namespace GalaxyMerge.Host
             Logger.Debug("Starting Galaxy Manager Service");
             _galaxyManagerHost.Open();
             
+            Logger.Trace("Instantiating Archive Manager Service");
             _archiveManagerHost?.Close();
             _archiveManagerHost = new ServiceHost(typeof(ArchiveManager));
+            
+            Logger.Trace("Configuring Archive Manager Service");
             _archiveManagerHost.AddDependencyInjectionBehavior(typeof(ArchiveManager), _container);
-            Logger.Debug("Starting Archive Manager Service");
+
+            Logger.Trace("Starting Archive Manager Service");
             _archiveManagerHost.Open();
-            
-            var registry = _container.Resolve<IGalaxyRegistry>();
-            var galaxyRepositories = registry.GetByCurrentIdentity();
-            Logger.Debug("Starting Galaxy Watcher Service(s)");
-            foreach (var galaxyRepository in galaxyRepositories)
-                _galaxyWatchers.Add(new GalaxyWatcher(galaxyRepository));
-            
-            Logger.Info("GalaxyMerge Service Started");
+
+            Logger.Info("GMessaging Service Started");
         }
         
         private void OnStop()
@@ -96,14 +88,6 @@ namespace GalaxyMerge.Host
                 _archiveManagerHost = null;    
             }
 
-            if (_galaxyWatchers.Count > 0)
-            {
-                foreach (var watcher in _galaxyWatchers)
-                    watcher.Dispose();
-
-                _galaxyWatchers.Clear();
-            }
-            
             _container.Dispose();
             _container = null;
         }
@@ -111,6 +95,12 @@ namespace GalaxyMerge.Host
         private static void OnServiceException(Exception obj)
         {
             Logger.Fatal(obj);
+        }
+
+        private static IContainer BuildContainer()
+        {
+            var builder = new ContainerBuilder();
+            return builder.Build();
         }
     }
 }

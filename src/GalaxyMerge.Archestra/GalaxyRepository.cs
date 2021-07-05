@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.ServiceModel.Security;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -63,9 +64,8 @@ namespace GalaxyMerge.Archestra
         {
             Logger.Trace("Logging into galaxy {Galaxy} with user name {User}", Name, userName);
             
-            _galaxy.Login(userName, string.Empty);
-            _galaxy.CommandResult.Process();
-            
+            _galaxy.SecureLogin(userName);
+
             Connected = true;
             ConnectedUser = userName;
         }
@@ -104,7 +104,7 @@ namespace GalaxyMerge.Archestra
             
             return false;
         }
-        
+
         public GalaxyObject GetObject(string tagName)
         {
             _galaxy.SynchronizeClient();

@@ -23,6 +23,12 @@ namespace GalaxyMerge.Services
             _galaxyFinder = new GalaxyFinder();
         }
 
+        internal GalaxyRegistry(IGalaxyRepositoryFactory galaxyRepositoryFactory, IGalaxyFinder galaxyFinder)
+        {
+            _repositoryFactory = galaxyRepositoryFactory;
+            _galaxyFinder = galaxyFinder;
+        }
+
         public bool IsRegistered(string galaxyName, string userName)
         {
             return _galaxies.SingleOrDefault(g => g.Name == galaxyName && g.ConnectedUser == userName) != null;
@@ -41,6 +47,18 @@ namespace GalaxyMerge.Services
         public IEnumerable<IGalaxyRepository> GetByUser(string userName)
         {
             return _galaxies.Where(g => g.ConnectedUser == userName);
+        }
+
+        public IEnumerable<IGalaxyRepository> GetByCurrentIdentity()
+        {
+            var userName = WindowsIdentity.GetCurrent().Name;
+            return _galaxies.Where(g => g.ConnectedUser == userName);
+        }
+
+        public IGalaxyRepository GetByCurrentIdentity(string galaxyName)
+        {
+            var userName = WindowsIdentity.GetCurrent().Name;
+            return _galaxies.SingleOrDefault(g => g.Name == galaxyName && g.ConnectedUser == userName);
         }
 
         public IEnumerable<IGalaxyRepository> GetAll()
@@ -188,8 +206,7 @@ namespace GalaxyMerge.Services
             await galaxy.LoginAsync(userName, token);
             _galaxies.Add(galaxy);
         }
-
-        //todo add logging
+        
         private void UnregisterGalaxy(string galaxyName, string userName)
         {
             if (string.IsNullOrEmpty(galaxyName))

@@ -7,16 +7,16 @@ namespace GalaxyMerge.Contracts
     {
         [OperationContract]
         bool Connect(string galaxyName);
-        
+
         [OperationContract]
         GalaxyObjectData GetObjectById(int objectId);
-        
+
         [OperationContract]
         GalaxyObjectData GetObjectByName(string tagName);
 
         [OperationContract]
         GalaxySymbolData GetSymbolById(int objectId);
-        
+
         [OperationContract]
         GalaxySymbolData GetSymbolByName(string tagName);
     }

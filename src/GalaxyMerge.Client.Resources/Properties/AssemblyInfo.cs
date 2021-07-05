@@ -55,7 +55,7 @@ using System.Windows.Markup;
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
-//XAML/CLR Namespacing mapping 
+//XAML/CLR Namespace mapping 
 [assembly: XmlnsDefinition("http://gmerge.com/ui/wpf", "GalaxyMerge.Client.Resources")]
 [assembly: XmlnsDefinition("http://gmerge.com/ui/wpf", "GalaxyMerge.Client.Resources.Controls")]
 [assembly: XmlnsDefinition("http://gmerge.com/ui/wpf", "GalaxyMerge.Client.Resources.Theming")]

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.ServiceModel;
 using System.Xml.Linq;
 using GalaxyMerge.Archestra.Abstractions;
 using GalaxyMerge.Archestra.Entities;
@@ -15,55 +16,61 @@ using GalaxyMerge.Primitives;
 
 namespace GalaxyMerge.Services
 {
-    public class ArchiveManager : IArchiveService
+    public class ArchiveManager : IArchiveService, IDisposable
     {
-        private readonly IGalaxyRepositoryProvider _galaxyRepositoryProvider;
+        private readonly IGalaxyRegistry _galaxyRegistry;
         private readonly IGalaxyDataRepositoryFactory _dataRepositoryFactory;
-        private IGalaxyRepository _grSession;
-        private IGalaxyDataRepository _dataRepository;
+        private ArchiveProcessor _archiver;
+        private ArchiveRepository _archiveRepository;
 
-        public ArchiveManager(IGalaxyRepositoryProvider galaxyRepositoryProvider, IGalaxyDataRepositoryFactory dataRepositoryFactory)
+        public ArchiveManager(IGalaxyRegistry galaxyRegistry, IGalaxyDataRepositoryFactory dataRepositoryFactory)
         {
-            _galaxyRepositoryProvider = galaxyRepositoryProvider;
+            _galaxyRegistry = galaxyRegistry;
             _dataRepositoryFactory = dataRepositoryFactory;
         }
         
         public bool Connect(string galaxyName)
         {
-            var galaxyConnectionString = DbStringBuilder.BuildGalaxy(Environment.MachineName, galaxyName);
-            _dataRepository = _dataRepositoryFactory.Create(galaxyConnectionString);
+            var connectionString = DbStringBuilder.BuildGalaxy(Environment.MachineName, galaxyName);
+            var dataRepository = _dataRepositoryFactory.Create(connectionString);
+            var galaxyRepository = GetRegisteredGalaxy(galaxyName);
             
-            _grSession = _galaxyRepositoryProvider.GetClientInstance(galaxyName);
+            _archiver = new ArchiveProcessor(galaxyRepository, dataRepository);
             
-            return _grSession.Name == galaxyName && _grSession.Connected;
+            //todo create and replace with factory interface injected into constructor
+            _archiveRepository = new ArchiveRepository(galaxyName);
+
+            return galaxyRepository.Name == galaxyName && galaxyRepository.Connected;
         }
         
         public ArchiveObjectData GetArchiveObject(int objectId)
         {
-            using var repo = new ArchiveRepository(_grSession.Name);
-            var archiveObject = repo.GetObject(objectId);
+            ValidateInitialization();
+
+            var archiveObject = _archiveRepository.GetObject(objectId);
             return DataMapper.Map(archiveObject);
         }
 
         public IEnumerable<ArchiveObjectData> GetArchiveObjects()
         {
-            using var repo = new ArchiveRepository(_grSession.Name);
-            var archiveObjects = repo.GetAllObjects();
+            ValidateInitialization();
+            
+            var archiveObjects = _archiveRepository.GetAllObjects();
             return archiveObjects.Select(DataMapper.Map);
         }
 
         public IEnumerable<ArchiveEntryData> GetArchiveEntries()
         {
-            using var repo = new ArchiveRepository(_grSession.Name);
-            var archiveEntries = repo.GetAllEntries();
+            
+            var archiveEntries = _archiveRepository.GetAllEntries();
             return archiveEntries.Select(DataMapper.Map);
         }
 
         public GalaxyObjectData GetGalaxyObject(int objectId)
         {
-            using var archiveRepository = new ArchiveRepository(_grSession.Name);
+            
 
-            var archiveObject = archiveRepository.GetObjectIncludeEntries(objectId);
+            var archiveObject = _archiveRepository.GetObjectIncludeEntries(objectId);
             if (archiveObject == null) return null;
 
             if (archiveObject.Template == Template.Symbol)
@@ -75,9 +82,9 @@ namespace GalaxyMerge.Services
         
         public GalaxySymbolData GetGalaxySymbol(int objectId)
         {
-            using var archiveRepository = new ArchiveRepository(_grSession.Name);
             
-            var archiveObject = archiveRepository.GetObjectIncludeEntries(objectId);
+            
+            var archiveObject = _archiveRepository.GetObjectIncludeEntries(objectId);
             if (archiveObject == null) return null;
 
             if (archiveObject.Template != Template.Symbol)
@@ -89,44 +96,41 @@ namespace GalaxyMerge.Services
 
         public IEnumerable<EventSettingData> GetEventSettings()
         {
-            using var repo = new ArchiveRepository(_grSession.Name);
-            return repo.GetEventSettings().Select(DataMapper.Map);
+            return _archiveRepository.GetEventSettings().Select(DataMapper.Map);
         }
 
         public IEnumerable<InclusionSettingData> GetInclusionSettings()
         {
-            using var repo = new ArchiveRepository(_grSession.Name);
-            return repo.GetInclusionSettings().Select(DataMapper.Map);
+            return _archiveRepository.GetInclusionSettings().Select(DataMapper.Map);
         }
 
         public void AddObject(int objectId)
         {
-            var archiver = new ArchiveProcessor(_grSession, _dataRepository);
-            archiver.Archive(objectId);
+            _archiver.Archive(objectId);
         }
 
         public void RemoveObject(int objectId)
         {
-            using var repo = new ArchiveRepository(_grSession.Name);
-            repo.RemoveObject(objectId);
+            _archiveRepository.RemoveObject(objectId);
         }
 
         public void ArchiveObject(int objectId, bool force = false)
         {
-            var archiver = new ArchiveProcessor(_grSession, _dataRepository);
-            archiver.Archive(objectId);
+            ValidateInitialization();
+            
+            _archiver.Archive(objectId);
         }
 
         public void UpdateEventSetting(IEnumerable<EventSettingData> eventSettings)
         {
-            using var repo = new ArchiveRepository(_grSession.Name);
-            repo.UpdateEventSettings(eventSettings.Select(x => new EventSetting(x.Operation, x.IsArchiveTrigger)));
+            _archiveRepository.UpdateEventSettings(eventSettings.Select(x => 
+                new EventSetting(x.Operation, x.IsArchiveTrigger)));
         }
 
         public void UpdateInclusionSetting(IEnumerable<InclusionSettingData> inclusionSettings)
         {
-            using var repo = new ArchiveRepository(_grSession.Name);
-            repo.UpdateInclusionSettings(inclusionSettings.Select(x => new InclusionSetting(x.Template, x.InclusionOption, x.IncludeInstances)));
+            _archiveRepository.UpdateInclusionSettings(inclusionSettings.Select(x => 
+                new InclusionSetting(x.Template, x.InclusionOption, x.IncludeInstances)));
         }
         
         private static GalaxyObjectData MaterializeObject(ArchiveEntry latest)
@@ -136,11 +140,45 @@ namespace GalaxyMerge.Services
             return DataMapper.Map(galaxyObject);
         }
 
+        //todo figure out tag name here
         private static GalaxySymbolData MaterializeSymbol(ArchiveEntry latest)
         {
             var xml = XElement.Load(new MemoryStream(latest.CompressedData.Decompress()));
-            var galaxyObject = new GalaxySymbol("").FromXml(xml); //todo figure out tagname here
+            var galaxyObject = new GalaxySymbol("").FromXml(xml); 
             return DataMapper.Map(galaxyObject);
         }
+        
+        public void Dispose()
+        {
+            _archiveRepository?.Dispose();
+        }
+        
+        private IGalaxyRepository GetRegisteredGalaxy(string galaxyName)
+        {
+            var userName = ServiceSecurityContext.Current.PrimaryIdentity.Name;
+            if (userName == null)
+                throw new InvalidOperationException("Could not get user name from current primary identity");
+
+            _galaxyRegistry.Register(galaxyName, userName);
+
+            var galaxyRepository = _galaxyRegistry.GetGalaxy(galaxyName, userName);
+            if (galaxyRepository == null)
+                throw new InvalidOperationException(
+                    $"Cannot find registered galaxy with name '{galaxyName}' for current client user '{userName}'");
+
+            return galaxyRepository;
+        }
+        
+        private void ValidateInitialization()
+        {
+            if (_archiver == null)
+                throw new InvalidOperationException(
+                    "Archive Processor not initialized. Can not perform call on uninitialized service. Call Connect prior to using service.");
+
+            if (_archiveRepository == null)
+                throw new InvalidOperationException(
+                    "Archive Repository not initialized. Can not perform call on uninitialized service. Call Connect prior to using service.");
+        }
+
     }
 }

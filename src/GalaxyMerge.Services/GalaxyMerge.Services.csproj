@@ -46,16 +46,14 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Abstractions\IGalaxyRegistry.cs" />
+        <Compile Include="ArchiveManager.cs" />
         <Compile Include="ArchiveQueue.cs" />
         <Compile Include="ArchiveHelper.cs" />
-        <Compile Include="ArchiveManager.cs" />
         <Compile Include="ArchiveProcessor.cs" />
-        <Compile Include="GalaxyWatcher.cs" />
         <Compile Include="GalaxyManager.cs" />
+        <Compile Include="GalaxyWatcher.cs" />
         <Compile Include="GalaxyRegistry.cs" />
-        <Compile Include="GalaxyRepositoryProvider.cs" />
-        <Compile Include="IGalaxyRegistry.cs" />
-        <Compile Include="IGalaxyRepositoryProvider.cs" />
         <Compile Include="DataMapper.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>

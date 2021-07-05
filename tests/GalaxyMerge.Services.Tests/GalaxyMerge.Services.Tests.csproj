@@ -46,7 +46,6 @@
         <Compile Include="ArchiveProcessorTests.cs" />
         <Compile Include="ArchiveSettingValidatorTests.cs" />
         <Compile Include="GalaxyRegistryTests.cs" />
-        <Compile Include="GalaxyRepositoryProviderTests.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
     <ItemGroup>
