@@ -4,20 +4,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GalaxyMerge.Data.Repositories
 {
-    public class GalaxyDataRepository : IGalaxyDataRepository
+    public class DataRepository : IDataRepository
     {
         private readonly GalaxyContext _context;
 
-        public GalaxyDataRepository(string connectionString)
+        public DataRepository(string connectionString)
         {
             var options = new DbContextOptionsBuilder<GalaxyContext>().UseSqlServer(connectionString).Options;
             _context = new GalaxyContext(options);
             InitializeRepositories(_context);
         }
 
-        public GalaxyDataRepository(string hostName, string galaxyName)
+        public DataRepository(string hostName, string galaxyName)
         {
-            var connectionString = DbStringBuilder.BuildGalaxy(hostName, galaxyName);
+            var connectionString = DbStringBuilder.GalaxyString(hostName, galaxyName);
             var options = new DbContextOptionsBuilder<GalaxyContext>().UseSqlServer(connectionString).Options;
             _context = new GalaxyContext(options);
             InitializeRepositories(_context);

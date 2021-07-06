@@ -6,9 +6,11 @@ namespace GalaxyMerge.Data.Abstractions
 {
     public interface IObjectRepository : IRepository<GObject>
     {
-        GObject FindByTagName(string tagName);
+        GObject Find(int id);
+        IEnumerable<GObject> Find(string tagName);
         string GetTagName(int objectId);
         int GetObjectId(string tagName);
+        GObject FindIncludeTemplate(int objectId);
         GObject FindIncludeDescendants(string tagName);
         GObject FindIncludeFolder(string tagName);
         Task<IEnumerable<GObject>> GetDerivationHierarchy();

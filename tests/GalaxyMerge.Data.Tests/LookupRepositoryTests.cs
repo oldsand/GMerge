@@ -28,7 +28,7 @@ namespace GalaxyMerge.Data.Tests
         [TestCase(829)] //$AnalogInput_v3 in ButaneDev2014
         public void FindAncestors_ValidObjectId_ReturnsExpectedAncestors(int objectId)
         {
-            var repo = new GalaxyDataRepository(_connectionString);
+            var repo = new DataRepository(_connectionString);
 
             var ancestors = repo.Lookup.FindAncestors(objectId);
             
@@ -38,7 +38,7 @@ namespace GalaxyMerge.Data.Tests
         [Test]
         public void FindAncestors_InvalidId_ReturnsEmptyList()
         {
-            var repo = new GalaxyDataRepository(_connectionString);
+            var repo = new DataRepository(_connectionString);
 
             var ancestors = repo.Lookup.FindAncestors(0);
 
@@ -50,7 +50,7 @@ namespace GalaxyMerge.Data.Tests
         [TestCase(829)] //$AnalogInput_v3 in ButaneDev2014
         public void FindDescendants_ValidObjectId_ReturnsExpectedAncestors(int objectId)
         {
-            var repo = new GalaxyDataRepository(_connectionString);
+            var repo = new DataRepository(_connectionString);
 
             var descendants = repo.Lookup.FindDescendants(objectId);
             
@@ -60,7 +60,7 @@ namespace GalaxyMerge.Data.Tests
         [Test]
         public void FindDescendants_InvalidId_ReturnsEmptyList()
         {
-            var repo = new GalaxyDataRepository(_connectionString);
+            var repo = new DataRepository(_connectionString);
 
             var descendants = repo.Lookup.FindDescendants(0);
 
@@ -72,7 +72,7 @@ namespace GalaxyMerge.Data.Tests
         [TestCase(38107, "_InTouch_Demo_\\Shared primitives\\Alarms")]
         public void GetFolderPath_ValidId_ReturnsExpectedFolderPath(int objectId, string expectedPath)
         {
-            var repo = new GalaxyDataRepository(_connectionString);
+            var repo = new DataRepository(_connectionString);
 
             var path = repo.Lookup.GetFolderPath(objectId);
             

@@ -19,7 +19,7 @@ namespace GalaxyMerge.Client.UI.Connection.ViewModels
 {
     public class GalaxyTreeViewModel : NavigationViewModelBase
     {
-        private readonly IGalaxyDataRepositoryFactory _galaxyDataRepositoryFactory;
+        private readonly IDataRepositoryFactory _dataRepositoryFactory;
         private readonly IDialogService _dialogService;
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
         private ResourceEntryWrapper _resourceEntry;
@@ -30,11 +30,11 @@ namespace GalaxyMerge.Client.UI.Connection.ViewModels
         {
         }
 
-        public GalaxyTreeViewModel(IGalaxyDataRepositoryFactory galaxyDataRepositoryFactory,
+        public GalaxyTreeViewModel(IDataRepositoryFactory dataRepositoryFactory,
             IDialogService dialogService)
         {
             Derivations = new ObservableCollection<GObject>();
-            _galaxyDataRepositoryFactory = galaxyDataRepositoryFactory;
+            _dataRepositoryFactory = dataRepositoryFactory;
             _dialogService = dialogService;
         }
 
@@ -78,7 +78,7 @@ namespace GalaxyMerge.Client.UI.Connection.ViewModels
                 _connectionString);
             Loading = true;
 
-            var dataRepository = _galaxyDataRepositoryFactory.Create(_connectionString);
+            var dataRepository = _dataRepositoryFactory.Create(_connectionString);
             var derivations = (await dataRepository.Objects.GetDerivationHierarchy()).ToList();
 
             Derivations.Clear();

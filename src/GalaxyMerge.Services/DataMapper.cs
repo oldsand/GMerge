@@ -1,6 +1,6 @@
 using System.Linq;
 using GalaxyMerge.Archestra.Entities;
-using GalaxyMerge.Archive.Entities;
+using GalaxyMerge.Archiving.Entities;
 using GalaxyMerge.Contracts;
 using GalaxyMerge.Data.Entities;
 using TableDependency.SqlClient.Base;
@@ -36,7 +36,7 @@ namespace GalaxyMerge.Services
             {
                 Operation = source.Operation,
                 OperationType = source.OperationType,
-                IsArchiveTrigger = source.IsArchiveTrigger
+                IsArchiveTrigger = source.IsArchiveEvent
             };
         }
         

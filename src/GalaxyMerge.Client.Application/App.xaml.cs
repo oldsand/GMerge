@@ -38,7 +38,7 @@ namespace GalaxyMerge.Client.Application
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.Register<IGalaxyDataRepositoryFactory, GalaxyDataRepositoryFactory>();
+            containerRegistry.Register<IDataRepositoryFactory, DataRepositoryFactory>();
             containerRegistry.Register<IResourceRepository, ResourceRepository>();
             containerRegistry.Register<ILogRepository, LogRepository>();
         }

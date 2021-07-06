@@ -4,6 +4,8 @@
 
 using System;
 using System.Collections.Generic;
+using GalaxyMerge.Core;
+using GalaxyMerge.Primitives;
 
 namespace GalaxyMerge.Data.Entities
 {
@@ -35,6 +37,7 @@ namespace GalaxyMerge.Data.Entities
         public int DeployedVersion { get; private set; }
         public Guid? CheckedOutByUserGuid { get; private set; }
         public bool IsTemplate { get; private set; }
+        public bool IsSymbol => Enumeration.FromId<Template>(TemplateId).Equals(Template.Symbol);
         public bool IsHidden { get; private set; }
         public short HostingTreeLevel { get; private set; }
         public bool DeploymentPending { get; private set; }

@@ -33,6 +33,7 @@ namespace GalaxyMerge.Data.Configurations
             builder.Property(x => x.DeploymentPending).HasColumnName("deployment_pending_status");
 
             builder.Ignore(x => x.Folder);
+            builder.Ignore(x => x.IsSymbol);
 
             builder.HasOne(x => x.TemplateDefinition).WithMany(t => t.Derivations).HasForeignKey(x => x.TemplateId);
             builder.HasOne(x => x.DerivedFrom).WithMany(t => t.Derivations).HasForeignKey(x => x.DerivedFromId);

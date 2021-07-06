@@ -1,139 +1,94 @@
 using System;
-using System.Linq;
-using GalaxyMerge.Archestra.Abstractions;
-using GalaxyMerge.Archive.Entities;
-using GalaxyMerge.Archive.Repositories;
-using GalaxyMerge.Core;
-using GalaxyMerge.Core.Extensions;
+using GalaxyMerge.Archiving.Abstractions;
+using GalaxyMerge.Archiving.Entities;
+using GalaxyMerge.Core.Utilities;
 using GalaxyMerge.Data.Abstractions;
 using GalaxyMerge.Data.Entities;
-using GalaxyMerge.Data.Repositories;
-using GalaxyMerge.Primitives;
+using GalaxyMerge.Services.Abstractions;
+using NLog;
 
 namespace GalaxyMerge.Services
 {
-    public class ArchiveProcessor
+    public class ArchiveProcessor : IArchiveProcessor
     {
         private readonly string _galaxyName;
-        private readonly IGalaxyRepository _galaxyRepository;
-        private readonly IGalaxyDataRepository _dataRepository;
+        private readonly IGalaxyRegistry _galaxyRegistry;
+        private readonly IDataRepositoryFactory _dataRepositoryFactory;
+        private readonly IArchiveRepositoryFactory _archiveRepositoryFactory;
+        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+        private readonly IArchiveQueue _archiveQueue;
 
-        public ArchiveProcessor(IGalaxyRepository galaxyRepository, IGalaxyDataRepository dataRepository)
+        public ArchiveProcessor(string galaxyName,
+            IGalaxyRegistry galaxyRegistry,
+            IDataRepositoryFactory dataRepositoryFactory, 
+            IArchiveRepositoryFactory archiveRepositoryFactory,
+            IArchiveQueue archiveQueue)
         {
-            _galaxyRepository = galaxyRepository ??
-                                throw new ArgumentNullException(nameof(galaxyRepository), "Value cannot be null");
-            _dataRepository = dataRepository ??
-                              throw new ArgumentNullException(nameof(dataRepository), "Value cannot be null");
-
-            if (!galaxyRepository.Connected)
-                throw new ArgumentException("Galaxy Repository must be connect in order to initialize this object",
-                    nameof(galaxyRepository));
-
-            _galaxyName = _galaxyRepository.Name;
+            _galaxyName = galaxyName;
+            _galaxyRegistry = galaxyRegistry;
+            _dataRepositoryFactory = dataRepositoryFactory;
+            _archiveRepositoryFactory = archiveRepositoryFactory;
+            _archiveQueue = archiveQueue;
         }
 
-        public void Archive(int objectId, int? changeLogId = null, bool forceArchive = false)
+        public void Enqueue(ChangeLog changeLog)
         {
-            var gObject = GetGObject(objectId);
-            ArchiveObject(gObject, changeLogId, forceArchive);
+            Logger.Debug("Adding change log '{ChangeLogId}' to archive queue", changeLog.ChangeLogId);
+            
+            var entry = new QueuedEntry(changeLog.ChangeLogId, changeLog.ObjectId, changeLog.OperationId, changeLog.ChangeDate);
+            using var archiveRepository = _archiveRepositoryFactory.Create(DbStringBuilder.ArchiveString(_galaxyName));
+            archiveRepository.Queue.Add(entry);
+            
+            _archiveQueue.Enqueue(entry, Process);
         }
 
-        public void Archive(string tagName, int? changeLogId = null, bool forceArchive = false)
+        private void Process(QueuedEntry entry)
         {
-            var gObject = GetGObject(tagName);
-            ArchiveObject(gObject, changeLogId, forceArchive);
-        }
+            Logger.Trace("Initializing repositories for galaxy '{GalaxyName}'", _galaxyName);
+            var galaxyRepository = _galaxyRegistry.GetByCurrentIdentity(_galaxyName);
+            using var dataRepository = _dataRepositoryFactory.Create(DbStringBuilder.GalaxyString(_galaxyName));
+            using var archiveRepository = _archiveRepositoryFactory.Create(DbStringBuilder.ArchiveString(_galaxyName));
+            
+            Logger.Debug("Starting processing for {ChangeLogId}", entry.ChangeLogId);
+            archiveRepository.Queue.SetProcessing(entry.ChangeLogId);
 
-        private void ArchiveObject(GObject gObject, int? changeLogId, bool forceArchive)
-        {
-            if (Exists(gObject.ObjectId))
+            Logger.Trace("Retrieving gObjet {ObjectId}", entry.ObjectId);
+            var target = dataRepository.Objects.Find(entry.ObjectId);
+            if (target == null)
+                throw new InvalidOperationException($"Could not find object target with id {entry.ObjectId}");
+
+            Logger.Trace("Retrieving archive");
+            var archive = archiveRepository.Get();
+
+            var canArchive =
+                archive.CanArchive(target.ObjectId, target.TemplateId, target.IsTemplate, entry.OperationId);
+
+            if (!canArchive)
             {
-                if (!forceArchive && IsLatest(gObject)) return;
-                UpdateArchiveObject(gObject, changeLogId);
+                Logger.Debug("ChangeLog {ChangeLogId} not configured for archiving. Removing from archive queue", entry.ChangeLogId);
+                archiveRepository.Queue.Remove(entry.ChangeLogId);
                 return;
             }
 
-            AddArchiveObject(gObject, changeLogId);
-        }
+            try
+            {
+                Logger.Trace("Archiving log {ChangeLogId} for object {ObjectId}", entry.ChangeLogId,
+                    entry.ObjectId);
+                
+                using var archiver = new Archiver(galaxyRepository, dataRepository, archiveRepository);
+                archiver.Archive(target, false, entry.ChangeLogId);
 
-        private void AddArchiveObject(GObject gObject, int? changeLogId)
-        {
-            using var archiveRepo = new ArchiveRepository(_galaxyName);
-
-            var template = Enumeration.FromId<Template>(gObject.TemplateId);
-            if (template == null) throw new InvalidOperationException("Cannot Archive Unknown Template Type");
-
-            var archiveObject = new ArchiveObject(gObject.ObjectId, gObject.TagName, gObject.ConfigVersion, template);
-
-            var data = IsSymbol(gObject) ? GetSymbolData(gObject.TagName) : GetObjectData(gObject.TagName);
-            archiveObject.AddEntry(data, changeLogId);
-
-            archiveRepo.AddObject(archiveObject);
-            archiveRepo.Save();
-        }
-
-        private void UpdateArchiveObject(GObject gObject, int? changeLogId)
-        {
-            using var archiveRepo = new ArchiveRepository(_galaxyName);
-
-            var archiveObject = archiveRepo.GetObjectIncludeEntries(gObject.ObjectId);
-
-            if (gObject.TagName != archiveObject.TagName)
-                archiveObject.UpdateTagName(gObject.TagName);
-
-            if (gObject.ConfigVersion != archiveObject.Version)
-                archiveObject.UpdateVersion(gObject.ConfigVersion);
-
-            var data = IsSymbol(gObject) ? GetSymbolData(gObject.TagName) : GetObjectData(gObject.TagName);
-            archiveObject.AddEntry(data, changeLogId);
-
-            archiveRepo.UpdateObject(archiveObject);
-            archiveRepo.Save();
-        }
-
-        private static bool IsSymbol(GObject gObject)
-        {
-            return Enumeration.FromId<Template>(gObject.TemplateId).Equals(Template.Symbol);
-        }
-
-        //todo this still needs work. we can't assume comparing version/date to check in operation always will work.
-        private bool IsLatest(GObject gObject)
-        {
-            using var archiveRepo = new ArchiveRepository(_galaxyName);
-            var latest = archiveRepo.GetLatestEntry(gObject.ObjectId);
-            
-            var changeLog = _dataRepository.ChangeLogs.GetLatestByOperation(gObject.ObjectId, Operation.CheckInSuccess);
-
-            return latest != null && changeLog.ConfigurationVersion == latest.Version &&
-                   changeLog.ChangeDate <= latest.ArchivedOn;
-        }
-
-        private bool Exists(int objectId)
-        {
-            using var repo = new ArchiveRepository(_galaxyName);
-            return repo.ObjectExists(objectId);
-        }
-
-        private GObject GetGObject(int objectId)
-        {
-            return _dataRepository.Objects.FindInclude(x => x.ObjectId == objectId, x => x.TemplateDefinition);
-        }
-
-        private GObject GetGObject(string tagName)
-        {
-            return _dataRepository.Objects.FindAllInclude(x => x.TagName == tagName, x => x.TemplateDefinition).FirstOrDefault();
-        }
-
-        private byte[] GetObjectData(string tagName)
-        {
-            var galaxyObject = _galaxyRepository.GetObject(tagName);
-            return galaxyObject.ToXml().ToByteArray();
-        }
-
-        private byte[] GetSymbolData(string tagName)
-        {
-            var galaxySymbol = _galaxyRepository.GetSymbol(tagName);
-            return galaxySymbol.ToXml().ToByteArray();
+                Logger.Debug("Archiving complete for log {ChangeLogId} on object {ObjectId}",
+                    entry.ChangeLogId, entry.ObjectId);
+                
+                archiveRepository.Queue.Remove(entry.ChangeLogId);
+            }
+            catch (Exception)
+            {
+                Logger.Error("Archiving failed for log {ChangeLogId} on object {ObjectId}"
+                    , entry.ChangeLogId, entry.ObjectId);
+                archiveRepository.Queue.SetFailed(entry.ChangeLogId);
+            }
         }
     }
 }

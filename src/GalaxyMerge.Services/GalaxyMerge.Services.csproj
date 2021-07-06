@@ -46,13 +46,18 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Abstractions\IArchiveProcessor.cs" />
+        <Compile Include="Abstractions\IArchiveProcessorFactory.cs" />
+        <Compile Include="Abstractions\IArchiveQueue.cs" />
+        <Compile Include="Abstractions\IArchiver.cs" />
         <Compile Include="Abstractions\IGalaxyRegistry.cs" />
         <Compile Include="ArchiveManager.cs" />
+        <Compile Include="ArchiveProcessorFactory.cs" />
         <Compile Include="ArchiveQueue.cs" />
-        <Compile Include="ArchiveHelper.cs" />
         <Compile Include="ArchiveProcessor.cs" />
+        <Compile Include="Archiver.cs" />
         <Compile Include="GalaxyManager.cs" />
-        <Compile Include="GalaxyWatcher.cs" />
+        <Compile Include="ArchiveMonitor.cs" />
         <Compile Include="GalaxyRegistry.cs" />
         <Compile Include="DataMapper.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
@@ -62,9 +67,9 @@
         <Project>{32ea2985-26c5-44b5-b8c1-46c8d4da0979}</Project>
         <Name>GalaxyMerge.Archestra</Name>
       </ProjectReference>
-      <ProjectReference Include="..\GalaxyMerge.Archive\GalaxyMerge.Archive.csproj">
-        <Project>{a5993bff-2469-4b9d-a4cd-be795a13d4f6}</Project>
-        <Name>GalaxyMerge.Archive</Name>
+      <ProjectReference Include="..\GalaxyMerge.Archiving\GalaxyMerge.Archiving.csproj">
+        <Project>{15034b13-2af5-405f-8408-8015bee53ed3}</Project>
+        <Name>GalaxyMerge.Archiving</Name>
       </ProjectReference>
       <ProjectReference Include="..\GalaxyMerge.Contracts\GalaxyMerge.Contracts.csproj">
         <Project>{b72fb577-363e-493f-b9c7-66b6dd8720ae}</Project>

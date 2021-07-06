@@ -1,6 +1,6 @@
 using System.Security.Principal;
 using GalaxyMerge.Archestra;
-using GalaxyMerge.Archive;
+using GalaxyMerge.Archiving;
 using GalaxyMerge.Data.Repositories;
 using GalaxyMerge.Testing;
 using NUnit.Framework;
@@ -10,16 +10,16 @@ namespace GalaxyMerge.Services.Tests
     [TestFixture]
     public class ArchiveManualTesting
     {
-        [Test]
+        /*[Test]
         public void CreateAndSeedAnArchiveDatabaseForManualInspection()
         {
             var gr = new GalaxyRepository(Settings.CurrentTestGalaxy);
             gr.Login(WindowsIdentity.GetCurrent().Name);
             
-            using var dataRepo = new GalaxyDataRepository(Settings.CurrentTestHost, Settings.CurrentTestGalaxy);
+            using var dataRepo = new DataRepository(Settings.CurrentTestHost, Settings.CurrentTestGalaxy);
 
             var config =
-                ArchiveConfigurationBuilder.Default(gr.Name, gr.VersionNumber, gr.CdiVersion, gr.VersionString);
+                ArchiveConfiguration.Default(gr.Name, gr.VersionNumber, gr.CdiVersion, gr.VersionString);
             var builder = new ArchiveBuilder();
             builder.Build(config);
 
@@ -30,6 +30,6 @@ namespace GalaxyMerge.Services.Tests
             archiver.Archive("Generic_SubSystem_Injection", null, true);
             
             FileAssert.Exists(config.FileName);
-        }
+        }*/
     }
 }

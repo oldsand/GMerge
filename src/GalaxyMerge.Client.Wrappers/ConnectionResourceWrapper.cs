@@ -32,7 +32,7 @@ namespace GalaxyMerge.Client.Wrappers
         
         public string GetConnectionString()
         {
-            return DbStringBuilder.BuildGalaxy(NodeName, GalaxyName);
+            return DbStringBuilder.GalaxyString(NodeName, GalaxyName);
         }
     }
 }

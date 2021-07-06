@@ -24,7 +24,7 @@ namespace GalaxyMerge.Data.Tests
         [Test]
         public void Create_ConnectionString_ReturnsNotNull()
         {
-            var factory = new GalaxyDataRepositoryFactory();
+            var factory = new DataRepositoryFactory();
 
             var repo = factory.Create(_connectionStringBuilder.ConnectionString);
             
@@ -34,7 +34,7 @@ namespace GalaxyMerge.Data.Tests
         [Test]
         public void Create_ConnectionStringBuilder_ReturnsNotNull()
         {
-            var factory = new GalaxyDataRepositoryFactory();
+            var factory = new DataRepositoryFactory();
 
             var repo = factory.Create(_connectionStringBuilder);
             

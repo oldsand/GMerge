@@ -17,9 +17,14 @@ namespace GalaxyMerge.Data.Repositories
         {
         }
 
-        public GObject FindByTagName(string tagName)
+        public GObject Find(int id)
         {
-            return GetQueryable().FirstOrDefault(x => x.TagName == tagName);
+            return Set.Find(id);
+        }
+
+        public IEnumerable<GObject> Find(string tagName)
+        {
+            return GetQueryable().Where(x => x.TagName == tagName);
         }
 
         public string GetTagName(int objectId)
@@ -39,6 +44,12 @@ namespace GalaxyMerge.Data.Repositories
             return results.SingleOrDefault(x => x.TagName == tagName);
         }
         
+        public GObject FindIncludeTemplate(int objectId)
+        {
+            var results = Set.Include(x => x.TemplateDefinition);
+            return results.SingleOrDefault(x => x.ObjectId == objectId);
+        }
+        
         public GObject FindIncludeFolder(string tagName)
         {
             return Set
@@ -54,6 +65,5 @@ namespace GalaxyMerge.Data.Repositories
                 .Where(x => x.DerivedFromId == 0 && !x.IsHidden && x.Derivations.Any() && x.TemplateDefinition.CategoryId != 16)
                 .OrderBy(x => x.TagName);
         }
-        
     }
 }

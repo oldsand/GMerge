@@ -1,9 +1,10 @@
 using System;
 using System.Diagnostics;
 using Autofac;
-using GalaxyMerge.Archive;
-using GalaxyMerge.Archive.Abstractions;
+using GalaxyMerge.Archiving;
+using GalaxyMerge.Archiving.Abstractions;
 using GalaxyMerge.Data.Abstractions;
+using GalaxyMerge.Primitives;
 using GalaxyMerge.Services;
 using NLog;
 
@@ -33,7 +34,7 @@ namespace GalaxyMerge.Host
             var builder = new ContainerBuilder();
             builder.RegisterType<GalaxyMergeService>().AsSelf();
             builder.RegisterType<GalaxyRegistry>().AsSelf().AsImplementedInterfaces().SingleInstance();
-            builder.RegisterType<GalaxyDataRepositoryFactory>().AsSelf().AsImplementedInterfaces();
+            builder.RegisterType<DataRepositoryFactory>().AsSelf().AsImplementedInterfaces();
             builder.RegisterType<GalaxyManager>().AsSelf().AsImplementedInterfaces();
             builder.RegisterType<ArchiveManager>().AsSelf().AsImplementedInterfaces();
             builder.RegisterType<ArchiveBuilder>().AsSelf().AsImplementedInterfaces();
@@ -75,8 +76,10 @@ namespace GalaxyMerge.Host
             var galaxies = registry.GetAll();
 
             foreach (var galaxy in galaxies)
-                builder.Build(ArchiveConfigurationBuilder.Default(galaxy.Name, galaxy.VersionNumber, galaxy.CdiVersion,
-                    galaxy.VersionString));
+            {
+                var version = ArchestraVersion.FromCid(galaxy.CdiVersion);
+                builder.Build(ArchiveConfiguration.Default(galaxy.Name, version));
+            }
         }
     }
 }

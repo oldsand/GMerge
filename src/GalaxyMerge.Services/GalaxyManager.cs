@@ -11,11 +11,11 @@ namespace GalaxyMerge.Services
     public class GalaxyManager : IGalaxyService, IDisposable
     {
         private readonly IGalaxyRegistry _galaxyRegistry;
-        private readonly IGalaxyDataRepositoryFactory _dataRepositoryFactory;
+        private readonly IDataRepositoryFactory _dataRepositoryFactory;
         private IGalaxyRepository _galaxyRepository;
-        private IGalaxyDataRepository _dataRepository;
+        private IDataRepository _dataRepository;
 
-        public GalaxyManager(IGalaxyRegistry galaxyRegistry, IGalaxyDataRepositoryFactory dataRepositoryFactory)
+        public GalaxyManager(IGalaxyRegistry galaxyRegistry, IDataRepositoryFactory dataRepositoryFactory)
         {
             _galaxyRegistry = galaxyRegistry ?? throw new ArgumentNullException(nameof(galaxyRegistry));
             _dataRepositoryFactory =
@@ -24,7 +24,7 @@ namespace GalaxyMerge.Services
 
         public bool Connect(string galaxyName)
         {
-            var connectionString = DbStringBuilder.BuildGalaxy(Environment.MachineName, galaxyName);
+            var connectionString = DbStringBuilder.GalaxyString(Environment.MachineName, galaxyName);
             _dataRepository = _dataRepositoryFactory.Create(connectionString);
 
             _galaxyRepository = GetRegisteredGalaxy(galaxyName);

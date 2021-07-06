@@ -6,71 +6,65 @@ using System.ServiceModel;
 using System.Xml.Linq;
 using GalaxyMerge.Archestra.Abstractions;
 using GalaxyMerge.Archestra.Entities;
-using GalaxyMerge.Archive.Entities;
-using GalaxyMerge.Archive.Repositories;
+using GalaxyMerge.Archiving.Abstractions;
+using GalaxyMerge.Archiving.Entities;
 using GalaxyMerge.Contracts;
 using GalaxyMerge.Core.Extensions;
 using GalaxyMerge.Core.Utilities;
 using GalaxyMerge.Data.Abstractions;
 using GalaxyMerge.Primitives;
+using GalaxyMerge.Services.Abstractions;
 
 namespace GalaxyMerge.Services
 {
-    public class ArchiveManager : IArchiveService, IDisposable
+    public class ArchiveManager : IArchiveService
     {
         private readonly IGalaxyRegistry _galaxyRegistry;
-        private readonly IGalaxyDataRepositoryFactory _dataRepositoryFactory;
-        private ArchiveProcessor _archiver;
-        private ArchiveRepository _archiveRepository;
+        private readonly IDataRepositoryFactory _dataRepositoryFactory;
+        private readonly IArchiveRepositoryFactory _archiveRepositoryFactory;
+        private IGalaxyRepository _galaxyRepository;
 
-        public ArchiveManager(IGalaxyRegistry galaxyRegistry, IGalaxyDataRepositoryFactory dataRepositoryFactory)
+        public ArchiveManager(IGalaxyRegistry galaxyRegistry,
+            IDataRepositoryFactory dataRepositoryFactory,
+            IArchiveRepositoryFactory archiveRepositoryFactory,
+            IArchiveProcessorFactory processorFactory)
         {
             _galaxyRegistry = galaxyRegistry;
             _dataRepositoryFactory = dataRepositoryFactory;
+            _archiveRepositoryFactory = archiveRepositoryFactory;
         }
         
         public bool Connect(string galaxyName)
         {
-            var connectionString = DbStringBuilder.BuildGalaxy(Environment.MachineName, galaxyName);
-            var dataRepository = _dataRepositoryFactory.Create(connectionString);
-            var galaxyRepository = GetRegisteredGalaxy(galaxyName);
-            
-            _archiver = new ArchiveProcessor(galaxyRepository, dataRepository);
-            
-            //todo create and replace with factory interface injected into constructor
-            _archiveRepository = new ArchiveRepository(galaxyName);
-
-            return galaxyRepository.Name == galaxyName && galaxyRepository.Connected;
+            _galaxyRepository = GetRegisteredGalaxy(galaxyName);
+            return _galaxyRepository.Name == galaxyName && _galaxyRepository.Connected;
         }
         
         public ArchiveObjectData GetArchiveObject(int objectId)
         {
-            ValidateInitialization();
-
-            var archiveObject = _archiveRepository.GetObject(objectId);
+            using var repo = _archiveRepositoryFactory.Create(DbStringBuilder.ArchiveString(_galaxyRepository.Name));
+            var archiveObject = repo.Objects.FindInclude(objectId);
             return DataMapper.Map(archiveObject);
         }
 
         public IEnumerable<ArchiveObjectData> GetArchiveObjects()
         {
-            ValidateInitialization();
-            
-            var archiveObjects = _archiveRepository.GetAllObjects();
+            using var repo = _archiveRepositoryFactory.Create(DbStringBuilder.ArchiveString(_galaxyRepository.Name));
+            var archiveObjects = repo.Objects.GetAll();
             return archiveObjects.Select(DataMapper.Map);
         }
 
         public IEnumerable<ArchiveEntryData> GetArchiveEntries()
         {
-            
-            var archiveEntries = _archiveRepository.GetAllEntries();
+            using var repo = _archiveRepositoryFactory.Create(DbStringBuilder.ArchiveString(_galaxyRepository.Name));
+            var archiveEntries = repo.Objects.GetAll().SelectMany(o => o.Entries);
             return archiveEntries.Select(DataMapper.Map);
         }
 
         public GalaxyObjectData GetGalaxyObject(int objectId)
         {
-            
-
-            var archiveObject = _archiveRepository.GetObjectIncludeEntries(objectId);
+            using var repo = _archiveRepositoryFactory.Create(DbStringBuilder.ArchiveString(_galaxyRepository.Name));
+            var archiveObject = repo.Objects.FindInclude(objectId);
             if (archiveObject == null) return null;
 
             if (archiveObject.Template == Template.Symbol)
@@ -82,9 +76,8 @@ namespace GalaxyMerge.Services
         
         public GalaxySymbolData GetGalaxySymbol(int objectId)
         {
-            
-            
-            var archiveObject = _archiveRepository.GetObjectIncludeEntries(objectId);
+            using var repo = _archiveRepositoryFactory.Create(DbStringBuilder.ArchiveString(_galaxyRepository.Name));
+            var archiveObject = repo.Objects.FindInclude(objectId);
             if (archiveObject == null) return null;
 
             if (archiveObject.Template != Template.Symbol)
@@ -96,41 +89,50 @@ namespace GalaxyMerge.Services
 
         public IEnumerable<EventSettingData> GetEventSettings()
         {
-            return _archiveRepository.GetEventSettings().Select(DataMapper.Map);
+            using var repo = _archiveRepositoryFactory.Create(DbStringBuilder.ArchiveString(_galaxyRepository.Name));
+            var archive = repo.Get();
+            return archive.EventSettings.Select(DataMapper.Map);
         }
 
         public IEnumerable<InclusionSettingData> GetInclusionSettings()
         {
-            return _archiveRepository.GetInclusionSettings().Select(DataMapper.Map);
+            using var repo = _archiveRepositoryFactory.Create(DbStringBuilder.ArchiveString(_galaxyRepository.Name));
+            var archive = repo.Get();
+            return archive.InclusionSettings.Select(DataMapper.Map);
         }
 
         public void AddObject(int objectId)
         {
-            _archiver.Archive(objectId);
+            using var dataRepo = _dataRepositoryFactory.Create(DbStringBuilder.GalaxyString(_galaxyRepository.Name));
+            using var archiveRepo = _archiveRepositoryFactory.Create(DbStringBuilder.ArchiveString(_galaxyRepository.Name));
+            using var archiver = new Archiver(_galaxyRepository, dataRepo, archiveRepo);
+            archiver.Archive(objectId);
         }
 
         public void RemoveObject(int objectId)
         {
-            _archiveRepository.RemoveObject(objectId);
+            using var repo = _archiveRepositoryFactory.Create(DbStringBuilder.ArchiveString(_galaxyRepository.Name));
+            repo.Objects.Remove(objectId);
         }
 
         public void ArchiveObject(int objectId, bool force = false)
         {
-            ValidateInitialization();
-            
-            _archiver.Archive(objectId);
+            using var dataRepo = _dataRepositoryFactory.Create(DbStringBuilder.GalaxyString(_galaxyRepository.Name));
+            using var archiveRepo = _archiveRepositoryFactory.Create(DbStringBuilder.ArchiveString(_galaxyRepository.Name));
+            using var archiver = new Archiver(_galaxyRepository, dataRepo, archiveRepo);
+            archiver.Archive(objectId, force);
         }
 
         public void UpdateEventSetting(IEnumerable<EventSettingData> eventSettings)
         {
-            _archiveRepository.UpdateEventSettings(eventSettings.Select(x => 
-                new EventSetting(x.Operation, x.IsArchiveTrigger)));
+            /*_archiveRepository.UpdateEventSettings(eventSettings.Select(x => 
+                new EventSetting(x.Operation, x.IsArchiveTrigger)));*/
         }
 
         public void UpdateInclusionSetting(IEnumerable<InclusionSettingData> inclusionSettings)
         {
-            _archiveRepository.UpdateInclusionSettings(inclusionSettings.Select(x => 
-                new InclusionSetting(x.Template, x.InclusionOption, x.IncludeInstances)));
+            /*_archiveRepository.UpdateInclusionSettings(inclusionSettings.Select(x => 
+                new InclusionSetting(x.Template, x.InclusionOption, x.IncludeInstances)));*/
         }
         
         private static GalaxyObjectData MaterializeObject(ArchiveEntry latest)
@@ -147,12 +149,7 @@ namespace GalaxyMerge.Services
             var galaxyObject = new GalaxySymbol("").FromXml(xml); 
             return DataMapper.Map(galaxyObject);
         }
-        
-        public void Dispose()
-        {
-            _archiveRepository?.Dispose();
-        }
-        
+
         private IGalaxyRepository GetRegisteredGalaxy(string galaxyName)
         {
             var userName = ServiceSecurityContext.Current.PrimaryIdentity.Name;
@@ -168,17 +165,5 @@ namespace GalaxyMerge.Services
 
             return galaxyRepository;
         }
-        
-        private void ValidateInitialization()
-        {
-            if (_archiver == null)
-                throw new InvalidOperationException(
-                    "Archive Processor not initialized. Can not perform call on uninitialized service. Call Connect prior to using service.");
-
-            if (_archiveRepository == null)
-                throw new InvalidOperationException(
-                    "Archive Repository not initialized. Can not perform call on uninitialized service. Call Connect prior to using service.");
-        }
-
     }
 }
