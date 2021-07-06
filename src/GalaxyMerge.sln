@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Archestra", "Ga
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{5B40454C-F34F-4EC8-80BF-48E4F9DCD4C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Host", "GalaxyMerge.Host\GalaxyMerge.Host.csproj", "{56F996D1-4DD5-428B-B1FC-4345DF3F7B71}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Host.Archiving", "GalaxyMerge.Host.Archiving\GalaxyMerge.Host.Archiving.csproj", "{56F996D1-4DD5-428B-B1FC-4345DF3F7B71}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{9D0E27B6-2F28-481D-B5AA-6F95C22C2530}"
 EndProject

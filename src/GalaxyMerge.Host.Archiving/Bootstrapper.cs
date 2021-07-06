@@ -8,7 +8,7 @@ using GalaxyMerge.Primitives;
 using GalaxyMerge.Services;
 using NLog;
 
-namespace GalaxyMerge.Host
+namespace GalaxyMerge.Host.Archiving
 {
     public class Bootstrapper
     {

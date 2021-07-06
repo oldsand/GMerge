@@ -7,8 +7,8 @@
     <ProjectGuid>{56F996D1-4DD5-428B-B1FC-4345DF3F7B71}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GalaxyMerge.Host</RootNamespace>
-    <AssemblyName>GalaxyMerge.Host</AssemblyName>
+    <RootNamespace>GalaxyMerge.Host.Archiving</RootNamespace>
+    <AssemblyName>GalaxyMerge.Host.Archiving</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <LangVersion>default</LangVersion>

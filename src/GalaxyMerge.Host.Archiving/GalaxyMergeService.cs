@@ -13,7 +13,7 @@ using Topshelf.HostConfigurators;
 
 // ReSharper disable ClassNeverInstantiated.Global
 
-namespace GalaxyMerge.Host
+namespace GalaxyMerge.Host.Archiving
 {
     public class GalaxyMergeService
     {
