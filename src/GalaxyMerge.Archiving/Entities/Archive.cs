@@ -74,7 +74,7 @@ namespace GalaxyMerge.Archiving.Entities
         
         public bool IsTrigger(int operationId)
         {
-            return _eventSettings.Single(x => x.OperationId == operationId).IsArchiveEvent;
+            return _eventSettings.Single(x => x.Operation.Id == operationId).IsArchiveEvent;
         }
         
         internal void AddEvent(EventSetting setting)

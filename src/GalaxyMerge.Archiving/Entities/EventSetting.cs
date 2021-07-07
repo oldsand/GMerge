@@ -11,16 +11,16 @@ namespace GalaxyMerge.Archiving.Entities
         
         public EventSetting(Operation operation, bool isArchiveEvent = false)
         {
-            OperationId = operation.Id;
+            Operation = operation;
+            OperationType = OperationType.FromOperation(operation);
             IsArchiveEvent = isArchiveEvent;
         }
 
         public int EventId { get; private set; }
         public int ArchiveId { get; private set; }
         public Archive Archive { get; private set; }
-        public int OperationId { get; private set; }
-        public Operation Operation => Enumeration.FromId<Operation>(OperationId);
-        public OperationType OperationType => OperationType.FromOperation(Operation);
+        public Operation Operation { get; private set; }
+        public OperationType OperationType { get; private set; }
         public bool IsArchiveEvent { get; set; }
     }
 }

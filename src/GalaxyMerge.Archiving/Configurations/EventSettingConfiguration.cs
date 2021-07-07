@@ -12,15 +12,16 @@ namespace GalaxyMerge.Archiving.Configurations
         {
             builder.ToTable(nameof(EventSetting)).HasKey(x => x.EventId);
             
-            builder.Property(x => x.OperationId).IsRequired();
-            builder.Property(x => x.OperationType).IsRequired()
-                .HasConversion(x => x.Name, x => Enumeration.FromName<OperationType>(x));
+            builder.Property(x => x.Operation)
+                .HasConversion(x => x.Name, x => Enumeration.FromName<Operation>(x))
+                .IsRequired();
+            builder.Property(x => x.OperationType)
+                .HasConversion(x => x.Name, x => Enumeration.FromName<OperationType>(x))
+                .IsRequired();
             builder.Property(x => x.IsArchiveEvent).IsRequired();
             
-            builder.HasIndex(x => x.OperationId).IsUnique();
+            builder.HasIndex(x => x.Operation).IsUnique();
 
-            builder.Ignore(x => x.Operation);
-            
             builder.HasOne(x => x.Archive).WithMany(x => x.EventSettings).HasForeignKey(x => x.ArchiveId);
         }
     }

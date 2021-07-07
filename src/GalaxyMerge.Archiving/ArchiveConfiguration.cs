@@ -45,7 +45,7 @@ namespace GalaxyMerge.Archiving
             return _archive;
         }
 
-        public ArchiveConfiguration HasEvent(Operation operation, bool isArchiveEvent = true)
+        public ArchiveConfiguration ConfigureEvent(Operation operation, bool isArchiveEvent = true)
         {
             if (operation == null) throw new ArgumentNullException(nameof(operation), "Operation value cannot be null");
             
@@ -53,7 +53,7 @@ namespace GalaxyMerge.Archiving
             return this;
         }
 
-        public ArchiveConfiguration HasInclusion(Template template, InclusionOption option = null, bool includeInstances = false)
+        public ArchiveConfiguration ConfigureInclusion(Template template, InclusionOption option = null, bool includeInstances = false)
         {
             if (template == null) throw new ArgumentNullException(nameof(template), "Template value cannot be null");
 

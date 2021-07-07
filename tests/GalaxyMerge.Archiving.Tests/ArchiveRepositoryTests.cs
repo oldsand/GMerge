@@ -1,26 +1,38 @@
-using GalaxyMerge.Test.Core;
+using System.IO;
+using GalaxyMerge.Core.Utilities;
+using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 
 namespace GalaxyMerge.Archiving.Tests
 {
-    internal class ArchiveRepositoryTests : SqliteTestFixture<ArchiveContext>
+    internal class ArchiveRepositoryTests
     {
+        private const string GalaxyName = "GalaxyName";
+        private string _connectionString;
+
         [SetUp]
         public void Setup()
         {
-            using var context = new ArchiveContext(ContextOptions);
-            Create(context);
+            var config = ArchiveConfiguration.Default(GalaxyName);
+            var builder = new ArchiveBuilder();
+            builder.Build(config);
+            
+            _connectionString = DbStringBuilder.ArchiveString(GalaxyName);
         }
         
         [TearDown]
         public void TearDown()
         {
-            Dispose();
+            var fileName = Path.Combine(ApplicationPath.Archives, $"{GalaxyName}.db");
+            File.Delete(fileName);
         }
+        
 
-        protected override void Seed()
+        private void Seed()
         {
-            using var context = new ArchiveContext(ContextOptions);
+            var options = new DbContextOptionsBuilder<ArchiveContext>()
+                .UseSqlite(_connectionString).Options;
+            using var context = new ArchiveContext(options);
             
             //context.
         }
