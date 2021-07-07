@@ -10,15 +10,11 @@ namespace GalaxyMerge.Archiving
 {
     public class ArchiveConfiguration : IArchiveConfiguration
     {
-        private readonly string _galaxyName;
-        private readonly ArchestraVersion _version;
-        private readonly List<EventSetting> _eventSettings = new();
-        private readonly List<InclusionSetting> _inclusionSettings = new();
+        private readonly Archive _archive;
 
         private ArchiveConfiguration(string galaxyName, ArchestraVersion version = null)
         {
-            _galaxyName = galaxyName;
-            _version = version;
+            _archive = new Archive(galaxyName, version);
 
             var operations = Enumeration.GetAll<Operation>();
             foreach (var operation in operations)
@@ -31,25 +27,22 @@ namespace GalaxyMerge.Archiving
         
         public static ArchiveConfiguration Default(string galaxyName, ArchestraVersion version = null)
         {
-            var builder = new ArchiveConfiguration(galaxyName, version);
+            var configuration = new ArchiveConfiguration(galaxyName, version);
             
             var operations = Enumeration.GetAll<Operation>();
             foreach (var operation in operations)
-                builder.UpdateEventSetting(operation, IsDefaultArchiveOperation(operation));
+                configuration.UpdateEventSetting(operation, IsDefaultArchiveOperation(operation));
 
             var templates = Enumeration.GetAll<Template>();
             foreach (var template in templates)
-                builder.UpdateInclusionSetting(template, DefaultInclusionOption(template), DefaultIncludeInstances(template));
+                configuration.UpdateInclusionSetting(template, DefaultInclusionOption(template), DefaultIncludeInstances(template));
             
-            return builder;
+            return configuration;
         }
 
-        public Archive Build()
+        public Archive GenerateArchive()
         {
-            var archiveName = $"{_galaxyName}Archive";
-            var archive = new Archive(archiveName, _galaxyName, _version);
-            //todo configure archive
-            return archive;
+            return _archive;
         }
 
         public ArchiveConfiguration HasEvent(Operation operation, bool isArchiveEvent = true)
@@ -72,12 +65,12 @@ namespace GalaxyMerge.Archiving
 
         private void UpdateEventSetting(Operation operation, bool isArchiveEvent)
         {
-            var eventSetting = _eventSettings.SingleOrDefault(s => s.Operation == operation);
+            var eventSetting = _archive.EventSettings.SingleOrDefault(s => s.Operation == operation);
 
             if (eventSetting == null)
             {
                 var setting = new EventSetting(operation, isArchiveEvent);
-                _eventSettings.Add(setting);
+                _archive.AddEvent(setting);
                 return;
             }
             
@@ -86,12 +79,12 @@ namespace GalaxyMerge.Archiving
 
         private void UpdateInclusionSetting(Template template, InclusionOption inclusionOption, bool includeInstances)
         {
-            var inclusionSetting = _inclusionSettings.SingleOrDefault(s => s.Template == template);
+            var inclusionSetting = _archive.InclusionSettings.SingleOrDefault(s => s.Template == template);
 
             if (inclusionSetting == null)
             {
                 var setting = new InclusionSetting(template, inclusionOption, includeInstances);
-                _inclusionSettings.Add(setting);
+                _archive.AddInclusion(setting);
                 return;
             }
 

@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using GalaxyMerge.Testing;
+using GalaxyMerge.Test.Core;
 using NUnit.Framework;
 
 namespace GalaxyMerge.Services.Tests

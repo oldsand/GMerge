@@ -1,5 +1,5 @@
 using GalaxyMerge.Data.Repositories;
-using GalaxyMerge.Testing;
+using GalaxyMerge.Test.Core;
 using Microsoft.Data.SqlClient;
 using NUnit.Framework;
 

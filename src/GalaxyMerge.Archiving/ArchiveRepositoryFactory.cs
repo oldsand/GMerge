@@ -1,4 +1,5 @@
 using GalaxyMerge.Archiving.Abstractions;
+using GalaxyMerge.Archiving.Repositories;
 
 namespace GalaxyMerge.Archiving
 {
@@ -6,17 +7,7 @@ namespace GalaxyMerge.Archiving
     {
         public IArchiveRepository Create(string connectionString)
         {
-            return null;
-        }
-        
-        public IArchiveRepository CreateObjectRepository(string connectionString)
-        {
-            return null;
-        }
-        
-        public IQueueRepository CreateQueueRepository(string connectionString)
-        {
-            return null;
+            return new ArchiveRepository(connectionString);
         }
     }
 }

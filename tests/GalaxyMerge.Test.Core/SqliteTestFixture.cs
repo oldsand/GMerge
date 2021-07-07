@@ -5,7 +5,7 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
-namespace GalaxyMerge.Client.Data.Tests.Base
+namespace GalaxyMerge.Test.Core
 {
     public class SqliteTestFixture<T> : DbTestFixture<T>, IDisposable where T : DbContext
     {

@@ -58,7 +58,7 @@ namespace GalaxyMerge.Services
                 throw new InvalidOperationException($"Could not find object target with id {entry.ObjectId}");
 
             Logger.Trace("Retrieving archive");
-            var archive = archiveRepository.Get();
+            var archive = archiveRepository.GetArchive();
 
             var canArchive =
                 archive.CanArchive(target.ObjectId, target.TemplateId, target.IsTemplate, entry.OperationId);

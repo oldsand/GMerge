@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace GalaxyMerge.Client.Data.Tests.Base
+namespace GalaxyMerge.Test.Core
 {
     public abstract class DbTestFixture<T> where T : DbContext
     {

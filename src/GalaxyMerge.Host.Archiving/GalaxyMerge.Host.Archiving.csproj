@@ -48,7 +48,7 @@
   <ItemGroup>
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Configurations\LoggerConfiguration.cs" />
-    <Compile Include="GalaxyMergeService.cs">
+    <Compile Include="ArchivingService.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -32,7 +32,7 @@ namespace GalaxyMerge.Host.Archiving
         {
             Logger.Trace("Configuring DI Container");
             var builder = new ContainerBuilder();
-            builder.RegisterType<GalaxyMergeService>().AsSelf();
+            builder.RegisterType<ArchivingService>().AsSelf();
             builder.RegisterType<GalaxyRegistry>().AsSelf().AsImplementedInterfaces().SingleInstance();
             builder.RegisterType<DataRepositoryFactory>().AsSelf().AsImplementedInterfaces();
             builder.RegisterType<GalaxyManager>().AsSelf().AsImplementedInterfaces();

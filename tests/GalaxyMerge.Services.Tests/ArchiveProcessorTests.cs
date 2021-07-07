@@ -1,7 +1,7 @@
 using System.IO;
 using GalaxyMerge.Archiving;
 using GalaxyMerge.Core.Utilities;
-using GalaxyMerge.Testing;
+using GalaxyMerge.Test.Core;
 using NUnit.Framework;
 
 namespace GalaxyMerge.Services.Tests

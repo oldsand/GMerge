@@ -4,7 +4,7 @@ using GalaxyMerge.Archestra.Entities;
 using GalaxyMerge.Archestra.Extensions;
 using GalaxyMerge.Core.Extensions;
 using GalaxyMerge.Primitives;
-using GalaxyMerge.Testing;
+using GalaxyMerge.Test.Core;
 using NUnit.Framework;
 
 namespace GalaxyMerge.Archestra.Tests

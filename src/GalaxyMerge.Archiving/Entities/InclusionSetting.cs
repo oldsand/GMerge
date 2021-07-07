@@ -23,6 +23,9 @@ namespace GalaxyMerge.Archiving.Entities
             IncludeInstances = includeInstances;
         }
 
+        public int InclusionId { get; private set; }
+        public int ArchiveId { get; private set; }
+        public Archive Archive { get; private set; }
         public int TemplateId { get; private set; }
         public Template Template => Enumeration.FromId<Template>(TemplateId);
         public InclusionOption InclusionOption { get; set; }

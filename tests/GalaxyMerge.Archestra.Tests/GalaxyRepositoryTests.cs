@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
-using GalaxyMerge.Testing;
+using GalaxyMerge.Test.Core;
 using NUnit.Framework;
 
 namespace GalaxyMerge.Archestra.Tests

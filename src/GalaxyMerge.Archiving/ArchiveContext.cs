@@ -24,7 +24,11 @@ namespace GalaxyMerge.Archiving
         }
 
         public DbSet<Archive> Archive { get; set; }
+        public DbSet<EventSetting> EventSettings { get; set; }
+        public DbSet<InclusionSetting> InclusionSettings { get; set; }
+        public DbSet<IgnoreSetting> IgnoreSettings { get; set; }
         public DbSet<ArchiveObject> Objects { get; set; }
         public DbSet<QueuedEntry> Queue { get; set; }
+        
     }
 }

@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using GalaxyMerge.Data.Repositories;
-using GalaxyMerge.Testing;
+using GalaxyMerge.Test.Core;
 using NUnit.Framework;
 
 namespace GalaxyMerge.Data.Tests

@@ -1,9 +1,5 @@
-using System.IO;
-using GalaxyMerge.Core;
-using GalaxyMerge.Core.Utilities;
-using GalaxyMerge.Data.Repositories;
-using GalaxyMerge.Primitives;
-using GalaxyMerge.Testing;
+
+using GalaxyMerge.Test.Core;
 using NUnit.Framework;
 
 namespace GalaxyMerge.Services.Tests

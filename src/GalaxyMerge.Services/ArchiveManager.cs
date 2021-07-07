@@ -43,7 +43,7 @@ namespace GalaxyMerge.Services
         public ArchiveObjectData GetArchiveObject(int objectId)
         {
             using var repo = _archiveRepositoryFactory.Create(DbStringBuilder.ArchiveString(_galaxyRepository.Name));
-            var archiveObject = repo.Objects.FindInclude(objectId);
+            var archiveObject = repo.Objects.Get(objectId);
             return DataMapper.Map(archiveObject);
         }
 
@@ -64,7 +64,7 @@ namespace GalaxyMerge.Services
         public GalaxyObjectData GetGalaxyObject(int objectId)
         {
             using var repo = _archiveRepositoryFactory.Create(DbStringBuilder.ArchiveString(_galaxyRepository.Name));
-            var archiveObject = repo.Objects.FindInclude(objectId);
+            var archiveObject = repo.Objects.Get(objectId);
             if (archiveObject == null) return null;
 
             if (archiveObject.Template == Template.Symbol)
@@ -77,7 +77,7 @@ namespace GalaxyMerge.Services
         public GalaxySymbolData GetGalaxySymbol(int objectId)
         {
             using var repo = _archiveRepositoryFactory.Create(DbStringBuilder.ArchiveString(_galaxyRepository.Name));
-            var archiveObject = repo.Objects.FindInclude(objectId);
+            var archiveObject = repo.Objects.Get(objectId);
             if (archiveObject == null) return null;
 
             if (archiveObject.Template != Template.Symbol)
@@ -90,14 +90,14 @@ namespace GalaxyMerge.Services
         public IEnumerable<EventSettingData> GetEventSettings()
         {
             using var repo = _archiveRepositoryFactory.Create(DbStringBuilder.ArchiveString(_galaxyRepository.Name));
-            var archive = repo.Get();
+            var archive = repo.GetArchive();
             return archive.EventSettings.Select(DataMapper.Map);
         }
 
         public IEnumerable<InclusionSettingData> GetInclusionSettings()
         {
             using var repo = _archiveRepositoryFactory.Create(DbStringBuilder.ArchiveString(_galaxyRepository.Name));
-            var archive = repo.Get();
+            var archive = repo.GetArchive();
             return archive.InclusionSettings.Select(DataMapper.Map);
         }
 

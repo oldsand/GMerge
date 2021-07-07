@@ -1,5 +1,5 @@
 using GalaxyMerge.Archestra.Entities;
-using GalaxyMerge.Testing;
+using GalaxyMerge.Test.Core;
 using NUnit.Framework;
 
 namespace GalaxyMerge.Archestra.Tests

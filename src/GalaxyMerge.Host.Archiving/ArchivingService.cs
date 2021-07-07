@@ -15,7 +15,7 @@ using Topshelf.HostConfigurators;
 
 namespace GalaxyMerge.Host.Archiving
 {
-    public class GalaxyMergeService
+    public class ArchivingService
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly List<ArchiveMonitor> _archiveMonitors = new();
@@ -37,7 +37,7 @@ namespace GalaxyMerge.Host.Archiving
             config.UseAutofacContainer(_container);
             config.UseNLog();
 
-            config.Service<GalaxyMergeService>(instance =>
+            config.Service<ArchivingService>(instance =>
             {
                 instance.ConstructUsingAutofacContainer();
                 instance.WhenStarted(x => x.OnStart());
@@ -46,8 +46,8 @@ namespace GalaxyMerge.Host.Archiving
             
             config.OnException(OnServiceException);
             
-            config.SetServiceName("gArchiving");
-            config.SetDisplayName("Galaxy Merge Archiving");
+            config.SetServiceName("GArchiving");
+            config.SetDisplayName("Galaxy Merge Archiving Service");
             config.SetDescription(@"Service host for the Galaxy Merge application.
                                   This service provides retrieval, archiving, and modification of System Platform
                                   Archestra objects and graphics hosted on this machine's galaxy repositories.");

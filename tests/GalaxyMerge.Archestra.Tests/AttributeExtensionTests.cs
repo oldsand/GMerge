@@ -1,5 +1,5 @@
 using System.Linq;
-using GalaxyMerge.Testing;
+using GalaxyMerge.Test.Core;
 using NUnit.Framework;
 
 namespace GalaxyMerge.Archestra.Tests

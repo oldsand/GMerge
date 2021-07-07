@@ -20,6 +20,8 @@ namespace GalaxyMerge.Archiving.Configurations
             builder.HasIndex(x => x.OperationId).IsUnique();
 
             builder.Ignore(x => x.Operation);
+            
+            builder.HasOne(x => x.Archive).WithMany(x => x.EventSettings).HasForeignKey(x => x.ArchiveId);
         }
     }
 }

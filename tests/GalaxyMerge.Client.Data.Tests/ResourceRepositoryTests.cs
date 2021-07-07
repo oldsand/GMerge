@@ -2,14 +2,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using GalaxyMerge.Client.Data.Entities;
 using GalaxyMerge.Client.Data.Repositories;
-using GalaxyMerge.Client.Data.Tests.Base;
+using GalaxyMerge.Test.Core;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 
 namespace GalaxyMerge.Client.Data.Tests
 {
     [TestFixture]
-    public class ResourceRepositoryTests : SqliteTestFixture<AppContext>
+    internal class ResourceRepositoryTests : SqliteTestFixture<AppContext>
     {
         [SetUp]
         public void Setup()
@@ -27,10 +27,23 @@ namespace GalaxyMerge.Client.Data.Tests
         protected override void Seed()
         {
             using var context = new AppContext(ContextOptions);
-            context.Resources.Add(new ResourceEntry("Resource1", ResourceType.Connection, "This is a test"));
-            context.Resources.Add(new ResourceEntry("Resource2", ResourceType.Archive, "Resource Number 2"));
-            context.Resources.Add(new ResourceEntry("Resource3", ResourceType.Directory, "Test Description"));
-            context.Resources.Add(new ResourceEntry("Resource4", ResourceType.Connection, "This is another test"));
+            context.Resources.Add(new ResourceEntry("Resource1", ResourceType.Connection, "This is a test")
+            {
+                Connection = {NodeName = "SomeNode", GalaxyName = "TestGalaxy1"}
+            });
+            context.Resources.Add(new ResourceEntry("Resource2", ResourceType.Archive, "Resource Number 2")
+            {
+                Archive = { FileName = "C:\\SomeFileName.db"}
+            });
+            context.Resources.Add(new ResourceEntry("Resource3", ResourceType.Directory, "Test Description")
+            {
+                Directory = { DirectoryName = "C:\\SomeDirectory"}
+            });
+            context.Resources.Add(new ResourceEntry("Resource4", ResourceType.Connection, "This is another test")
+            {
+                Connection = {NodeName = "AnotherHost", GalaxyName = "TestGalaxy2"}
+            });
+            
             context.SaveChanges();
         }
 
@@ -116,9 +129,12 @@ namespace GalaxyMerge.Client.Data.Tests
         public void Add_WhenCalled_CanGetAddedEntry()
         {
             Seed();
-            using var repo = new ResourceRepository(Connection);
+            using var repo = new ResourceRepository(Connection){};
 
-            repo.Add(new ResourceEntry("TestAddResource", ResourceType.Archive));
+            repo.Add(new ResourceEntry("TestAddResource", ResourceType.Archive)
+            {
+                Archive = { FileName = "C:\\SomeFileName.db"}
+            });
             repo.Save();
 
             var result = repo.Get("TestAddResource");

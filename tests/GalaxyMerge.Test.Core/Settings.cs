@@ -1,4 +1,4 @@
-namespace GalaxyMerge.Testing
+namespace GalaxyMerge.Test.Core
 {
     public static class Settings
     {

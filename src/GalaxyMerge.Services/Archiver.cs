@@ -44,8 +44,11 @@ namespace GalaxyMerge.Services
         private void ArchiveObject(GObject gObject, bool force = false, int? changeLogId = null)
         {
             if (!_archiveRepository.Objects.Exists(gObject.ObjectId))
+            {
                 AddArchiveObject(gObject, changeLogId);
-
+                return;
+            }
+            
             //todo add is latest var isLatest = _archiveRepository.IsLatest();
             if (!force) return;
             UpdateArchiveObject(gObject, changeLogId);
@@ -67,7 +70,7 @@ namespace GalaxyMerge.Services
 
         private void UpdateArchiveObject(GObject gObject, int? changeLogId)
         {
-            var archiveObject = _archiveRepository.Objects.FindInclude(gObject.ObjectId);
+            var archiveObject = _archiveRepository.Objects.Get(gObject.ObjectId);
 
             if (gObject.TagName != archiveObject.TagName)
                 archiveObject.UpdateTagName(gObject.TagName);

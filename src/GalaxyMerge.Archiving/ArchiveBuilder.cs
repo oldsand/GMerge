@@ -8,15 +8,15 @@ namespace GalaxyMerge.Archiving
     {
         public void Build(IArchiveConfiguration config)
         {
-            var archive = config.Build();
+            var archive = config.GenerateArchive();
             
-            var connectionString = DbStringBuilder.ArchiveString(archive.ArchiveName);
+            var connectionString = DbStringBuilder.ArchiveString(archive.GalaxyName);
             var options = new DbContextOptionsBuilder<ArchiveContext>()
                 .UseSqlite(connectionString).Options;
-            
             using var context = new ArchiveContext(options);
+            
             context.Database.EnsureCreated();
-            context.Archive.Add(config.Build());
+            context.Archive.Add(archive);
             
             context.SaveChanges();
         }
