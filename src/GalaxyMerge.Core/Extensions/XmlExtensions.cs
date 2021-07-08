@@ -67,17 +67,26 @@ namespace GalaxyMerge.Core.Extensions
 
         public static byte [] ToByteArray(this XNode node, SaveOptions options = default, Encoding encoding = default)
         {
-            var settings = new XmlWriterSettings { OmitXmlDeclaration = true, Indent = (options & SaveOptions.DisableFormatting) == 0, Encoding = encoding ?? Encoding.Default };
+            var settings = new XmlWriterSettings
+            {
+                OmitXmlDeclaration = true,
+                Indent = (options & SaveOptions.DisableFormatting) == 0,
+                Encoding = encoding ?? Encoding.UTF8
+            };
+            
             if ((options & SaveOptions.OmitDuplicateNamespaces) != 0)
                 settings.NamespaceHandling |= NamespaceHandling.OmitDuplicates;
+            
             return node.ToByteArray(settings);
         }
     
         public static byte [] ToByteArray(this XNode node, XmlWriterSettings settings)
         {
             using var memoryStream = new MemoryStream();
+            
             using (var writer = XmlWriter.Create(memoryStream, settings)) 
                 node.WriteTo(writer);
+            
             return memoryStream.ToArray();
         }
     }

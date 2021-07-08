@@ -37,6 +37,7 @@ namespace GalaxyMerge.Archiving.Repositories
 
         public void Add(ArchiveObject archiveObject)
         {
+            archiveObject.Archive ??= _context.Archive.Single();
             _context.Objects.Add(archiveObject);
         }
 

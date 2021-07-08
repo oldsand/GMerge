@@ -44,6 +44,7 @@ namespace GalaxyMerge.Archiving.Entities
         {
             if (_objects.All(x => x.ObjectId != archiveObject.ObjectId))
             {
+                archiveObject.Archive = this;
                 _objects.Add(archiveObject);
                 return;
             }

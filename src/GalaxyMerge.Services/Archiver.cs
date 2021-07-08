@@ -53,6 +53,22 @@ namespace GalaxyMerge.Services
             if (!force) return;
             UpdateArchiveObject(gObject, changeLogId);
         }
+        
+        private void ArchiveObject1(GObject gObject, bool force = false, int? changeLogId = null)
+        {
+            var archive = _archiveRepository.GetArchive();
+            
+            var template = Enumeration.FromId<Template>(gObject.TemplateId);
+            if (template == null) throw new InvalidOperationException("Cannot Archive Unknown Template Type");
+
+            var archiveObject = new ArchiveObject(gObject.ObjectId, gObject.TagName, gObject.ConfigVersion, template);
+
+            var data = gObject.IsSymbol ? GetSymbolData(gObject.TagName) : GetObjectData(gObject.TagName);
+            archiveObject.AddEntry(data, changeLogId);
+            
+            archive.UpdateObject(archiveObject);
+            _archiveRepository.Save();
+        }
 
         private void AddArchiveObject(GObject gObject, int? changeLogId)
         {

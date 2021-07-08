@@ -7,7 +7,8 @@ namespace GalaxyMerge.Archiving.Abstractions
     public interface IArchiveRepository : IDisposable
     {
         Archive GetArchive();
-        Archive GetArchiveIncludeObjects();
+        Archive GetArchiveInfo();
+        Archive GetArchiveSettings();
         IArchiveObjectRepository Objects { get; }
         IQueueRepository Queue { get; }
         bool HasChanges();

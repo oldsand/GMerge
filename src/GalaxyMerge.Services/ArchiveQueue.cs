@@ -27,10 +27,10 @@ namespace GalaxyMerge.Services
         
         private void Process()
         {
-            foreach (var (queuedEntry, processor) in _processQueue.GetConsumingEnumerable(CancellationToken.None))
+            foreach (var (entry, processor) in _processQueue.GetConsumingEnumerable(CancellationToken.None))
             {
-                Logger.Trace("Processing entry with change log id '{ChangeLogId}'", queuedEntry.ChangeLogId);
-                processor?.Invoke(queuedEntry);
+                Logger.Trace("Processing entry with change log id '{ChangeLogId}'", entry.ChangeLogId);
+                processor?.Invoke(entry);
             }
         }
     }

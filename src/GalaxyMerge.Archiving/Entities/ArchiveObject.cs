@@ -18,17 +18,18 @@ namespace GalaxyMerge.Archiving.Entities
             TagName = tagName;
             Version = version;
             Template = template;
+            IsTemplate = tagName.StartsWith("$");
             AddedOn = DateTime.Now;
             ModifiedOn = DateTime.Now;
         }
         
         public int ObjectId { get; private set; }
-        public int ArchiveId { get; private set; }
-        public Archive Archive { get; private set; }
+        public int ArchiveId { get; internal set; }
+        public Archive Archive { get; internal set; }
         public string TagName { get; private set; }
         public int Version { get; private set; }
         public Template Template { get; private set; }
-        public bool IsTemplate { get; set; }
+        public bool IsTemplate { get; private set; }
         public DateTime AddedOn { get; private set; }
         public DateTime ModifiedOn { get; private set; }
         public IEnumerable<ArchiveEntry> Entries => _entries;

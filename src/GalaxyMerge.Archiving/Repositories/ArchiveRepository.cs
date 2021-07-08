@@ -24,16 +24,21 @@ namespace GalaxyMerge.Archiving.Repositories
                 .Include(x => x.EventSettings)
                 .Include(x => x.InclusionSettings)
                 .Include(x => x.IgnoreSettings)
+                .Include(x => x.Objects)
                 .Single();
         }
-        
-        public Archive GetArchiveIncludeObjects()
+
+        public Archive GetArchiveInfo()
+        {
+            return _context.Archive.Single();
+        }
+
+        public Archive GetArchiveSettings()
         {
             return _context.Archive
                 .Include(x => x.EventSettings)
                 .Include(x => x.InclusionSettings)
                 .Include(x => x.IgnoreSettings)
-                .Include(x => x.Objects)
                 .Single();
         }
 
