@@ -34,7 +34,7 @@ namespace GalaxyMerge.Data.Tests
         {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-            using var repo = new DataRepository(_connectionString);
+            using var repo = new GalaxyDataProvider(_connectionString);
 
             var result = repo.Objects.Find(tagName).First();
             stopwatch.Stop();
@@ -49,7 +49,7 @@ namespace GalaxyMerge.Data.Tests
         [TestCase("AppEngine")]
         public void FindByTagName_InvalidObject_ReturnsNull(string tagName)
         {
-            var repo = new DataRepository(_connectionString);
+            var repo = new GalaxyDataProvider(_connectionString);
 
             var result = repo.Objects.Find(tagName);
 
@@ -59,7 +59,7 @@ namespace GalaxyMerge.Data.Tests
         [Test]
         public void Find_ValidId_ReturnsObject()
         {
-            var repo = new DataRepository(_connectionString);
+            var repo = new GalaxyDataProvider(_connectionString);
 
             var result = repo.Objects.Find(x => x.ObjectId == 14);
 
@@ -73,7 +73,7 @@ namespace GalaxyMerge.Data.Tests
         [TestCase("$AppEngine")]
         public void FindIncludeTemplate_ValidObject_ReturnsObjectWithTemplateNotNull(string tagName)
         {
-            var repo = new DataRepository(_connectionString);
+            var repo = new GalaxyDataProvider(_connectionString);
 
             var result = repo.Objects.FindInclude(x => x.TagName == tagName, g => g.TemplateDefinition);
 
@@ -86,7 +86,7 @@ namespace GalaxyMerge.Data.Tests
         [TestCase("SUN_GEN_Site_Data")]
         public void FindIncludeArea_ValidObject_ReturnsObjectWithAreaNotNull(string tagName)
         {
-            var repo = new DataRepository(_connectionString);
+            var repo = new GalaxyDataProvider(_connectionString);
 
             var result = repo.Objects.FindInclude(x => x.TagName == tagName, g => g.Area);
 
@@ -99,7 +99,7 @@ namespace GalaxyMerge.Data.Tests
         [TestCase("SUN_GEN_Site_Data")]
         public void FindIncludeHost_ValidObject_ReturnsObjectWithHostNotNull(string tagName)
         {
-            var repo = new DataRepository(_connectionString);
+            var repo = new GalaxyDataProvider(_connectionString);
 
             var result = repo.Objects.FindInclude(x => x.TagName == tagName, g => g.Host);
 
@@ -112,7 +112,7 @@ namespace GalaxyMerge.Data.Tests
         [TestCase("$UserDefined")]
         public void FindIncludeDerivations_ValidObject_ReturnsObjectWithDerivedObject(string tagName)
         {
-            var repo = new DataRepository(_connectionString);
+            var repo = new GalaxyDataProvider(_connectionString);
 
             var result = repo.Objects.FindInclude(x => x.TagName == tagName, g => g.Derivations);
 
@@ -125,7 +125,7 @@ namespace GalaxyMerge.Data.Tests
         [TestCase("$UserDefined")]
         public void FindIncludeAllDerivations_ValidObject_ReturnsObjectWithDerivedObject(string tagName)
         {
-            var repo = new DataRepository(_connectionString);
+            var repo = new GalaxyDataProvider(_connectionString);
 
             var result = repo.Objects.FindIncludeDescendants(tagName);
 
@@ -137,7 +137,7 @@ namespace GalaxyMerge.Data.Tests
         [Test]
         public void FindIncludeChangeLogs_WhenCalled_ReturnsObjectWithChangeLogs()
         {
-            var repo = new DataRepository(_connectionString);
+            var repo = new GalaxyDataProvider(_connectionString);
 
             var result = repo.Objects.FindInclude(x => x.TagName == "$Test_Template", x => x.ChangeLogs);
             
@@ -148,7 +148,7 @@ namespace GalaxyMerge.Data.Tests
         [Test]
         public async Task GetDerivationHierarchy_WhenCalled_ReturnsNotEmpty()
         {
-            var repo = new DataRepository(_connectionString);
+            var repo = new GalaxyDataProvider(_connectionString);
 
             var derivations = (await repo.Objects.GetDerivationHierarchy()).ToList();
             
@@ -160,7 +160,7 @@ namespace GalaxyMerge.Data.Tests
         [TestCase("FormatString")]
         public void FindIncludeFolder_ValidSymbol_ReturnsValidFolderObject(string tagName)
         {
-            var repo = new DataRepository(_connectionString);
+            var repo = new GalaxyDataProvider(_connectionString);
 
             var result = repo.Objects.FindIncludeFolder(tagName);
             Assert.NotNull(result);

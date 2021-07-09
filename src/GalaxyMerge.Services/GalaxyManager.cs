@@ -11,21 +11,21 @@ namespace GalaxyMerge.Services
     public class GalaxyManager : IGalaxyService, IDisposable
     {
         private readonly IGalaxyRegistry _galaxyRegistry;
-        private readonly IDataRepositoryFactory _dataRepositoryFactory;
+        private readonly IGalaxyDataProviderFactory _galaxyDataProviderFactory;
         private IGalaxyRepository _galaxyRepository;
-        private IDataRepository _dataRepository;
+        private IGalaxyDataProvider _galaxyDataProvider;
 
-        public GalaxyManager(IGalaxyRegistry galaxyRegistry, IDataRepositoryFactory dataRepositoryFactory)
+        public GalaxyManager(IGalaxyRegistry galaxyRegistry, IGalaxyDataProviderFactory galaxyDataProviderFactory)
         {
             _galaxyRegistry = galaxyRegistry ?? throw new ArgumentNullException(nameof(galaxyRegistry));
-            _dataRepositoryFactory =
-                dataRepositoryFactory ?? throw new ArgumentNullException(nameof(dataRepositoryFactory));
+            _galaxyDataProviderFactory =
+                galaxyDataProviderFactory ?? throw new ArgumentNullException(nameof(galaxyDataProviderFactory));
         }
 
         public bool Connect(string galaxyName)
         {
             var connectionString = DbStringBuilder.GalaxyString(Environment.MachineName, galaxyName);
-            _dataRepository = _dataRepositoryFactory.Create(connectionString);
+            _galaxyDataProvider = _galaxyDataProviderFactory.Create(connectionString);
 
             _galaxyRepository = GetRegisteredGalaxy(galaxyName);
 
@@ -36,7 +36,7 @@ namespace GalaxyMerge.Services
         {
             ValidateInitialization();
 
-            var tagName = _dataRepository.Objects.GetTagName(objectId);
+            var tagName = _galaxyDataProvider.Objects.GetTagName(objectId);
             var galaxyObject = _galaxyRepository.GetObject(tagName);
             return DataMapper.Map(galaxyObject);
         }
@@ -53,7 +53,7 @@ namespace GalaxyMerge.Services
         {
             ValidateInitialization();
             
-            var tagName = _dataRepository.Objects.GetTagName(objectId);
+            var tagName = _galaxyDataProvider.Objects.GetTagName(objectId);
             var galaxySymbol = _galaxyRepository.GetSymbol(tagName);
             return DataMapper.Map(galaxySymbol);
         }
@@ -68,7 +68,7 @@ namespace GalaxyMerge.Services
 
         public void Dispose()
         {
-            _dataRepository?.Dispose();
+            _galaxyDataProvider?.Dispose();
         }
 
         private IGalaxyRepository GetRegisteredGalaxy(string galaxyName)
@@ -93,7 +93,7 @@ namespace GalaxyMerge.Services
                 throw new InvalidOperationException(
                     "Galaxy Repository not initialized. Can not perform call on uninitialized service. Call Connect prior to using service.");
 
-            if (_dataRepository == null)
+            if (_galaxyDataProvider == null)
                 throw new InvalidOperationException(
                     "Data Repository not initialized. Can not perform call on uninitialized service. Call Connect prior to using service.");
         }

@@ -3,6 +3,7 @@ using System.Diagnostics;
 using Autofac;
 using GalaxyMerge.Archiving;
 using GalaxyMerge.Archiving.Abstractions;
+using GalaxyMerge.Data;
 using GalaxyMerge.Data.Abstractions;
 using GalaxyMerge.Primitives;
 using GalaxyMerge.Services;
@@ -34,7 +35,7 @@ namespace GalaxyMerge.Host.Archiving
             var builder = new ContainerBuilder();
             builder.RegisterType<ArchivingService>().AsSelf();
             builder.RegisterType<GalaxyRegistry>().AsSelf().AsImplementedInterfaces().SingleInstance();
-            builder.RegisterType<DataRepositoryFactory>().AsSelf().AsImplementedInterfaces();
+            builder.RegisterType<GalaxyDataProviderFactory>().AsSelf().AsImplementedInterfaces();
             builder.RegisterType<GalaxyManager>().AsSelf().AsImplementedInterfaces();
             builder.RegisterType<ArchiveManager>().AsSelf().AsImplementedInterfaces();
             builder.RegisterType<ArchiveBuilder>().AsSelf().AsImplementedInterfaces();

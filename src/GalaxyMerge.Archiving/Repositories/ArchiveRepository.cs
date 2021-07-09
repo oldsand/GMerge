@@ -2,6 +2,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GalaxyMerge.Archiving.Abstractions;
 using GalaxyMerge.Archiving.Entities;
+using GalaxyMerge.Primitives;
 using Microsoft.EntityFrameworkCore;
 
 namespace GalaxyMerge.Archiving.Repositories
@@ -14,19 +15,17 @@ namespace GalaxyMerge.Archiving.Repositories
         {
             var options = new DbContextOptionsBuilder<ArchiveContext>().UseSqlite(connectionString).Options;
             _context = new ArchiveContext(options);
+            
+            Events = new EventSettingRepository(_context);
+            Inclusions = new InclusionSettingsRepository(_context);
             Objects = new ArchiveObjectRepository(_context);
             Queue = new QueueRepository(_context);
         }
-
-        public Archive GetArchive()
-        {
-            return _context.Archive
-                .Include(x => x.EventSettings)
-                .Include(x => x.InclusionSettings)
-                .Include(x => x.IgnoreSettings)
-                .Include(x => x.Objects)
-                .Single();
-        }
+        
+        public IEventSettingsRepository Events { get; }
+        public IInclusionSettingsRepository Inclusions { get; }
+        public IArchiveObjectRepository Objects { get; }
+        public IQueueRepository Queue { get; }
 
         public Archive GetArchiveInfo()
         {
@@ -41,9 +40,11 @@ namespace GalaxyMerge.Archiving.Repositories
                 .Include(x => x.IgnoreSettings)
                 .Single();
         }
-
-        public IArchiveObjectRepository Objects { get; }
-        public IQueueRepository Queue { get; }
+        
+        public bool CanArchive(ArchiveObject archiveObject, Operation operation)
+        {
+            return Inclusions.IsIncluded(archiveObject) && Events.IsTrigger(operation);
+        }
 
         public bool HasChanges()
         {

@@ -29,7 +29,7 @@ namespace GalaxyMerge.Data.Tests
         [TestCase("EN - Functions")]
         public void Find_ValidName_ReturnsExpectedFolderName(string folderName)
         {
-            var repo = new DataRepository(_connectionString);
+            var repo = new GalaxyDataProvider(_connectionString);
 
             var folder = repo.Folders.Find(x => x.FolderName == folderName);
             
@@ -40,7 +40,7 @@ namespace GalaxyMerge.Data.Tests
         [Test]
         public void FindInclude_ChildFolders_ReturnsExpectedChildFolder()
         {
-            var repo = new DataRepository(_connectionString);
+            var repo = new GalaxyDataProvider(_connectionString);
 
             var folder = repo.Folders.FindInclude(x => x.FolderName == "ArchestrA Symbol Library", x => x.Folders);
             
@@ -52,7 +52,7 @@ namespace GalaxyMerge.Data.Tests
         [Test]
         public async Task GetSymbolHierarchy_WhenCalled_ReturnsNotEmpty()
         {
-            var repo = new DataRepository(_connectionString);
+            var repo = new GalaxyDataProvider(_connectionString);
 
             var symbols = (await repo.Folders.GetSymbolHierarchy()).ToList();
             

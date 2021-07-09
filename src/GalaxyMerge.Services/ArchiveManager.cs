@@ -20,17 +20,17 @@ namespace GalaxyMerge.Services
     public class ArchiveManager : IArchiveService
     {
         private readonly IGalaxyRegistry _galaxyRegistry;
-        private readonly IDataRepositoryFactory _dataRepositoryFactory;
+        private readonly IGalaxyDataProviderFactory _galaxyDataProviderFactory;
         private readonly IArchiveRepositoryFactory _archiveRepositoryFactory;
         private IGalaxyRepository _galaxyRepository;
 
         public ArchiveManager(IGalaxyRegistry galaxyRegistry,
-            IDataRepositoryFactory dataRepositoryFactory,
+            IGalaxyDataProviderFactory galaxyDataProviderFactory,
             IArchiveRepositoryFactory archiveRepositoryFactory,
             IArchiveProcessorFactory processorFactory)
         {
             _galaxyRegistry = galaxyRegistry;
-            _dataRepositoryFactory = dataRepositoryFactory;
+            _galaxyDataProviderFactory = galaxyDataProviderFactory;
             _archiveRepositoryFactory = archiveRepositoryFactory;
         }
         
@@ -90,20 +90,18 @@ namespace GalaxyMerge.Services
         public IEnumerable<EventSettingData> GetEventSettings()
         {
             using var repo = _archiveRepositoryFactory.Create(DbStringBuilder.ArchiveString(_galaxyRepository.Name));
-            var archive = repo.GetArchive();
-            return archive.EventSettings.Select(DataMapper.Map);
+            return repo.Events.GetAll().Select(DataMapper.Map);
         }
 
         public IEnumerable<InclusionSettingData> GetInclusionSettings()
         {
             using var repo = _archiveRepositoryFactory.Create(DbStringBuilder.ArchiveString(_galaxyRepository.Name));
-            var archive = repo.GetArchive();
-            return archive.InclusionSettings.Select(DataMapper.Map);
+            return repo.Inclusions.GetAll().Select(DataMapper.Map);
         }
 
         public void AddObject(int objectId)
         {
-            using var dataRepo = _dataRepositoryFactory.Create(DbStringBuilder.GalaxyString(_galaxyRepository.Name));
+            using var dataRepo = _galaxyDataProviderFactory.Create(DbStringBuilder.GalaxyString(_galaxyRepository.Name));
             using var archiveRepo = _archiveRepositoryFactory.Create(DbStringBuilder.ArchiveString(_galaxyRepository.Name));
             using var archiver = new Archiver(_galaxyRepository, dataRepo, archiveRepo);
             archiver.Archive(objectId);
@@ -112,12 +110,12 @@ namespace GalaxyMerge.Services
         public void RemoveObject(int objectId)
         {
             using var repo = _archiveRepositoryFactory.Create(DbStringBuilder.ArchiveString(_galaxyRepository.Name));
-            repo.Objects.Remove(objectId);
+            repo.Objects.Delete(objectId);
         }
 
         public void ArchiveObject(int objectId, bool force = false)
         {
-            using var dataRepo = _dataRepositoryFactory.Create(DbStringBuilder.GalaxyString(_galaxyRepository.Name));
+            using var dataRepo = _galaxyDataProviderFactory.Create(DbStringBuilder.GalaxyString(_galaxyRepository.Name));
             using var archiveRepo = _archiveRepositoryFactory.Create(DbStringBuilder.ArchiveString(_galaxyRepository.Name));
             using var archiver = new Archiver(_galaxyRepository, dataRepo, archiveRepo);
             archiver.Archive(objectId, force);

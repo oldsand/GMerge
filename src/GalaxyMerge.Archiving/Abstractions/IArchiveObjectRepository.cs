@@ -8,10 +8,9 @@ namespace GalaxyMerge.Archiving.Abstractions
     {
         bool Exists(int objectId);
         ArchiveObject Get(int objectId);
-        IEnumerable<ArchiveObject> Get(string tagName);
         IEnumerable<ArchiveObject> GetAll();
-        void Add(ArchiveObject archiveObject);
-        void Remove(int objectId);
-        void Update(ArchiveObject archiveObject);
+        IEnumerable<ArchiveObject> FindByTagName(string tagName);
+        void Upsert(ArchiveObject archiveObject);
+        void Delete(int objectId);
     }
 }

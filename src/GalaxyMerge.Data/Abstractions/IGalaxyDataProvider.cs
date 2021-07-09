@@ -2,7 +2,7 @@ using System;
 
 namespace GalaxyMerge.Data.Abstractions
 {
-    public interface IDataRepository : IDisposable
+    public interface IGalaxyDataProvider : IDisposable
     {
         IObjectRepository Objects { get; }
         IDefinitionRepository Definitions { get; }

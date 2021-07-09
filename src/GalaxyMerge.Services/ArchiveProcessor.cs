@@ -1,9 +1,12 @@
 using System;
+using System.Diagnostics.Eventing.Reader;
 using GalaxyMerge.Archiving.Abstractions;
 using GalaxyMerge.Archiving.Entities;
+using GalaxyMerge.Core;
 using GalaxyMerge.Core.Utilities;
 using GalaxyMerge.Data.Abstractions;
 using GalaxyMerge.Data.Entities;
+using GalaxyMerge.Primitives;
 using GalaxyMerge.Services.Abstractions;
 using NLog;
 
@@ -13,20 +16,20 @@ namespace GalaxyMerge.Services
     {
         private readonly string _galaxyName;
         private readonly IGalaxyRegistry _galaxyRegistry;
-        private readonly IDataRepositoryFactory _dataRepositoryFactory;
+        private readonly IGalaxyDataProviderFactory _galaxyDataProviderFactory;
         private readonly IArchiveRepositoryFactory _archiveRepositoryFactory;
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
         private readonly IArchiveQueue _archiveQueue;
 
         public ArchiveProcessor(string galaxyName,
             IGalaxyRegistry galaxyRegistry,
-            IDataRepositoryFactory dataRepositoryFactory, 
+            IGalaxyDataProviderFactory galaxyDataProviderFactory, 
             IArchiveRepositoryFactory archiveRepositoryFactory,
             IArchiveQueue archiveQueue)
         {
             _galaxyName = galaxyName;
             _galaxyRegistry = galaxyRegistry;
-            _dataRepositoryFactory = dataRepositoryFactory;
+            _galaxyDataProviderFactory = galaxyDataProviderFactory;
             _archiveRepositoryFactory = archiveRepositoryFactory;
             _archiveQueue = archiveQueue;
         }
@@ -46,7 +49,7 @@ namespace GalaxyMerge.Services
         {
             Logger.Trace("Initializing repositories for galaxy '{GalaxyName}'", _galaxyName);
             var galaxyRepository = _galaxyRegistry.GetByCurrentIdentity(_galaxyName);
-            using var dataRepository = _dataRepositoryFactory.Create(DbStringBuilder.GalaxyString(_galaxyName));
+            using var dataRepository = _galaxyDataProviderFactory.Create(DbStringBuilder.GalaxyString(_galaxyName));
             using var archiveRepository = _archiveRepositoryFactory.Create(DbStringBuilder.ArchiveString(_galaxyName));
             
             Logger.Debug("Starting processing for {ChangeLogId}", entry.ChangeLogId);
@@ -55,13 +58,14 @@ namespace GalaxyMerge.Services
             Logger.Trace("Retrieving gObjet {ObjectId}", entry.ObjectId);
             var target = dataRepository.Objects.Find(entry.ObjectId);
             if (target == null)
-                throw new InvalidOperationException($"Could not find object target with id {entry.ObjectId}");
+            {
+                Logger.Warn("Could not find object target with id {ObjectId}", entry.ObjectId);
+                return;
+            }
 
             Logger.Trace("Retrieving archive");
-            var archive = archiveRepository.GetArchive();
-
-            var canArchive =
-                archive.CanArchive(target.ObjectId, target.TemplateId, target.IsTemplate, entry.OperationId);
+            var archiveObject = new ArchiveObject(entry.ObjectId, target.TagName, target.ConfigVersion, Template.Area);
+            var canArchive = archiveRepository.CanArchive(archiveObject, Enumeration.FromId<Operation>(entry.OperationId));
 
             if (!canArchive)
             {

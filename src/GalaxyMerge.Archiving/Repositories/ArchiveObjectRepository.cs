@@ -22,34 +22,39 @@ namespace GalaxyMerge.Archiving.Repositories
 
         public ArchiveObject Get(int objectId)
         {
-            return _context.Objects.Include(x => x.Entries).Single(x => x.ObjectId == objectId);
-        }
-
-        public IEnumerable<ArchiveObject> Get(string tagName)
-        {
-            return _context.Objects.Where(x => x.TagName == tagName);
+            return _context.Objects.Include(x => x.Entries).SingleOrDefault(x => x.ObjectId == objectId);
         }
 
         public IEnumerable<ArchiveObject> GetAll()
         {
             return _context.Objects.ToList();
         }
-
-        public void Add(ArchiveObject archiveObject)
+        
+        public IEnumerable<ArchiveObject> FindByTagName(string tagName)
         {
-            archiveObject.Archive ??= _context.Archive.Single();
-            _context.Objects.Add(archiveObject);
+            return _context.Objects.Where(x => x.TagName == tagName);
         }
 
-        public void Remove(int objectId)
+        public void Upsert(ArchiveObject archiveObject)
+        {
+            if (_context.Objects.All(x => x.ObjectId != archiveObject.ObjectId))
+            {
+                _context.Entry(archiveObject).State = EntityState.Added;
+                _context.Objects.Add(archiveObject);
+                return;
+            }
+
+            var target = _context.Objects.Single(x => x.ObjectId == archiveObject.ObjectId);
+            target.UpdateTagName(archiveObject.TagName);
+            target.UpdateVersion(archiveObject.Version);
+            target.AddEntries(archiveObject.Entries);
+        }
+        
+        public void Delete(int objectId)
         {
             var target = _context.Objects.Find(objectId);
+            if (target == null) return;
             _context.Objects.Remove(target);
-        }
-
-        public void Update(ArchiveObject archiveObject)
-        {
-            _context.Objects.Update(archiveObject);
         }
 
         public void Dispose()

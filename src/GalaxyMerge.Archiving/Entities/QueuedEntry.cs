@@ -9,12 +9,12 @@ namespace GalaxyMerge.Archiving.Entities
         {
         }
         
-        public QueuedEntry(int changeLogId, int objectId, int operationId, DateTime changeOn)
+        public QueuedEntry(int changeLogId, int objectId, int operationId, DateTime changedOn)
         {
             ChangeLogId = changeLogId;
             ObjectId = objectId;
             OperationId = operationId;
-            ChangeOn = changeOn;
+            ChangedOn = changedOn;
             QueuedOn = DateTime.Now;
             State = QueueState.New;
         }
@@ -22,7 +22,7 @@ namespace GalaxyMerge.Archiving.Entities
         public int ChangeLogId { get; private set; }
         public int ObjectId { get; private set; }
         public int OperationId { get; private set; }
-        public DateTime ChangeOn { get; private set; }
+        public DateTime ChangedOn { get; private set; }
         public DateTime QueuedOn { get; private set; }
         public QueueState State { get; set; }
     }

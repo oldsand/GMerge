@@ -1,14 +1,12 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using GalaxyMerge.Archiving.Abstractions;
 using GalaxyMerge.Archiving.Entities;
 using GalaxyMerge.Core;
 using GalaxyMerge.Primitives;
 
 namespace GalaxyMerge.Archiving
 {
-    public class ArchiveConfiguration : IArchiveConfiguration
+    public class ArchiveConfiguration
     {
         private readonly Archive _archive;
 
@@ -31,7 +29,7 @@ namespace GalaxyMerge.Archiving
             
             var operations = Enumeration.GetAll<Operation>();
             foreach (var operation in operations)
-                configuration.UpdateEventSetting(operation, IsDefaultArchiveOperation(operation));
+                configuration.UpdateEventSetting(operation, DefaultIsArchiveEvent(operation));
 
             var templates = Enumeration.GetAll<Template>();
             foreach (var template in templates)
@@ -92,7 +90,7 @@ namespace GalaxyMerge.Archiving
             inclusionSetting.IncludeInstances = includeInstances;
         }
         
-        private static bool IsDefaultArchiveOperation(Operation operation)
+        private static bool DefaultIsArchiveEvent(Operation operation)
         {
             return operation == Operation.CheckInSuccess ||
                    operation == Operation.CreateDerivedTemplate ||

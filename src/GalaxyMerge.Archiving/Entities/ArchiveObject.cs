@@ -24,8 +24,6 @@ namespace GalaxyMerge.Archiving.Entities
         }
         
         public int ObjectId { get; private set; }
-        public int ArchiveId { get; internal set; }
-        public Archive Archive { get; internal set; }
         public string TagName { get; private set; }
         public int Version { get; private set; }
         public Template Template { get; private set; }

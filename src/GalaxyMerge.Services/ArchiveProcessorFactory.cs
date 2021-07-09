@@ -7,24 +7,24 @@ namespace GalaxyMerge.Services
     public class ArchiveProcessorFactory : IArchiveProcessorFactory
     {
         private readonly IGalaxyRegistry _galaxyRegistry;
-        private readonly IDataRepositoryFactory _dataRepositoryFactory;
+        private readonly IGalaxyDataProviderFactory _galaxyDataProviderFactory;
         private readonly IArchiveRepositoryFactory _archiveRepositoryFactory;
         private readonly IArchiveQueue _archiveQueue;
 
         public ArchiveProcessorFactory(IGalaxyRegistry galaxyRegistry, 
-            IDataRepositoryFactory dataRepositoryFactory,
+            IGalaxyDataProviderFactory galaxyDataProviderFactory,
             IArchiveRepositoryFactory archiveRepositoryFactory,
             IArchiveQueue archiveQueue)
         {
             _galaxyRegistry = galaxyRegistry;
-            _dataRepositoryFactory = dataRepositoryFactory;
+            _galaxyDataProviderFactory = galaxyDataProviderFactory;
             _archiveRepositoryFactory = archiveRepositoryFactory;
             _archiveQueue = archiveQueue;
         }
 
         public IArchiveProcessor Create(string galaxyName)
         {
-            return new ArchiveProcessor(galaxyName, _galaxyRegistry, _dataRepositoryFactory, 
+            return new ArchiveProcessor(galaxyName, _galaxyRegistry, _galaxyDataProviderFactory, 
                 _archiveRepositoryFactory, _archiveQueue);
         }
     }

@@ -6,7 +6,7 @@ namespace GalaxyMerge.Archiving
 {
     public class ArchiveBuilder : IArchiveBuilder
     {
-        public void Build(IArchiveConfiguration config)
+        public void Build(ArchiveConfiguration config)
         {
             var archive = config.GenerateArchive();
             

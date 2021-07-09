@@ -1,21 +1,22 @@
 using GalaxyMerge.Core.Utilities;
 using GalaxyMerge.Data.Abstractions;
+using GalaxyMerge.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 
-namespace GalaxyMerge.Data.Repositories
+namespace GalaxyMerge.Data
 {
-    public class DataRepository : IDataRepository
+    public class GalaxyDataProvider : IGalaxyDataProvider
     {
         private readonly GalaxyContext _context;
 
-        public DataRepository(string connectionString)
+        public GalaxyDataProvider(string connectionString)
         {
             var options = new DbContextOptionsBuilder<GalaxyContext>().UseSqlServer(connectionString).Options;
             _context = new GalaxyContext(options);
             InitializeRepositories(_context);
         }
 
-        public DataRepository(string hostName, string galaxyName)
+        public GalaxyDataProvider(string hostName, string galaxyName)
         {
             var connectionString = DbStringBuilder.GalaxyString(hostName, galaxyName);
             var options = new DbContextOptionsBuilder<GalaxyContext>().UseSqlServer(connectionString).Options;
