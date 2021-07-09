@@ -46,20 +46,17 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Abstractions\IArchiveProcessor.cs" />
-        <Compile Include="Abstractions\IArchiveProcessorFactory.cs" />
-        <Compile Include="Abstractions\IArchiveQueue.cs" />
         <Compile Include="Abstractions\IArchiver.cs" />
         <Compile Include="Abstractions\IGalaxyRegistry.cs" />
         <Compile Include="ArchiveManager.cs" />
-        <Compile Include="ArchiveProcessorFactory.cs" />
-        <Compile Include="ArchiveQueue.cs" />
-        <Compile Include="ArchiveProcessor.cs" />
         <Compile Include="Archiver.cs" />
+        <Compile Include="Base\ConcurrentQueueProcessor.cs" />
         <Compile Include="GalaxyManager.cs" />
         <Compile Include="ArchiveMonitor.cs" />
         <Compile Include="GalaxyRegistry.cs" />
         <Compile Include="DataMapper.cs" />
+        <Compile Include="Processors\QueuedEntryProcessor.cs" />
+        <Compile Include="Processors\ChangeLogProcessor.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
     <ItemGroup>

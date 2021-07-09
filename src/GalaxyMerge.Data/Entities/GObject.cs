@@ -19,6 +19,11 @@ namespace GalaxyMerge.Data.Entities
             HostedObjects = new List<GObject>();
             ChangeLogs = new List<ChangeLog>();
         }
+
+        public GObject(int objectId, string tagName, int configVersion)
+        {
+            
+        }
         
         public int ObjectId { get; private set; }
         public int TemplateId { get; private set; }

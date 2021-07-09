@@ -21,6 +21,7 @@ namespace GalaxyMerge.Archiving.Entities
         
         public int ChangeLogId { get; private set; }
         public int ObjectId { get; private set; }
+        public ArchiveObject ArchiveObject { get; set; }
         public int OperationId { get; private set; }
         public DateTime ChangedOn { get; private set; }
         public DateTime QueuedOn { get; private set; }

@@ -13,7 +13,6 @@ using GalaxyMerge.Core.Extensions;
 using GalaxyMerge.Core.Utilities;
 using GalaxyMerge.Data.Abstractions;
 using GalaxyMerge.Primitives;
-using GalaxyMerge.Services.Abstractions;
 
 namespace GalaxyMerge.Services
 {
@@ -26,8 +25,7 @@ namespace GalaxyMerge.Services
 
         public ArchiveManager(IGalaxyRegistry galaxyRegistry,
             IGalaxyDataProviderFactory galaxyDataProviderFactory,
-            IArchiveRepositoryFactory archiveRepositoryFactory,
-            IArchiveProcessorFactory processorFactory)
+            IArchiveRepositoryFactory archiveRepositoryFactory)
         {
             _galaxyRegistry = galaxyRegistry;
             _galaxyDataProviderFactory = galaxyDataProviderFactory;

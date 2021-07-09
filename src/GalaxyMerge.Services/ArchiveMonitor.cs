@@ -1,7 +1,9 @@
 using System;
+using GalaxyMerge.Archiving.Entities;
 using GalaxyMerge.Core.Utilities;
 using GalaxyMerge.Data.Entities;
 using GalaxyMerge.Services.Abstractions;
+using GalaxyMerge.Services.Processors;
 using NLog;
 using TableDependency.SqlClient;
 using TableDependency.SqlClient.Base.Enums;
@@ -13,20 +15,21 @@ namespace GalaxyMerge.Services
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private SqlTableDependency<ChangeLog> _changeLogDependency;
-        private readonly IArchiveProcessor _processor;
+        private readonly ChangeLogProcessor _changeLogProcessor;
+        private readonly QueuedEntryProcessor _queuedEntryProcessor;
         private const string ChangeLogTableName = "gobject_change_log";
 
-        public ArchiveMonitor(string galaxyName, IArchiveProcessorFactory processorFactory)
+        public ArchiveMonitor(string galaxyName)
         {
-            Logger.Trace("Constructing Galaxy Watcher service instance for '{Galaxy}'", galaxyName);
-            
-            Logger.Trace("Initializing archive processor for '{Galaxy}'",galaxyName);
-            _processor = processorFactory.Create(galaxyName);
+            Logger.Trace("Initializing archive processors for '{Galaxy}'",galaxyName);
+            _changeLogProcessor = new ChangeLogProcessor(galaxyName);
+            _changeLogProcessor.OnEntryQueued += OnEntryQueued;
+            _queuedEntryProcessor = new QueuedEntryProcessor(galaxyName);
 
             SetupServiceBroker(galaxyName);
             InitializeDependency(galaxyName);
         }
-
+        
         private static void SetupServiceBroker(string databaseName)
         {
             if (!SqlServiceBroker.IsUnique(databaseName))
@@ -62,7 +65,7 @@ namespace GalaxyMerge.Services
         {
             if (e.ChangeType != ChangeType.Insert) return;
             Logger.Trace("Change log event detected. Details: {@ChangeLog}", e.Entity);
-            _processor.Enqueue(e.Entity);
+            _changeLogProcessor.Enqueue(e.Entity);
         }
 
         private void OnChangeLogTableError(object sender, ErrorEventArgs e)
@@ -80,10 +83,16 @@ namespace GalaxyMerge.Services
             if (e.Status == TableDependencyStatus.Started)
                 Logger.Debug("Archive monitor table dependency started on {GalaxyName}", e.Database);
         }
+        
+        private void OnEntryQueued(object sender, QueuedEntry e)
+        {
+            _queuedEntryProcessor.Enqueue(e);
+        }
 
         public void Dispose()
         {
             Logger.Trace("Stopping table dependency service");
+            _changeLogProcessor.OnEntryQueued -= OnEntryQueued;
             _changeLogDependency?.Stop();
         }
     }

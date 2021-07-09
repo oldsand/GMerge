@@ -65,8 +65,7 @@ namespace GalaxyMerge.Host.Archiving
             
             foreach (var galaxyRepository in galaxyRepositories)
             {
-                var processorFactory = _container.Resolve<IArchiveProcessorFactory>();
-                var monitor = new ArchiveMonitor(galaxyRepository.Name, processorFactory);
+                var monitor = new ArchiveMonitor(galaxyRepository.Name);
                 _archiveMonitors.Add(monitor);
             }
 

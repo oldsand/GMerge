@@ -20,6 +20,7 @@ namespace GalaxyMerge.Archiving.Configurations
             builder.Property(x => x.ModifiedOn).IsRequired();
 
             builder.HasMany(x => x.Entries).WithOne(x => x.ArchiveObject).HasForeignKey(x => x.ObjectId);
+            builder.HasMany(x => x.QueuedItems).WithOne(x => x.ArchiveObject).HasForeignKey(x => x.ObjectId);
         }
     }
 }

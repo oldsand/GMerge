@@ -40,11 +40,8 @@
         <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="ArchiveControllerTests.cs" />
         <Compile Include="ArchiveManagerTests.cs" />
-        <Compile Include="ArchiveManualTesting.cs" />
-        <Compile Include="ArchiveProcessorTests.cs" />
-        <Compile Include="ArchiveSettingValidatorTests.cs" />
+        <Compile Include="ChangeLogProcessorTests.cs" />
         <Compile Include="GalaxyRegistryTests.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
@@ -83,6 +80,7 @@
       </ProjectReference>
     </ItemGroup>
     <ItemGroup>
+      <PackageReference Include="Moq" Version="4.16.1" />
       <PackageReference Include="NUnit" Version="3.13.1" />
     </ItemGroup>
     <ItemGroup>

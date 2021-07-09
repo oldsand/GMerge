@@ -7,7 +7,6 @@ namespace GalaxyMerge.Archiving.Entities
     public class ArchiveObject
     {
         private readonly List<ArchiveEntry> _entries = new();
-        
         private ArchiveObject()
         {
         }
@@ -15,12 +14,13 @@ namespace GalaxyMerge.Archiving.Entities
         public ArchiveObject(int objectId, string tagName, int version, Template template)
         {
             ObjectId = objectId;
-            TagName = tagName;
+            TagName = tagName ?? throw new ArgumentNullException(nameof(tagName), "tagName can not be null");
             Version = version;
-            Template = template;
+            Template = template ?? throw new ArgumentNullException(nameof(template), "template can not be null");
             IsTemplate = tagName.StartsWith("$");
             AddedOn = DateTime.Now;
             ModifiedOn = DateTime.Now;
+            QueuedItems = new List<QueuedEntry>();
         }
         
         public int ObjectId { get; private set; }
@@ -31,6 +31,7 @@ namespace GalaxyMerge.Archiving.Entities
         public DateTime AddedOn { get; private set; }
         public DateTime ModifiedOn { get; private set; }
         public IEnumerable<ArchiveEntry> Entries => _entries;
+        public IEnumerable<QueuedEntry> QueuedItems { get; private set; }
 
         public void UpdateTagName(string tagName)
         {
