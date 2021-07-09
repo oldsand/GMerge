@@ -1,5 +1,5 @@
 using System.Linq;
-using GalaxyMerge.Core;
+using GalaxyMerge.Primitives.Base;
 
 namespace GalaxyMerge.Primitives
 {

@@ -26,7 +26,7 @@ namespace GalaxyMerge.Client.Data.Entities
 
         public string ResourceDescription { get; set; }
 
-        public string ResourcePath => ResourceType.GetFormattedPath(this);
+        public string ResourcePath { get; }
 
         public ResourceType ResourceType { get; }
 

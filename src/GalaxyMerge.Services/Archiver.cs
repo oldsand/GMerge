@@ -7,6 +7,7 @@ using GalaxyMerge.Core.Extensions;
 using GalaxyMerge.Data.Abstractions;
 using GalaxyMerge.Data.Entities;
 using GalaxyMerge.Primitives;
+using GalaxyMerge.Primitives.Base;
 using GalaxyMerge.Services.Abstractions;
 
 namespace GalaxyMerge.Services
@@ -32,7 +33,7 @@ namespace GalaxyMerge.Services
 
         public void Archive(int objectId, bool force = false, int? changeLogId = null)
         {
-            var gObject = _galaxyDataProvider.Objects.Find(objectId);
+            var gObject = _galaxyDataProvider.ObjectsReadOnly.Find(objectId);
             ArchiveObject(gObject, force, changeLogId);
         }
         

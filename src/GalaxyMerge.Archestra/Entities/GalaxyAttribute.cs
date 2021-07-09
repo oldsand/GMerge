@@ -5,6 +5,7 @@ using System.Xml.Linq;
 using GalaxyMerge.Core;
 using GalaxyMerge.Core.Extensions;
 using GalaxyMerge.Primitives;
+using GalaxyMerge.Primitives.Base;
 
 namespace GalaxyMerge.Archestra.Entities
 {

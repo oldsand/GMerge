@@ -31,7 +31,7 @@ namespace GalaxyMerge.Data.Tests
         {
             var repo = new GalaxyDataProvider(_connectionString);
 
-            var folder = repo.Folders.Find(x => x.FolderName == folderName);
+            var folder = repo.FoldersReadOnly.Find(x => x.FolderName == folderName);
             
             Assert.NotNull(folder);
             Assert.AreEqual(folderName, folder.FolderName);
@@ -42,7 +42,7 @@ namespace GalaxyMerge.Data.Tests
         {
             var repo = new GalaxyDataProvider(_connectionString);
 
-            var folder = repo.Folders.FindInclude(x => x.FolderName == "ArchestrA Symbol Library", x => x.Folders);
+            var folder = repo.FoldersReadOnly.FindInclude(x => x.FolderName == "ArchestrA Symbol Library", x => x.Folders);
             
             Assert.IsNotEmpty(folder.Folders);
             Assert.True(folder.Folders.Any(x => x.FolderName == "Buttons"));
@@ -54,7 +54,7 @@ namespace GalaxyMerge.Data.Tests
         {
             var repo = new GalaxyDataProvider(_connectionString);
 
-            var symbols = (await repo.Folders.GetSymbolHierarchy()).ToList();
+            var symbols = (await repo.FoldersReadOnly.GetSymbolHierarchy()).ToList();
             
             Assert.NotNull(symbols);
             Assert.True(symbols.Any(x => x.Objects.Any()));

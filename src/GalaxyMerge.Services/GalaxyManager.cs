@@ -36,7 +36,7 @@ namespace GalaxyMerge.Services
         {
             ValidateInitialization();
 
-            var tagName = _galaxyDataProvider.Objects.GetTagName(objectId);
+            var tagName = _galaxyDataProvider.ObjectsReadOnly.GetTagName(objectId);
             var galaxyObject = _galaxyRepository.GetObject(tagName);
             return DataMapper.Map(galaxyObject);
         }
@@ -53,7 +53,7 @@ namespace GalaxyMerge.Services
         {
             ValidateInitialization();
             
-            var tagName = _galaxyDataProvider.Objects.GetTagName(objectId);
+            var tagName = _galaxyDataProvider.ObjectsReadOnly.GetTagName(objectId);
             var galaxySymbol = _galaxyRepository.GetSymbol(tagName);
             return DataMapper.Map(galaxySymbol);
         }

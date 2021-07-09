@@ -1,15 +1,14 @@
-using System.Data.Common;
 using System.Linq;
-using GalaxyMerge.Core.Utilities;
 using GalaxyMerge.Data.Abstractions;
+using GalaxyMerge.Data.Base;
 using GalaxyMerge.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace GalaxyMerge.Data.Repositories
 {
-    internal class UserRepository : Repository<UserProfile>, IUserRepository
+    internal class UserReadOnlyRepository : ReadOnlyRepository<UserProfile>, IUserReadOnlyRepository
     {
-        internal UserRepository(DbContext context) : base(context)
+        internal UserReadOnlyRepository(DbContext context) : base(context)
         {
         }
 

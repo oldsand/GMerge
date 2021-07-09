@@ -1,14 +1,15 @@
 using System.Linq;
 using GalaxyMerge.Data.Abstractions;
+using GalaxyMerge.Data.Base;
 using GalaxyMerge.Data.Entities;
 using GalaxyMerge.Primitives;
 using Microsoft.EntityFrameworkCore;
 
 namespace GalaxyMerge.Data.Repositories
 {
-    internal class ChangeLogRepository : Repository<ChangeLog>, IChangeLogRepository
+    internal class ChangeLogReadOnlyRepository : ReadOnlyRepository<ChangeLog>, IChangeLogReadOnlyRepository
     {
-        internal ChangeLogRepository(DbContext context) : base (context)
+        internal ChangeLogReadOnlyRepository(DbContext context) : base (context)
         {
         }
 

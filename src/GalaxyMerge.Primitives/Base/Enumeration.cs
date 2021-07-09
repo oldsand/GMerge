@@ -5,7 +5,7 @@ using System.Reflection;
 
 // ReSharper disable MemberCanBePrivate.Global
 
-namespace GalaxyMerge.Core
+namespace GalaxyMerge.Primitives.Base
 {
     /// <summary>
     /// Abstract enumeration class contains logic for generic type safe enumeration.

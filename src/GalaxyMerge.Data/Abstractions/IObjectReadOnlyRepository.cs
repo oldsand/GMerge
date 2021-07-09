@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GalaxyMerge.Data.Base;
 using GalaxyMerge.Data.Entities;
 
 namespace GalaxyMerge.Data.Abstractions
 {
-    public interface IObjectRepository : IRepository<GObject>
+    public interface IObjectReadOnlyRepository : IReadOnlyRepository<GObject>
     {
         GObject Find(int id);
         IEnumerable<GObject> Find(string tagName);

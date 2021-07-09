@@ -36,7 +36,7 @@ namespace GalaxyMerge.Data.Tests
             stopwatch.Start();
             using var repo = new GalaxyDataProvider(_connectionString);
 
-            var result = repo.Objects.Find(tagName).First();
+            var result = repo.ObjectsReadOnly.Find(tagName).First();
             stopwatch.Stop();
             
             Assert.NotNull(result);
@@ -51,7 +51,7 @@ namespace GalaxyMerge.Data.Tests
         {
             var repo = new GalaxyDataProvider(_connectionString);
 
-            var result = repo.Objects.Find(tagName);
+            var result = repo.ObjectsReadOnly.Find(tagName);
 
             Assert.IsNull(result);
         }
@@ -61,7 +61,7 @@ namespace GalaxyMerge.Data.Tests
         {
             var repo = new GalaxyDataProvider(_connectionString);
 
-            var result = repo.Objects.Find(x => x.ObjectId == 14);
+            var result = repo.ObjectsReadOnly.Find(x => x.ObjectId == 14);
 
             Assert.NotNull(result);
             Assert.AreEqual("$UserDefined", result.TagName);
@@ -75,7 +75,7 @@ namespace GalaxyMerge.Data.Tests
         {
             var repo = new GalaxyDataProvider(_connectionString);
 
-            var result = repo.Objects.FindInclude(x => x.TagName == tagName, g => g.TemplateDefinition);
+            var result = repo.ObjectsReadOnly.FindInclude(x => x.TagName == tagName, g => g.TemplateDefinition);
 
             Assert.NotNull(result);
             Assert.AreEqual(tagName, result.TagName);
@@ -88,7 +88,7 @@ namespace GalaxyMerge.Data.Tests
         {
             var repo = new GalaxyDataProvider(_connectionString);
 
-            var result = repo.Objects.FindInclude(x => x.TagName == tagName, g => g.Area);
+            var result = repo.ObjectsReadOnly.FindInclude(x => x.TagName == tagName, g => g.Area);
 
             Assert.NotNull(result);
             Assert.AreEqual(tagName, result.TagName);
@@ -101,7 +101,7 @@ namespace GalaxyMerge.Data.Tests
         {
             var repo = new GalaxyDataProvider(_connectionString);
 
-            var result = repo.Objects.FindInclude(x => x.TagName == tagName, g => g.Host);
+            var result = repo.ObjectsReadOnly.FindInclude(x => x.TagName == tagName, g => g.Host);
 
             Assert.NotNull(result);
             Assert.AreEqual(tagName, result.TagName);
@@ -114,7 +114,7 @@ namespace GalaxyMerge.Data.Tests
         {
             var repo = new GalaxyDataProvider(_connectionString);
 
-            var result = repo.Objects.FindInclude(x => x.TagName == tagName, g => g.Derivations);
+            var result = repo.ObjectsReadOnly.FindInclude(x => x.TagName == tagName, g => g.Derivations);
 
             Assert.NotNull(result);
             Assert.AreEqual(tagName, result.TagName);
@@ -127,7 +127,7 @@ namespace GalaxyMerge.Data.Tests
         {
             var repo = new GalaxyDataProvider(_connectionString);
 
-            var result = repo.Objects.FindIncludeDescendants(tagName);
+            var result = repo.ObjectsReadOnly.FindIncludeDescendants(tagName);
 
             Assert.NotNull(result);
             Assert.AreEqual(tagName, result.TagName);
@@ -139,7 +139,7 @@ namespace GalaxyMerge.Data.Tests
         {
             var repo = new GalaxyDataProvider(_connectionString);
 
-            var result = repo.Objects.FindInclude(x => x.TagName == "$Test_Template", x => x.ChangeLogs);
+            var result = repo.ObjectsReadOnly.FindInclude(x => x.TagName == "$Test_Template", x => x.ChangeLogs);
             
             Assert.NotNull(result);
             Assert.IsNotEmpty(result.ChangeLogs);
@@ -150,7 +150,7 @@ namespace GalaxyMerge.Data.Tests
         {
             var repo = new GalaxyDataProvider(_connectionString);
 
-            var derivations = (await repo.Objects.GetDerivationHierarchy()).ToList();
+            var derivations = (await repo.ObjectsReadOnly.GetDerivationHierarchy()).ToList();
             
             Assert.NotNull(derivations);
             Assert.IsNotEmpty(derivations);
@@ -162,7 +162,7 @@ namespace GalaxyMerge.Data.Tests
         {
             var repo = new GalaxyDataProvider(_connectionString);
 
-            var result = repo.Objects.FindIncludeFolder(tagName);
+            var result = repo.ObjectsReadOnly.FindIncludeFolder(tagName);
             Assert.NotNull(result);
             Assert.NotNull(result.Folder);
         }

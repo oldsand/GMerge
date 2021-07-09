@@ -9,6 +9,7 @@ using GalaxyMerge.Data;
 using GalaxyMerge.Data.Abstractions;
 using GalaxyMerge.Data.Entities;
 using GalaxyMerge.Primitives;
+using GalaxyMerge.Primitives.Base;
 using GalaxyMerge.Services.Base;
 using NLog;
 
@@ -53,7 +54,7 @@ namespace GalaxyMerge.Services.Processors
                 : _archiveRepositoryFactory.Create(_archiveConnectionString);
             
             Logger.Trace("Retrieving object with id {ObjectId}", item.ObjectId);
-            var target = provider.Objects.Find(item.ObjectId);
+            var target = provider.ObjectsReadOnly.Find(item.ObjectId);
             if (target == null)
             {
                 Logger.Warn("Could not find object target with id {ObjectId}", item.ObjectId);

@@ -13,8 +13,9 @@ namespace GalaxyMerge.Client.Data.Configurations
             builder.ToTable("Resource").HasKey(x => x.ResourceId);
             
             builder.Property(x => x.ResourceName).IsRequired();
-            builder.Property(x => x.ResourceType).IsRequired()
-                .HasConversion(x => x.Name, x => Enumeration.FromName<ResourceType>(x));
+            builder.Property(x => x.ResourceType)
+                .HasConversion(x => x.ToString(), x => (ResourceType) Enum.Parse(typeof(ResourceType), x))
+                .IsRequired();
             builder.Property(x => x.AddedOn).IsRequired();
             builder.Property(x => x.AddedBy).IsRequired();
             

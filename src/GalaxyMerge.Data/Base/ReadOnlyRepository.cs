@@ -5,14 +5,14 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
-namespace GalaxyMerge.Data.Abstractions
+namespace GalaxyMerge.Data.Base
 {
-    public abstract class Repository<T> : IRepository<T> where T : class
+    public abstract class ReadOnlyRepository<T> : IReadOnlyRepository<T> where T : class
     {
         private readonly DbContext _context;
         protected readonly DbSet<T> Set;
 
-        protected Repository(DbContext context)
+        protected ReadOnlyRepository(DbContext context)
         {
             _context = context;
             Set = context.Set<T>();

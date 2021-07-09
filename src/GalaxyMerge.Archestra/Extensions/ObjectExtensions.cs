@@ -6,6 +6,7 @@ using ArchestrA.GRAccess;
 using GalaxyMerge.Archestra.Entities;
 using GalaxyMerge.Core;
 using GalaxyMerge.Primitives;
+using GalaxyMerge.Primitives.Base;
 
 // ReSharper disable SuspiciousTypeConversion.Global
 

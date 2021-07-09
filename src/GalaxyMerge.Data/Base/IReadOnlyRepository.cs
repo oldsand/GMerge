@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace GalaxyMerge.Data.Abstractions
+namespace GalaxyMerge.Data.Base
 {
-    public interface IRepository<TEntity> : IDisposable where TEntity : class
+    public interface IReadOnlyRepository<TEntity> : IDisposable where TEntity : class
     {
         IEnumerable<TEntity> GetAll();
         Task<IEnumerable<TEntity>> GetAllAsync();

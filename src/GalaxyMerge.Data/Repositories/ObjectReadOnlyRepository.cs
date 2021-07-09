@@ -2,18 +2,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GalaxyMerge.Data.Abstractions;
+using GalaxyMerge.Data.Base;
 using GalaxyMerge.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace GalaxyMerge.Data.Repositories
 {
-    internal class ObjectRepository : Repository<GObject>, IObjectRepository
+    internal class ObjectReadOnlyRepository : ReadOnlyRepository<GObject>, IObjectReadOnlyRepository
     {
-        internal ObjectRepository(DbContext context) : base (context)
+        internal ObjectReadOnlyRepository(DbContext context) : base (context)
         {
         }
 
-        public ObjectRepository(string connectionString) : base(GalaxyContext.Create(connectionString))
+        public ObjectReadOnlyRepository(string connectionString) : base(GalaxyContext.Create(connectionString))
         {
         }
 

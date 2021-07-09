@@ -2,14 +2,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GalaxyMerge.Data.Abstractions;
+using GalaxyMerge.Data.Base;
 using GalaxyMerge.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace GalaxyMerge.Data.Repositories
 {
-    internal class FolderRepository : Repository<Folder>, IFolderRepository
+    internal class FolderReadOnlyRepository : ReadOnlyRepository<Folder>, IFolderReadOnlyRepository
     {
-        internal FolderRepository(DbContext context) : base(context)
+        internal FolderReadOnlyRepository(DbContext context) : base(context)
         {
         }
 

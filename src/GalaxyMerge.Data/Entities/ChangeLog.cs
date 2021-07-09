@@ -3,6 +3,8 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Local
 
 using System;
+using GalaxyMerge.Primitives;
+using GalaxyMerge.Primitives.Base;
 
 namespace GalaxyMerge.Data.Entities
 {
@@ -16,6 +18,7 @@ namespace GalaxyMerge.Data.Entities
         public int ObjectId { get; private set; }
         public DateTime ChangeDate { get; private set; }
         public short OperationId { get; private set; }
+        public Operation Operation => Enumeration.FromId<Operation>(OperationId);
         public int ConfigurationVersion { get; private set; }
         public string Comment { get; private set; }
         public string UserName { get; private set; }

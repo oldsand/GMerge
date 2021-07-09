@@ -79,7 +79,7 @@ namespace GalaxyMerge.Client.UI.Connection.ViewModels
             Loading = true;
 
             var dataRepository = _galaxyDataProviderFactory.Create(_connectionString);
-            var derivations = (await dataRepository.Objects.GetDerivationHierarchy()).ToList();
+            var derivations = (await dataRepository.ObjectsReadOnly.GetDerivationHierarchy()).ToList();
 
             Derivations.Clear();
             Derivations.AddRange(derivations);

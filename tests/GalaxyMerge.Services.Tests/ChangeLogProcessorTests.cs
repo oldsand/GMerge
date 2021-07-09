@@ -12,8 +12,8 @@ namespace GalaxyMerge.Services.Tests
         public void Process_WhenCalled_SomethingHappens()
         {
             var mockProvider = new Mock<IGalaxyDataProvider>()
-                .Setup(p => p.Objects.Find(It.IsAny<int>()))
-                .Returns(new GObject(1, "", 1));
+                .Setup(p => p.ObjectsReadOnly.Find(It.IsAny<int>()))
+                .Returns(new GObject(){ObjectId = 1, TagName = "SomeTag", ConfigVersion = 1, TemplateId = 14});
         }
     }
 }

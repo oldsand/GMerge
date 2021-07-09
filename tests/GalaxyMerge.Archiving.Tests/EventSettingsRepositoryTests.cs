@@ -5,6 +5,7 @@ using GalaxyMerge.Archiving.Repositories;
 using GalaxyMerge.Core;
 using GalaxyMerge.Core.Utilities;
 using GalaxyMerge.Primitives;
+using GalaxyMerge.Primitives.Base;
 using NUnit.Framework;
 
 namespace GalaxyMerge.Archiving.Tests

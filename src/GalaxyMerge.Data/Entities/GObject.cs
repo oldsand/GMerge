@@ -1,17 +1,15 @@
-// EF Core entity class. Only EF should be instantiating and setting properties.
-// ReSharper disable ClassNeverInstantiated.Global
-// ReSharper disable UnusedAutoPropertyAccessor.Local
-
 using System;
 using System.Collections.Generic;
-using GalaxyMerge.Core;
 using GalaxyMerge.Primitives;
+using GalaxyMerge.Primitives.Base;
+
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace GalaxyMerge.Data.Entities
 {
     public class GObject
     {
-        private GObject()
+        public GObject()
         {
             Derivations = new List<GObject>();
             ContainedObjects = new List<GObject>();
@@ -20,43 +18,40 @@ namespace GalaxyMerge.Data.Entities
             ChangeLogs = new List<ChangeLog>();
         }
 
-        public GObject(int objectId, string tagName, int configVersion)
-        {
-            
-        }
-        
-        public int ObjectId { get; private set; }
-        public int TemplateId { get; private set; }
-        public int DerivedFromId { get; private set; }
-        public int ContainedById { get; private set; }
-        public int AreaId { get; private set; }
-        public int HostId { get; private set; }
-        public int CheckedInPackageId { get; private set; }
-        public int CheckedOutPackageId { get; private set; }
-        public int DeployedPackageId { get; private set; }
-        public int LastDeployedPackageId { get; private set; }
-        public string TagName { get; private set; }
-        public string ContainedName { get; private set; }
-        public string HierarchicalName { get; private set; }
-        public int ConfigVersion { get; private set; }
-        public int DeployedVersion { get; private set; }
-        public Guid? CheckedOutByUserGuid { get; private set; }
-        public bool IsTemplate { get; private set; }
+        public int ObjectId { get; set; }
+        public int TemplateId { get; set; }
+        public Template Template => Enumeration.FromId<Template>(TemplateId);
+        public int DerivedFromId { get; set; }
+        public int ContainedById { get; set; }
+        public int AreaId { get; set; }
+        public int HostId { get; set; }
+        public int CheckedInPackageId { get; set; }
+        public int CheckedOutPackageId { get; set; }
+        public int DeployedPackageId { get; set; }
+        public int LastDeployedPackageId { get; set; }
+        public string TagName { get; set; }
+        public string ContainedName { get; set; }
+        public string HierarchicalName { get; set; }
+        public int ConfigVersion { get; set; }
+        public int DeployedVersion { get; set; }
+        public Guid? CheckedOutByUserGuid { get; set; }
+        public bool IsTemplate { get; set; }
         public bool IsSymbol => Enumeration.FromId<Template>(TemplateId).Equals(Template.Symbol);
-        public bool IsHidden { get; private set; }
-        public short HostingTreeLevel { get; private set; }
-        public bool DeploymentPending { get; private set; }
-        public TemplateDefinition TemplateDefinition { get; private set; }
-        public GObject DerivedFrom { get; private set; }
-        public IEnumerable<GObject> Derivations { get; private set; }
-        public GObject Container { get; private set; }
-        public IEnumerable<GObject> ContainedObjects { get; private set; }
-        public GObject Area { get; private set; }
-        public IEnumerable<GObject> AreaObjects { get; private set; }
-        public GObject Host { get; private set; }
-        internal FolderObjectLink FolderObjectLink { get; private set; }
+        public bool IsClientControl => Enumeration.FromId<Template>(TemplateId).Equals(Template.ClientControl);
+        public bool IsHidden { get; set; }
+        public short HostingTreeLevel { get; set; }
+        public bool DeploymentPending { get; set; }
+        public TemplateDefinition TemplateDefinition { get; set; }
+        public GObject DerivedFrom { get; set; }
+        public IEnumerable<GObject> Derivations { get; set; }
+        public GObject Container { get; set; }
+        public IEnumerable<GObject> ContainedObjects { get; set; }
+        public GObject Area { get; set; }
+        public IEnumerable<GObject> AreaObjects { get; set; }
+        public GObject Host { get; set; }
+        internal FolderObjectLink FolderObjectLink { get; set; }
         public Folder Folder => FolderObjectLink.Folder;
-        public IEnumerable<GObject> HostedObjects { get; private set; }
-        public IEnumerable<ChangeLog> ChangeLogs { get; private set; }
+        public IEnumerable<GObject> HostedObjects { get; set; }
+        public IEnumerable<ChangeLog> ChangeLogs { get; set; }
     }
 }

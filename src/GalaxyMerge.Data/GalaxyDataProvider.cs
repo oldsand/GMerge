@@ -1,6 +1,6 @@
-using GalaxyMerge.Core.Utilities;
 using GalaxyMerge.Data.Abstractions;
 using GalaxyMerge.Data.Repositories;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace GalaxyMerge.Data
@@ -18,7 +18,13 @@ namespace GalaxyMerge.Data
 
         public GalaxyDataProvider(string hostName, string galaxyName)
         {
-            var connectionString = DbStringBuilder.GalaxyString(hostName, galaxyName);
+            var connectionString = new SqlConnectionStringBuilder
+            {
+                DataSource = hostName,
+                InitialCatalog = galaxyName,
+                IntegratedSecurity = true
+            }.ConnectionString;
+            
             var options = new DbContextOptionsBuilder<GalaxyContext>().UseSqlServer(connectionString).Options;
             _context = new GalaxyContext(options);
             InitializeRepositories(_context);
@@ -26,23 +32,23 @@ namespace GalaxyMerge.Data
 
         private void InitializeRepositories(GalaxyContext context)
         {
-            Objects = new ObjectRepository(context);
-            Definitions = new DefinitionRepository(context);
-            Folders = new FolderRepository(context);
-            ChangeLogs = new ChangeLogRepository(context);
-            Users = new UserRepository(context);
+            ObjectsReadOnly = new ObjectReadOnlyRepository(context);
+            DefinitionsReadOnly = new DefinitionReadOnlyRepository(context);
+            FoldersReadOnly = new FolderReadOnlyRepository(context);
+            ChangeLogsReadOnly = new ChangeLogReadOnlyRepository(context);
+            UsersReadOnly = new UserReadOnlyRepository(context);
             Lookup = new LookupRepository(context);
         }
 
-        public IObjectRepository Objects { get; private set; }
+        public IObjectReadOnlyRepository ObjectsReadOnly { get; private set; }
 
-        public IDefinitionRepository Definitions { get; private set; }
+        public IDefinitionReadOnlyRepository DefinitionsReadOnly { get; private set; }
 
-        public IFolderRepository Folders { get; private set; }
+        public IFolderReadOnlyRepository FoldersReadOnly { get; private set; }
 
-        public IChangeLogRepository ChangeLogs { get; private set; }
+        public IChangeLogReadOnlyRepository ChangeLogsReadOnly { get; private set; }
 
-        public IUserRepository Users { get; private set; }
+        public IUserReadOnlyRepository UsersReadOnly { get; private set; }
 
         public ILookupRepository Lookup { get; private set; }
 

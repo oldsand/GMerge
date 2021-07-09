@@ -78,7 +78,7 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
                 _resourceRepository.Add(ResourceEntry.Model);
                 _resourceRepository.Save();
 
-                Logger.Info("Added new {ResourceType} resource named {ResourceName}", ResourceEntry.ResourceType.Name,
+                Logger.Info("Added new {ResourceType} resource named {ResourceName}", ResourceEntry.ResourceType,
                     ResourceEntry.ResourceName);
 
                 var args = new NewResourceCompleteEventArgs(ButtonResult.OK, ResourceEntry);
@@ -87,7 +87,7 @@ namespace GalaxyMerge.Client.Dialogs.ViewModels
             catch (Exception e)
             {
                 Logger.Error(e, "Failed to add new {ResourceType} resource named {ResourceName}",
-                    ResourceEntry.ResourceType.Name,
+                    ResourceEntry.ResourceType,
                     ResourceEntry.ResourceName);
 
                 var args = new NewResourceCompleteEventArgs(ButtonResult.Abort, ResourceEntry);

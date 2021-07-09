@@ -18,6 +18,8 @@ namespace GalaxyMerge.Data.Configurations
             builder.Property(x => x.Comment).HasColumnName("user_comment");
             builder.Property(x => x.ConfigurationVersion).HasColumnName("configuration_version");
             builder.Property(x => x.UserName).HasColumnName("user_profile_name");
+
+            builder.Ignore(x => x.Operation);
         }
     }
 }

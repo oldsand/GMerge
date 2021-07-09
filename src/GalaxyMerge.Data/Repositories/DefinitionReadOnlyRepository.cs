@@ -1,14 +1,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using GalaxyMerge.Data.Abstractions;
+using GalaxyMerge.Data.Base;
 using GalaxyMerge.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace GalaxyMerge.Data.Repositories
 {
-    internal class DefinitionRepository : Repository<TemplateDefinition>, IDefinitionRepository
+    internal class DefinitionReadOnlyRepository : ReadOnlyRepository<TemplateDefinition>, IDefinitionReadOnlyRepository
     {
-        internal DefinitionRepository(DbContext context) : base(context)
+        internal DefinitionReadOnlyRepository(DbContext context) : base(context)
         {
         }
 
