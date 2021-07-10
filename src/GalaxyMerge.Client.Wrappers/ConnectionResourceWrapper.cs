@@ -1,6 +1,6 @@
 using GalaxyMerge.Client.Data.Entities;
 using GalaxyMerge.Client.Wrappers.Base;
-using GalaxyMerge.Core.Utilities;
+using GCommon.Core.Utilities;
 
 namespace GalaxyMerge.Client.Wrappers
 {

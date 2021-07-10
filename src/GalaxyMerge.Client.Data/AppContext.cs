@@ -1,6 +1,6 @@
 using System.Runtime.CompilerServices;
 using GalaxyMerge.Client.Data.Entities;
-using GalaxyMerge.Core.Utilities;
+using GCommon.Core.Utilities;
 using Microsoft.EntityFrameworkCore;
 
 [assembly: InternalsVisibleTo("GalaxyMerge.Client.Data.Tests")]

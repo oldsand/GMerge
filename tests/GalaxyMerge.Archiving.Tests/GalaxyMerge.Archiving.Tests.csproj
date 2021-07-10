@@ -14,8 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\GalaxyMerge.Archiving\GalaxyMerge.Archiving.csproj" />
-      <ProjectReference Include="..\GalaxyMerge.Test.Core\GalaxyMerge.Test.Core.csproj" />
+      <ProjectReference Include="..\..\src\GCommon.Archiving\GCommon.Archiving.csproj" />
     </ItemGroup>
 
 </Project>

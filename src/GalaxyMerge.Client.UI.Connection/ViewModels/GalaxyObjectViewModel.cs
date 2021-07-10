@@ -2,7 +2,7 @@ using System;
 using System.Windows.Controls;
 using GalaxyMerge.Client.Core.Mvvm;
 using GalaxyMerge.Client.Core.Utilities;
-using GalaxyMerge.Data.Entities;
+using GCommon.Data.Entities;
 using Prism.Regions;
 
 namespace GalaxyMerge.Client.UI.Connection.ViewModels

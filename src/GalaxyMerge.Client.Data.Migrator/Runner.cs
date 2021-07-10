@@ -1,12 +1,12 @@
 ﻿using System;
 using FluentMigrator.Runner;
 using GalaxyMerge.Client.Data.Migrator.Migrations;
-using GalaxyMerge.Core.Utilities;
+using GCommon.Core.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace GalaxyMerge.Client.Data.Migrator
 {
-    internal class Runner
+    internal static class Runner
     {
         private static void Main(string[] args)
         {

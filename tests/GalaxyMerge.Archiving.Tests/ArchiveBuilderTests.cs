@@ -1,7 +1,9 @@
 using System.IO;
 using System.Linq;
-using GalaxyMerge.Core.Utilities;
-using GalaxyMerge.Primitives;
+using GCommon.Core.Utilities;
+
+using GCommon.Archiving;
+using GCommon.Primitives;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 
@@ -27,7 +29,7 @@ namespace GalaxyMerge.Archiving.Tests
             
             var archive = context.Archive.Single();
             Assert.AreEqual("GalaxyName", archive.GalaxyName);
-            Assert.AreEqual(ArchestraVersion.Sp2012R2P03, archive.Version);
+            Assert.AreEqual(ArchestraVersion.SystemPlatform2012R2P3, archive.Version);
 
             context.Database.EnsureDeleted();
 

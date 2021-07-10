@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO.Abstractions;
 using System.Xml.Linq;
-using GalaxyMerge.Core.Extensions;
+using GCommon.Core.Extensions;
 using GalaxyMerge.IO.Abstractions;
 
 namespace GalaxyMerge.IO

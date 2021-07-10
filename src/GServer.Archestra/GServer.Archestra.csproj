@@ -1,0 +1,141 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+        <ProjectGuid>{32EA2985-26C5-44B5-B8C1-46C8D4DA0979}</ProjectGuid>
+        <OutputType>Library</OutputType>
+        <AppDesignerFolder>Properties</AppDesignerFolder>
+        <RootNamespace>GServer.Archestra</RootNamespace>
+        <AssemblyName>GServer.Archestra</AssemblyName>
+        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+        <FileAlignment>512</FileAlignment>
+        <LangVersion>default</LangVersion>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <PlatformTarget>x86</PlatformTarget>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>bin\Debug\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+        <Prefer32bit>false</Prefer32bit>
+        <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>bin\Release\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="ArchestrA.GRAccess, Version=1.8.0.0, Culture=neutral, PublicKeyToken=23106a86e706d0ae">
+          <HintPath>..\Lib\ArchestrA.GRAccess.dll</HintPath>
+        </Reference>
+        <Reference Include="ArchestrA.Visualization.GraphicAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=23106a86e706d0ae">
+          <HintPath>..\Lib\ArchestrA.Visualization.GraphicAccess.dll</HintPath>
+        </Reference>
+        <Reference Include="Microsoft.CSharp" />
+        <Reference Include="System" />
+        <Reference Include="System.Configuration" />
+        <Reference Include="System.Core" />
+        <Reference Include="System.Data" />
+        <Reference Include="System.IO.Compression" />
+        <Reference Include="System.Runtime.Serialization" />
+        <Reference Include="System.ServiceModel" />
+        <Reference Include="System.Transactions" />
+        <Reference Include="System.Xml" />
+        <Reference Include="System.Xml.Linq" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="Abstractions\IGalaxyRepositoryFactory.cs" />
+        <Compile Include="Abstractions\IGalaxyFinder.cs" />
+        <Compile Include="Abstractions\IGalaxyRepository.cs" />
+        <Compile Include="Entities\CustomProperty.cs" />
+        <Compile Include="Entities\GalaxyAttribute.cs" />
+        <Compile Include="Entities\GalaxyObject.cs" />
+        <Compile Include="Entities\GalaxySymbol.cs" />
+        <Compile Include="Entities\NamedScript.cs" />
+        <Compile Include="Entities\PredefinedScript.cs" />
+        <Compile Include="Entities\WizardAssociation.cs" />
+        <Compile Include="Entities\WizardChoice.cs" />
+        <Compile Include="Entities\WizardLayer.cs" />
+        <Compile Include="Entities\WizardOption.cs" />
+        <Compile Include="Exceptions\CouldNotCreateFileException.cs" />
+        <Compile Include="Exceptions\CustomConfigurationErrorException.cs" />
+        <Compile Include="Exceptions\GalaxyException.cs" />
+        <Compile Include="Exceptions\InstanceIsDeployedException.cs" />
+        <Compile Include="Exceptions\InstanceIsHostException.cs" />
+        <Compile Include="Exceptions\InstanceProtectionDeniedException.cs" />
+        <Compile Include="Exceptions\InsufficientPermissionsException.cs" />
+        <Compile Include="Exceptions\InvalidGrLoadModeException.cs" />
+        <Compile Include="Exceptions\LicenseUnavailableException.cs" />
+        <Compile Include="Exceptions\NoSuchFileException.cs" />
+        <Compile Include="Exceptions\NoSuchGrNodeException.cs" />
+        <Compile Include="Exceptions\NoSuchUserException.cs" />
+        <Compile Include="Exceptions\ObjectCannotBeOverwrittenException.cs" />
+        <Compile Include="Exceptions\ObjectHostNotDeployedException.cs" />
+        <Compile Include="Exceptions\ObjectHostNotFoundException.cs" />
+        <Compile Include="Exceptions\ObjectInBadStateException.cs" />
+        <Compile Include="Exceptions\ObjectInReadOnlyModeException.cs" />
+        <Compile Include="Exceptions\ObjectIsAContainerException.cs" />
+        <Compile Include="Exceptions\ObjectIsCheckedOutException.cs" />
+        <Compile Include="Exceptions\ObjectIsCheckedOutToSomeoneElseException.cs" />
+        <Compile Include="Exceptions\ObjectIsRequiredException.cs" />
+        <Compile Include="Exceptions\ObjectNotAnAutomationObjectException.cs" />
+        <Compile Include="Exceptions\ObjectNotCheckedOutToMeException.cs" />
+        <Compile Include="Exceptions\OemVersionIncompatibleException.cs" />
+        <Compile Include="Exceptions\OutOfSyncException.cs" />
+        <Compile Include="Exceptions\PasswordIncorrectException.cs" />
+        <Compile Include="Exceptions\RetryClientSyncException.cs" />
+        <Compile Include="Exceptions\SyncSemaphoreException.cs" />
+        <Compile Include="Exceptions\TemplateInUseException.cs" />
+        <Compile Include="Extensions\CommandResultExtensions.cs" />
+        <Compile Include="Extensions\AttributeExtensions.cs" />
+        <Compile Include="Extensions\ObjectExtensions.cs" />
+        <Compile Include="Extensions\GalaxyExtensions.cs" />
+        <Compile Include="Extensions\ObjectCollectionExtensions.cs" />
+        <Compile Include="Extensions\TimeExtensions.cs" />
+        <Compile Include="Extensions\TypeExtensions.cs" />
+        <Compile Include="Extensions\MxValueExtensions.cs" />
+        <Compile Include="GalaxyRepository.cs" />
+        <Compile Include="GalaxyRepositoryFactory.cs" />
+        <Compile Include="GalaxyFinder.cs" />
+        <Compile Include="Helpers\SchemaValidator.cs" />
+        <Compile Include="Options\CsvImportOptions.cs" />
+        <Compile Include="Options\CurrentlyDeployedOption.cs" />
+        <Compile Include="Options\DeploymentOptions.cs" />
+        <Compile Include="Properties\AssemblyInfo.cs" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\GCommon.Primitives\GCommon.Primitives.csproj">
+        <Project>{446fe87c-5122-4344-9df9-9f641e81a476}</Project>
+        <Name>GCommon.Primitives</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\GCommon.Core\GCommon.Core.csproj">
+        <Project>{dd496472-fb15-4ffc-86ca-2ac8f0e6cf3c}</Project>
+        <Name>GCommon.Core</Name>
+      </ProjectReference>
+    </ItemGroup>
+    <ItemGroup>
+      <EmbeddedResource Include="Schemas\aaGraphics.xsd" />
+    </ItemGroup>
+    <ItemGroup>
+      <PackageReference Include="NLog" Version="4.7.10" />
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+         Other similar extension points exist, see Microsoft.Common.targets.
+    <Target Name="BeforeBuild">
+    </Target>
+    <Target Name="AfterBuild">
+    </Target>
+    -->
+
+</Project>

@@ -1,5 +1,6 @@
 using System.Linq;
 using GalaxyMerge.Test.Core;
+using GServer.Archestra;
 using NUnit.Framework;
 
 namespace GalaxyMerge.Archestra.Tests

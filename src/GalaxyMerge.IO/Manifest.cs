@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Xml.Linq;
-using GalaxyMerge.Core.Extensions;
+using GCommon.Core.Extensions;
 using GalaxyMerge.IO.Abstractions;
 
 [assembly: InternalsVisibleTo("GalaxyAccess.IO.IntegrationTests")]

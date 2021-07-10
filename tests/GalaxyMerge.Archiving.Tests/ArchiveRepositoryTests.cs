@@ -1,11 +1,9 @@
 using System;
 using System.IO;
-using System.Text;
-using GalaxyMerge.Archiving.Entities;
-using GalaxyMerge.Archiving.Repositories;
-using GalaxyMerge.Core.Utilities;
-using GalaxyMerge.Primitives;
-using Microsoft.EntityFrameworkCore;
+using GCommon.Archiving.Repositories;
+using GCommon.Core.Utilities;
+using GCommon.Primitives;
+using GCommon.Archiving;
 using NUnit.Framework;
 
 namespace GalaxyMerge.Archiving.Tests
@@ -51,7 +49,7 @@ namespace GalaxyMerge.Archiving.Tests
             
             Assert.AreEqual(1, archive.ArchiveId);
             Assert.AreEqual(GalaxyName, archive.GalaxyName);
-            Assert.AreEqual(ArchestraVersion.Sp2012R2P03, archive.Version);
+            Assert.AreEqual(ArchestraVersion.SystemPlatform2012R2P3, archive.Version);
             Assert.That(archive.CreatedOn, Is.EqualTo(DateTime.Now).Within(5).Seconds);
             Assert.That(archive.UpdatedOn, Is.EqualTo(DateTime.Now).Within(5).Seconds);
         }

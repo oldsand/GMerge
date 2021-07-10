@@ -1,6 +1,6 @@
 using System;
 using GalaxyMerge.Client.Data.Entities;
-using GalaxyMerge.Core;
+using GCommon.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

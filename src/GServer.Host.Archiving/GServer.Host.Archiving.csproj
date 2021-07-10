@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{56F996D1-4DD5-428B-B1FC-4345DF3F7B71}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GServer.Host.Archiving</RootNamespace>
+    <AssemblyName>GServer.Host.Archiving</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <LangVersion>default</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Activation" />
+    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Bootstrapper.cs" />
+    <Compile Include="Configurations\LoggerConfiguration.cs" />
+    <Compile Include="ArchivingService.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GServer.Archestra\GServer.Archestra.csproj">
+      <Project>{32ea2985-26c5-44b5-b8c1-46c8d4da0979}</Project>
+      <Name>GServer.Archestra</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GCommon.Archiving\GCommon.Archiving.csproj">
+      <Project>{15034b13-2af5-405f-8408-8015bee53ed3}</Project>
+      <Name>GCommon.Archiving</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GCommon.Contracts\GCommon.Contracts.csproj">
+      <Project>{b72fb577-363e-493f-b9c7-66b6dd8720ae}</Project>
+      <Name>GCommon.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GCommon.Core\GCommon.Core.csproj">
+      <Project>{dd496472-fb15-4ffc-86ca-2ac8f0e6cf3c}</Project>
+      <Name>GCommon.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GCommon.Data\GCommon.Data.csproj">
+      <Project>{1116a38e-aa67-46e3-9d09-e2de5c2a694e}</Project>
+      <Name>GCommon.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GalaxyMerge.IO\GalaxyMerge.IO.csproj">
+      <Project>{9c3b117b-5acb-49c8-b19d-4fca1ce2be88}</Project>
+      <Name>GalaxyMerge.IO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GCommon.Primitives\GCommon.Primitives.csproj">
+      <Project>{446fe87c-5122-4344-9df9-9f641e81a476}</Project>
+      <Name>GCommon.Primitives</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GServer.Services\GServer.Services.csproj">
+      <Project>{0a10ea2f-bb40-4da4-b4b0-9efc58a58725}</Project>
+      <Name>GServer.Services</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="6.2.0" />
+    <PackageReference Include="Autofac.Wcf" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="5.0.0" />
+    <PackageReference Include="System.Buffers" Version="4.5.1" />
+    <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="5.0.1" />
+    <PackageReference Include="System.Memory" Version="4.5.4" />
+    <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="5.0.0" />
+    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
+    <PackageReference Include="Topshelf" Version="4.3.0" />
+    <PackageReference Include="Topshelf.Autofac" Version="4.0.1" />
+    <PackageReference Include="Topshelf.NLog" Version="4.3.0" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+         Other similar extension points exist, see Microsoft.Common.targets.
+    <Target Name="BeforeBuild">
+    </Target>
+    <Target Name="AfterBuild">
+    </Target>
+    -->
+</Project>

@@ -2,7 +2,7 @@
 using GalaxyMerge.Client.Application.ViewModels;
 using GalaxyMerge.Client.Data.Entities;
 using GalaxyMerge.Client.Wrappers;
-using GalaxyMerge.Core.Logging;
+using GCommon.Core.Logging;
 using NLog;
 
 namespace GalaxyMerge.Client.Application.Design

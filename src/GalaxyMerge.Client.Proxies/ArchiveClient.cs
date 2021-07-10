@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
-using GalaxyMerge.Contracts;
+using GCommon.Contracts;
 
 namespace GalaxyMerge.Client.Proxies
 {
@@ -51,20 +51,15 @@ namespace GalaxyMerge.Client.Proxies
         {
             return Channel.GetInclusionSettings();
         }
-
-        public void AddObject(int objectId)
+        
+        public void ArchiveObject(int objectId)
         {
-            Channel.AddObject(objectId);
+            Channel.ArchiveObject(objectId);
         }
 
         public void RemoveObject(int objectId)
         {
             Channel.RemoveObject(objectId);
-        }
-
-        public void ArchiveObject(int objectId, bool force = false)
-        {
-            Channel.ArchiveObject(objectId, force);
         }
 
         public void UpdateEventSetting(IEnumerable<EventSettingData> eventSettings)

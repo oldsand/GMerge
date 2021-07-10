@@ -7,7 +7,7 @@
              xmlns:ui="http://gmerge.com/ui/wpf"
              xmlns:vm="clr-namespace:GalaxyMerge.Client.UI.Connection.ViewModels"
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
-             xmlns:entities="clr-namespace:GalaxyMerge.Data.Entities;assembly=GalaxyMerge.Data"
+             xmlns:entities="clr-namespace:GCommon.Data.Entities;assembly=GCommon.Data"
              prism:ViewModelLocator.AutoWireViewModel="True"
              d:DataContext="{d:DesignInstance vm:GalaxyTreeViewModel, IsDesignTimeCreatable=True}"
              mc:Ignorable="d"

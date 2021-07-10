@@ -123,9 +123,9 @@
       <Page Include="Views\ResourceSettingsDialog.xaml" />
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\GalaxyMerge.Contracts\GalaxyMerge.Contracts.csproj">
+      <ProjectReference Include="..\GCommon.Contracts\GCommon.Contracts.csproj">
         <Project>{b72fb577-363e-493f-b9c7-66b6dd8720ae}</Project>
-        <Name>GalaxyMerge.Contracts</Name>
+        <Name>GCommon.Contracts</Name>
       </ProjectReference>
       <ProjectReference Include="..\GalaxyMerge.Client.Converters\GalaxyMerge.Client.Converters.csproj">
         <Project>{710ea881-acd9-4c06-97e6-6c88e395e821}</Project>
@@ -155,9 +155,9 @@
         <Project>{0db6d056-eee8-49e1-8ff5-c6edce7c48fc}</Project>
         <Name>GalaxyMerge.Client.Resources</Name>
       </ProjectReference>
-      <ProjectReference Include="..\GalaxyMerge.Core\GalaxyMerge.Core.csproj">
+      <ProjectReference Include="..\GCommon.Core\GCommon.Core.csproj">
         <Project>{dd496472-fb15-4ffc-86ca-2ac8f0e6cf3c}</Project>
-        <Name>GalaxyMerge.Core</Name>
+        <Name>GCommon.Core</Name>
       </ProjectReference>
     </ItemGroup>
     <ItemGroup>

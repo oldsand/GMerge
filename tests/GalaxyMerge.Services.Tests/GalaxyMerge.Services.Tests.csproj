@@ -40,39 +40,40 @@
         <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="ArchiveManagerTests.cs" />
-        <Compile Include="ChangeLogProcessorTests.cs" />
-        <Compile Include="GalaxyRegistryTests.cs" />
+        <Compile Include="Integration\ArchiveManagerTests.cs" />
+        <Compile Include="Integration\ChangeLogProcessorTests.cs" />
+        <Compile Include="Integration\GalaxyArchiverIntegrationTests.cs" />
+        <Compile Include="Integration\GalaxyRegistryTests.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\..\src\GalaxyMerge.Archestra\GalaxyMerge.Archestra.csproj">
+      <ProjectReference Include="..\..\src\GServer.Archestra\GServer.Archestra.csproj">
         <Project>{32ea2985-26c5-44b5-b8c1-46c8d4da0979}</Project>
-        <Name>GalaxyMerge.Archestra</Name>
+        <Name>GServer.Archestra</Name>
       </ProjectReference>
-      <ProjectReference Include="..\..\src\GalaxyMerge.Archiving\GalaxyMerge.Archiving.csproj">
-        <Project>{36d58023-748b-4569-8b11-18f7558add37}</Project>
-        <Name>GalaxyMerge.Archiving</Name>
+      <ProjectReference Include="..\..\src\GCommon.Archiving\GCommon.Archiving.csproj">
+        <Project>{15034b13-2af5-405f-8408-8015bee53ed3}</Project>
+        <Name>GCommon.Archiving</Name>
       </ProjectReference>
-      <ProjectReference Include="..\..\src\GalaxyMerge.Contracts\GalaxyMerge.Contracts.csproj">
+      <ProjectReference Include="..\..\src\GCommon.Contracts\GCommon.Contracts.csproj">
         <Project>{b72fb577-363e-493f-b9c7-66b6dd8720ae}</Project>
-        <Name>GalaxyMerge.Contracts</Name>
+        <Name>GCommon.Contracts</Name>
       </ProjectReference>
-      <ProjectReference Include="..\..\src\GalaxyMerge.Primitives\GalaxyMerge.Primitives.csproj">
+      <ProjectReference Include="..\..\src\GCommon.Primitives\GCommon.Primitives.csproj">
         <Project>{446fe87c-5122-4344-9df9-9f641e81a476}</Project>
-        <Name>GalaxyMerge.Primitives</Name>
+        <Name>GCommon.Primitives</Name>
       </ProjectReference>
-      <ProjectReference Include="..\..\src\GalaxyMerge.Core\GalaxyMerge.Core.csproj">
+      <ProjectReference Include="..\..\src\GCommon.Core\GCommon.Core.csproj">
         <Project>{dd496472-fb15-4ffc-86ca-2ac8f0e6cf3c}</Project>
-        <Name>GalaxyMerge.Core</Name>
+        <Name>GCommon.Core</Name>
       </ProjectReference>
-      <ProjectReference Include="..\..\src\GalaxyMerge.Data\GalaxyMerge.Data.csproj">
+      <ProjectReference Include="..\..\src\GCommon.Data\GCommon.Data.csproj">
         <Project>{1116a38e-aa67-46e3-9d09-e2de5c2a694e}</Project>
-        <Name>GalaxyMerge.Data</Name>
+        <Name>GCommon.Data</Name>
       </ProjectReference>
-      <ProjectReference Include="..\..\src\GalaxyMerge.Services\GalaxyMerge.Services.csproj">
+      <ProjectReference Include="..\..\src\GServer.Services\GServer.Services.csproj">
         <Project>{0a10ea2f-bb40-4da4-b4b0-9efc58a58725}</Project>
-        <Name>GalaxyMerge.Services</Name>
+        <Name>GServer.Services</Name>
       </ProjectReference>
       <ProjectReference Include="..\GalaxyMerge.Test.Core\GalaxyMerge.Test.Core.csproj">
         <Project>{ee1518f0-850e-479c-a01d-92329776f2ad}</Project>
@@ -85,6 +86,9 @@
     </ItemGroup>
     <ItemGroup>
       <None Include="app.config" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Unit" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

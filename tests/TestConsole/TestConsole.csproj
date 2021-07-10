@@ -56,21 +56,21 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\GalaxyMerge.Archestra\GalaxyMerge.Archestra.csproj">
+    <ProjectReference Include="..\..\src\GServer.Archestra\GServer.Archestra.csproj">
       <Project>{32ea2985-26c5-44b5-b8c1-46c8d4da0979}</Project>
-      <Name>GalaxyMerge.Archestra</Name>
+      <Name>GServer.Archestra</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\GalaxyMerge.Data\GalaxyMerge.Data.csproj">
+    <ProjectReference Include="..\..\src\GCommon.Data\GCommon.Data.csproj">
       <Project>{1116a38e-aa67-46e3-9d09-e2de5c2a694e}</Project>
-      <Name>GalaxyMerge.Data</Name>
+      <Name>GCommon.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\GalaxyMerge.IO\GalaxyMerge.IO.csproj">
       <Project>{9c3b117b-5acb-49c8-b19d-4fca1ce2be88}</Project>
       <Name>GalaxyMerge.IO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\GalaxyMerge.Services\GalaxyMerge.Services.csproj">
+    <ProjectReference Include="..\..\src\GServer.Services\GServer.Services.csproj">
       <Project>{0a10ea2f-bb40-4da4-b4b0-9efc58a58725}</Project>
-      <Name>GalaxyMerge.Services</Name>
+      <Name>GServer.Services</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

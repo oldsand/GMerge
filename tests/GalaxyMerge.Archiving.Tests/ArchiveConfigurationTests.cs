@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
-using GalaxyMerge.Primitives;
+using GCommon.Primitives;
+using GCommon.Archiving;
 using NUnit.Framework;
 
 namespace GalaxyMerge.Archiving.Tests
@@ -25,7 +26,7 @@ namespace GalaxyMerge.Archiving.Tests
 
             Assert.NotNull(archive);
             Assert.AreEqual("GalaxyName", archive.GalaxyName);
-            Assert.AreEqual(ArchestraVersion.Sp2012R2P03, archive.Version);
+            Assert.AreEqual(ArchestraVersion.SystemPlatform2012R2P3, archive.Version);
         }
 
         [Test]

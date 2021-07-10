@@ -1,11 +1,11 @@
 using System;
 using System.IO;
 using System.Linq;
-using GalaxyMerge.Archiving.Repositories;
-using GalaxyMerge.Core;
-using GalaxyMerge.Core.Utilities;
-using GalaxyMerge.Primitives;
-using GalaxyMerge.Primitives.Base;
+using GCommon.Archiving.Repositories;
+using GCommon.Core.Utilities;
+using GCommon.Primitives;
+using GCommon.Primitives.Base;
+using GCommon.Archiving;
 using NUnit.Framework;
 
 namespace GalaxyMerge.Archiving.Tests

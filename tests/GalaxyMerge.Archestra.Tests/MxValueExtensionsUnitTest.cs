@@ -2,9 +2,9 @@ using System;
 using System.Collections;
 using System.Linq;
 using ArchestrA.GRAccess;
-using GalaxyMerge.Archestra.Extensions;
-using GalaxyMerge.Core.Extensions;
-using GalaxyMerge.Primitives;
+using GServer.Archestra.Extensions;
+using GCommon.Core.Extensions;
+using GCommon.Primitives;
 using NUnit.Framework;
 
 namespace GalaxyMerge.Archestra.Tests

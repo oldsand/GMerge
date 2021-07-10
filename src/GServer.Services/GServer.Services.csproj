@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+        <ProjectGuid>{0A10EA2F-BB40-4DA4-B4B0-9EFC58A58725}</ProjectGuid>
+        <OutputType>Library</OutputType>
+        <AppDesignerFolder>Properties</AppDesignerFolder>
+        <RootNamespace>GServer.Services</RootNamespace>
+        <AssemblyName>GServer.Services</AssemblyName>
+        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+        <FileAlignment>512</FileAlignment>
+        <LangVersion>default</LangVersion>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <PlatformTarget>x86</PlatformTarget>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>bin\Debug\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>bin\Release\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="mscorlib" />
+        <Reference Include="System" />
+        <Reference Include="System.ComponentModel.DataAnnotations" />
+        <Reference Include="System.Core" />
+        <Reference Include="System.Data" />
+        <Reference Include="System.ServiceModel" />
+        <Reference Include="System.Xml" />
+        <Reference Include="System.Xml.Linq" />
+        <Reference Include="TableDependency.SqlClient, Version=8.5.8.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>..\..\..\..\.nuget\packages\sqltabledependency\8.5.8\lib\net451\TableDependency.SqlClient.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="Abstractions\ConcurrentQueueProcessor.cs" />
+        <Compile Include="Abstractions\IGalaxyArchiver.cs" />
+        <Compile Include="Abstractions\IConcurrentQueueProcessor.cs" />
+        <Compile Include="Abstractions\IGalaxyRegistry.cs" />
+        <Compile Include="ArchiveManager.cs" />
+        <Compile Include="GalaxyArchiver.cs" />
+        <Compile Include="GalaxyManager.cs" />
+        <Compile Include="ChangeLogMonitor.cs" />
+        <Compile Include="GalaxyRegistry.cs" />
+        <Compile Include="DataMapper.cs" />
+        <Compile Include="Processors\QueuedEntryProcessor.cs" />
+        <Compile Include="Processors\ChangeLogProcessor.cs" />
+        <Compile Include="Properties\AssemblyInfo.cs" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\GServer.Archestra\GServer.Archestra.csproj">
+        <Project>{32ea2985-26c5-44b5-b8c1-46c8d4da0979}</Project>
+        <Name>GServer.Archestra</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\GCommon.Archiving\GCommon.Archiving.csproj">
+        <Project>{15034b13-2af5-405f-8408-8015bee53ed3}</Project>
+        <Name>GCommon.Archiving</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\GCommon.Contracts\GCommon.Contracts.csproj">
+        <Project>{b72fb577-363e-493f-b9c7-66b6dd8720ae}</Project>
+        <Name>GCommon.Contracts</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\GCommon.Primitives\GCommon.Primitives.csproj">
+        <Project>{446fe87c-5122-4344-9df9-9f641e81a476}</Project>
+        <Name>GCommon.Primitives</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\GCommon.Core\GCommon.Core.csproj">
+        <Project>{dd496472-fb15-4ffc-86ca-2ac8f0e6cf3c}</Project>
+        <Name>GCommon.Core</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\GCommon.Data\GCommon.Data.csproj">
+        <Project>{1116a38e-aa67-46e3-9d09-e2de5c2a694e}</Project>
+        <Name>GCommon.Data</Name>
+      </ProjectReference>
+    </ItemGroup>
+    <ItemGroup>
+      <PackageReference Include="NLog" Version="4.7.10" />
+      <PackageReference Include="SqlTableDependency" Version="8.5.8" />
+      <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+      <PackageReference Include="System.Data.Common" Version="4.3.0" />
+      <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+         Other similar extension points exist, see Microsoft.Common.targets.
+    <Target Name="BeforeBuild">
+    </Target>
+    <Target Name="AfterBuild">
+    </Target>
+    -->
+
+</Project>

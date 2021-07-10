@@ -4,8 +4,8 @@ using System.IO.Abstractions;
 using System.Linq;
 using System.Xml.Linq;
 using System.Xml.Schema;
-using GalaxyMerge.Core.Extensions;
-using GalaxyMerge.Core.Utilities;
+using GCommon.Core.Extensions;
+using GCommon.Core.Utilities;
 using GalaxyMerge.IO.Abstractions;
 
 namespace GalaxyMerge.IO

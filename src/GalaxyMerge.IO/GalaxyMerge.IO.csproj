@@ -75,9 +75,9 @@
       <Content Include="Schemas\aaGraphics.xsd" />
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\GalaxyMerge.Core\GalaxyMerge.Core.csproj">
+      <ProjectReference Include="..\GCommon.Core\GCommon.Core.csproj">
         <Project>{dd496472-fb15-4ffc-86ca-2ac8f0e6cf3c}</Project>
-        <Name>GalaxyMerge.Core</Name>
+        <Name>GCommon.Core</Name>
       </ProjectReference>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

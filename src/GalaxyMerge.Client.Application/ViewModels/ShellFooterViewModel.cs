@@ -1,7 +1,7 @@
 using GalaxyMerge.Client.Core.Mvvm;
 using GalaxyMerge.Client.Core.Naming;
 using GalaxyMerge.Client.Events;
-using GalaxyMerge.Core.Logging;
+using GCommon.Core.Logging;
 using ImTools;
 using NLog;
 using Prism.Commands;

@@ -5,25 +5,25 @@ VisualStudioVersion = 16.0.30523.141
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.IO", "GalaxyMerge.IO\GalaxyMerge.IO.csproj", "{9C3B117B-5ACB-49C8-B19D-4FCA1CE2BE88}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Services", "GalaxyMerge.Services\GalaxyMerge.Services.csproj", "{0A10EA2F-BB40-4DA4-B4B0-9EFC58A58725}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GServer.Services", "GServer.Services\GServer.Services.csproj", "{0A10EA2F-BB40-4DA4-B4B0-9EFC58A58725}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Archestra", "GalaxyMerge.Archestra\GalaxyMerge.Archestra.csproj", "{32EA2985-26C5-44B5-B8C1-46C8D4DA0979}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GServer.Archestra", "GServer.Archestra\GServer.Archestra.csproj", "{32EA2985-26C5-44B5-B8C1-46C8D4DA0979}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{5B40454C-F34F-4EC8-80BF-48E4F9DCD4C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Host.Archiving", "GalaxyMerge.Host.Archiving\GalaxyMerge.Host.Archiving.csproj", "{56F996D1-4DD5-428B-B1FC-4345DF3F7B71}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GServer.Host.Archiving", "GServer.Host.Archiving\GServer.Host.Archiving.csproj", "{56F996D1-4DD5-428B-B1FC-4345DF3F7B71}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{9D0E27B6-2F28-481D-B5AA-6F95C22C2530}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Client", "Client", "{62CE6D9C-8204-479F-B8EF-A11609AB4273}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{F315C569-1436-4161-A7BA-60BD073E707C}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{F315C569-1436-4161-A7BA-60BD073E707C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Primitives", "GalaxyMerge.Primitives\GalaxyMerge.Primitives.csproj", "{446FE87C-5122-4344-9DF9-9F641E81A476}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GCommon.Primitives", "GCommon.Primitives\GCommon.Primitives.csproj", "{446FE87C-5122-4344-9DF9-9F641E81A476}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Core", "GalaxyMerge.Core\GalaxyMerge.Core.csproj", "{DD496472-FB15-4FFC-86CA-2AC8F0E6CF3C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GCommon.Core", "GCommon.Core\GCommon.Core.csproj", "{DD496472-FB15-4FFC-86CA-2AC8F0E6CF3C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Data", "GalaxyMerge.Data\GalaxyMerge.Data.csproj", "{1116A38E-AA67-46E3-9D09-E2DE5C2A694E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GCommon.Data", "GCommon.Data\GCommon.Data.csproj", "{1116A38E-AA67-46E3-9D09-E2DE5C2A694E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Archestra.Tests", "..\tests\GalaxyMerge.Archestra.Tests\GalaxyMerge.Archestra.Tests.csproj", "{A794D19C-AAAD-4228-B9BC-1BCB8944B823}"
 EndProject
@@ -33,7 +33,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Services.Tests"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Data.Tests", "..\tests\GalaxyMerge.Data.Tests\GalaxyMerge.Data.Tests.csproj", "{3658F2B5-79AE-4062-B061-97940C7C67C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Contracts", "GalaxyMerge.Contracts\GalaxyMerge.Contracts.csproj", "{B72FB577-363E-493F-B9C7-66B6DD8720AE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GCommon.Contracts", "GCommon.Contracts\GCommon.Contracts.csproj", "{B72FB577-363E-493F-B9C7-66B6DD8720AE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Client.Proxies", "GalaxyMerge.Client.Proxies\GalaxyMerge.Client.Proxies.csproj", "{C080B539-439D-4C9E-BDF4-7578E215F34D}"
 EndProject
@@ -71,15 +71,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Client.Wrapper.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Migrators", "Migrators", "{007BE7BC-3F87-486C-9033-172406ED71B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Host.Messaging", "GalaxyMerge.Host.Messaging\GalaxyMerge.Host.Messaging.csproj", "{4275FC5B-FEDC-43DF-85D1-6B95E9359F2B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GServer.Host.Messaging", "GServer.Host.Messaging\GServer.Host.Messaging.csproj", "{4275FC5B-FEDC-43DF-85D1-6B95E9359F2B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Logging", "GalaxyMerge.Logging\GalaxyMerge.Logging.csproj", "{A8CDE9C1-E747-4519-A460-B99A16C2DFD4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GCommon.Logging", "GCommon.Logging\GCommon.Logging.csproj", "{A8CDE9C1-E747-4519-A460-B99A16C2DFD4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Archiving", "GalaxyMerge.Archiving\GalaxyMerge.Archiving.csproj", "{15034B13-2AF5-405F-8408-8015BEE53ED3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GCommon.Archiving", "GCommon.Archiving\GCommon.Archiving.csproj", "{15034B13-2AF5-405F-8408-8015BEE53ED3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Archiving.Tests", "..\tests\GalaxyMerge.Archiving.Tests\GalaxyMerge.Archiving.Tests.csproj", "{C3CA8F8A-3107-4E77-8C92-42147709BDDF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Test.Core", "..\tests\GalaxyMerge.Test.Core\GalaxyMerge.Test.Core.csproj", "{EE1518F0-850E-479C-A01D-92329776F2AD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GCommon.Archiving.Migrator", "GCommon.Archiving.Migrator\GCommon.Archiving.Migrator.csproj", "{60753A81-21CA-429E-9917-D5E33FF357B4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -219,6 +221,10 @@ Global
 		{EE1518F0-850E-479C-A01D-92329776F2AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE1518F0-850E-479C-A01D-92329776F2AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE1518F0-850E-479C-A01D-92329776F2AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60753A81-21CA-429E-9917-D5E33FF357B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60753A81-21CA-429E-9917-D5E33FF357B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60753A81-21CA-429E-9917-D5E33FF357B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60753A81-21CA-429E-9917-D5E33FF357B4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -261,5 +267,6 @@ Global
 		{15034B13-2AF5-405F-8408-8015BEE53ED3} = {F315C569-1436-4161-A7BA-60BD073E707C}
 		{C3CA8F8A-3107-4E77-8C92-42147709BDDF} = {5B40454C-F34F-4EC8-80BF-48E4F9DCD4C9}
 		{EE1518F0-850E-479C-A01D-92329776F2AD} = {5B40454C-F34F-4EC8-80BF-48E4F9DCD4C9}
+		{60753A81-21CA-429E-9917-D5E33FF357B4} = {007BE7BC-3F87-486C-9033-172406ED71B3}
 	EndGlobalSection
 EndGlobal

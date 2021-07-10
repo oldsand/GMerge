@@ -8,8 +8,8 @@ using GalaxyMerge.Client.Core.Naming;
 using GalaxyMerge.Client.Core.Prism;
 using GalaxyMerge.Client.UI.Connection.Utilities;
 using GalaxyMerge.Client.Wrappers;
-using GalaxyMerge.Data.Abstractions;
-using GalaxyMerge.Data.Entities;
+using GCommon.Data.Abstractions;
+using GCommon.Data.Entities;
 using NLog;
 using Prism.Commands;
 using Prism.Regions;
@@ -79,7 +79,7 @@ namespace GalaxyMerge.Client.UI.Connection.ViewModels
             Loading = true;
 
             var dataRepository = _galaxyDataProviderFactory.Create(_connectionString);
-            var derivations = (await dataRepository.ObjectsReadOnly.GetDerivationHierarchy()).ToList();
+            var derivations = (await dataRepository.Objects.GetDerivationHierarchy()).ToList();
 
             Derivations.Clear();
             Derivations.AddRange(derivations);

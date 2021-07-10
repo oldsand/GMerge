@@ -1,7 +1,7 @@
 using System.Data;
 using System.IO;
-using GalaxyMerge.Core.Logging;
-using GalaxyMerge.Core.Utilities;
+using GCommon.Core.Logging;
+using GCommon.Core.Utilities;
 using NLog;
 using NLog.Config;
 using NLog.Targets;

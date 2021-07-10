@@ -3,8 +3,8 @@ using System.Globalization;
 using System.Windows.Controls;
 using GalaxyMerge.Client.Core.Converters;
 using GalaxyMerge.Client.Core.Utilities;
-using GalaxyMerge.Data.Entities;
-using GalaxyMerge.Primitives;
+using GCommon.Data.Entities;
+using GCommon.Primitives;
 
 namespace GalaxyMerge.Client.Converters
 {

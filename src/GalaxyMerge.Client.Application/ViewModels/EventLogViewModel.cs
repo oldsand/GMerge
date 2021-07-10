@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using GalaxyMerge.Client.Core.Mvvm;
 using GalaxyMerge.Client.Data.Entities;
 using GalaxyMerge.Client.Wrappers;
-using GalaxyMerge.Core.Logging;
+using GCommon.Core.Logging;
 using NLog;
 using Prism.Commands;
 

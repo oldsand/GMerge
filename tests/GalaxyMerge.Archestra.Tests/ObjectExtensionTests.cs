@@ -1,10 +1,11 @@
 using System;
 using System.Linq;
-using GalaxyMerge.Archestra.Entities;
-using GalaxyMerge.Archestra.Extensions;
-using GalaxyMerge.Core.Extensions;
-using GalaxyMerge.Primitives;
+using GServer.Archestra.Entities;
+using GServer.Archestra.Extensions;
+using GCommon.Core.Extensions;
+using GCommon.Primitives;
 using GalaxyMerge.Test.Core;
+using GServer.Archestra;
 using NUnit.Framework;
 
 namespace GalaxyMerge.Archestra.Tests
