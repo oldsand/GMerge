@@ -83,7 +83,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test.Integration", "Test.In
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test.Unit", "Test.Unit", "{66C1D8A2-2DFC-4448-B5CF-55BFFB267749}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GServer.Services.IntegrationTest", "..\tests\GServer.Services.IntegrationTest\GServer.Services.IntegrationTest.csproj", "{9C9E4028-0D7D-4850-9547-B37819EDCF0B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GServer.Services.IntegrationTests", "..\tests\GServer.Services.IntegrationTests\GServer.Services.IntegrationTests.csproj", "{9E336386-1B9C-41D5-A8F1-34E018B81F92}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -219,10 +219,10 @@ Global
 		{60753A81-21CA-429E-9917-D5E33FF357B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60753A81-21CA-429E-9917-D5E33FF357B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{60753A81-21CA-429E-9917-D5E33FF357B4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9C9E4028-0D7D-4850-9547-B37819EDCF0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9C9E4028-0D7D-4850-9547-B37819EDCF0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9C9E4028-0D7D-4850-9547-B37819EDCF0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9C9E4028-0D7D-4850-9547-B37819EDCF0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E336386-1B9C-41D5-A8F1-34E018B81F92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E336386-1B9C-41D5-A8F1-34E018B81F92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E336386-1B9C-41D5-A8F1-34E018B81F92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E336386-1B9C-41D5-A8F1-34E018B81F92}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -264,6 +264,6 @@ Global
 		{A6B2CF2B-DF71-4F17-95FA-3E8BCEE3B8AE} = {66C1D8A2-2DFC-4448-B5CF-55BFFB267749}
 		{A34225E1-5B53-4464-B66C-05F8B0E2BFF0} = {66C1D8A2-2DFC-4448-B5CF-55BFFB267749}
 		{E866834A-A961-4B15-B138-4F95EE55C194} = {66C1D8A2-2DFC-4448-B5CF-55BFFB267749}
-		{9C9E4028-0D7D-4850-9547-B37819EDCF0B} = {21A3E2BB-E1EC-46E6-83D1-5ACAE5926286}
+		{9E336386-1B9C-41D5-A8F1-34E018B81F92} = {21A3E2BB-E1EC-46E6-83D1-5ACAE5926286}
 	EndGlobalSection
 EndGlobal

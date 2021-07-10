@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using GTest.Core;
 using NUnit.Framework;
 
-namespace GServer.Services.IntegrationTest
+namespace GServer.Services.IntegrationTests
 {
     [TestFixture]
     public class GalaxyRegistryTests

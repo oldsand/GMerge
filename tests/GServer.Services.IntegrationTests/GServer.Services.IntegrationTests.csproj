@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+        <ProjectGuid>{9E336386-1B9C-41D5-A8F1-34E018B81F92}</ProjectGuid>
+        <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+        <OutputType>Library</OutputType>
+        <AppDesignerFolder>Properties</AppDesignerFolder>
+        <RootNamespace>GServer.Services.IntegrationTests</RootNamespace>
+        <AssemblyName>GServer.Services.IntegrationTests</AssemblyName>
+        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+        <FileAlignment>512</FileAlignment>
+        <LangVersion>default</LangVersion>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <PlatformTarget>x86</PlatformTarget>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>bin\Debug\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>bin\Release\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="mscorlib" />
+        <Reference Include="System" />
+        <Reference Include="System.Core" />
+        <Reference Include="System.Data" />
+        <Reference Include="System.Numerics" />
+        <Reference Include="System.Xml" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="ArchiveManagerTests.cs" />
+        <Compile Include="ChangeLogProcessorTests.cs" />
+        <Compile Include="GalaxyArchiverTests.cs" />
+        <Compile Include="GalaxyRegistryTests.cs" />
+        <Compile Include="Properties\AssemblyInfo.cs" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\..\src\GCommon.Archiving\GCommon.Archiving.csproj">
+        <Project>{15034b13-2af5-405f-8408-8015bee53ed3}</Project>
+        <Name>GCommon.Archiving</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\..\src\GCommon.Contracts\GCommon.Contracts.csproj">
+        <Project>{b72fb577-363e-493f-b9c7-66b6dd8720ae}</Project>
+        <Name>GCommon.Contracts</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\..\src\GCommon.Primitives\GCommon.Primitives.csproj">
+        <Project>{446fe87c-5122-4344-9df9-9f641e81a476}</Project>
+        <Name>GCommon.Primitives</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\..\src\GServer.Archestra\GServer.Archestra.csproj">
+        <Project>{32ea2985-26c5-44b5-b8c1-46c8d4da0979}</Project>
+        <Name>GServer.Archestra</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\..\src\GServer.Services\GServer.Services.csproj">
+        <Project>{0a10ea2f-bb40-4da4-b4b0-9efc58a58725}</Project>
+        <Name>GServer.Services</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\GTest.Core\GTest.Core.csproj">
+        <Project>{ee1518f0-850e-479c-a01d-92329776f2ad}</Project>
+        <Name>GTest.Core</Name>
+      </ProjectReference>
+    </ItemGroup>
+    <ItemGroup>
+      <None Include="app.config" />
+    </ItemGroup>
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="3.1.10" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.10" />
+      <PackageReference Include="NUnit" Version="3.5.0" />
+      <PackageReference Include="SQLitePCLRaw.core" Version="2.0.2" />
+      <PackageReference Include="System.Buffers" Version="4.4.0" />
+      <PackageReference Include="System.Memory" Version="4.5.3" />
+      <PackageReference Include="System.Numerics.Vectors" Version="4.4.0" />
+      <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.5.2" />
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+         Other similar extension points exist, see Microsoft.Common.targets.
+    <Target Name="BeforeBuild">
+    </Target>
+    <Target Name="AfterBuild">
+    </Target>
+    -->
+
+</Project>

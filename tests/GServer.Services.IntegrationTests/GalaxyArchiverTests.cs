@@ -7,7 +7,7 @@ using GTest.Core;
 using Microsoft.Data.Sqlite;
 using NUnit.Framework;
 
-namespace GServer.Services.IntegrationTest
+namespace GServer.Services.IntegrationTests
 {
     [TestFixture]
     public class GalaxyArchiverTests
