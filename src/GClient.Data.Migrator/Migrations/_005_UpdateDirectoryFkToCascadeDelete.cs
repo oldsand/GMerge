@@ -1,7 +1,7 @@
 using System.Data;
 using FluentMigrator;
 
-namespace GalaxyMerge.Client.Data.Migrator.Migrations
+namespace GClient.Data.Migrator.Migrations
 {
     [Migration(5)]
     public class _005_UpdateDirectoryFkToCascadeDelete : Migration

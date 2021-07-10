@@ -1,10 +1,10 @@
 ﻿using System;
 using FluentMigrator.Runner;
-using GalaxyMerge.Client.Data.Migrator.Migrations;
+using GClient.Data.Migrator.Migrations;
 using GCommon.Core.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace GalaxyMerge.Client.Data.Migrator
+namespace GClient.Data.Migrator
 {
     internal static class Runner
     {

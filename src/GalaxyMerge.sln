@@ -51,7 +51,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GClient.Resources", "GClien
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GClient.Events", "GClient.Events\GClient.Events.csproj", "{60790AC9-6ADD-444F-A812-22129782FA81}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalaxyMerge.Client.Data.Migrator", "GalaxyMerge.Client.Data.Migrator\GalaxyMerge.Client.Data.Migrator.csproj", "{FA36EC7D-59E3-42E9-9661-4CDEB8206BD1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GClient.Data.Migrator", "GClient.Data.Migrator\GClient.Data.Migrator.csproj", "{FA36EC7D-59E3-42E9-9661-4CDEB8206BD1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GClient.Module.Connection", "GClient.Module.Connection\GClient.Module.Connection.csproj", "{CE25B627-6028-438D-B172-D81CE5FEDFB9}"
 EndProject

@@ -1,6 +1,6 @@
 using FluentMigrator;
 
-namespace GalaxyMerge.Client.Data.Migrator.Migrations
+namespace GClient.Data.Migrator.Migrations
 {
     [Migration(2)]
     public class _002_MakeResourceNameUnique : Migration

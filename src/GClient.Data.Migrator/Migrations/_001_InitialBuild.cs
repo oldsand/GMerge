@@ -1,6 +1,6 @@
 using FluentMigrator;
 
-namespace GalaxyMerge.Client.Data.Migrator.Migrations
+namespace GClient.Data.Migrator.Migrations
 {
     [Migration(1)]
     public class _001_InitialBuild : Migration
