@@ -40,10 +40,10 @@
         <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Integration\FolderReposiotryTests.cs" />
-        <Compile Include="Integration\GalaxyDataRepositoryFactoryTests.cs" />
-        <Compile Include="Integration\LookupRepositoryTests.cs" />
-        <Compile Include="Integration\ObjectRepositoryTests.cs" />
+        <Compile Include="FolderReposiotryTests.cs" />
+        <Compile Include="GalaxyDataRepositoryFactoryTests.cs" />
+        <Compile Include="LookupRepositoryTests.cs" />
+        <Compile Include="ObjectRepositoryTests.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
     <ItemGroup>
@@ -59,13 +59,10 @@
         <Project>{1116a38e-aa67-46e3-9d09-e2de5c2a694e}</Project>
         <Name>GCommon.Data</Name>
       </ProjectReference>
-      <ProjectReference Include="..\GalaxyMerge.Test.Core\GalaxyMerge.Test.Core.csproj">
+      <ProjectReference Include="..\GTest.Core\GTest.Core.csproj">
         <Project>{ee1518f0-850e-479c-a01d-92329776f2ad}</Project>
-        <Name>GalaxyMerge.Test.Core</Name>
+        <Name>GTest.Core</Name>
       </ProjectReference>
-    </ItemGroup>
-    <ItemGroup>
-      <Folder Include="Unit" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

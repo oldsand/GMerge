@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+        <ProjectGuid>{A794D19C-AAAD-4228-B9BC-1BCB8944B823}</ProjectGuid>
+        <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+        <OutputType>Library</OutputType>
+        <AppDesignerFolder>Properties</AppDesignerFolder>
+        <RootNamespace>GServer.Archestra.IntegrationTests</RootNamespace>
+        <AssemblyName>GServer.Archestra.IntegrationTests</AssemblyName>
+        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+        <FileAlignment>512</FileAlignment>
+        <LangVersion>default</LangVersion>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <PlatformTarget>x86</PlatformTarget>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>bin\Debug\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>bin\Release\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="ArchestrA.GRAccess, Version=1.8.0.0, Culture=neutral, PublicKeyToken=23106a86e706d0ae">
+          <HintPath>..\Lib\ArchestrA.GRAccess.dll</HintPath>
+        </Reference>
+        <Reference Include="ArchestrA.Visualization.GraphicAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=23106a86e706d0ae">
+          <HintPath>..\Lib\ArchestrA.Visualization.GraphicAccess.dll</HintPath>
+        </Reference>
+        <Reference Include="mscorlib" />
+        <Reference Include="System" />
+        <Reference Include="System.ComponentModel.DataAnnotations" />
+        <Reference Include="System.Core" />
+        <Reference Include="System.Data" />
+        <Reference Include="System.Numerics" />
+        <Reference Include="System.Xml" />
+        <Reference Include="System.Xml.Linq" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="GalaxyExtensionTests.cs" />
+        <Compile Include="GalaxyFactoryTests.cs" />
+        <Compile Include="GalaxyFinderTests.cs" />
+        <Compile Include="GalaxyRepositoryTests.cs" />
+        <Compile Include="MxValueExtensionsIntegrationTests.cs" />
+        <Compile Include="MxValueExtensionsUnitTest.cs" />
+        <Compile Include="CreateObjectTests.cs" />
+        <Compile Include="ObjectCollectionExtensionTests.cs" />
+        <Compile Include="ObjectSerializationTests.cs" />
+        <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="AttributeExtensionTests.cs" />
+        <Compile Include="ObjectExtensionTests.cs" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\..\src\GServer.Archestra\GServer.Archestra.csproj">
+        <Project>{32ea2985-26c5-44b5-b8c1-46c8d4da0979}</Project>
+        <Name>GServer.Archestra</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\..\src\GCommon.Primitives\GCommon.Primitives.csproj">
+        <Project>{446fe87c-5122-4344-9df9-9f641e81a476}</Project>
+        <Name>GCommon.Primitives</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\..\src\GCommon.Contracts\GCommon.Contracts.csproj">
+        <Project>{b72fb577-363e-493f-b9c7-66b6dd8720ae}</Project>
+        <Name>GCommon.Contracts</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\..\src\GCommon.Core\GCommon.Core.csproj">
+        <Project>{dd496472-fb15-4ffc-86ca-2ac8f0e6cf3c}</Project>
+        <Name>GCommon.Core</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\GTest.Core\GTest.Core.csproj">
+        <Project>{ee1518f0-850e-479c-a01d-92329776f2ad}</Project>
+        <Name>GTest.Core</Name>
+      </ProjectReference>
+    </ItemGroup>
+    <ItemGroup>
+      <None Include="app.config" />
+    </ItemGroup>
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="1.1.1" />
+      <PackageReference Include="Microsoft.Bcl.HashCode" Version="1.1.0" />
+      <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="3.1.10" />
+      <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="3.1.6" />
+      <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="3.1.10" />
+      <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="3.1.10" />
+      <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.10" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.1.10" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="3.1.10" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.10" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.10" />
+      <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="3.1.6" />
+      <PackageReference Include="Microsoft.Extensions.Logging" Version="3.1.10" />
+      <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.10" />
+      <PackageReference Include="Microsoft.Extensions.Options" Version="3.1.10" />
+      <PackageReference Include="Microsoft.Extensions.Primitives" Version="3.1.10" />
+      <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+      <PackageReference Include="NUnit" Version="3.5.0" />
+      <PackageReference Include="System.Buffers" Version="4.5.1" />
+      <PackageReference Include="System.Collections.Immutable" Version="1.7.1" />
+      <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
+      <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="4.7.1" />
+      <PackageReference Include="System.Memory" Version="4.5.4" />
+      <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
+      <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.7.1" />
+      <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.0.0" />
+      <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+         Other similar extension points exist, see Microsoft.Common.targets.
+    <Target Name="BeforeBuild">
+    </Target>
+    <Target Name="AfterBuild">
+    </Target>
+    -->
+
+</Project>

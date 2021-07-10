@@ -3,7 +3,7 @@ using GCommon.Archiving.Entities;
 using GCommon.Core.Utilities;
 using Microsoft.EntityFrameworkCore;
 
-[assembly:InternalsVisibleTo("GalaxyMerge.Archiving.Tests")]
+[assembly:InternalsVisibleTo("GCommon.Archiving.IntegrationTests")]
 namespace GCommon.Archiving
 {
     internal class ArchiveContext : DbContext

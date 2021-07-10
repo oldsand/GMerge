@@ -17,7 +17,7 @@ using GServer.Archestra.Helpers;
 using GServer.Archestra.Options;
 using NLog;
 
-[assembly: InternalsVisibleTo("GalaxyMerge.Archestra.Tests")]
+[assembly: InternalsVisibleTo("GServer.Archestra.IntegrationTests")]
 namespace GServer.Archestra
 {
     public class GalaxyRepository : IGalaxyRepository

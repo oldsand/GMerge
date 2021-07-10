@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+        <ProjectGuid>{CE25B627-6028-438D-B172-D81CE5FEDFB9}</ProjectGuid>
+        <OutputType>Library</OutputType>
+        <RootNamespace>GClient.Module.Connection</RootNamespace>
+        <AssemblyName>GClient.Module.Connection</AssemblyName>
+        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+        <FileAlignment>512</FileAlignment>
+        <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+        <WarningLevel>4</WarningLevel>
+        <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+        <LangVersion>default</LangVersion>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>bin\Debug\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>bin\Release\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="System" />
+        <Reference Include="System.Core" />
+        <Reference Include="System.Data" />
+        <Reference Include="System.Xml" />
+        <Reference Include="System.Xaml">
+            <RequiredTargetFramework>4.0</RequiredTargetFramework>
+        </Reference>
+        <Reference Include="WindowsBase" />
+        <Reference Include="PresentationCore" />
+        <Reference Include="PresentationFramework" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="ConnectionModule.cs" />
+        <Compile Include="Properties\AssemblyInfo.cs">
+            <SubType>Code</SubType>
+        </Compile>
+        <Compile Include="Properties\Resources.Designer.cs">
+            <AutoGen>True</AutoGen>
+            <DesignTime>True</DesignTime>
+            <DependentUpon>Resources.resx</DependentUpon>
+        </Compile>
+        <Compile Include="Providers\IGalaxyObjectProvider.cs" />
+        <Compile Include="Utilities\DesignModels.cs" />
+        <Compile Include="Utilities\ScopedNames.cs" />
+        <Compile Include="ViewModels\ArchiveViewModel.cs" />
+        <Compile Include="ViewModels\ChangeLogViewModel.cs" />
+        <Compile Include="ViewModels\ConnectionViewModel.cs" />
+        <Compile Include="ViewModels\GalaxyObjectViewModel.cs" />
+        <Compile Include="ViewModels\GalaxyTreeViewModel.cs" />
+        <Compile Include="ViewModels\GalaxyViewModel.cs" />
+        <Compile Include="Views\ArchiveView.xaml.cs">
+          <DependentUpon>ArchiveView.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Views\ChangeLogView.xaml.cs">
+          <DependentUpon>ChangeLogView.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Views\ConnectionView.xaml.cs">
+          <DependentUpon>ConnectionView.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Views\GalaxyObjectView.xaml.cs">
+          <DependentUpon>GalaxyObjectView.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Views\GalaxyTreeView.xaml.cs">
+          <DependentUpon>GalaxyTreeView.xaml</DependentUpon>
+        </Compile>
+        <Compile Include="Views\GalaxyView.xaml.cs">
+          <DependentUpon>GalaxyView.xaml</DependentUpon>
+        </Compile>
+        <EmbeddedResource Include="Properties\Resources.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+    </ItemGroup>
+    <ItemGroup>
+      <PackageReference Include="NLog" Version="4.7.10" />
+      <PackageReference Include="Prism.Core" Version="8.1.97" />
+      <PackageReference Include="Prism.Wpf" Version="8.1.97" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\GCommon.Contracts\GCommon.Contracts.csproj">
+        <Project>{b72fb577-363e-493f-b9c7-66b6dd8720ae}</Project>
+        <Name>GCommon.Contracts</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\GClient.Converters\GClient.Converters.csproj">
+        <Project>{710ea881-acd9-4c06-97e6-6c88e395e821}</Project>
+        <Name>GClient.Converters</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\GClient.Core\GClient.Core.csproj">
+        <Project>{a52fad8f-28b0-4527-9937-ad3885eeccc9}</Project>
+        <Name>GClient.Core</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\GClient.Data\GClient.Data.csproj">
+        <Project>{04b42b6e-dd66-49a8-84e8-bb2743293330}</Project>
+        <Name>GClient.Data</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\GClient.Events\GClient.Events.csproj">
+        <Project>{60790ac9-6add-444f-a812-22129782fa81}</Project>
+        <Name>GClient.Events</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\GClient.Proxies\GClient.Proxies.csproj">
+        <Project>{c080b539-439d-4c9e-bdf4-7578e215f34d}</Project>
+        <Name>GClient.Proxies</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\GClient.Resources\GClient.Resources.csproj">
+        <Project>{0db6d056-eee8-49e1-8ff5-c6edce7c48fc}</Project>
+        <Name>GClient.Resources</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\GClient.Wrappers\GClient.Wrappers.csproj">
+        <Project>{31a6b9b2-e1c6-41ac-a753-8a1985842fb6}</Project>
+        <Name>GClient.Wrappers</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\GCommon.Core\GCommon.Core.csproj">
+        <Project>{dd496472-fb15-4ffc-86ca-2ac8f0e6cf3c}</Project>
+        <Name>GCommon.Core</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\GCommon.Data\GCommon.Data.csproj">
+        <Project>{1116a38e-aa67-46e3-9d09-e2de5c2a694e}</Project>
+        <Name>GCommon.Data</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\GCommon.Primitives\GCommon.Primitives.csproj">
+        <Project>{446fe87c-5122-4344-9df9-9f641e81a476}</Project>
+        <Name>GCommon.Primitives</Name>
+      </ProjectReference>
+    </ItemGroup>
+    <ItemGroup>
+      <Page Include="Views\ArchiveView.xaml" />
+      <Page Include="Views\ChangeLogView.xaml" />
+      <Page Include="Views\ConnectionView.xaml" />
+      <Page Include="Views\GalaxyObjectView.xaml" />
+      <Page Include="Views\GalaxyTreeView.xaml" />
+      <Page Include="Views\GalaxyView.xaml" />
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

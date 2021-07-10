@@ -1,0 +1,110 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:GClient.Resources.Controls">
+  
+  
+  <ControlTemplate x:Key="Icon.Loading" TargetType="{x:Type controls:Icon}">
+      <Viewbox VerticalAlignment="Center" HorizontalAlignment="Center" Height="20" Width="20" Stretch="Fill">
+        <Viewbox.Resources>
+          <Storyboard x:Key="Storyboard1">
+            <DoubleAnimationUsingKeyFrames
+              RepeatBehavior="Forever"
+              Storyboard.TargetName="path2"
+              Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)">
+              <EasingDoubleKeyFrame KeyTime="0" Value="-180" />
+              <EasingDoubleKeyFrame KeyTime="0:0:1" Value="180" />
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames
+              RepeatBehavior="Forever"
+              Storyboard.TargetName="path1"
+              Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)">
+              <EasingDoubleKeyFrame KeyTime="0" Value="90" />
+              <EasingDoubleKeyFrame KeyTime="0:0:1" Value="-270" />
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames
+              RepeatBehavior="Forever"
+              Storyboard.TargetName="path"
+              Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)">
+              <EasingDoubleKeyFrame KeyTime="0" Value="0" />
+              <EasingDoubleKeyFrame KeyTime="0:0:1" Value="360" />
+            </DoubleAnimationUsingKeyFrames>
+          </Storyboard>
+        </Viewbox.Resources>
+        <Viewbox.Triggers>
+          <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+            <BeginStoryboard Storyboard="{StaticResource Storyboard1}" />
+          </EventTrigger>
+        </Viewbox.Triggers>
+        <Grid Height="50" Width="50">
+          <Path
+            x:Name="path"
+            Width="50"
+            Height="50"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Clip="M-2.042,-3.833 L24.5,-3.833 L24.5,53.834 L-2.042,53.834 z"
+            Data="M49,25 C49,38.254834 38.254834,49 25,49 C11.745166,49 1,38.254834 1,25 C1,11.745166 11.745166,1 25,1 C38.254834,1 49,11.745166 49,25 z"
+            RenderTransformOrigin="0.5,0.5"
+            Stretch="Fill"
+            Stroke="#FF65CED8"
+            StrokeThickness="4">
+            <Path.RenderTransform>
+              <TransformGroup>
+                <ScaleTransform />
+                <SkewTransform />
+                <RotateTransform />
+                <TranslateTransform />
+              </TransformGroup>
+            </Path.RenderTransform>
+          </Path>
+          <Path
+            x:Name="path1"
+            Width="40"
+            Height="40"
+            Margin="5,5,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Clip="M-4.5,-9.5 L19.5,-9.5 L19.5,44.5 L-4.5,44.5 z"
+            Data="M39,20 C39,30.49341 30.49341,39 20,39 C9.5065898,39 1,30.49341 1,20 C1,9.5065898 9.5065898,1 20,1 C30.49341,1 39,9.5065898 39,20 z"
+            RenderTransformOrigin="0.5,0.5"
+            Stretch="Fill"
+            Stroke="#FFF59D32"
+            StrokeThickness="4">
+            <Path.RenderTransform>
+              <TransformGroup>
+                <ScaleTransform />
+                <SkewTransform />
+                <RotateTransform Angle="90" />
+                <TranslateTransform />
+              </TransformGroup>
+            </Path.RenderTransform>
+          </Path>
+          <Path
+            x:Name="path2"
+            Width="30"
+            Height="30"
+            Margin="10"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Clip="M-1,-6.25 L14.5,-6.25 L14.5,35.875 L-1,35.875 z"
+            Data="M29,15 C29,22.731986 22.731986,29 15,29 C7.2680135,29 1,22.731986 1,15 C1,7.2680135 7.2680135,1 15,1 C22.731986,1 29,7.2680135 29,15 z"
+            RenderTransformOrigin="0.5,0.5"
+            Stretch="Fill"
+            Stroke="#FF9B72E4"
+            StrokeDashCap="Round"
+            StrokeEndLineCap="Round"
+            StrokeStartLineCap="Round"
+            StrokeThickness="4">
+            <Path.RenderTransform>
+              <TransformGroup>
+                <ScaleTransform />
+                <SkewTransform />
+                <RotateTransform Angle="180" />
+                <TranslateTransform />
+              </TransformGroup>
+            </Path.RenderTransform>
+          </Path>
+        </Grid>
+      </Viewbox>
+    </ControlTemplate>
+</ResourceDictionary>

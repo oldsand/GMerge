@@ -40,10 +40,10 @@
         <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Integration\ArchiveManagerTests.cs" />
-        <Compile Include="Integration\ChangeLogProcessorTests.cs" />
-        <Compile Include="Integration\GalaxyArchiverIntegrationTests.cs" />
-        <Compile Include="Integration\GalaxyRegistryTests.cs" />
+        <Compile Include="ArchiveManagerTests.cs" />
+        <Compile Include="ChangeLogProcessorTests.cs" />
+        <Compile Include="GalaxyArchiverIntegrationTests.cs" />
+        <Compile Include="GalaxyRegistryTests.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
     <ItemGroup>
@@ -75,9 +75,9 @@
         <Project>{0a10ea2f-bb40-4da4-b4b0-9efc58a58725}</Project>
         <Name>GServer.Services</Name>
       </ProjectReference>
-      <ProjectReference Include="..\GalaxyMerge.Test.Core\GalaxyMerge.Test.Core.csproj">
+      <ProjectReference Include="..\GTest.Core\GTest.Core.csproj">
         <Project>{ee1518f0-850e-479c-a01d-92329776f2ad}</Project>
-        <Name>GalaxyMerge.Test.Core</Name>
+        <Name>GTest.Core</Name>
       </ProjectReference>
     </ItemGroup>
     <ItemGroup>
@@ -86,9 +86,6 @@
     </ItemGroup>
     <ItemGroup>
       <None Include="app.config" />
-    </ItemGroup>
-    <ItemGroup>
-      <Folder Include="Unit" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
