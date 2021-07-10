@@ -1,18 +1,12 @@
-using GCommon.Archiving.Abstractions;
-using GCommon.Archiving.Entities;
-using GCommon.Data.Abstractions;
-using GCommon.Data.Entities;
-using GCommon.Primitives;
-using GServer.Services.Processors;
-using Moq;
 using NUnit.Framework;
 
-namespace GalaxyMerge.Services.Tests
+namespace GServer.Services.IntegrationTest
 {
     [TestFixture]
     public class ChangeLogProcessorTests
     {
-        private GObject _testObject;
+        //todo these would be in unit tests
+        /*private GObject _testObject;
 
         [SetUp]
         public void Setup()
@@ -72,6 +66,6 @@ namespace GalaxyMerge.Services.Tests
             var processor = new ChangeLogProcessor(mockProviderFactory.Object, mockRepositoryFactory.Object);
             
             processor.Enqueue(new ChangeLog());
-        }
+        }*/
     }
 }

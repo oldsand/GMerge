@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-namespace GalaxyMerge.Services.Tests
+namespace GServer.Services.IntegrationTest
 {
     [TestFixture]
     public class ArchiveManagerTests

@@ -1,17 +1,16 @@
 using System;
-using GTest.Core;
 using GCommon.Archiving;
 using GCommon.Archiving.Repositories;
 using GCommon.Primitives;
 using GServer.Archestra;
-using GServer.Services;
+using GTest.Core;
 using Microsoft.Data.Sqlite;
 using NUnit.Framework;
 
-namespace GalaxyMerge.Services.Tests
+namespace GServer.Services.IntegrationTest
 {
     [TestFixture]
-    public class GalaxyArchiverIntegrationTests
+    public class GalaxyArchiverTests
     {
         private ArchiveRepository _archiveRepo;
         private GalaxyRepository _galaxyRepo;

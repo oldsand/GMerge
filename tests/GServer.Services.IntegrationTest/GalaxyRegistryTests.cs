@@ -2,10 +2,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using GTest.Core;
-using GServer.Services;
 using NUnit.Framework;
 
-namespace GalaxyMerge.Services.Tests
+namespace GServer.Services.IntegrationTest
 {
     [TestFixture]
     public class GalaxyRegistryTests

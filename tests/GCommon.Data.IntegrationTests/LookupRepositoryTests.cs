@@ -3,7 +3,7 @@ using GCommon.Data;
 using Microsoft.Data.SqlClient;
 using NUnit.Framework;
 
-namespace GalaxyMerge.Data.Tests
+namespace GCommon.Data.IntegrationTests
 {
     [TestFixture]
     public class LookupRepositoryTests

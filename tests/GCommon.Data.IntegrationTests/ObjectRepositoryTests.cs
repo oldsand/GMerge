@@ -6,7 +6,7 @@ using GTest.Core;
 using GCommon.Data;
 using NUnit.Framework;
 
-namespace GalaxyMerge.Data.Tests
+namespace GCommon.Data.IntegrationTests
 {
     [TestFixture]
     public class ObjectRepositoryTests
