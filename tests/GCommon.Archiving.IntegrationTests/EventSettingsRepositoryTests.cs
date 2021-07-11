@@ -2,10 +2,9 @@ using System;
 using System.IO;
 using System.Linq;
 using GCommon.Archiving.Repositories;
-using GCommon.Core.Utilities;
 using GCommon.Primitives;
 using GCommon.Primitives.Base;
-using GCommon.Archiving;
+using Microsoft.Data.Sqlite;
 using NUnit.Framework;
 
 namespace GCommon.Archiving.IntegrationTests
@@ -13,30 +12,32 @@ namespace GCommon.Archiving.IntegrationTests
     [TestFixture]
     public class EventSettingsRepositoryTests
     {
-        private const string GalaxyName = "GalaxyName";
-        private string _connectionString;
-        
+        private SqliteConnectionStringBuilder _builder;
+
         [SetUp]
         public void Setup()
         {
-            var config = ArchiveConfiguration.Default(GalaxyName);
-            var builder = new ArchiveBuilder();
-            builder.Build(config);
+            _builder = new SqliteConnectionStringBuilder {DataSource = @"\TestArchive.db"};
+
+            var config = ArchiveConfiguration
+                .Default("TestArchive")
+                .OverrideConnectionString(_builder.ConnectionString);
             
-            _connectionString = DbStringBuilder.ArchiveString(GalaxyName);
+            var archiveBuilder = new ArchiveBuilder();
+            archiveBuilder.Build(config);
         }
-        
+
         [TearDown]
         public void TearDown()
         {
-            var fileName = Path.Combine(ApplicationPath.Archives, $"{GalaxyName}.db");
+            var fileName = _builder.DataSource;
             File.Delete(fileName);
         }
 
         [Test]
         public void IsTrigger_IsEventTrigger_ReturnsTrue()
         {
-            using var repo = new ArchiveRepository(_connectionString);
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
 
             var result = repo.Events.IsTrigger(Operation.CreateInstance);
 
@@ -46,7 +47,7 @@ namespace GCommon.Archiving.IntegrationTests
         [Test]
         public void IsTrigger_IsNotEventTrigger_ReturnsFalse()
         {
-            using var repo = new ArchiveRepository(_connectionString);
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
 
             var result = repo.Events.IsTrigger(Operation.Upload);
 
@@ -56,7 +57,7 @@ namespace GCommon.Archiving.IntegrationTests
         [Test]
         public void IsTrigger_Null_ThrowsArgumentNullException()
         {
-            using var repo = new ArchiveRepository(_connectionString);
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
             
             Assert.Throws<ArgumentNullException>(() =>
             {
@@ -67,7 +68,7 @@ namespace GCommon.Archiving.IntegrationTests
         [Test]
         public void Get_ValidOperation_ReturnsExpectObject()
         {
-            using var repo = new ArchiveRepository(_connectionString);
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
 
             var result = repo.Events.Get(Operation.DeploySuccess);
 
@@ -78,7 +79,7 @@ namespace GCommon.Archiving.IntegrationTests
         [Test]
         public void Get_Null_ThrowArgumentNullException()
         {
-            using var repo = new ArchiveRepository(_connectionString);
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
 
             Assert.Throws<ArgumentNullException>(() =>
             {
@@ -89,7 +90,7 @@ namespace GCommon.Archiving.IntegrationTests
         [Test]
         public void GetAll_WhenCalled_ReturnsNumbersOfExpectedOperations()
         {
-            using var repo = new ArchiveRepository(_connectionString);
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
             var count = Enumeration.GetAll<Operation>().ToList().Count;
 
             var operations = repo.Events.GetAll().ToList();
@@ -100,7 +101,7 @@ namespace GCommon.Archiving.IntegrationTests
         [Test]
         public void GetArchiveEvents_WhenCalled_ReturnsAllArchiveEvents()
         {
-            using var repo = new ArchiveRepository(_connectionString);
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
             
             var operations = repo.Events.GetArchiveEvents().ToList();
             
@@ -110,7 +111,7 @@ namespace GCommon.Archiving.IntegrationTests
         [Test]
         public void Configure_SetTriggerTrue_ReturnsTrue()
         {
-            using var repo = new ArchiveRepository(_connectionString);
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
             
             repo.Events.Configure(Operation.DeploySuccess, true);
             repo.Save();
@@ -123,7 +124,7 @@ namespace GCommon.Archiving.IntegrationTests
         [Test]
         public void Configure_SetTriggerFalse_ReturnsFalse()
         {
-            using var repo = new ArchiveRepository(_connectionString);
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
             
             repo.Events.Configure(Operation.CheckInSuccess, false);
             repo.Save();
@@ -136,7 +137,7 @@ namespace GCommon.Archiving.IntegrationTests
         [Test]
         public void Configure_NullOperation_ReturnsFalse()
         {
-            using var repo = new ArchiveRepository(_connectionString);
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
             
             Assert.Throws<ArgumentNullException>(() =>
             {

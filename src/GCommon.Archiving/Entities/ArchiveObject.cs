@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GCommon.Core.Extensions;
 using GCommon.Primitives;
 
 namespace GCommon.Archiving.Entities
@@ -8,6 +9,7 @@ namespace GCommon.Archiving.Entities
     public class ArchiveObject
     {
         private readonly List<ArchiveEntry> _entries = new();
+
         private ArchiveObject()
         {
         }
@@ -23,7 +25,7 @@ namespace GCommon.Archiving.Entities
             ModifiedOn = DateTime.Now;
             QueuedItems = new List<QueuedEntry>();
         }
-        
+
         public int ObjectId { get; private set; }
         public string TagName { get; private set; }
         public int Version { get; private set; }
@@ -34,41 +36,47 @@ namespace GCommon.Archiving.Entities
         public IEnumerable<ArchiveEntry> Entries => _entries;
         public IEnumerable<QueuedEntry> QueuedItems { get; private set; }
 
-        public bool HasEntries()
-        {
-            return _entries.Any();
-        }
-
         public ArchiveEntry GetLatestEntry()
         {
             return _entries.OrderByDescending(x => x.ArchivedOn).FirstOrDefault();
         }
-        
-        public void UpdateTagName(string tagName)
+
+        public void AddEntry(ArchiveEntry entry)
         {
-            if (TagName == tagName) return;
-            TagName = tagName;
-            ModifiedOn = DateTime.Now;
+            AddArchiveEntry(entry);
         }
 
-        public void UpdateVersion(int version)
+        public void AddEntries(IEnumerable<ArchiveEntry> entries)
         {
-            if (Version == version) return;
-            Version = version;
-            ModifiedOn = DateTime.Now;
+            foreach (var entry in entries)
+                AddArchiveEntry(entry);
         }
-        
-        public void AddEntry(byte[] data, int? changeLogId = null)
+
+        public void AddEntry(byte[] data)
         {
-            var entry = new ArchiveEntry(this, data, changeLogId);
+            if (data == null) throw new ArgumentNullException(nameof(data), "data can not be null");
+            var entry = new ArchiveEntry(this, data);
+            AddArchiveEntry(entry);
+        }
+
+        private void AddArchiveEntry(ArchiveEntry entry)
+        {
+            if (entry == null) throw new ArgumentNullException(nameof(entry), "entry can not be null");
+
+            var data = entry.CompressedData.Decompress();
+            if (IsCurrent(data)) return;
+
             _entries.Add(entry);
             ModifiedOn = DateTime.Now;
         }
-        
-        public void AddEntries(IEnumerable<ArchiveEntry> entries)
+
+        private bool IsCurrent(IEnumerable<byte> data)
         {
-            _entries.AddRange(entries);
-            ModifiedOn = DateTime.Now;
+            if (!_entries.Any()) return false;
+
+            var latest = _entries.OrderByDescending(x => x.ArchivedOn).First();
+            var currentData = latest.CompressedData.Decompress();
+            return currentData.SequenceEqual(data);
         }
     }
 }

@@ -19,8 +19,10 @@ namespace GCommon.Archiving.Configurations
             builder.Property(x => x.AddedOn).IsRequired();
             builder.Property(x => x.ModifiedOn).IsRequired();
 
-            builder.HasMany(x => x.Entries).WithOne(x => x.ArchiveObject).HasForeignKey(x => x.ObjectId);
-            builder.HasMany(x => x.QueuedItems).WithOne(x => x.ArchiveObject).HasForeignKey(x => x.ObjectId);
+            builder.HasMany(x => x.Entries).WithOne(x => x.ArchiveObject).HasForeignKey(x => x.ObjectId)
+                .OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany(x => x.QueuedItems).WithOne(x => x.ArchiveObject).HasForeignKey(x => x.ObjectId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

@@ -44,10 +44,11 @@ namespace GCommon.Archiving.Repositories
                 return;
             }
 
-            var target = _context.Objects.Single(x => x.ObjectId == archiveObject.ObjectId);
+            _context.Objects.Update(archiveObject);
+            /*var target = _context.Objects.Single(x => x.ObjectId == archiveObject.ObjectId);
             target.UpdateTagName(archiveObject.TagName);
             target.UpdateVersion(archiveObject.Version);
-            target.AddEntries(archiveObject.Entries);
+            target.AddEntries(archiveObject.Entries);*/
         }
         
         public void Delete(int objectId)

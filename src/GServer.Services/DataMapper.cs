@@ -206,7 +206,6 @@ namespace GServer.Services
                 ObjectId = source.ObjectId,
                 Version = source.Version,
                 ArchivedOn = source.ArchivedOn,
-                ChangeLogId = source.ChangeLogId,
                 CompressedData = source.CompressedData
             };
         }

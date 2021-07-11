@@ -4,36 +4,39 @@ using GCommon.Archiving.Repositories;
 using GCommon.Core.Utilities;
 using GCommon.Primitives;
 using GCommon.Archiving;
+using Microsoft.Data.Sqlite;
 using NUnit.Framework;
 
 namespace GCommon.Archiving.IntegrationTests
 {
     internal class ArchiveRepositoryTests
     {
-        private const string GalaxyName = "GalaxyName";
-        private string _connectionString;
+        private SqliteConnectionStringBuilder _builder;
 
         [SetUp]
         public void Setup()
         {
-            var config = ArchiveConfiguration.Default(GalaxyName);
-            var builder = new ArchiveBuilder();
-            builder.Build(config);
+            _builder = new SqliteConnectionStringBuilder {DataSource = @"\TestArchive.db"};
+
+            var config = ArchiveConfiguration
+                .Default("TestArchive")
+                .OverrideConnectionString(_builder.ConnectionString);
             
-            _connectionString = DbStringBuilder.ArchiveString(GalaxyName);
+            var archiveBuilder = new ArchiveBuilder();
+            archiveBuilder.Build(config);
         }
-        
+
         [TearDown]
         public void TearDown()
         {
-            var fileName = Path.Combine(ApplicationPath.Archives, $"{GalaxyName}.db");
+            var fileName = _builder.DataSource;
             File.Delete(fileName);
         }
 
         [Test]
         public void GetArchiveInfo_WhenCalled_ReturnsNotNull()
         {
-            using var repo = new ArchiveRepository(_connectionString);
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
 
             var archive = repo.GetArchiveInfo();
             
@@ -43,12 +46,12 @@ namespace GCommon.Archiving.IntegrationTests
         [Test]
         public void GetArchiveInfo_WhenCalled_ReturnsExpectedInfo()
         {
-            using var repo = new ArchiveRepository(_connectionString);
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
 
             var archive = repo.GetArchiveInfo();
             
             Assert.AreEqual(1, archive.ArchiveId);
-            Assert.AreEqual(GalaxyName, archive.GalaxyName);
+            Assert.AreEqual("TestArchive", archive.GalaxyName);
             Assert.AreEqual(ArchestraVersion.SystemPlatform2012R2P3, archive.Version);
             Assert.That(archive.CreatedOn, Is.EqualTo(DateTime.Now).Within(5).Seconds);
             Assert.That(archive.UpdatedOn, Is.EqualTo(DateTime.Now).Within(5).Seconds);
@@ -57,7 +60,7 @@ namespace GCommon.Archiving.IntegrationTests
         [Test]
         public void GetArchiveSettings_WhenCalled_ReturnsNotEmptySettings()
         {
-            using var repo = new ArchiveRepository(_connectionString);
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
 
             var archive = repo.GetArchiveSettings();
             
@@ -72,7 +75,7 @@ namespace GCommon.Archiving.IntegrationTests
         /*private void Seed()
         {
             var options = new DbContextOptionsBuilder<ArchiveContext>()
-                .UseSqlite(_connectionString).Options;
+                .UseSqlite(_builder.ConnectionString).Options;
             using var context = new ArchiveContext(options);
 
             context.Objects.Add(new ArchiveObject(1, "Tag1", 21, Template.UserDefined));

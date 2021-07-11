@@ -28,6 +28,7 @@ namespace GCommon.Archiving
         public DbSet<InclusionSetting> InclusionSettings { get; set; }
         public DbSet<IgnoreSetting> IgnoreSettings { get; set; }
         public DbSet<ArchiveObject> Objects { get; set; }
+        public DbSet<ChangeLogInfo> ChangeLogs { get; set; }
         public DbSet<QueuedEntry> Queue { get; set; }
         
     }

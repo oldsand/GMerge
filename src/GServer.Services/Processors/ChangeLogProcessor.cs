@@ -68,8 +68,12 @@ namespace GServer.Services.Processors
             
             Logger.Debug("Object {ObjectId} valid for archiving. Updating archive database", item.ObjectId);
             repository.Objects.Upsert(archiveObject);
+
+            var changeLogInfo = 
+                new ChangeLogInfo(item.ChangeLogId, item.ChangeDate, item.Operation, item.Comment, item.UserName);
+            repository.ChangeLogs.Add(changeLogInfo);
             
-            var entry = new QueuedEntry(item.ChangeLogId, item.ObjectId, item.OperationId, item.ChangeDate);
+            var entry = new QueuedEntry(item.ChangeLogId, item.ObjectId);
             repository.Queue.Add(entry);
             
             repository.Save();

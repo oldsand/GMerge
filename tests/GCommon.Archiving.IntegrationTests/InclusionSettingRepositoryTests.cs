@@ -7,6 +7,7 @@ using GCommon.Core.Utilities;
 using GCommon.Primitives;
 using GCommon.Primitives.Base;
 using GCommon.Archiving;
+using Microsoft.Data.Sqlite;
 using NUnit.Framework;
 
 namespace GCommon.Archiving.IntegrationTests
@@ -14,30 +15,32 @@ namespace GCommon.Archiving.IntegrationTests
     [TestFixture]
     public class InclusionSettingRepositoryTests
     {
-        private const string GalaxyName = "GalaxyName";
-        private string _connectionString;
-        
+        private SqliteConnectionStringBuilder _builder;
+
         [SetUp]
         public void Setup()
         {
-            var config = ArchiveConfiguration.Default(GalaxyName);
-            var builder = new ArchiveBuilder();
-            builder.Build(config);
+            _builder = new SqliteConnectionStringBuilder {DataSource = @"\TestArchive.db"};
+
+            var config = ArchiveConfiguration
+                .Default("TestArchive")
+                .OverrideConnectionString(_builder.ConnectionString);
             
-            _connectionString = DbStringBuilder.ArchiveString(GalaxyName);
+            var archiveBuilder = new ArchiveBuilder();
+            archiveBuilder.Build(config);
         }
-        
+
         [TearDown]
         public void TearDown()
         {
-            var fileName = Path.Combine(ApplicationPath.Archives, $"{GalaxyName}.db");
+            var fileName = _builder.DataSource;
             File.Delete(fileName);
         }
         
         [Test]
         public void IsIncluded_TemplateWithOptionAll_ReturnsTrue()
         {
-            using var repo = new ArchiveRepository(_connectionString);
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
             var archiveObject = new ArchiveObject(1, "$SomeTag", 1, Template.UserDefined);
             
             var result = repo.Inclusions.IsIncluded(archiveObject);
@@ -48,7 +51,7 @@ namespace GCommon.Archiving.IntegrationTests
         [Test]
         public void IsIncluded_TemplateWithOptionSelect_ReturnsFalse()
         {
-            using var repo = new ArchiveRepository(_connectionString);
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
             var archiveObject = new ArchiveObject(1, "SomeTag", 1, Template.Area);
             
             var result = repo.Inclusions.IsIncluded(archiveObject);
@@ -59,7 +62,7 @@ namespace GCommon.Archiving.IntegrationTests
         [Test]
         public void IsIncluded_TemplateWithOptionNone_ReturnsFalse()
         {
-            using var repo = new ArchiveRepository(_connectionString);
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
             repo.Inclusions.Configure(Template.InTouchViewApp, InclusionOption.None, false);
             var archiveObject = new ArchiveObject(1, "SomeTag", 31, Template.InTouchViewApp);
             
@@ -71,7 +74,7 @@ namespace GCommon.Archiving.IntegrationTests
         [Test]
         public void IsIncluded_Null_ThrowsArgumentNullException()
         {
-            using var repo = new ArchiveRepository(_connectionString);
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
             
             Assert.Throws<ArgumentNullException>(() =>
             {
@@ -82,7 +85,7 @@ namespace GCommon.Archiving.IntegrationTests
         [Test]
         public void Get_ValidTemplate_ReturnsExpectSetting()
         {
-            using var repo = new ArchiveRepository(_connectionString);
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
 
             var result = repo.Inclusions.Get(Template.Galaxy);
 
@@ -93,7 +96,7 @@ namespace GCommon.Archiving.IntegrationTests
         [Test]
         public void Get_Null_ThrowArgumentNullException()
         {
-            using var repo = new ArchiveRepository(_connectionString);
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
 
             Assert.Throws<ArgumentNullException>(() =>
             {
@@ -104,7 +107,7 @@ namespace GCommon.Archiving.IntegrationTests
         [Test]
         public void GetAll_WhenCalled_ReturnsNumbersOfExpectedTemplates()
         {
-            using var repo = new ArchiveRepository(_connectionString);
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
             var count = Enumeration.GetAll<Template>().ToList().Count;
 
             var templates = repo.Inclusions.GetAll().ToList();
@@ -115,7 +118,7 @@ namespace GCommon.Archiving.IntegrationTests
         [Test]
         public void FindByOption_OptionsAll_ReturnsAllInclusionsWithAll()
         {
-            using var repo = new ArchiveRepository(_connectionString);
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
             
             var settings = repo.Inclusions.FindByOption(InclusionOption.All).ToList();
             
@@ -125,7 +128,7 @@ namespace GCommon.Archiving.IntegrationTests
         [Test]
         public void Configure_SetOptionNoneIncludeFalse_ReturnsExpectedValues()
         {
-            using var repo = new ArchiveRepository(_connectionString);
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
             
             repo.Inclusions.Configure(Template.ClientControl, InclusionOption.None, false);
             repo.Save();
@@ -139,7 +142,7 @@ namespace GCommon.Archiving.IntegrationTests
         [Test]
         public void Configure_SetOptionAllIncludeTrue_ReturnsExpectedValues()
         {
-            using var repo = new ArchiveRepository(_connectionString);
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
             
             repo.Inclusions.Configure(Template.OpcClient, InclusionOption.All, true);
             repo.Save();
@@ -153,7 +156,7 @@ namespace GCommon.Archiving.IntegrationTests
         [Test]
         public void Configure_NullOperation_ReturnsFalse()
         {
-            using var repo = new ArchiveRepository(_connectionString);
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
             
             Assert.Throws<ArgumentNullException>(() =>
             {

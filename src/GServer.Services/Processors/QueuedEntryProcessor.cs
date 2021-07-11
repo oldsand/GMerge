@@ -39,11 +39,16 @@ namespace GServer.Services.Processors
                 : _archiveRepositoryFactory.Create(_connectionString);
 
             archiveRepository.Queue.SetProcessing(item.ChangeLogId);
+            archiveRepository.Save();
 
             var archiveObject = archiveRepository.Objects.Get(item.ObjectId);
 
             using var archiver = new GalaxyArchiver(_galaxyRepository, archiveRepository);
             archiver.Archive(archiveObject);
+
+            var changeLog = archiveRepository.ChangeLogs.Get(item.ChangeLogId);
+            changeLog.Entry = archiveObject.GetLatestEntry();
+            archiveRepository.Save();
         }
 
         public override void OnComplete(QueuedEntry item)
