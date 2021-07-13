@@ -6,6 +6,7 @@ using GCommon.Core.Utilities;
 using GCommon.Data;
 using GCommon.Data.Abstractions;
 using GCommon.Data.Entities;
+using GServer.Archestra.Abstractions;
 using GServer.Services.Abstractions;
 using NLog;
 
@@ -18,11 +19,13 @@ namespace GServer.Services.Processors
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
         private readonly string _archiveConnectionString;
         private readonly string _galaxyConnectionString;
+        private readonly ArchiveLogProcessor _archiveLogProcessor;
 
-        public ChangeLogProcessor(string galaxyName)
+        public ChangeLogProcessor(IGalaxyRepository galaxyRepository)
         {
-            _archiveConnectionString = DbStringBuilder.ArchiveString(galaxyName);
-            _galaxyConnectionString = DbStringBuilder.GalaxyString(galaxyName);
+            _archiveLogProcessor = new ArchiveLogProcessor(galaxyRepository);
+            _archiveConnectionString = DbStringBuilder.ArchiveString(galaxyRepository.Name);
+            _galaxyConnectionString = DbStringBuilder.GalaxyString(galaxyRepository.Name);
         }
 
         public ChangeLogProcessor(IGalaxyDataProviderFactory dataProviderFactory,
@@ -34,20 +37,18 @@ namespace GServer.Services.Processors
             _galaxyConnectionString = string.Empty;
         }
 
-        public event EventHandler<QueuedEntry> OnEntryQueued;
-
-        public override void Process(ChangeLog item)
+        protected override void Process(ChangeLog item)
         {
             Logger.Trace("Processing change log with id {ChangeLogId}", item.ChangeLogId);
-            
-            using var provider = _dataProviderFactory == null 
+
+            using var provider = _dataProviderFactory == null
                 ? new GalaxyDataProvider(_galaxyConnectionString)
                 : _dataProviderFactory.Create(_galaxyConnectionString);
-            
-            using var repository = _archiveRepositoryFactory == null 
-                ? new ArchiveRepository(_archiveConnectionString) 
+
+            using var repository = _archiveRepositoryFactory == null
+                ? new ArchiveRepository(_archiveConnectionString)
                 : _archiveRepositoryFactory.Create(_archiveConnectionString);
-            
+
             var target = provider.Objects.Find(item.ObjectId);
             if (target == null)
             {
@@ -55,35 +56,42 @@ namespace GServer.Services.Processors
                 Logger.Trace("Aborting processing for change log with id {ChangeLogId}", item.ChangeLogId);
                 return;
             }
-            
-            var archiveObject = new ArchiveObject(target.ObjectId, target.TagName, target.ConfigVersion, target.Template);
-            var canArchive = repository.CanArchive(archiveObject, item.Operation);
-            if (!canArchive)
+
+            var archiveObject =
+                new ArchiveObject(target.ObjectId, target.TagName, target.ConfigVersion, target.Template);
+
+            if (!repository.CanArchive(archiveObject, item.Operation))
             {
                 Logger.Debug("ChangeLog {ChangeLogId} for Object {ObjectId} not valid for archiving",
                     item.ChangeLogId, item.ObjectId);
                 Logger.Trace("Aborting processing for change log with id {ChangeLogId}", item.ChangeLogId);
                 return;
             }
-            
-            Logger.Debug("Object {ObjectId} valid for archiving. Updating archive database", item.ObjectId);
-            repository.Objects.Upsert(archiveObject);
 
-            var changeLogInfo = 
-                new ChangeLogInfo(item.ChangeLogId, item.ChangeDate, item.Operation, item.Comment, item.UserName);
-            repository.ChangeLogs.Add(changeLogInfo);
-            
-            var entry = new QueuedEntry(item.ChangeLogId, item.ObjectId);
-            repository.Queue.Add(entry);
-            
+            Logger.Debug("ChangeLog {ChangeLogId} for Object {ObjectId} valid for archiving", item.ChangeLogId,
+                item.ObjectId);
+
+            archiveObject.AddLog(item.ChangeLogId, item.ChangeDate, item.Operation, item.Comment, item.UserName);
+            repository.Objects.Upsert(archiveObject);
             repository.Save();
-            
-            OnEntryQueued?.Invoke(this, entry);
         }
 
-        public override void OnError(ChangeLog item, Exception e)
+        protected override void OnComplete(ChangeLog item)
         {
+            using var repository = _archiveRepositoryFactory == null
+                ? new ArchiveRepository(_archiveConnectionString)
+                : _archiveRepositoryFactory.Create(_archiveConnectionString);
+
+            var log = repository.Logs.Get(item.ChangeLogId);
+
+            if (log == null) return;
             
+            _archiveLogProcessor.Enqueue(log);
+        }
+
+        protected override void OnError(ChangeLog item, Exception e)
+        {
+            //todo probably want to fire events 
         }
     }
 }

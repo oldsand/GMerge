@@ -28,8 +28,8 @@ namespace GCommon.Archiving
         public DbSet<InclusionSetting> InclusionSettings { get; set; }
         public DbSet<IgnoreSetting> IgnoreSettings { get; set; }
         public DbSet<ArchiveObject> Objects { get; set; }
-        public DbSet<ChangeLogInfo> ChangeLogs { get; set; }
-        public DbSet<QueuedEntry> Queue { get; set; }
-        
+        public DbSet<ArchiveEntry> Entries { get; set; }
+        public DbSet<ArchiveLog> Logs { get; set; }
+        public DbSet<EntryLog> EntryLogs { get; set; }
     }
 }

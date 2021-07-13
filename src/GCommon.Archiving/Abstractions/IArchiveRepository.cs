@@ -10,8 +10,7 @@ namespace GCommon.Archiving.Abstractions
         IEventSettingsRepository Events { get; }
         IInclusionSettingsRepository Inclusions { get; }
         IArchiveObjectRepository Objects { get; }
-        IChangeLogInfoRepository ChangeLogs { get; }
-        IQueueRepository Queue { get; }
+        IArchiveLogRepository Logs { get; }
         Archive GetArchiveInfo();
         Archive GetArchiveSettings();
         bool CanArchive(ArchiveObject archiveObject, Operation operation);

@@ -28,7 +28,7 @@ namespace GServer.Services
         {
             var data = GetArchiveData(archiveObject);
             
-            archiveObject.AddEntry(data);
+            archiveObject.Archive(data);
             
             _archiveRepository.Objects.Upsert(archiveObject);
             _archiveRepository.Save();

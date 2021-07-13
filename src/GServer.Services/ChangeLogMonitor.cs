@@ -15,8 +15,7 @@ namespace GServer.Services
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private SqlTableDependency<ChangeLog> _changeLogDependency;
-        private ChangeLogProcessor _changeLogProcessor;
-        private QueuedEntryProcessor _queuedEntryProcessor;
+        private readonly ChangeLogProcessor _changeLogProcessor;
         private const string ChangeLogTableName = "gobject_change_log";
 
         public ChangeLogMonitor(IGalaxyRepository galaxyRepository)
@@ -27,9 +26,11 @@ namespace GServer.Services
             var galaxyName = galaxyRepository.Name;
             
             Logger.Trace("Initializing archive processors for '{Galaxy}'",galaxyName);
+            
             SetupServiceBroker(galaxyName);
             InitializeDependency(galaxyName);
-            InitializeProcessors(galaxyRepository);
+            
+            _changeLogProcessor = new ChangeLogProcessor(galaxyRepository);
         }
 
         private static void SetupServiceBroker(string databaseName)
@@ -62,14 +63,6 @@ namespace GServer.Services
             Logger.Debug("Starting ChangeLog Table Dependency for '{Database}'", databaseName);
             _changeLogDependency.Start();
         }
-        
-        private void InitializeProcessors(IGalaxyRepository galaxyRepository)
-        {
-            _changeLogProcessor = new ChangeLogProcessor(galaxyRepository.Name);
-            _queuedEntryProcessor = new QueuedEntryProcessor(galaxyRepository);
-
-            _changeLogProcessor.OnEntryQueued += OnEntryQueued;
-        }
 
         private void OnChangeLogTableChanged(object sender, RecordChangedEventArgs<ChangeLog> e)
         {
@@ -93,16 +86,10 @@ namespace GServer.Services
             if (e.Status == TableDependencyStatus.Started)
                 Logger.Debug("Change log table dependency started on {GalaxyName}", e.Database);
         }
-        
-        private void OnEntryQueued(object sender, QueuedEntry e)
-        {
-            _queuedEntryProcessor.Enqueue(e);
-        }
 
         public void Dispose()
         {
             Logger.Trace("Stopping table dependency service");
-            _changeLogProcessor.OnEntryQueued -= OnEntryQueued;
             _changeLogDependency?.Stop();
         }
     }

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GCommon.Archiving.Configurations
 {
-    internal class ArchiveEntityConfiguration : IEntityTypeConfiguration<Archive>
+    internal class ArchiveConfiguration : IEntityTypeConfiguration<Archive>
     {
         public void Configure(EntityTypeBuilder<Archive> builder)
         {

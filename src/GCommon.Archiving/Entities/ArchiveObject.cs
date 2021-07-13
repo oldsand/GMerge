@@ -9,6 +9,7 @@ namespace GCommon.Archiving.Entities
     public class ArchiveObject
     {
         private readonly List<ArchiveEntry> _entries = new();
+        private readonly List<ArchiveLog> _logs = new();
 
         private ArchiveObject()
         {
@@ -23,7 +24,7 @@ namespace GCommon.Archiving.Entities
             IsTemplate = tagName.StartsWith("$");
             AddedOn = DateTime.Now;
             ModifiedOn = DateTime.Now;
-            QueuedItems = new List<QueuedEntry>();
+            
         }
 
         public int ObjectId { get; private set; }
@@ -33,41 +34,34 @@ namespace GCommon.Archiving.Entities
         public bool IsTemplate { get; private set; }
         public DateTime AddedOn { get; private set; }
         public DateTime ModifiedOn { get; private set; }
-        public IEnumerable<ArchiveEntry> Entries => _entries;
-        public IEnumerable<QueuedEntry> QueuedItems { get; private set; }
+        public IEnumerable<ArchiveEntry> Entries => _entries.AsReadOnly();
+        public IEnumerable<ArchiveLog> Logs => _logs.AsReadOnly();
 
         public ArchiveEntry GetLatestEntry()
         {
             return _entries.OrderByDescending(x => x.ArchivedOn).FirstOrDefault();
         }
 
-        public void AddEntry(ArchiveEntry entry)
-        {
-            AddArchiveEntry(entry);
-        }
-
-        public void AddEntries(IEnumerable<ArchiveEntry> entries)
-        {
-            foreach (var entry in entries)
-                AddArchiveEntry(entry);
-        }
-
-        public void AddEntry(byte[] data)
+        public void Archive(byte[] data)
         {
             if (data == null) throw new ArgumentNullException(nameof(data), "data can not be null");
-            var entry = new ArchiveEntry(this, data);
-            AddArchiveEntry(entry);
-        }
-
-        private void AddArchiveEntry(ArchiveEntry entry)
-        {
-            if (entry == null) throw new ArgumentNullException(nameof(entry), "entry can not be null");
-
-            var data = entry.CompressedData.Decompress();
             if (IsCurrent(data)) return;
 
+            var entry = new ArchiveEntry(this, data);
             _entries.Add(entry);
+            
             ModifiedOn = DateTime.Now;
+        }
+
+        public void AddLog(int logId, DateTime changedOn, Operation operation, string comment, string userName)
+        {
+            if (changedOn == null) throw new ArgumentNullException(nameof(changedOn), "changedOn can not be null");
+            if (operation == null) throw new ArgumentNullException(nameof(operation), "operation can not be null");
+            if (comment == null) throw new ArgumentNullException(nameof(comment), "comment can not be null");
+            if (userName == null) throw new ArgumentNullException(nameof(userName), "userName can not be null");
+
+            var log = new ArchiveLog(logId, ObjectId, changedOn, operation, comment, userName);
+            _logs.Add(log);
         }
 
         private bool IsCurrent(IEnumerable<byte> data)

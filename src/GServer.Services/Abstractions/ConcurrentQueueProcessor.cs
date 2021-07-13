@@ -19,13 +19,13 @@ namespace GServer.Services.Abstractions
             _queue.Add(item);
         }
         
-        public abstract void Process(T item);
+        protected abstract void Process(T item);
         
-        public virtual void OnComplete(T item)
+        protected virtual void OnComplete(T item)
         {
         }
         
-        public virtual void OnError(T item, Exception e)
+        protected virtual void OnError(T item, Exception e)
         {
             throw e;
         }

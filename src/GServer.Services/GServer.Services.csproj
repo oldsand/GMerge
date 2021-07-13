@@ -56,7 +56,7 @@
         <Compile Include="ChangeLogMonitor.cs" />
         <Compile Include="GalaxyRegistry.cs" />
         <Compile Include="DataMapper.cs" />
-        <Compile Include="Processors\QueuedEntryProcessor.cs" />
+        <Compile Include="Processors\ArchiveLogProcessor.cs" />
         <Compile Include="Processors\ChangeLogProcessor.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>

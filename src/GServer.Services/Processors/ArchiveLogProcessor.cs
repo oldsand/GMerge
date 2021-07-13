@@ -4,25 +4,26 @@ using GCommon.Archiving.Abstractions;
 using GCommon.Archiving.Entities;
 using GCommon.Archiving.Repositories;
 using GCommon.Core.Utilities;
+using GCommon.Primitives;
 using GServer.Services.Abstractions;
 using NLog;
 
 namespace GServer.Services.Processors
 {
-    public class QueuedEntryProcessor : ConcurrentQueueProcessor<QueuedEntry>
+    public class ArchiveLogProcessor : ConcurrentQueueProcessor<ArchiveLog>
     {
         private readonly IGalaxyRepository _galaxyRepository;
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
         private readonly string _connectionString;
         private readonly IArchiveRepositoryFactory _archiveRepositoryFactory;
 
-        public QueuedEntryProcessor(IGalaxyRepository galaxyRepository)
+        public ArchiveLogProcessor(IGalaxyRepository galaxyRepository)
         {
             _galaxyRepository = galaxyRepository;
             _connectionString = DbStringBuilder.ArchiveString(galaxyRepository.Name);
         }
 
-        public QueuedEntryProcessor(IGalaxyRepository galaxyRepository,
+        public ArchiveLogProcessor(IGalaxyRepository galaxyRepository,
             IArchiveRepositoryFactory archiveRepositoryFactory)
         {
             _galaxyRepository = galaxyRepository;
@@ -30,28 +31,31 @@ namespace GServer.Services.Processors
             _connectionString = string.Empty;
         }
 
-        public override void Process(QueuedEntry item)
+        protected override void Process(ArchiveLog item)
         {
-            Logger.Trace("Processing queued entry with id {ChangeLogId}", item.ChangeLogId);
+            Logger.Trace("Processing archive log with id {ChangeLogId}", item.ChangeLogId);
 
             using var archiveRepository = _archiveRepositoryFactory == null
                 ? new ArchiveRepository(_connectionString)
                 : _archiveRepositoryFactory.Create(_connectionString);
-
-            archiveRepository.Queue.SetProcessing(item.ChangeLogId);
+            
+            Logger.Trace("Updating archive log state to processing");
+            item.State = ArchiveState.Processing;
+            archiveRepository.Logs.Update(item);
             archiveRepository.Save();
 
-            var archiveObject = archiveRepository.Objects.Get(item.ObjectId);
+            //var archiveObject = archiveRepository.Objects.Get(item.ObjectId);
+            var archiveObject = item.ArchiveObject;
 
             using var archiver = new GalaxyArchiver(_galaxyRepository, archiveRepository);
             archiver.Archive(archiveObject);
-
-            var changeLog = archiveRepository.ChangeLogs.Get(item.ChangeLogId);
-            changeLog.Entry = archiveObject.GetLatestEntry();
+            
+            var entry = archiveObject.GetLatestEntry();
+            entry.AssignLog(item);
             archiveRepository.Save();
         }
 
-        public override void OnComplete(QueuedEntry item)
+        protected override void OnComplete(ArchiveLog item)
         {
             Logger.Trace("Archiving complete for entry {ChangeLogId} on object {ObjectId}", item.ChangeLogId,
                 item.ObjectId);
@@ -60,10 +64,12 @@ namespace GServer.Services.Processors
                 ? new ArchiveRepository(_connectionString)
                 : _archiveRepositoryFactory.Create(_connectionString);
 
-            archiveRepository.Queue.Remove(item.ChangeLogId);
+            item.State = ArchiveState.Archived;
+            archiveRepository.Logs.Update(item);
+            archiveRepository.Save();
         }
 
-        public override void OnError(QueuedEntry item, Exception e)
+        protected override void OnError(ArchiveLog item, Exception e)
         {
             Logger.Error(e, "Archiving failed for entry {ChangeLogId} on object {ObjectId}", item.ChangeLogId,
                 item.ObjectId);
@@ -72,7 +78,9 @@ namespace GServer.Services.Processors
                 ? new ArchiveRepository(_connectionString)
                 : _archiveRepositoryFactory.Create(_connectionString);
 
-            archiveRepository.Queue.SetFailed(item.ChangeLogId);
+            item.State = ArchiveState.Failed;
+            archiveRepository.Logs.Update(item);
+            archiveRepository.Save();
         }
     }
 }

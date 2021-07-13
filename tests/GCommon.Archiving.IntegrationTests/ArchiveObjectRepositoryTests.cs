@@ -178,7 +178,7 @@ namespace GCommon.Archiving.IntegrationTests
             Seed();
             using var repo = new ArchiveRepository(_builder.ConnectionString);
             var archiveObject = new ArchiveObject(1, "Some Test Object", 2, Template.UserDefined);
-            archiveObject.AddEntry(Encoding.UTF8.GetBytes("This is a new entry test"));
+            archiveObject.Archive(Encoding.UTF8.GetBytes("This is a new entry test"));
 
             repo.Objects.Upsert(archiveObject);
             repo.Save();
@@ -200,7 +200,7 @@ namespace GCommon.Archiving.IntegrationTests
             Seed();
             using var repo = new ArchiveRepository(_builder.ConnectionString);
             var archiveObject = new ArchiveObject(311, "Upsert Tester", 123, Template.UserDefined);
-            archiveObject.AddEntry(Encoding.UTF8.GetBytes("This is a new entry test"));
+            archiveObject.Archive(Encoding.UTF8.GetBytes("This is a new entry test"));
 
             repo.Objects.Upsert(archiveObject);
             repo.Save();
@@ -220,7 +220,7 @@ namespace GCommon.Archiving.IntegrationTests
             Seed();
             using var repo = new ArchiveRepository(_builder.ConnectionString);
             var archiveObject = new ArchiveObject(12, "New Object", 1, Template.Symbol);
-            archiveObject.AddEntry(Encoding.UTF8.GetBytes("This is a new entry test"));
+            archiveObject.Archive(Encoding.UTF8.GetBytes("This is a new entry test"));
 
             repo.Objects.Upsert(archiveObject);
             repo.Save();
@@ -274,7 +274,7 @@ namespace GCommon.Archiving.IntegrationTests
             context.Objects.Add(new ArchiveObject(4, "Tag1", 2, Template.ViewEngine));
 
             var archiveObject = new ArchiveObject(311, "TestObject", 2, Template.UserDefined);
-            archiveObject.AddEntry(Encoding.UTF8.GetBytes("This is some data to convert to binary"));
+            archiveObject.Archive(Encoding.UTF8.GetBytes("This is some data to convert to binary"));
             context.Objects.Add(archiveObject);
 
             context.SaveChanges();

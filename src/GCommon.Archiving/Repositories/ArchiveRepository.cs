@@ -19,16 +19,14 @@ namespace GCommon.Archiving.Repositories
             Events = new EventSettingRepository(_context);
             Inclusions = new InclusionSettingsRepository(_context);
             Objects = new ArchiveObjectRepository(_context);
-            ChangeLogs = new ChangeLogInfoRepository(_context);
-            Queue = new QueueRepository(_context);
+            Logs = new ArchiveLogRepository(_context);
         }
 
         public ArchiveRepository(string connectionString,
             IEventSettingsRepository events, 
             IInclusionSettingsRepository inclusions,
             IArchiveObjectRepository objects,
-            IChangeLogInfoRepository changeLogs,
-            IQueueRepository queue)
+            IArchiveLogRepository logs)
         {
             var options = new DbContextOptionsBuilder<ArchiveContext>().UseSqlite(connectionString).Options;
             _context = new ArchiveContext(options);
@@ -36,15 +34,13 @@ namespace GCommon.Archiving.Repositories
             Events = events;
             Inclusions = inclusions;
             Objects = objects;
-            ChangeLogs = changeLogs;
-            Queue = queue;
+            Logs = logs;
         }
         
         public IEventSettingsRepository Events { get; }
         public IInclusionSettingsRepository Inclusions { get; }
         public IArchiveObjectRepository Objects { get; }
-        public IChangeLogInfoRepository ChangeLogs { get; }
-        public IQueueRepository Queue { get; }
+        public IArchiveLogRepository Logs { get; }
 
         public Archive GetArchiveInfo()
         {
