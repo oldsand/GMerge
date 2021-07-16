@@ -56,6 +56,10 @@ namespace GServer.Host.Archiving
             config.SetStopTimeout(TimeSpan.FromSeconds(30));
             config.RunAsLocalSystem();
             config.StartAutomatically();
+            config.EnableServiceRecovery(recoveryOption =>
+            {
+                recoveryOption.RestartService(0);
+            });
         }
 
         private void OnStart()
@@ -88,7 +92,8 @@ namespace GServer.Host.Archiving
 
         private static void OnServiceException(Exception obj)
         {
-            Logger.Fatal(obj);
+            Logger.Fatal(obj, "Servvice exception");
+            Environment.Exit(1);
         }
     }
 }

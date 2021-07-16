@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using GCommon.Primitives;
@@ -20,13 +21,15 @@ namespace GCommon.Archiving.Repositories
             Inclusions = new InclusionSettingsRepository(_context);
             Objects = new ArchiveObjectRepository(_context);
             Logs = new ArchiveLogRepository(_context);
+            Queue = new QueuedLogRepository(_context);
         }
 
         public ArchiveRepository(string connectionString,
             IEventSettingsRepository events, 
             IInclusionSettingsRepository inclusions,
             IArchiveObjectRepository objects,
-            IArchiveLogRepository logs)
+            IArchiveLogRepository logs,
+            IQueuedLogRepository queue)
         {
             var options = new DbContextOptionsBuilder<ArchiveContext>().UseSqlite(connectionString).Options;
             _context = new ArchiveContext(options);
@@ -35,12 +38,14 @@ namespace GCommon.Archiving.Repositories
             Inclusions = inclusions;
             Objects = objects;
             Logs = logs;
+            Queue = queue;
         }
         
         public IEventSettingsRepository Events { get; }
         public IInclusionSettingsRepository Inclusions { get; }
         public IArchiveObjectRepository Objects { get; }
         public IArchiveLogRepository Logs { get; }
+        public IQueuedLogRepository Queue { get; }
 
         public Archive GetArchiveInfo()
         {
@@ -56,8 +61,12 @@ namespace GCommon.Archiving.Repositories
                 .Single();
         }
         
-        public bool CanArchive(ArchiveObject archiveObject, Operation operation)
+        public bool IsArchivable(ArchiveObject archiveObject)
         {
+            var operation = archiveObject.Logs.OrderByDescending(x => x.ChangedOn).FirstOrDefault()?.Operation;
+            if (operation == null)
+                throw new InvalidOperationException("Could not find log operation for archive object");
+            
             return Inclusions.IsIncluded(archiveObject) && Events.IsTrigger(operation);
         }
 

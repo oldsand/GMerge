@@ -2,7 +2,7 @@ using System;
 using System.Data;
 using System.Data.SqlClient;
 
-namespace GTest.Console
+namespace GTest.ConsoleApp
 {
     public class SqlNotifier : IDisposable
     {

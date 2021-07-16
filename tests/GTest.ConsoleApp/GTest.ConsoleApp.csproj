@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{2969914A-CA35-45C9-B421-EFBB28CC0994}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>GTest.Console</RootNamespace>
-    <AssemblyName>GTest.Console</AssemblyName>
+    <RootNamespace>GTest.ConsoleApp</RootNamespace>
+    <AssemblyName>GTest.ConsoleApp</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -56,6 +56,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\GCommon.Archiving\GCommon.Archiving.csproj">
+      <Project>{15034b13-2af5-405f-8408-8015bee53ed3}</Project>
+      <Name>GCommon.Archiving</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\GServer.Archestra\GServer.Archestra.csproj">
       <Project>{32ea2985-26c5-44b5-b8c1-46c8d4da0979}</Project>
       <Name>GServer.Archestra</Name>
@@ -78,6 +82,7 @@
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
     <PackageReference Include="System.Data.Common" Version="4.3.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+    <PackageReference Include="System.Threading.Tasks.Dataflow" Version="5.0.0" />
     <PackageReference Include="UDE.CSharp" Version="1.1.0" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

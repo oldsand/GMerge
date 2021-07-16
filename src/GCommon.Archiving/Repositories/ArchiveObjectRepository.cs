@@ -22,7 +22,10 @@ namespace GCommon.Archiving.Repositories
 
         public ArchiveObject Get(int objectId)
         {
-            return _context.Objects.Include(x => x.Entries).SingleOrDefault(x => x.ObjectId == objectId);
+            return _context.Objects
+                .Include(x => x.Entries)
+                .Include(x => x.Logs)
+                .SingleOrDefault(x => x.ObjectId == objectId);
         }
 
         public IEnumerable<ArchiveObject> GetAll()
@@ -37,6 +40,13 @@ namespace GCommon.Archiving.Repositories
 
         public void Upsert(ArchiveObject archiveObject)
         {
+            foreach (var archiveLog in archiveObject.Logs)
+            {
+                if (_context.Logs.Any(x => x.ChangeLogId == archiveLog.ChangeLogId))
+                    _context.Entry(archiveLog).State = EntityState.Modified;
+                _context.Entry(archiveLog).State = EntityState.Added;
+            }
+            
             if (_context.Objects.All(x => x.ObjectId != archiveObject.ObjectId))
             {
                 _context.Entry(archiveObject).State = EntityState.Added;
@@ -45,10 +55,6 @@ namespace GCommon.Archiving.Repositories
             }
 
             _context.Objects.Update(archiveObject);
-            /*var target = _context.Objects.Single(x => x.ObjectId == archiveObject.ObjectId);
-            target.UpdateTagName(archiveObject.TagName);
-            target.UpdateVersion(archiveObject.Version);
-            target.AddEntries(archiveObject.Entries);*/
         }
         
         public void Delete(int objectId)

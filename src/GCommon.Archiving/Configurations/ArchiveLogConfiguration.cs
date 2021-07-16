@@ -12,6 +12,7 @@ namespace GCommon.Archiving.Configurations
         {
             builder.ToTable(nameof(ArchiveLog)).HasKey(x => x.ChangeLogId);
 
+            builder.Property(x => x.ChangeLogId).ValueGeneratedNever();
             builder.Property(x => x.ObjectId).IsRequired();
             builder.Property(x => x.ChangedOn).IsRequired();
             builder.Property(x => x.Operation)

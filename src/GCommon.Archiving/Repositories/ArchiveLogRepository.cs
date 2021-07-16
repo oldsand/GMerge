@@ -40,6 +40,12 @@ namespace GCommon.Archiving.Repositories
             return _context.Logs.Where(predicate);
         }
 
+        public void Add(ArchiveLog log)
+        {
+            if (log == null) throw new ArgumentNullException(nameof(log), "log can not be null");
+            _context.Logs.Add(log);
+        }
+
         public void Update(ArchiveLog log)
         {
             if (log == null) throw new ArgumentNullException(nameof(log), "log can not be null");

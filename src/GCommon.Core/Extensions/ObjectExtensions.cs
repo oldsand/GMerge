@@ -2,8 +2,13 @@ using System;
 
 namespace GCommon.Core.Extensions
 {
-    public static class TypeExtensions
+    public static class ObjectExtensions
     {
+        public static void Output(this object obj)
+        {
+            Console.WriteLine(obj.ToString());
+        }
+        
         public static T ConvertTo<T>(this object value)
         {
             T returnValue;

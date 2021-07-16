@@ -41,6 +41,11 @@ namespace GCommon.Archiving.Entities
         {
             return _entries.OrderByDescending(x => x.ArchivedOn).FirstOrDefault();
         }
+        
+        public ArchiveLog GetLatestLog()
+        {
+            return _logs.OrderByDescending(x => x.ChangedOn).FirstOrDefault();
+        }
 
         public void Archive(byte[] data)
         {
@@ -60,7 +65,7 @@ namespace GCommon.Archiving.Entities
             if (comment == null) throw new ArgumentNullException(nameof(comment), "comment can not be null");
             if (userName == null) throw new ArgumentNullException(nameof(userName), "userName can not be null");
 
-            var log = new ArchiveLog(logId, ObjectId, changedOn, operation, comment, userName);
+            var log = new ArchiveLog(logId, this, changedOn, operation, comment, userName);
             _logs.Add(log);
         }
 

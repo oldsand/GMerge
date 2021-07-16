@@ -30,6 +30,6 @@ namespace GCommon.Archiving
         public DbSet<ArchiveObject> Objects { get; set; }
         public DbSet<ArchiveEntry> Entries { get; set; }
         public DbSet<ArchiveLog> Logs { get; set; }
-        public DbSet<EntryLog> EntryLogs { get; set; }
+        public DbSet<QueuedLog> Queue { get; set; }
     }
 }

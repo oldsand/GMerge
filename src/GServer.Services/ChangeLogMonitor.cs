@@ -1,9 +1,7 @@
 using System;
 using GServer.Archestra.Abstractions;
-using GCommon.Archiving.Entities;
 using GCommon.Core.Utilities;
 using GCommon.Data.Entities;
-using GServer.Services.Processors;
 using NLog;
 using TableDependency.SqlClient;
 using TableDependency.SqlClient.Base.Enums;
@@ -15,7 +13,7 @@ namespace GServer.Services
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private SqlTableDependency<ChangeLog> _changeLogDependency;
-        private readonly ChangeLogProcessor _changeLogProcessor;
+        private ArchivingPipeline _archivingPipeline;
         private const string ChangeLogTableName = "gobject_change_log";
 
         public ChangeLogMonitor(IGalaxyRepository galaxyRepository)
@@ -25,26 +23,26 @@ namespace GServer.Services
 
             var galaxyName = galaxyRepository.Name;
             
-            Logger.Trace("Initializing archive processors for '{Galaxy}'",galaxyName);
+            Logger.Trace("Initializing archive processors {Galaxy}",galaxyName);
             
             SetupServiceBroker(galaxyName);
             InitializeDependency(galaxyName);
+            InitializePipeline(galaxyRepository);
             
-            _changeLogProcessor = new ChangeLogProcessor(galaxyRepository);
         }
 
         private static void SetupServiceBroker(string databaseName)
         {
             if (!SqlServiceBroker.IsUnique(databaseName))
             {
-                Logger.Trace("Creating new Service Broker for galaxy database '{Database}'", databaseName);
+                Logger.Trace("Creating new Service Broker for galaxy database {Database}", databaseName);
                 SqlServiceBroker.New(databaseName);
                 return;
             }
 
             if (SqlServiceBroker.IsEnabled(databaseName)) return;
 
-            Logger.Trace("Enabling Service Broker for galaxy database '{Database}'", databaseName);
+            Logger.Trace("Enabling Service Broker for galaxy database {Database}", databaseName);
             SqlServiceBroker.Enable(databaseName);
         }
 
@@ -63,18 +61,23 @@ namespace GServer.Services
             Logger.Debug("Starting ChangeLog Table Dependency for '{Database}'", databaseName);
             _changeLogDependency.Start();
         }
+        
+        private void InitializePipeline(IGalaxyRepository galaxyRepository)
+        {
+            _archivingPipeline = new ArchivingPipeline(galaxyRepository);
+            _archivingPipeline.Start();
+        }
 
         private void OnChangeLogTableChanged(object sender, RecordChangedEventArgs<ChangeLog> e)
         {
             if (e.ChangeType != ChangeType.Insert) return;
             Logger.Trace("Change log event detected. Details: {@ChangeLog}", e.Entity);
-            _changeLogProcessor.Enqueue(e.Entity);
+            _archivingPipeline.Enqueue(e.Entity);
         }
 
         private void OnChangeLogTableError(object sender, ErrorEventArgs e)
         {
-            Logger.Error(e.Error);
-            Logger.Error(e.Message);
+            Logger.Error(e.Error, e.Message);
             _changeLogDependency.Stop();
             _changeLogDependency.Start();
         }

@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -26,7 +27,7 @@ namespace GCommon.Archiving.IntegrationTests
             var config = ArchiveConfiguration
                 .Default("TestArchive")
                 .OverrideConnectionString(_builder.ConnectionString);
-            
+
             var archiveBuilder = new ArchiveBuilder();
             archiveBuilder.Build(config);
         }
@@ -99,6 +100,21 @@ namespace GCommon.Archiving.IntegrationTests
             Assert.NotNull(entry);
             Assert.AreEqual("This is some data to convert to binary",
                 Encoding.UTF8.GetString(entry.CompressedData.Decompress()));
+        }
+        
+        [Test]
+        public void Get_ExistingObjectIdWithLogs_IncludesLogs()
+        {
+            Seed();
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
+
+            var result = repo.Objects.Get(411);
+
+            Assert.That(result.Logs, Has.Count.EqualTo(1));
+
+            var log = result.Logs.Single();
+            Assert.NotNull(log);
+            Assert.AreEqual(1, log.ChangeLogId);
         }
 
         [Test]
@@ -193,6 +209,44 @@ namespace GCommon.Archiving.IntegrationTests
             var data = Encoding.UTF8.GetString(entry.CompressedData.Decompress());
             Assert.AreEqual("This is a new entry test", data);
         }
+        
+        [Test]
+        public void Upsert_ExistingObjectAddLog_ReturnsExpectedLog()
+        {
+            Seed();
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
+            var archiveObject = new ArchiveObject(1, "Some Test Object", 2, Template.UserDefined);
+            archiveObject.AddLog(213, DateTime.Now, Operation.Rename, "Comment", Environment.UserName);
+
+            repo.Objects.Upsert(archiveObject);
+            repo.Save();
+
+            var target = repo.Objects.Get(1);
+
+            Assert.That(target.Logs, Has.Count.EqualTo(1));
+
+            var log = target.Logs.First();
+            Assert.NotNull(log);
+            Assert.AreEqual(213, log.ChangeLogId);
+        }
+        
+        [Test]
+        public void Upsert_ExistingObjectAddLog_AfterSaveTheInstanceRetainsState()
+        {
+            Seed();
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
+            var archiveObject = new ArchiveObject(1, "Some Test Object", 2, Template.UserDefined);
+            archiveObject.AddLog(213, DateTime.Now, Operation.Rename, "Comment", Environment.UserName);
+
+            repo.Objects.Upsert(archiveObject);
+            repo.Save();
+
+            Assert.That(archiveObject.Logs, Has.Count.EqualTo(1));
+
+            var log = archiveObject.Logs.First();
+            Assert.NotNull(log);
+            Assert.AreEqual(213, log.ChangeLogId);
+        }
 
         [Test]
         public void Upsert_ExistingObjectWithEntryAddEntry_ReturnsExpectedEntries()
@@ -212,6 +266,50 @@ namespace GCommon.Archiving.IntegrationTests
             var latest = target.GetLatestEntry();
             Assert.NotNull(latest);
             Assert.AreEqual("This is a new entry test", Encoding.UTF8.GetString(latest.CompressedData.Decompress()));
+        }
+
+        [Test]
+        public void Upsert_ExistingObjectWithLogAddLog_ReturnsExpectedEntries()
+        {
+            Seed();
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
+            var archiveObject = new ArchiveObject(411, "Upsert Tester", 123, Template.UserDefined);
+            archiveObject.AddLog(213, DateTime.Now, Operation.Rename, "Comment", Environment.UserName);
+
+            repo.Objects.Upsert(archiveObject);
+            repo.Save();
+
+            var target = repo.Objects.Get(411);
+
+            Assert.That(target.Logs, Has.Count.EqualTo(2));
+
+            var latest = target.GetLatestLog();
+            Assert.NotNull(latest);
+            Assert.AreEqual(213, latest.ChangeLogId);
+            Assert.AreEqual(Operation.Rename, latest.Operation);
+            Assert.AreEqual("Comment", latest.Comment);
+            Assert.AreEqual(Environment.UserName, latest.UserName);
+        }
+        
+        [Test]
+        public void Upsert_ExistingObjectWithLogAddLog_AfterSaveTheInstanceRetainsState()
+        {
+            Seed();
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
+            var archiveObject = new ArchiveObject(411, "Upsert Tester", 123, Template.UserDefined);
+            archiveObject.AddLog(213, DateTime.Now, Operation.Rename, "Comment", Environment.UserName);
+
+            repo.Objects.Upsert(archiveObject);
+            repo.Save();
+
+            Assert.That(archiveObject.Logs, Has.Count.EqualTo(1));
+
+            var log = archiveObject.GetLatestLog();
+            Assert.NotNull(log);
+            Assert.AreEqual(213, log.ChangeLogId);
+            Assert.AreEqual(Operation.Rename, log.Operation);
+            Assert.AreEqual("Comment", log.Comment);
+            Assert.AreEqual(Environment.UserName, log.UserName);
         }
 
         [Test]
@@ -273,9 +371,13 @@ namespace GCommon.Archiving.IntegrationTests
             context.Objects.Add(new ArchiveObject(3, "Tag3", 13, Template.Symbol));
             context.Objects.Add(new ArchiveObject(4, "Tag1", 2, Template.ViewEngine));
 
-            var archiveObject = new ArchiveObject(311, "TestObject", 2, Template.UserDefined);
-            archiveObject.Archive(Encoding.UTF8.GetBytes("This is some data to convert to binary"));
-            context.Objects.Add(archiveObject);
+            var aObjectWithEntry = new ArchiveObject(311, "TestObject", 2, Template.UserDefined);
+            aObjectWithEntry.Archive(Encoding.UTF8.GetBytes("This is some data to convert to binary"));
+            context.Objects.Add(aObjectWithEntry);
+
+            var aObjectWithLog = new ArchiveObject(411, "TestObject", 2, Template.UserDefined);
+            aObjectWithLog.AddLog(1, DateTime.Now, Operation.Rename, "Comment", Environment.UserName);
+            context.Objects.Add(aObjectWithLog);
 
             context.SaveChanges();
         }

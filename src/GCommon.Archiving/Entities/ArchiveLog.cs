@@ -9,6 +9,18 @@ namespace GCommon.Archiving.Entities
         {
         }
         
+        public ArchiveLog(int changeLogId, ArchiveObject archiveObject, DateTime changedOn, Operation operation, string comment, string userName)
+        {
+            ChangeLogId = changeLogId;
+            ObjectId = archiveObject.ObjectId;
+            ArchiveObject = archiveObject;
+            ChangedOn = changedOn;
+            Operation = operation;
+            Comment = comment;
+            UserName = userName;
+            State = ArchiveState.New;
+        }
+        
         public ArchiveLog(int changeLogId, int objectId, DateTime changedOn, Operation operation, string comment, string userName)
         {
             ChangeLogId = changeLogId;

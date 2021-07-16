@@ -10,6 +10,7 @@ namespace GCommon.Archiving.Abstractions
         ArchiveLog Get(int changeLogId);
         IEnumerable<ArchiveLog> GetAll();
         IEnumerable<ArchiveLog> Find(Expression<Func<ArchiveLog, bool>> predicate);
+        void Add(ArchiveLog log);
         void Update(ArchiveLog log);
     }
 }

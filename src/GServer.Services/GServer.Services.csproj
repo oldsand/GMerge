@@ -46,18 +46,17 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Abstractions\ConcurrentQueueProcessor.cs" />
         <Compile Include="Abstractions\IGalaxyArchiver.cs" />
-        <Compile Include="Abstractions\IConcurrentQueueProcessor.cs" />
         <Compile Include="Abstractions\IGalaxyRegistry.cs" />
+        <Compile Include="Abstractions\IPipelineProcessor.cs" />
+        <Compile Include="Abstractions\PipelineProcessor.cs" />
         <Compile Include="ArchiveManager.cs" />
+        <Compile Include="ArchivingPipeline.cs" />
         <Compile Include="GalaxyArchiver.cs" />
         <Compile Include="GalaxyManager.cs" />
         <Compile Include="ChangeLogMonitor.cs" />
         <Compile Include="GalaxyRegistry.cs" />
         <Compile Include="DataMapper.cs" />
-        <Compile Include="Processors\ArchiveLogProcessor.cs" />
-        <Compile Include="Processors\ChangeLogProcessor.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
     <ItemGroup>
@@ -92,6 +91,7 @@
       <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
       <PackageReference Include="System.Data.Common" Version="4.3.0" />
       <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+      <PackageReference Include="System.Threading.Tasks.Dataflow" Version="5.0.0" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
