@@ -54,6 +54,7 @@
         <Compile Include="GalaxyFactoryTests.cs" />
         <Compile Include="GalaxyFinderTests.cs" />
         <Compile Include="GalaxyRepositoryTests.cs" />
+        <Compile Include="Global.cs" />
         <Compile Include="MxValueExtensionsIntegrationTests.cs" />
         <Compile Include="MxValueExtensionsUnitTest.cs" />
         <Compile Include="CreateObjectTests.cs" />
@@ -79,10 +80,6 @@
       <ProjectReference Include="..\..\src\GCommon.Core\GCommon.Core.csproj">
         <Project>{dd496472-fb15-4ffc-86ca-2ac8f0e6cf3c}</Project>
         <Name>GCommon.Core</Name>
-      </ProjectReference>
-      <ProjectReference Include="..\GTest.Core\GTest.Core.csproj">
-        <Project>{ee1518f0-850e-479c-a01d-92329776f2ad}</Project>
-        <Name>GTest.Core</Name>
       </ProjectReference>
     </ItemGroup>
     <ItemGroup>

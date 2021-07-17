@@ -33,12 +33,29 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
+        <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc">
+          <HintPath>..\packages\Castle.Core.4.4.0\lib\net45\Castle.Core.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="Moq, Version=4.16.0.0, Culture=neutral, PublicKeyToken=69f491c39445e920">
+          <HintPath>..\packages\Moq.4.16.1\lib\net45\Moq.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
         <Reference Include="mscorlib" />
         <Reference Include="System" />
+        <Reference Include="System.Configuration" />
         <Reference Include="System.Core" />
         <Reference Include="System.Data" />
+        <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+          <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
         <Reference Include="System.Threading.Tasks.Dataflow, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
           <HintPath>..\packages\System.Threading.Tasks.Dataflow.5.0.0\lib\net461\System.Threading.Tasks.Dataflow.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
+        <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
+          <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
           <Private>True</Private>
         </Reference>
         <Reference Include="System.Xml" />
@@ -47,16 +64,36 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="DataFlowTests.cs" />
+        <Compile Include="ArchivingPipelineTests.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
     <ItemGroup>
       <None Include="packages.config" />
     </ItemGroup>
     <ItemGroup>
+      <ProjectReference Include="..\GCommon.Archiving\GCommon.Archiving.csproj">
+        <Project>{15034b13-2af5-405f-8408-8015bee53ed3}</Project>
+        <Name>GCommon.Archiving</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\GCommon.Contracts\GCommon.Contracts.csproj">
+        <Project>{b72fb577-363e-493f-b9c7-66b6dd8720ae}</Project>
+        <Name>GCommon.Contracts</Name>
+      </ProjectReference>
       <ProjectReference Include="..\GCommon.Core\GCommon.Core.csproj">
         <Project>{dd496472-fb15-4ffc-86ca-2ac8f0e6cf3c}</Project>
         <Name>GCommon.Core</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\GCommon.Data\GCommon.Data.csproj">
+        <Project>{1116a38e-aa67-46e3-9d09-e2de5c2a694e}</Project>
+        <Name>GCommon.Data</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\GCommon.Primitives\GCommon.Primitives.csproj">
+        <Project>{446fe87c-5122-4344-9df9-9f641e81a476}</Project>
+        <Name>GCommon.Primitives</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\GServer.Archestra\GServer.Archestra.csproj">
+        <Project>{32ea2985-26c5-44b5-b8c1-46c8d4da0979}</Project>
+        <Name>GServer.Archestra</Name>
       </ProjectReference>
       <ProjectReference Include="..\GServer.Services\GServer.Services.csproj">
         <Project>{0a10ea2f-bb40-4da4-b4b0-9efc58a58725}</Project>

@@ -18,11 +18,13 @@ using GServer.Archestra.Options;
 using NLog;
 
 [assembly: InternalsVisibleTo("GServer.Archestra.IntegrationTests")]
+
 namespace GServer.Archestra
 {
     public class GalaxyRepository : IGalaxyRepository
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         // ReSharper disable PrivateFieldCanBeConvertedToLocalVariable because this has to be in memory for operations to work (according to documentation)
         private readonly GRAccessAppClass _grAccessApp;
         private readonly GraphicAccess _graphicAccess;
@@ -33,7 +35,7 @@ namespace GServer.Archestra
             _grAccessApp = new GRAccessAppClass();
             _graphicAccess = new GraphicAccess();
             _galaxy = _grAccessApp.QueryGalaxies(Environment.MachineName)[galaxyName];
-            
+
             var result = _grAccessApp.CommandResult;
             if (!result.Successful || _galaxy == null)
                 throw new GalaxyException(
@@ -64,7 +66,7 @@ namespace GServer.Archestra
         public void Login(string userName)
         {
             Logger.Trace("Logging into galaxy {Galaxy} with user name {User}", Name, userName);
-            
+
             _galaxy.SecureLogin(userName);
 
             Connected = true;
@@ -83,10 +85,10 @@ namespace GServer.Archestra
         public void Logout()
         {
             Logger.Trace("User {User} logging out of galaxy {Galaxy}", ConnectedUser, Name);
-            
+
             _galaxy.Logout();
             _galaxy.CommandResult.Process();
-            
+
             Connected = false;
             ConnectedUser = string.Empty;
         }
@@ -94,26 +96,39 @@ namespace GServer.Archestra
         public bool UserIsAuthorized(string userName)
         {
             Logger.Trace("Authorizing {User} against {Galaxy} current security settings", ConnectedUser, Name);
-            
+
             _galaxy.SynchronizeClient();
             var security = _galaxy.GetReadOnlySecurity();
             _galaxy.CommandResult.Process();
-            
+
             foreach (IGalaxyUser user in security.UsersAvailable)
                 if (user.UserName == userName)
                     return true;
-            
+
             return false;
         }
 
-        public GalaxyObject GetObject(string tagName)
+        public void Delete()
+        {
+            if (_galaxy == null) throw new InvalidOperationException("Galaxy not initialized");
+            
+            _grAccessApp.DeleteGalaxy(_galaxy.Name);
+            
+            if (_grAccessApp.CommandResult.Successful) return;
+
+            throw new InvalidOperationException($"Failed to delete galaxy {_galaxy.Name}. " +
+                                                $"{_grAccessApp.CommandResult.ID}. " +
+                                                $"{_grAccessApp.CommandResult.CustomMessage}");
+        }
+
+        public ArchestraObject GetObject(string tagName)
         {
             _galaxy.SynchronizeClient();
             var gObject = _galaxy.GetObjectByName(tagName);
             return gObject?.Map();
         }
 
-        public IEnumerable<GalaxyObject> GetObjects(IEnumerable<string> tagNames)
+        public IEnumerable<ArchestraObject> GetObjects(IEnumerable<string> tagNames)
         {
             _galaxy.SynchronizeClient();
             var objects = _galaxy.GetObjectsByName(tagNames);
@@ -121,43 +136,43 @@ namespace GServer.Archestra
                 yield return gObject.Map();
         }
 
-        public GalaxySymbol GetSymbol(string tagName)
+        public ArchestraGraphic GetGraphic(string tagName)
         {
             _galaxy.SynchronizeClient();
             using var tempDirectory = new TempDirectory(ApplicationPath.TempSymbolSubPath);
             var fileName = Path.Combine(tempDirectory.FullName, $@"{tagName}.xml");
-            
-            ExportSymbol(tagName, fileName);
+
+            ExportGraphic(tagName, fileName);
             var symbol = XElement.Load(fileName);
-            
-            return new GalaxySymbol(tagName).FromXml(symbol);
+
+            return new ArchestraGraphic(tagName).FromXml(symbol);
         }
 
-        public IEnumerable<GalaxySymbol> GetSymbols(IEnumerable<string> tagNames)
+        public IEnumerable<ArchestraGraphic> GetGraphics(IEnumerable<string> tagNames)
         {
-            return tagNames.Select(GetSymbol);
+            return tagNames.Select(GetGraphic);
         }
 
-        public void CreateObject(GalaxyObject galaxyObject)
+        public void CreateObject(ArchestraObject archestraObject)
         {
             _galaxy.SynchronizeClient();
-            var repositoryObject = _galaxy.CreateObject(galaxyObject.TagName, galaxyObject.DerivedFromName);
-            
+            var repositoryObject = _galaxy.CreateObject(archestraObject.TagName, archestraObject.DerivedFromName);
+
             try
             {
                 repositoryObject.CheckOut();
-                
-                repositoryObject.SetUserDefinedAttributes(galaxyObject);
-                repositoryObject.SetFieldAttributes(galaxyObject);
+
+                repositoryObject.SetUserDefinedAttributes(archestraObject);
+                repositoryObject.SetFieldAttributes(archestraObject);
                 repositoryObject.Save();
-                
-                repositoryObject.ConfigureAttributes(galaxyObject);
+
+                repositoryObject.ConfigureAttributes(archestraObject);
                 repositoryObject.Save();
-                
-                repositoryObject.ConfigureExtensions(galaxyObject);
+
+                repositoryObject.ConfigureExtensions(archestraObject);
                 repositoryObject.Save();
-                
-                repositoryObject.CheckIn($"Galaxy Merge Service Created Object '{galaxyObject.TagName}'");
+
+                repositoryObject.CheckIn($"Galaxy Merge Service Created Object '{archestraObject.TagName}'");
             }
             catch (Exception)
             {
@@ -167,45 +182,45 @@ namespace GServer.Archestra
             }
         }
 
-        public void CreateObjects(IEnumerable<GalaxyObject> galaxyObjects)
+        public void CreateObjects(IEnumerable<ArchestraObject> galaxyObjects)
         {
             foreach (var galaxyObject in galaxyObjects)
                 CreateObject(galaxyObject);
         }
 
-        public void CreateSymbol(GalaxySymbol galaxySymbol)
+        public void CreateGraphic(ArchestraGraphic archestraGraphic)
         {
             _galaxy.SynchronizeClient();
-            
-            var symbol = galaxySymbol.ToXml();
-            var doc = new XDocument(new XDeclaration("1.0", "utf-8", "yes"), symbol);
+
+            var graphic = archestraGraphic.ToXml();
+            var doc = new XDocument(new XDeclaration("1.0", "utf-8", "yes"), graphic);
             SchemaValidator.ValidateSymbol(doc);
 
             using var tempDirectory = new TempDirectory(ApplicationPath.TempSymbolSubPath);
-            var fileName = Path.Combine(tempDirectory.FullName, $"{galaxySymbol.TagName}.xml");
+            var fileName = Path.Combine(tempDirectory.FullName, $"{archestraGraphic.TagName}.xml");
             doc.Save(fileName);
-            
-            ImportSymbol(fileName, galaxySymbol.TagName, false);
-            
+
+            ImportGraphic(fileName, archestraGraphic.TagName, false);
+
             //TODO: Can we then set the folder container or no?
         }
 
-        public void CreateSymbols(IEnumerable<GalaxySymbol> galaxySymbols)
+        public void CreateSymbols(IEnumerable<ArchestraGraphic> galaxySymbols)
         {
             foreach (var symbol in galaxySymbols)
-                CreateSymbol(symbol);
+                CreateGraphic(symbol);
         }
 
         public void DeleteObject(string tagName, bool recursive)
         {
             _galaxy.SynchronizeClient();
-            
+
             if (recursive)
             {
                 _galaxy.DeepDelete(tagName);
                 return;
             }
-            
+
             var gObject = _galaxy.GetObjectByName(tagName);
             gObject?.Delete();
         }
@@ -213,35 +228,35 @@ namespace GServer.Archestra
         public void DeleteObjects(IEnumerable<string> tagNames, bool recursive)
         {
             var objects = _galaxy.GetTemplatesByName(tagNames);
-            
+
             foreach (IgObject gObject in objects)
                 DeleteObject(gObject.Tagname, recursive);
-            
+
             objects.CommandResults.Process();
         }
 
-        public void UpdateObject(GalaxyObject galaxyObject)
+        public void UpdateObject(ArchestraObject archestraObject)
         {
             _galaxy.SynchronizeClient();
-            
-            var repositoryObject = _galaxy.GetObjectByName(galaxyObject.TagName);
+
+            var repositoryObject = _galaxy.GetObjectByName(archestraObject.TagName);
             var original = repositoryObject.Map();
-            
+
             try
             {
                 repositoryObject.CheckOut();
-                
-                repositoryObject.SetUserDefinedAttributes(galaxyObject);
-                repositoryObject.SetFieldAttributes(galaxyObject);
+
+                repositoryObject.SetUserDefinedAttributes(archestraObject);
+                repositoryObject.SetFieldAttributes(archestraObject);
                 repositoryObject.Save();
-                
-                repositoryObject.ConfigureAttributes(galaxyObject);
+
+                repositoryObject.ConfigureAttributes(archestraObject);
                 repositoryObject.Save();
-                
-                repositoryObject.ConfigureExtensions(galaxyObject);
+
+                repositoryObject.ConfigureExtensions(archestraObject);
                 repositoryObject.Save();
-                
-                repositoryObject.CheckIn($"Galaxy Merge Service Created Object '{galaxyObject.TagName}'");
+
+                repositoryObject.CheckIn($"Galaxy Merge Service Created Object '{archestraObject.TagName}'");
             }
             catch (Exception)
             {
@@ -252,7 +267,7 @@ namespace GServer.Archestra
             }
         }
 
-        public void UpdateSymbol(GalaxySymbol galaxySymbol)
+        public void UpdateSymbol(ArchestraGraphic archestraGraphic)
         {
             throw new NotImplementedException();
         }
@@ -260,7 +275,7 @@ namespace GServer.Archestra
         public void Deploy(IEnumerable<string> tagNames, DeploymentOptions options)
         {
             if (options == null) throw new ArgumentException("Value cannot be null");
-            
+
             _galaxy.SynchronizeClient();
 
             var deployedOption = options.DeployedOption.ToMxType();
@@ -291,7 +306,7 @@ namespace GServer.Archestra
         public void ExportPkg(string tagName, string fileName)
         {
             _galaxy.SynchronizeClient();
-            
+
             var collection = _galaxy.CreategObjectCollection();
             var item = _galaxy.GetObjectByName(tagName);
             collection.Add(item);
@@ -303,7 +318,7 @@ namespace GServer.Archestra
         public void ExportPkg(IEnumerable<string> tagNames, string fileName)
         {
             _galaxy.SynchronizeClient();
-            
+
             var collection = _galaxy.GetObjectsByName(tagNames);
             collection.ExportObjects(EExportType.exportAsPDF, fileName);
             collection.CommandResults.Process();
@@ -312,7 +327,7 @@ namespace GServer.Archestra
         public void ExportCsv(string tagName, string fileName)
         {
             _galaxy.SynchronizeClient();
-            
+
             var collection = _galaxy.CreategObjectCollection();
             var item = _galaxy.GetObjectByName(tagName);
             collection.Add(item);
@@ -324,24 +339,24 @@ namespace GServer.Archestra
         public void ExportCsv(IEnumerable<string> tagNames, string fileName)
         {
             _galaxy.SynchronizeClient();
-            
+
             var collection = _galaxy.GetObjectsByName(tagNames);
             collection.ExportObjects(EExportType.exportAsCSV, fileName);
             collection.CommandResults.Process();
         }
 
-        public void ExportSymbol(string tagName, string fileName)
+        public void ExportGraphic(string tagName, string fileName)
         {
             _galaxy.SynchronizeClient();
-            
+
             var result = _graphicAccess.ExportGraphicToXml(_galaxy, tagName, fileName);
             result.Process();
         }
 
-        public void ExportSymbol(IEnumerable<string> tagNames, string destination)
+        public void ExportGraphic(IEnumerable<string> tagNames, string destination)
         {
             _galaxy.SynchronizeClient();
-            
+
             foreach (var tagName in tagNames)
             {
                 var fileName = Path.Combine(destination, $"{tagName}.xml");
@@ -353,7 +368,7 @@ namespace GServer.Archestra
         public void ImportPkg(string fileName, bool overwrite)
         {
             _galaxy.SynchronizeClient();
-            
+
             _galaxy.ImportObjects(fileName, overwrite);
             _galaxy.CommandResults.Process();
         }
@@ -361,15 +376,15 @@ namespace GServer.Archestra
         public void ImportCsv(string fileName)
         {
             _galaxy.SynchronizeClient();
-            
+
             _galaxy.GRLoad(fileName, GRLoadMode.GRLoadModeUpdate);
             _galaxy.CommandResults.Process();
         }
 
-        public void ImportSymbol(string fileName, string tagName, bool overwrite)
+        public void ImportGraphic(string fileName, string tagName, bool overwrite)
         {
             _galaxy.SynchronizeClient();
-            
+
             var result = _graphicAccess.ImportGraphicFromXml(_galaxy, tagName, fileName, overwrite);
             result.Process();
         }

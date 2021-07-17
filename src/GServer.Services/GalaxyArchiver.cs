@@ -37,7 +37,7 @@ namespace GServer.Services
         private byte[] GetArchiveData(ArchiveObject archiveObject)
         {
             return archiveObject.Template == Template.Symbol
-                ? _galaxyRepository.GetSymbol(archiveObject.TagName).ToXml().ToByteArray()
+                ? _galaxyRepository.GetGraphic(archiveObject.TagName).ToXml().ToByteArray()
                 : _galaxyRepository.GetObject(archiveObject.TagName).ToXml().ToByteArray();
         }
     }

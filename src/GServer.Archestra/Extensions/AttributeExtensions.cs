@@ -90,9 +90,9 @@ namespace GServer.Archestra.Extensions
             attribute.SetValue(mxValue);
         }
 
-        public static GalaxyAttribute AsGalaxyAttribute(this IAttribute attribute)
+        public static ArchestraAttribute AsGalaxyAttribute(this IAttribute attribute)
         {
-            return new GalaxyAttribute
+            return new ArchestraAttribute
             {
                 Name = attribute.Name,
                 DataType = attribute.DataType.ToPrimitiveType(),
@@ -104,20 +104,20 @@ namespace GServer.Archestra.Extensions
             };
         }
 
-        public static IEnumerable<GalaxyAttribute> AsGalaxyAttributes(this IAttributes attributes)
+        public static IEnumerable<ArchestraAttribute> AsGalaxyAttributes(this IAttributes attributes)
         {
             foreach (IAttribute attribute in attributes)
                 yield return attribute.AsGalaxyAttribute();
         }
         
-        public static IEnumerable<GalaxyAttribute> ByDataType(this IAttributes attributes, DataType dataType)
+        public static IEnumerable<ArchestraAttribute> ByDataType(this IAttributes attributes, DataType dataType)
         {
             foreach (IAttribute attribute in attributes)
                 if (attribute.DataType == dataType.ToMxType())
                     yield return attribute.AsGalaxyAttribute();
         }
         
-        public static IEnumerable<GalaxyAttribute> ByNameContains(this IAttributes attributes, string name)
+        public static IEnumerable<ArchestraAttribute> ByNameContains(this IAttributes attributes, string name)
         {
             foreach (IAttribute attribute in attributes)
                 if (attribute.Name.Contains(name))

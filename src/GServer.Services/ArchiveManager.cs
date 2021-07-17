@@ -133,7 +133,7 @@ namespace GServer.Services
         private static GalaxyObjectData MaterializeObject(ArchiveEntry latest)
         {
             var xml = XElement.Load(new MemoryStream(latest.CompressedData.Decompress()));
-            var galaxyObject = new GalaxyObject().FromXml(xml);
+            var galaxyObject = new ArchestraObject().FromXml(xml);
             return DataMapper.Map(galaxyObject);
         }
 
@@ -141,7 +141,7 @@ namespace GServer.Services
         private static GalaxySymbolData MaterializeSymbol(ArchiveEntry latest)
         {
             var xml = XElement.Load(new MemoryStream(latest.CompressedData.Decompress()));
-            var galaxyObject = new GalaxySymbol("").FromXml(xml);
+            var galaxyObject = new ArchestraGraphic("").FromXml(xml);
             return DataMapper.Map(galaxyObject);
         }
 

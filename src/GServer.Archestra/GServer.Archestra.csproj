@@ -54,13 +54,14 @@
         <Reference Include="System.Xml.Linq" />
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Abstractions\IGalaxyCreator.cs" />
         <Compile Include="Abstractions\IGalaxyRepositoryFactory.cs" />
         <Compile Include="Abstractions\IGalaxyFinder.cs" />
         <Compile Include="Abstractions\IGalaxyRepository.cs" />
         <Compile Include="Entities\CustomProperty.cs" />
-        <Compile Include="Entities\GalaxyAttribute.cs" />
-        <Compile Include="Entities\GalaxyObject.cs" />
-        <Compile Include="Entities\GalaxySymbol.cs" />
+        <Compile Include="Entities\ArchestraAttribute.cs" />
+        <Compile Include="Entities\ArchestraObject.cs" />
+        <Compile Include="Entities\ArchestraGraphic.cs" />
         <Compile Include="Entities\NamedScript.cs" />
         <Compile Include="Entities\PredefinedScript.cs" />
         <Compile Include="Entities\WizardAssociation.cs" />

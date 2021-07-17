@@ -7,7 +7,7 @@ using GCommon.Primitives;
 
 namespace GServer.Archestra.Entities
 {
-    public class GalaxyObject : IXmlConvertible<GalaxyObject>
+    public class ArchestraObject : IXmlConvertible<ArchestraObject>
     {
         public string TagName { get; set; }
         public string ContainedName { get; set; }
@@ -19,9 +19,9 @@ namespace GServer.Archestra.Entities
         public string HostName { get; set; }
         public string AreaName { get; set; }
         public string ContainerName { get; set; }
-        public IEnumerable<GalaxyAttribute> Attributes { get; set; }
+        public IEnumerable<ArchestraAttribute> Attributes { get; set; }
 
-        public GalaxyObject FromXml(XElement element)
+        public ArchestraObject FromXml(XElement element)
         {
             TagName = element.Attribute(nameof(TagName))?.Value;
             HierarchicalName = element.Attribute(nameof(HierarchicalName))?.Value;
@@ -33,7 +33,7 @@ namespace GServer.Archestra.Entities
             HostName = element.Attribute(nameof(HostName))?.Value;
             AreaName = element.Attribute(nameof(AreaName))?.Value;
             ContainerName = element.Attribute(nameof(ContainerName))?.Value;
-            Attributes = element.Descendants("Attribute").Select(a => new GalaxyAttribute().FromXml(a)).ToList();
+            Attributes = element.Descendants("Attribute").Select(a => new ArchestraAttribute().FromXml(a)).ToList();
             return this;
         }
 

@@ -17,7 +17,7 @@ namespace GCommon.Data.Entities
         public string TagName { get;  private set; }
         public short CategoryId { get;  private set; }
         public string Codebase { get;  private set; }
-        public IEnumerable<GObject> Derivations { get; private set; }
+        public IEnumerable<GalaxyObject> Derivations { get; private set; }
         public IEnumerable<PrimitiveDefinition> PrimitiveDefinitions { get; private set; }
     }
 }

@@ -12,7 +12,7 @@ namespace GClient.Converters
     {
         public override object Convert(object values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (values is not GObject gObject) return null;
+            if (values is not GalaxyObject gObject) return null;
 
             if (gObject.TemplateDefinition == null)
                 throw new InvalidOperationException("GObject Template Definition cannot be null");

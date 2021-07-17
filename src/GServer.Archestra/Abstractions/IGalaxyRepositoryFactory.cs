@@ -9,5 +9,6 @@ namespace GServer.Archestra.Abstractions
         IGalaxyRepository Create(string galaxyName);
         Task<IGalaxyRepository> CreateAsync(string galaxyName, CancellationToken token);
         IEnumerable<IGalaxyRepository> CreateAll();
+        IGalaxyRepository New(string galaxyName);
     }
 }

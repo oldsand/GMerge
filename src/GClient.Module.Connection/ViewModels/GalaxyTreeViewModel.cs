@@ -24,7 +24,7 @@ namespace GClient.Module.Connection.ViewModels
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
         private ResourceEntryWrapper _resourceEntry;
         private string _connectionString;
-        private DelegateCommand<GObject> _openObjectViewCommand;
+        private DelegateCommand<GalaxyObject> _openObjectViewCommand;
 
         public GalaxyTreeViewModel()
         {
@@ -33,25 +33,25 @@ namespace GClient.Module.Connection.ViewModels
         public GalaxyTreeViewModel(IGalaxyDataProviderFactory galaxyDataProviderFactory,
             IDialogService dialogService)
         {
-            Derivations = new ObservableCollection<GObject>();
+            Derivations = new ObservableCollection<GalaxyObject>();
             _galaxyDataProviderFactory = galaxyDataProviderFactory;
             _dialogService = dialogService;
         }
 
-        public ObservableCollection<GObject> Derivations { get; }
+        public ObservableCollection<GalaxyObject> Derivations { get; }
 
-        public DelegateCommand<GObject> OpenObjectViewCommand =>
+        public DelegateCommand<GalaxyObject> OpenObjectViewCommand =>
             _openObjectViewCommand ??=
-                new DelegateCommand<GObject>(ExecuteOpenObjectViewCommand, CanExecuteOpenObjectViewCommand);
+                new DelegateCommand<GalaxyObject>(ExecuteOpenObjectViewCommand, CanExecuteOpenObjectViewCommand);
 
-        private void ExecuteOpenObjectViewCommand(GObject gObject)
+        private void ExecuteOpenObjectViewCommand(GalaxyObject galaxyObject)
         {
-            Logger.Trace("Opening GalaxyObject Vie for object '{ObjectName}'", gObject.TagName);
-            var parameters = new NavigationParameters {{"object", gObject}};
+            Logger.Trace("Opening GalaxyObject Vie for object '{ObjectName}'", galaxyObject.TagName);
+            var parameters = new NavigationParameters {{"object", galaxyObject}};
             RegionManager.RequestNavigate(RegionName.ContentRegion, ScopedNames.GalaxyObjectView, parameters);
         }
 
-        private bool CanExecuteOpenObjectViewCommand(GObject gObject)
+        private bool CanExecuteOpenObjectViewCommand(GalaxyObject galaxyObject)
         {
             return true;
         }

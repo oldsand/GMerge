@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using ArchestrA.GRAccess;
 using GServer.Archestra.Extensions;
-using GTest.Core;
 using NUnit.Framework;
 
 namespace GServer.Archestra.IntegrationTests
@@ -17,7 +16,7 @@ namespace GServer.Archestra.IntegrationTests
         public void Setup()
         {
             var grAccess = new GRAccessAppClass();
-            _galaxy = grAccess.QueryGalaxies(Environment.MachineName)[Settings.CurrentTestGalaxy];
+            _galaxy = grAccess.QueryGalaxies(Environment.MachineName)[Global.GalaxyName];
             _galaxy.Login(string.Empty, string.Empty);
         }
 
@@ -294,7 +293,7 @@ namespace GServer.Archestra.IntegrationTests
         [Test]
         public void IsDerivedFrom_ObjectDerivedFromTemplate_ReturnsTrue()
         {
-            var result = _galaxy.ObjectIsDescendentOf("$Test_Template", "$UserDefined");
+            var result = _galaxy.IsDescendentOf("$Test_Template", "$UserDefined");
             Assert.True(result);
         }
         

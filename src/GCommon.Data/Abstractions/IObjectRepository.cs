@@ -5,15 +5,15 @@ using GCommon.Data.Entities;
 
 namespace GCommon.Data.Abstractions
 {
-    public interface IObjectRepository : IReadOnlyRepository<GObject>
+    public interface IObjectRepository : IReadOnlyRepository<GalaxyObject>
     {
-        GObject Find(int id);
-        IEnumerable<GObject> Find(string tagName);
+        GalaxyObject Find(int id);
+        IEnumerable<GalaxyObject> Find(string tagName);
         string GetTagName(int objectId);
         int GetObjectId(string tagName);
-        GObject FindIncludeTemplate(int objectId);
-        GObject FindIncludeDescendants(string tagName);
-        GObject FindIncludeFolder(string tagName);
-        Task<IEnumerable<GObject>> GetDerivationHierarchy();
+        GalaxyObject FindIncludeTemplate(int objectId);
+        GalaxyObject FindIncludeDescendants(string tagName);
+        GalaxyObject FindIncludeFolder(string tagName);
+        Task<IEnumerable<GalaxyObject>> GetDerivationHierarchy();
     }
 }

@@ -25,6 +25,6 @@ namespace GCommon.Data.Entities
         public Folder ParentFolder { get; set; }
         public IEnumerable<Folder> Folders { get; private set; }
         internal IEnumerable<FolderObjectLink> FolderObjectLinks { get; private set; }
-        public IEnumerable<GObject> Objects => FolderObjectLinks.Select(x => x.GObject);
+        public IEnumerable<GalaxyObject> Objects => FolderObjectLinks.Select(x => x.GalaxyObject);
     }
 }

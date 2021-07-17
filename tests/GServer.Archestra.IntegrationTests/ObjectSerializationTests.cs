@@ -1,6 +1,4 @@
 using GServer.Archestra.Entities;
-using GTest.Core;
-using GServer.Archestra;
 using NUnit.Framework;
 
 namespace GServer.Archestra.IntegrationTests
@@ -13,15 +11,15 @@ namespace GServer.Archestra.IntegrationTests
         [SetUp]
         public void Setup()
         {
-            _galaxy = new GalaxyRepository(Settings.CurrentTestGalaxy);
-            _galaxy.Login(Settings.CurrentTestUser);
+            _galaxy = new GalaxyRepository(Global.GalaxyName);
+            _galaxy.Login(Global.UserName);
         }
         
         [Test]
         [TestCase("$Test_Template")]
         public void ToXml_WhenCalled_ReturnsNotNull(string tagName)
         {
-            var template = (GalaxyObject) _galaxy.GetObject(tagName);
+            var template = (ArchestraObject) _galaxy.GetObject(tagName);
 
             var serialized = template.ToXml();
             
@@ -32,10 +30,10 @@ namespace GServer.Archestra.IntegrationTests
         [TestCase("$Test_Template")]
         public void ToXmlFromXml_SameData_ReturnsObjectWithSameProperties(string tagName)
         {
-            var template = (GalaxyObject) _galaxy.GetObject(tagName);
+            var template = (ArchestraObject) _galaxy.GetObject(tagName);
 
             var xml = template.ToXml();
-            var galaxyObject = new GalaxyObject().FromXml(xml);
+            var galaxyObject = new ArchestraObject().FromXml(xml);
             
             Assert.AreEqual(template.TagName, galaxyObject.TagName);
         }

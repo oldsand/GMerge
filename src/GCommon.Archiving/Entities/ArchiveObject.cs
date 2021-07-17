@@ -62,8 +62,6 @@ namespace GCommon.Archiving.Entities
         {
             if (changedOn == null) throw new ArgumentNullException(nameof(changedOn), "changedOn can not be null");
             if (operation == null) throw new ArgumentNullException(nameof(operation), "operation can not be null");
-            if (comment == null) throw new ArgumentNullException(nameof(comment), "comment can not be null");
-            if (userName == null) throw new ArgumentNullException(nameof(userName), "userName can not be null");
 
             var log = new ArchiveLog(logId, this, changedOn, operation, comment, userName);
             _logs.Add(log);

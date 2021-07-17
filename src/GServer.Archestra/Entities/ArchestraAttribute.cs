@@ -9,7 +9,7 @@ using GCommon.Primitives.Base;
 
 namespace GServer.Archestra.Entities
 {
-    public class GalaxyAttribute : IXmlConvertible<GalaxyAttribute>
+    public class ArchestraAttribute : IXmlConvertible<ArchestraAttribute>
     {
         public string Name { get; set; }
         public DataType DataType { get; set; }
@@ -19,7 +19,7 @@ namespace GServer.Archestra.Entities
         public object Value { get; set; }
         public int ArrayCount { get; set; }
 
-        public GalaxyAttribute FromXml(XElement element)
+        public ArchestraAttribute FromXml(XElement element)
         {
             Name = element.Attribute(nameof(Name))?.Value;
             DataType = Enumeration.FromName<DataType>(element.Attribute(nameof(DataType))?.Value);

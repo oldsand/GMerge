@@ -1,5 +1,4 @@
 using System.Linq;
-using GTest.Core;
 using NUnit.Framework;
 
 namespace GServer.Archestra.IntegrationTests
@@ -12,8 +11,8 @@ namespace GServer.Archestra.IntegrationTests
         [SetUp]
         public void Setup()
         {
-            _galaxy = new GalaxyRepository(Settings.CurrentTestGalaxy);
-            _galaxy.Login(Settings.CurrentTestUser);
+            _galaxy = new GalaxyRepository(Global.GalaxyName);
+            _galaxy.Login(Global.UserName);
         }
         
         [Test]

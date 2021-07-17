@@ -18,8 +18,6 @@ namespace GCommon.Archiving.Configurations
             builder.Property(x => x.Operation)
                 .HasConversion(x => x.Name, x => Enumeration.FromName<Operation>(x))
                 .IsRequired();
-            builder.Property(x => x.Comment).IsRequired();
-            builder.Property(x => x.UserName).IsRequired();
             builder.Property(x => x.State)
                 .HasConversion(x => x.Name, x => Enumeration.FromName<ArchiveState>(x))
                 .IsRequired();

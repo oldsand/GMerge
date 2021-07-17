@@ -54,7 +54,7 @@ namespace GServer.Services
             ValidateInitialization();
             
             var tagName = _galaxyDataProvider.Objects.GetTagName(objectId);
-            var galaxySymbol = _galaxyRepository.GetSymbol(tagName);
+            var galaxySymbol = _galaxyRepository.GetGraphic(tagName);
             return DataMapper.Map(galaxySymbol);
         }
 
@@ -62,7 +62,7 @@ namespace GServer.Services
         {
             ValidateInitialization();
             
-            var galaxySymbol = _galaxyRepository.GetSymbol(tagName);
+            var galaxySymbol = _galaxyRepository.GetGraphic(tagName);
             return DataMapper.Map(galaxySymbol);
         }
 

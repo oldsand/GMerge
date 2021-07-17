@@ -1,6 +1,4 @@
 using GServer.Archestra.Entities;
-using GTest.Core;
-using GServer.Archestra;
 using NUnit.Framework;
 
 namespace GServer.Archestra.IntegrationTests
@@ -13,20 +11,20 @@ namespace GServer.Archestra.IntegrationTests
         [SetUp]
         public void Setup()
         {
-            _galaxy = new GalaxyRepository(Settings.CurrentTestGalaxy);
-            _galaxy.Login(Settings.CurrentTestUser);
+            _galaxy = new GalaxyRepository(Global.GalaxyName);
+            _galaxy.Login(Global.UserName);
         }
 
         [Test]
         public void CreateObject_LimitAlarms_ReturnsCorrectConfiguration()
         {
             //Get the known template
-            var template = (GalaxyObject) _galaxy.GetObject("$LimitAlarms");
+            var template = (ArchestraObject) _galaxy.GetObject("$LimitAlarms");
             Assert.NotNull(template);
 
             //Serialize data to in memory object
             var data = template.ToXml();
-            var galaxyObject = new GalaxyObject().FromXml(data);
+            var galaxyObject = new ArchestraObject().FromXml(data);
             Assert.NotNull(galaxyObject);
 
             //Delete the current template
@@ -44,12 +42,12 @@ namespace GServer.Archestra.IntegrationTests
         public void CreateObject_AlarmExtension_ReturnsCorrectConfiguration()
         {
             //Get the known template
-            var template = (GalaxyObject) _galaxy.GetObject("$AlarmExtension");
+            var template = (ArchestraObject) _galaxy.GetObject("$AlarmExtension");
             Assert.NotNull(template);
 
             //Serialize data to in memory object
             var data = template.ToXml();
-            var galaxyObject = new GalaxyObject().FromXml(data);
+            var galaxyObject = new ArchestraObject().FromXml(data);
             Assert.NotNull(galaxyObject);
 
             //Delete the current template
@@ -67,12 +65,12 @@ namespace GServer.Archestra.IntegrationTests
         public void CreateObject_RocAlarms_ReturnsCorrectConfiguration()
         {
             //Get the known template
-            var template = (GalaxyObject) _galaxy.GetObject("$ROCAlarms");
+            var template = (ArchestraObject) _galaxy.GetObject("$ROCAlarms");
             Assert.NotNull(template);
 
             //Serialize data to in memory object
             var data = template.ToXml();
-            var galaxyObject = new GalaxyObject().FromXml(data);
+            var galaxyObject = new ArchestraObject().FromXml(data);
             Assert.NotNull(galaxyObject);
 
             //Delete the current template
@@ -90,12 +88,12 @@ namespace GServer.Archestra.IntegrationTests
         public void CreateObject_IOExtensions_ReturnsCorrectConfiguration()
         {
             //Get the known template
-            var template = (GalaxyObject) _galaxy.GetObject("$IOExtensions");
+            var template = (ArchestraObject) _galaxy.GetObject("$IOExtensions");
             Assert.NotNull(template);
 
             //Serialize data to in memory object
             var data = template.ToXml();
-            var galaxyObject = new GalaxyObject().FromXml(data);
+            var galaxyObject = new ArchestraObject().FromXml(data);
             Assert.NotNull(galaxyObject);
 
             //Delete the current template
@@ -113,12 +111,12 @@ namespace GServer.Archestra.IntegrationTests
         public void CreateObject_ScriptExtension_ReturnsCorrectConfiguration()
         {
             //Get the known template
-            var template = (GalaxyObject) _galaxy.GetObject("$ScriptExtension");
+            var template = (ArchestraObject) _galaxy.GetObject("$ScriptExtension");
             Assert.NotNull(template);
 
             //Serialize data to in memory object
             var data = template.ToXml();
-            var galaxyObject = new GalaxyObject().FromXml(data);
+            var galaxyObject = new ArchestraObject().FromXml(data);
             Assert.NotNull(galaxyObject);
 
             //Delete the current template
@@ -136,12 +134,12 @@ namespace GServer.Archestra.IntegrationTests
         public void CreateObject_SiteData_ReturnsCorrectConfiguration()
         {
             //Get the known template
-            var template = (GalaxyObject) _galaxy.GetObject("$Site_Data");
+            var template = (ArchestraObject) _galaxy.GetObject("$Site_Data");
             Assert.NotNull(template);
 
             //Serialize data to in memory object
             var data = template.ToXml();
-            var galaxyObject = new GalaxyObject().FromXml(data);
+            var galaxyObject = new ArchestraObject().FromXml(data);
             Assert.NotNull(galaxyObject);
 
             //Delete the current template

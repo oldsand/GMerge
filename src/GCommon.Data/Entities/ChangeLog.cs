@@ -1,27 +1,25 @@
-// EF Core entity class. Only EF should be instantiating and setting properties.
-// ReSharper disable ClassNeverInstantiated.Global
-// ReSharper disable UnusedAutoPropertyAccessor.Local
-
 using System;
+using System.Diagnostics.CodeAnalysis;
 using GCommon.Primitives;
 using GCommon.Primitives.Base;
 
 namespace GCommon.Data.Entities
 {
+    [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
     public class ChangeLog
     {
-        public ChangeLog()
+        public int ChangeLogId { get; set; }
+        public int ObjectId { get; set; }
+        public DateTime ChangeDate { get; set; }
+        internal int OperationId { get; private set; }
+        public Operation Operation
         {
+            get => Enumeration.FromId<Operation>(OperationId);
+            set => OperationId = value.Id;
         }
-        
-        public int ChangeLogId { get; private set; }
-        public int ObjectId { get; private set; }
-        public DateTime ChangeDate { get; private set; }
-        public short OperationId { get; private set; }
-        public Operation Operation => Enumeration.FromId<Operation>(OperationId);
-        public int ConfigurationVersion { get; private set; }
-        public string Comment { get; private set; }
-        public string UserName { get; private set; }
-        public GObject GObject { get; private set; }
+        public int ConfigurationVersion { get; set; }
+        public string Comment { get; set; }
+        public string UserName { get; set; }
+        public GalaxyObject GalaxyObject { get; set; }
     }
 }

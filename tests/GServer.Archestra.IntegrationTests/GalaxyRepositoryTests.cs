@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
-using GTest.Core;
-using GServer.Archestra;
 using NUnit.Framework;
 
 namespace GServer.Archestra.IntegrationTests
@@ -15,8 +13,8 @@ namespace GServer.Archestra.IntegrationTests
         [SetUp]
         public void Setup()
         {
-            _galaxy = new GalaxyRepository(Settings.CurrentTestGalaxy);
-            _galaxy.Login(Settings.CurrentTestUser);
+            _galaxy = new GalaxyRepository(Global.GalaxyName);
+            _galaxy.Login(Global.UserName);
         }
 
         [Test]
@@ -25,7 +23,7 @@ namespace GServer.Archestra.IntegrationTests
         [TestCase("admin")]
         public void Login_WhenCalled_SetsConnectionProperties(string userName)
         {
-            var galaxy = new GalaxyRepository(Settings.CurrentTestGalaxy);
+            var galaxy = new GalaxyRepository(Global.GalaxyName);
 
             galaxy.Login(userName);
 
@@ -36,7 +34,7 @@ namespace GServer.Archestra.IntegrationTests
         [Test]
         public void Login_WindowsIdentity_ConnectsWithUserName()
         {
-            var galaxy = new GalaxyRepository(Settings.CurrentTestGalaxy);
+            var galaxy = new GalaxyRepository(Global.GalaxyName);
 
             var user = WindowsIdentity.GetCurrent();
             galaxy.Login(user.Name);
@@ -139,7 +137,7 @@ namespace GServer.Archestra.IntegrationTests
         [TestCase("Symbol_020")]
         public void GetSymbol_ValidaTagName_ReturnsExpectedInstance(string tagName)
         {
-            var instance = _galaxy.GetSymbol(tagName);
+            var instance = _galaxy.GetGraphic(tagName);
             
             Assert.NotNull(instance);
             Assert.AreEqual(tagName, instance.TagName);
@@ -157,7 +155,7 @@ namespace GServer.Archestra.IntegrationTests
         [Test]
         public void ExportSymbol_ValidSymbol_CreatesFile()
         {
-            _galaxy.ExportSymbol("TestSymbol",
+            _galaxy.ExportGraphic("TestSymbol",
                 @"C:\Users\tnunnink\Documents\Export\GalaxyAccess\TestSymbol.xml");
             
             FileAssert.Exists(@"C:\Users\tnunnink\Documents\Export\GalaxyAccess\TestSymbol.xml");
@@ -166,7 +164,7 @@ namespace GServer.Archestra.IntegrationTests
         [Test]
         public void ImportSymbol_ValidSymbol_LoadsSymbol()
         {
-            _galaxy.ImportSymbol(@"C:\Users\tnunnink\Documents\Export\GalaxyAccess\TestSymbol.xml", "NewTestSymbol", false);
+            _galaxy.ImportGraphic(@"C:\Users\tnunnink\Documents\Export\GalaxyAccess\TestSymbol.xml", "NewTestSymbol", false);
             
             Assert.Pass();
         }
@@ -174,7 +172,7 @@ namespace GServer.Archestra.IntegrationTests
         [Test]
         public void ImportSymbol_Overwrite_LoadsSymbol()
         {
-            _galaxy.ImportSymbol(@"C:\Users\tnunnink\Documents\Export\GalaxyAccess\TestSymbol.xml", "TestSymbol", true);
+            _galaxy.ImportGraphic(@"C:\Users\tnunnink\Documents\Export\GalaxyAccess\TestSymbol.xml", "TestSymbol", true);
             
             Assert.Pass();
         }
@@ -182,7 +180,7 @@ namespace GServer.Archestra.IntegrationTests
         [Test]
         public void GetSymbol_ValidSymbol_ReturnsGalaxySymbol()
         {
-            var symbol = _galaxy.GetSymbol("DatabaseAccess");
+            var symbol = _galaxy.GetGraphic("DatabaseAccess");
             
             Assert.NotNull(symbol);
             Assert.True(symbol.CustomProperties.Any(p => p.Name == "Execute"));

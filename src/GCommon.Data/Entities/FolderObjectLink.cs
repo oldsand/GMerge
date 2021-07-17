@@ -9,6 +9,6 @@ namespace GCommon.Data.Entities
         public int FolderId { get; private set; }
         public int ObjectId { get; private set; }
         public Folder Folder { get; private set; }
-        public GObject GObject { get; private set; }
+        public GalaxyObject GalaxyObject { get; private set; }
     }
 }

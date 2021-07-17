@@ -7,20 +7,24 @@ using GCommon.Primitives.Base;
 
 namespace GCommon.Data.Entities
 {
-    public class GObject
+    public class GalaxyObject
     {
-        public GObject()
+        public GalaxyObject()
         {
-            Derivations = new List<GObject>();
-            ContainedObjects = new List<GObject>();
-            AreaObjects = new List<GObject>();
-            HostedObjects = new List<GObject>();
+            Derivations = new List<GalaxyObject>();
+            ContainedObjects = new List<GalaxyObject>();
+            AreaObjects = new List<GalaxyObject>();
+            HostedObjects = new List<GalaxyObject>();
             ChangeLogs = new List<ChangeLog>();
         }
 
         public int ObjectId { get; set; }
-        public int TemplateId { get; set; }
-        public Template Template => Enumeration.FromId<Template>(TemplateId);
+        internal int TemplateId { get; private set; }
+        public Template Template
+        {
+            get => Enumeration.FromId<Template>(TemplateId);
+            set => TemplateId = value.Id;
+        }
         public int DerivedFromId { get; set; }
         public int ContainedById { get; set; }
         public int AreaId { get; set; }
@@ -36,22 +40,22 @@ namespace GCommon.Data.Entities
         public int DeployedVersion { get; set; }
         public Guid? CheckedOutByUserGuid { get; set; }
         public bool IsTemplate { get; set; }
-        public bool IsSymbol => Enumeration.FromId<Template>(TemplateId).Equals(Template.Symbol);
-        public bool IsClientControl => Enumeration.FromId<Template>(TemplateId).Equals(Template.ClientControl);
+        public bool IsSymbol => Template.Equals(Template.Symbol);
+        public bool IsClientControl => Template.Equals(Template.ClientControl);
         public bool IsHidden { get; set; }
         public short HostingTreeLevel { get; set; }
         public bool DeploymentPending { get; set; }
         public TemplateDefinition TemplateDefinition { get; set; }
-        public GObject DerivedFrom { get; set; }
-        public IEnumerable<GObject> Derivations { get; set; }
-        public GObject Container { get; set; }
-        public IEnumerable<GObject> ContainedObjects { get; set; }
-        public GObject Area { get; set; }
-        public IEnumerable<GObject> AreaObjects { get; set; }
-        public GObject Host { get; set; }
+        public GalaxyObject DerivedFrom { get; set; }
+        public IEnumerable<GalaxyObject> Derivations { get; set; }
+        public GalaxyObject Container { get; set; }
+        public IEnumerable<GalaxyObject> ContainedObjects { get; set; }
+        public GalaxyObject Area { get; set; }
+        public IEnumerable<GalaxyObject> AreaObjects { get; set; }
+        public GalaxyObject Host { get; set; }
         internal FolderObjectLink FolderObjectLink { get; set; }
         public Folder Folder => FolderObjectLink.Folder;
-        public IEnumerable<GObject> HostedObjects { get; set; }
+        public IEnumerable<GalaxyObject> HostedObjects { get; set; }
         public IEnumerable<ChangeLog> ChangeLogs { get; set; }
     }
 }

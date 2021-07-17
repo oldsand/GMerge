@@ -10,12 +10,12 @@ namespace GServer.Services
     //todo perhaps replace with AutoMapper
     public static class DataMapper
     {
-        public static GalaxyObjectData Map(GalaxyObject source)
+        public static GalaxyObjectData Map(ArchestraObject source)
         {
             return MapGalaxyObject(source);
         }
 
-        public static GalaxySymbolData Map(GalaxySymbol source)
+        public static GalaxySymbolData Map(ArchestraGraphic source)
         {
             return MapGalaxySymbol(source);
         }
@@ -56,11 +56,11 @@ namespace GServer.Services
                 .AddMapping(c => c.ChangeLogId, "gobject_change_log_id")
                 .AddMapping(c => c.ObjectId, "gobject_id")
                 .AddMapping(c => c.ChangeDate, "change_date")
-                .AddMapping(c => c.OperationId, "operation_id")
+                .AddMapping(c => c.Operation, "operation_id")
                 .AddMapping(c => c.UserName, "user_profile_name");
         }
 
-        private static GalaxyObjectData MapGalaxyObject(GalaxyObject source)
+        private static GalaxyObjectData MapGalaxyObject(ArchestraObject source)
         {
             return new GalaxyObjectData
             {
@@ -78,7 +78,7 @@ namespace GServer.Services
             };
         }
 
-        private static GalaxyAttributeData MapAttribute(GalaxyAttribute source)
+        private static GalaxyAttributeData MapAttribute(ArchestraAttribute source)
         {
             return new GalaxyAttributeData
             {
@@ -92,7 +92,7 @@ namespace GServer.Services
             };
         }
 
-        private static GalaxySymbolData MapGalaxySymbol(GalaxySymbol source)
+        private static GalaxySymbolData MapGalaxySymbol(ArchestraGraphic source)
         {
             return new GalaxySymbolData
             {

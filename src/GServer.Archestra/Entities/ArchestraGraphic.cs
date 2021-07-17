@@ -5,9 +5,9 @@ using GCommon.Core;
 
 namespace GServer.Archestra.Entities
 {
-    public class GalaxySymbol : IXmlConvertible<GalaxySymbol>
+    public class ArchestraGraphic : IXmlConvertible<ArchestraGraphic>
     {
-        public GalaxySymbol(string tagName)
+        public ArchestraGraphic(string tagName)
         {
             TagName = tagName;
         }
@@ -21,7 +21,7 @@ namespace GServer.Archestra.Entities
         public IEnumerable<WizardOption> WizardOptions { get; set; }
         public IEnumerable<WizardLayer> WizardLayers { get; set; }
 
-        public GalaxySymbol FromXml(XElement element)
+        public ArchestraGraphic FromXml(XElement element)
         {
             var root = new XElement(element);
             root.RemoveNodes();

@@ -51,9 +51,9 @@ namespace GCommon.Data.IntegrationTests
         {
             var repo = new GalaxyDataProvider(_connectionString);
 
-            var result = repo.Objects.Find(tagName);
+            var results = repo.Objects.Find(tagName);
 
-            Assert.IsNull(result);
+            Assert.IsEmpty(results);
         }
 
         [Test]
@@ -139,7 +139,7 @@ namespace GCommon.Data.IntegrationTests
         {
             var repo = new GalaxyDataProvider(_connectionString);
 
-            var result = repo.Objects.FindInclude(x => x.TagName == "$Test_Template", x => x.ChangeLogs);
+            var result = repo.Objects.FindInclude(x => x.TagName == "$UserDefined", x => x.ChangeLogs);
             
             Assert.NotNull(result);
             Assert.IsNotEmpty(result.ChangeLogs);

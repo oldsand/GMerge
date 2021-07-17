@@ -8,22 +8,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GCommon.Data.Repositories
 {
-    internal class ObjectRepository : ReadOnlyRepository<GObject>, IObjectRepository
+    internal class ObjectRepository : ReadOnlyRepository<GalaxyObject>, IObjectRepository
     {
         internal ObjectRepository(DbContext context) : base (context)
         {
         }
 
-        public ObjectRepository(string connectionString) : base(GalaxyContext.Create(connectionString))
-        {
-        }
-
-        public GObject Find(int id)
+        public GalaxyObject Find(int id)
         {
             return Set.Find(id);
         }
 
-        public IEnumerable<GObject> Find(string tagName)
+        public IEnumerable<GalaxyObject> Find(string tagName)
         {
             return GetQueryable().Where(x => x.TagName == tagName);
         }
@@ -39,19 +35,19 @@ namespace GCommon.Data.Repositories
             return gObject?.ObjectId ?? 0;
         }
 
-        public GObject FindIncludeDescendants(string tagName)
+        public GalaxyObject FindIncludeDescendants(string tagName)
         {
             var results = Set.Include(x => x.Derivations).ToList();
             return results.SingleOrDefault(x => x.TagName == tagName);
         }
         
-        public GObject FindIncludeTemplate(int objectId)
+        public GalaxyObject FindIncludeTemplate(int objectId)
         {
             var results = Set.Include(x => x.TemplateDefinition);
             return results.SingleOrDefault(x => x.ObjectId == objectId);
         }
         
-        public GObject FindIncludeFolder(string tagName)
+        public GalaxyObject FindIncludeFolder(string tagName)
         {
             return Set
                 .Include(x => x.FolderObjectLink)
@@ -59,7 +55,7 @@ namespace GCommon.Data.Repositories
                 .FirstOrDefault(x => x.TagName == tagName);
         }
         
-        public async Task<IEnumerable<GObject>> GetDerivationHierarchy()
+        public async Task<IEnumerable<GalaxyObject>> GetDerivationHierarchy()
         {
             var results = await Set.Include(x => x.Derivations).Include(x => x.TemplateDefinition).ToListAsync();
             return results

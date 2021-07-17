@@ -26,7 +26,7 @@ namespace GServer.Services
         public ArchivingPipeline(IGalaxyRepository galaxyRepository)
         {
             _galaxyRepository = galaxyRepository;
-            
+
             _galaxyString = DbStringBuilder.GalaxyString(galaxyRepository.Name);
             _archiveString = DbStringBuilder.ArchiveString(galaxyRepository.Name);
         }
@@ -39,101 +39,98 @@ namespace GServer.Services
             _dataProviderFactory = dataProviderFactory;
             _archiveRepositoryFactory = archiveRepositoryFactory;
         }
-        
+
         protected override ITargetBlock<ChangeLog> DefineFlow()
         {
-            //1. Send change log to be stored in case the service stops without completion, we can pick back up where we left off (hopefully)
-            //2. At the same time, use the log object id to retrieve the object from the database. We need this to construct archive object
-            //3. After step 2 completes, use that result with the change log input to construct an archive object.
-            //4. Use the resulting archive object to determine if it should be archived. (based on current archive settings)
-            //5. Taking the results that pass step 4, Archive the current object from the galaxy repository.
-            //6. Using the result from step 5, persist the archive object with log and entry to the database using Upsert.
-            //7. If the archiving was successful, remove the associated log from the queue/storage.
-            //8. If there was an issue, we probably want to pose failed entities somewhere where the use can review? Not sure yet.
+            var linkOptions = new DataflowLinkOptions {PropagateCompletion = true};
 
-            var broadcaster = new BroadcastBlock<ChangeLog>(log => log);
+            var logBroadcast = new BroadcastBlock<ChangeLog>(log => log);
             var storeLog = new ActionBlock<ChangeLog>(StoreLog);
-            var retrieveObject = new TransformBlock<ChangeLog, GObject>(RetrieveObject);
+            var retrieveObject = new TransformBlock<ChangeLog, GalaxyObject>(RetrieveObject);
             var logBuffer = new BufferBlock<ChangeLog>();
-            var objectLogPair = new JoinBlock<GObject, ChangeLog>();
-            var generateObject = new TransformBlock<Tuple<GObject, ChangeLog>, ArchiveObject>(GenerateObject);
-            var discardLog = new ActionBlock<Tuple<GObject, ChangeLog>>(DiscardLog);
-            var isArchivable = new TransformBlock<ArchiveObject, ArchiveObject>(IsArchivable);
+            var objectLogPair = new JoinBlock<GalaxyObject, ChangeLog>(new GroupingDataflowBlockOptions {Greedy = false});
+            var generateObject = new TransformBlock<Tuple<GalaxyObject, ChangeLog>, ArchiveObject>(GenerateObject);
+            var objectBroadcast = new BroadcastBlock<ArchiveObject>(obj => obj);
+            var objectBuffer = new BufferBlock<ArchiveObject>();
+            var isArchivable = new TransformBlock<ArchiveObject, bool>(IsArchivable);
+            var objectResultPair = new JoinBlock<ArchiveObject, bool>(new GroupingDataflowBlockOptions {Greedy = false});
+            var validObject = new TransformBlock<Tuple<ArchiveObject, bool>, ArchiveObject>(tuple => tuple.Item1);
+            var invalidObject = new TransformBlock<Tuple<ArchiveObject, bool>, ArchiveObject>(tuple => tuple.Item1);
             var archive = new TransformBlock<ArchiveObject, ArchiveObject>(Archive);
+            var retrieveObjectNull = new ActionBlock<Tuple<GalaxyObject, ChangeLog>>(RemoveLog);
             var removeLog = new ActionBlock<ArchiveObject>(RemoveLog);
 
-            broadcaster.LinkTo(storeLog);
-            broadcaster.LinkTo(retrieveObject);
-            broadcaster.LinkTo(logBuffer);
-            retrieveObject.LinkTo(objectLogPair.Target1);
-            logBuffer.LinkTo(objectLogPair.Target2);
-            objectLogPair.LinkTo(generateObject, tuple => tuple.Item1 != null && tuple.Item2 != null);
-            objectLogPair.LinkTo(discardLog, tuple => tuple.Item2 != null);
-            objectLogPair.LinkTo(DataflowBlock.NullTarget<Tuple<GObject, ChangeLog>>());
-            generateObject.LinkTo(isArchivable);
-            isArchivable.LinkTo(archive, o => o != null);
-            isArchivable.LinkTo(DataflowBlock.NullTarget<ArchiveObject>(), o => o == null);
+            logBroadcast.LinkTo(storeLog, linkOptions);
+            logBroadcast.LinkTo(retrieveObject, linkOptions);
+            logBroadcast.LinkTo(logBuffer, linkOptions);
+            retrieveObject.LinkTo(objectLogPair.Target1, linkOptions);
+            logBuffer.LinkTo(objectLogPair.Target2, linkOptions);
+            objectLogPair.LinkTo(generateObject, linkOptions, tuple => tuple.Item1 != null && tuple.Item2 != null);
+            objectLogPair.LinkTo(retrieveObjectNull, linkOptions, tuple => tuple.Item2 != null);
+            generateObject.LinkTo(objectBroadcast, linkOptions);
+            objectBroadcast.LinkTo(objectBuffer, linkOptions);
+            objectBroadcast.LinkTo(isArchivable, linkOptions);
+            objectBuffer.LinkTo(objectResultPair.Target1, linkOptions);
+            isArchivable.LinkTo(objectResultPair.Target2, linkOptions);
+            objectResultPair.LinkTo(validObject, linkOptions, tuple => tuple.Item2);
+            objectResultPair.LinkTo(invalidObject, linkOptions, tuple => !tuple.Item2);
+            validObject.LinkTo(archive, linkOptions);
+            archive.LinkTo(removeLog, linkOptions);
+            invalidObject.LinkTo(removeLog, linkOptions);
             
-            //at this point done, but we want to remove queued log and any failures should be dealt with?
-            
-            return broadcaster;
+            AssignCompletion(removeLog);
+
+            return logBroadcast;
         }
-        
+
         private void StoreLog(ChangeLog log)
         {
             Logger.Trace("Generating archive log with id {ChangeLogId}", log.ChangeLogId);
-            
+
             using var archive = _archiveRepositoryFactory == null
                 ? new ArchiveRepository(_archiveString)
                 : _archiveRepositoryFactory.Create(_archiveString);
-            
+
             archive.Queue.Enqueue(log.ChangeLogId);
         }
 
-        private void DiscardLog(Tuple<GObject, ChangeLog> payload)
+        private void RemoveLog(Tuple<GalaxyObject, ChangeLog> payload)
         {
             var log = payload.Item2;
-            
+
             using var archive = _archiveRepositoryFactory == null
                 ? new ArchiveRepository(_archiveString)
                 : _archiveRepositoryFactory.Create(_archiveString);
 
             archive.Queue.Dequeue(log.ChangeLogId);
         }
-        
+
         private void RemoveLog(ArchiveObject obj)
         {
+            if (obj == null) throw new ArgumentNullException(nameof(obj), "obj can not be null");
+            
             using var archive = _archiveRepositoryFactory == null
                 ? new ArchiveRepository(_archiveString)
                 : _archiveRepositoryFactory.Create(_archiveString);
 
-            
             var log = obj.Logs.SingleOrDefault();
             if (log == null) return;
 
             archive.Queue.Dequeue(log.ChangeLogId);
         }
-        
-        private GObject RetrieveObject(ChangeLog changeLog)
+
+        private GalaxyObject RetrieveObject(ChangeLog changeLog)
         {
             Logger.Trace("Retrieving GObject with id {ObjectId}", changeLog.ObjectId);
 
-            try
-            {
-                using var galaxy = _dataProviderFactory == null
-                    ? new GalaxyDataProvider(_galaxyString)
-                    : _dataProviderFactory.Create(_galaxyString);
-            
-                return galaxy.Objects.Find(changeLog.ObjectId);
-            }
-            catch (Exception e)
-            {
-                Logger.Error(e, "Failed to retrieve object with id {ObjectId}", changeLog.ObjectId);
-                return null;
-            }
+            using var galaxy = _dataProviderFactory == null
+                ? new GalaxyDataProvider(_galaxyString)
+                : _dataProviderFactory.Create(_galaxyString);
+
+            return galaxy.Objects.Find(changeLog.ObjectId);
         }
 
-        private ArchiveObject GenerateObject(Tuple<GObject, ChangeLog> payload)
+        private ArchiveObject GenerateObject(Tuple<GalaxyObject, ChangeLog> payload)
         {
             var (obj, log) = payload;
             Logger.Trace("Generating archive object with id {ObjectId}", obj.ObjectId);
@@ -142,14 +139,14 @@ namespace GServer.Services
             archiveObject.AddLog(log.ChangeLogId, log.ChangeDate, log.Operation, log.Comment, log.UserName);
             return archiveObject;
         }
-        
-        private ArchiveObject IsArchivable(ArchiveObject archiveObject)
+
+        private bool IsArchivable(ArchiveObject archiveObject)
         {
             using var archive = _archiveRepositoryFactory == null
                 ? new ArchiveRepository(_archiveString)
                 : _archiveRepositoryFactory.Create(_archiveString);
 
-            return archive.IsArchivable(archiveObject) ? archiveObject : null;
+            return archive.IsArchivable(archiveObject);
         }
 
         private ArchiveObject Archive(ArchiveObject obj)
@@ -168,7 +165,7 @@ namespace GServer.Services
                 Logger.Error(e, "Failed to archive object with id {ObjectId}", obj.ObjectId);
                 throw;
             }
-            
+
             return obj;
         }
     }

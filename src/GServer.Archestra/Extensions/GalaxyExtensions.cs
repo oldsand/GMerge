@@ -30,11 +30,11 @@ namespace GServer.Archestra.Extensions
             var security = galaxy.GetReadOnlySecurity();
             galaxy.CommandResult.Process();
 
-            if (security.AuthenticationMode == EAUTHMODE.eNone) return;
-
             if (security == null)
                 throw new InvalidOperationException(
                     "Could not obtain IGalaxySecurity instance. Unable to authorize user");
+            
+            if (security.AuthenticationMode == EAUTHMODE.eNone) return;
 
             // ReSharper disable once ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
             // GRAccess interface does not implement IEnumerable
@@ -277,7 +277,8 @@ namespace GServer.Archestra.Extensions
         }
 
         /// <summary>
-        /// Gets all objects, both templates and instances, that are descendents, both direct and indirect, of the provided template name.
+        /// Gets all objects, both templates and instances, that are derivations (direct or indirect) of the provided
+        /// template name.
         /// </summary>
         /// <param name="galaxy">The current galaxy object</param>
         /// <param name="templateName">The base template name.</param>
@@ -313,7 +314,7 @@ namespace GServer.Archestra.Extensions
         /// <returns>bool</returns>
         /// <exception cref="ArgumentNullException">Thrown when tagName or templateName is null</exception>
         /// <exception cref="GalaxyException">Thrown when command result is not successful</exception>
-        public static bool ObjectIsDescendentOf(this IGalaxy galaxy, string tagName, string templateName)
+        public static bool IsDescendentOf(this IGalaxy galaxy, string tagName, string templateName)
         {
             if (tagName == null) throw new ArgumentNullException(nameof(tagName), "tagName cannot be null");
             if (templateName == null)

@@ -10,9 +10,9 @@ namespace GClient.Module.Connection.ViewModels
     public class GalaxyObjectViewModel : NavigationViewModelBase
     {
 
-        private GObject _galaxyObject;
+        private GalaxyObject _galaxyObject;
 
-        public GObject GalaxyObject
+        public GalaxyObject GalaxyObject
         {
             get => _galaxyObject;
             set => SetProperty(ref _galaxyObject, value);
@@ -20,7 +20,7 @@ namespace GClient.Module.Connection.ViewModels
         
         public override void OnNavigatedTo(NavigationContext navigationContext)
         {
-            var gObject = navigationContext.Parameters.GetValue<GObject>("object");
+            var gObject = navigationContext.Parameters.GetValue<GalaxyObject>("object");
             GalaxyObject = gObject ?? throw new ArgumentNullException(nameof(gObject), 
                                @"Value for gObject cannot be null");
 
@@ -30,7 +30,7 @@ namespace GClient.Module.Connection.ViewModels
 
         public override bool IsNavigationTarget(NavigationContext navigationContext)
         {
-            var gObject = navigationContext.Parameters.GetValue<GObject>("object");
+            var gObject = navigationContext.Parameters.GetValue<GalaxyObject>("object");
             return gObject.ObjectId == GalaxyObject.ObjectId;
         }
     }

@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GCommon.Data.Configurations
 {
-    public class GObjectConfiguration : IEntityTypeConfiguration<GObject>
+    public class GalaxyObjectConfiguration : IEntityTypeConfiguration<GalaxyObject>
     {
-        public void Configure(EntityTypeBuilder<GObject> builder)
+        public void Configure(EntityTypeBuilder<GalaxyObject> builder)
         {
             //Configuring as view because EF core will treat this table as read-only, which we want.
             builder.ToView("gobject").HasKey(x => x.ObjectId);
@@ -31,7 +31,7 @@ namespace GCommon.Data.Configurations
             builder.Property(x => x.IsHidden).HasColumnName("is_hidden");
             builder.Property(x => x.HostingTreeLevel).HasColumnName("hosting_tree_level");
             builder.Property(x => x.DeploymentPending).HasColumnName("deployment_pending_status");
-
+            
             builder.Ignore(x => x.Template);
             builder.Ignore(x => x.Folder);
             builder.Ignore(x => x.IsSymbol);
@@ -42,8 +42,8 @@ namespace GCommon.Data.Configurations
             builder.HasOne(x => x.Container).WithMany(t => t.ContainedObjects).HasForeignKey(x => x.ContainedById);
             builder.HasOne(x => x.Area).WithMany(t => t.AreaObjects).HasForeignKey(x => x.AreaId);
             builder.HasOne(x => x.Host).WithMany(t => t.HostedObjects).HasForeignKey(x => x.HostId);
-            builder.HasMany(x => x.ChangeLogs).WithOne(c => c.GObject).HasForeignKey(x => x.ObjectId);
-            builder.HasOne(x => x.FolderObjectLink).WithOne(x => x.GObject).HasForeignKey<FolderObjectLink>(x => x.ObjectId);
+            builder.HasMany(x => x.ChangeLogs).WithOne(c => c.GalaxyObject).HasForeignKey(x => x.ObjectId);
+            builder.HasOne(x => x.FolderObjectLink).WithOne(x => x.GalaxyObject).HasForeignKey<FolderObjectLink>(x => x.ObjectId);
         }
     }
 }

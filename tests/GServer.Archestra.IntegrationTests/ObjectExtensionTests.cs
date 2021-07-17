@@ -4,8 +4,6 @@ using GServer.Archestra.Entities;
 using GServer.Archestra.Extensions;
 using GCommon.Core.Extensions;
 using GCommon.Primitives;
-using GTest.Core;
-using GServer.Archestra;
 using NUnit.Framework;
 
 namespace GServer.Archestra.IntegrationTests
@@ -18,8 +16,8 @@ namespace GServer.Archestra.IntegrationTests
         [SetUp]
         public void Setup()
         {
-            _galaxy = new GalaxyRepository(Settings.CurrentTestGalaxy);
-            _galaxy.Login(Settings.CurrentTestUser);
+            _galaxy = new GalaxyRepository(Global.GalaxyName);
+            _galaxy.Login(Global.UserName);
         }
 
         [Test]
@@ -188,7 +186,7 @@ namespace GServer.Archestra.IntegrationTests
         [Test]
         public void SerializeTemplate_WhenCalled_ReturnsCorrectXml()
         {
-            var siteData = (GalaxyObject) _galaxy.GetObject("$Site_Data");
+            var siteData = (ArchestraObject) _galaxy.GetObject("$Site_Data");
             var data = siteData.Serialize();
             Assert.NotNull(data);
         }
@@ -237,7 +235,7 @@ namespace GServer.Archestra.IntegrationTests
         [Test]
         public void GetExtensions_DerivedTemplate001_ReturnsExpected()
         {
-            var template = (GalaxyObject) _galaxy.GetObject("$DerivedTemplate001");
+            var template = (ArchestraObject) _galaxy.GetObject("$DerivedTemplate001");
             var intTestAttributes = template.Attributes.Where(a => a.Name.StartsWith($"IntTest.")).ToList();
             Assert.NotNull(intTestAttributes);
         }

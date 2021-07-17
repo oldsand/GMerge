@@ -42,5 +42,23 @@ namespace GServer.Archestra
                 yield return new GalaxyRepository(grAccess, galaxy);
             }
         }
+
+        public IGalaxyRepository New(string galaxyName)
+        {
+            var grAccess = new GRAccessAppClass();
+            
+            grAccess.CreateGalaxy(galaxyName);
+
+            if (!grAccess.CommandResult.Successful)
+            {
+                throw new InvalidOperationException(
+                    $"Creating galaxy {galaxyName} failed. {grAccess.CommandResult.ID}. {grAccess.CommandResult.CustomMessage}");
+            }
+
+            var galaxy = grAccess.QueryGalaxies()[galaxyName];
+            if (galaxy == null) throw new InvalidOperationException($"Could not find created galaxy {galaxyName}");
+
+            return new GalaxyRepository(grAccess, galaxy);
+        }
     }
 }

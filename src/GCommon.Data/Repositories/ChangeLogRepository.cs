@@ -22,7 +22,7 @@ namespace GCommon.Data.Repositories
         public ChangeLog GetLatestByOperation(int objectId, Operation operation)
         {
             return Set.OrderByDescending(x => x.ChangeDate)
-                .FirstOrDefault(x => x.ObjectId == objectId && x.OperationId == operation.Id);
+                .FirstOrDefault(x => x.ObjectId == objectId && x.Operation == operation);
         }
     }
 }

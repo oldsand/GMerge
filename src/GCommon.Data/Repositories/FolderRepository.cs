@@ -18,7 +18,7 @@ namespace GCommon.Data.Repositories
         {
             var results = await Set
                 .Include(x => x.Folders)
-                .Include(x => x.FolderObjectLinks).ThenInclude(x => x.GObject)
+                .Include(x => x.FolderObjectLinks).ThenInclude(x => x.GalaxyObject)
                 .ToListAsync();
             
             return results
