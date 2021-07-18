@@ -84,15 +84,14 @@ namespace GServer.Archestra.Extensions
         
         public static void SetValue<T>(this IAttribute attribute, T value)
         {
-            //TODO is this right? should I really be cloning first? What about attributes that have not data type set?
             attribute.value.Clone(out var mxValue); 
             mxValue.SetValue(value, attribute.DataType.ToPrimitiveType());
             attribute.SetValue(mxValue);
         }
 
-        public static ArchestraAttribute AsGalaxyAttribute(this IAttribute attribute)
+        public static ArchestraAttribute Map(this IAttribute attribute)
         {
-            return new ArchestraAttribute
+            return new()
             {
                 Name = attribute.Name,
                 DataType = attribute.DataType.ToPrimitiveType(),
@@ -104,24 +103,24 @@ namespace GServer.Archestra.Extensions
             };
         }
 
-        public static IEnumerable<ArchestraAttribute> AsGalaxyAttributes(this IAttributes attributes)
+        public static IEnumerable<ArchestraAttribute> Map(this IAttributes attributes)
         {
             foreach (IAttribute attribute in attributes)
-                yield return attribute.AsGalaxyAttribute();
+                yield return attribute.Map();
         }
         
         public static IEnumerable<ArchestraAttribute> ByDataType(this IAttributes attributes, DataType dataType)
         {
             foreach (IAttribute attribute in attributes)
                 if (attribute.DataType == dataType.ToMxType())
-                    yield return attribute.AsGalaxyAttribute();
+                    yield return attribute.Map();
         }
         
         public static IEnumerable<ArchestraAttribute> ByNameContains(this IAttributes attributes, string name)
         {
             foreach (IAttribute attribute in attributes)
                 if (attribute.Name.Contains(name))
-                    yield return attribute.AsGalaxyAttribute();
+                    yield return attribute.Map();
         }
     }
 }

@@ -7,6 +7,7 @@ using GCommon.Data;
 using GCommon.Data.Abstractions;
 using GCommon.Primitives;
 using GServer.Services;
+using GServer.Services.Abstractions;
 using NLog;
 
 namespace GServer.Host.Archiving
@@ -54,7 +55,7 @@ namespace GServer.Host.Archiving
                 stopwatch.Start();
                 
                 var registry = _container.Resolve<IGalaxyRegistry>();
-                registry.RegisterParallel();
+                registry.RegisterAll();
                 
                 stopwatch.Stop();
                 Logger.Debug("Galaxy registration complete. Ellapsed time: {Time}", stopwatch.Elapsed);

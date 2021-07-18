@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using GServer.Archestra;
 using GServer.Archestra.Abstractions;
+using GServer.Services.Abstractions;
 using NLog;
 
 namespace GServer.Services
@@ -15,12 +16,12 @@ namespace GServer.Services
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly IGalaxyRepositoryFactory _repositoryFactory;
         private readonly IGalaxyFinder _galaxyFinder;
-        private readonly List<IGalaxyRepository> _galaxies = new List<IGalaxyRepository>();
+        private readonly List<IGalaxyRepository> _galaxies = new();
 
         public GalaxyRegistry()
         {
             _repositoryFactory = new GalaxyRepositoryFactory();
-            _galaxyFinder = new GalaxyFinder();
+            _galaxyFinder = new GalaxyAccess();
         }
 
         internal GalaxyRegistry(IGalaxyRepositoryFactory galaxyRepositoryFactory, IGalaxyFinder galaxyFinder)
@@ -80,33 +81,12 @@ namespace GServer.Services
         public void RegisterAll()
         {
             var user = WindowsIdentity.GetCurrent();
-            var galaxies = _galaxyFinder.FindAll();
-            
-            foreach (var galaxy in galaxies)
-                RegisterGalaxy(galaxy, user.Name);
-        }
-
-        public void RegisterAll(string userName)
-        {
-            var galaxies = _galaxyFinder.FindAll();
-            foreach (var galaxy in galaxies)
-                RegisterGalaxy(galaxy, userName);
-        }
-        
-        public void RegisterParallel()
-        {
-            var user = WindowsIdentity.GetCurrent();
             var galaxyRepositories = _repositoryFactory.CreateAll();
 
             Parallel.ForEach(galaxyRepositories, galaxyRepository =>
             {
-                if (IsRegistered(galaxyRepository.Name, user.Name))
-                {
-                    galaxyRepository.SynchronizeClient();
-                    Logger.Debug("Galaxy {Galaxy} already registered to user {User}", galaxyRepository.Name, user.Name);
-                    return;
-                }
-                
+                if (IsRegistered(galaxyRepository.Name, user.Name)) return;
+
                 galaxyRepository.Login(user.Name);
                 _galaxies.Add(galaxyRepository);
                 
@@ -114,18 +94,22 @@ namespace GServer.Services
             });
         }
 
-        public Task RegisterAsync(string galaxyName, CancellationToken token)
+        public void RegisterAll(string userName)
         {
-            var user = WindowsIdentity.GetCurrent();
-            return RegisterGalaxyAsync(galaxyName, user.Name, token);
+            var galaxyRepositories = _repositoryFactory.CreateAll();
+
+            Parallel.ForEach(galaxyRepositories, galaxyRepository =>
+            {
+                if (IsRegistered(galaxyRepository.Name, userName)) return;
+
+                galaxyRepository.Login(userName);
+                _galaxies.Add(galaxyRepository);
+                
+                Logger.Debug("Galaxy {Galaxy} successfully registered to {User}", galaxyRepository.Name, userName);
+            });
         }
 
-        public Task RegisterAsync(string galaxyName, string userName, CancellationToken token)
-        {
-            return RegisterGalaxyAsync(galaxyName, userName, token);
-        }
-
-        public async Task RegisterAllAsync(CancellationToken token)
+        /*public async Task RegisterAllAsync(CancellationToken token)
         {
             var user = WindowsIdentity.GetCurrent();
             var unregisteredGalaxies = (await _galaxyFinder.FindAllAsync(token))
@@ -140,9 +124,9 @@ namespace GServer.Services
                 await galaxy.LoginAsync(user.Name, token);
                 _galaxies.Add(galaxy);
             }
-        }
+        }*/
 
-        public async Task RegisterAllAsync(string userName, CancellationToken token)
+        /*public async Task RegisterAllAsync(string userName, CancellationToken token)
         {
             var galaxies = (await _galaxyFinder.FindAllAsync(token))
                 .Where(g => !IsRegistered(g, userName)).ToList();
@@ -156,7 +140,7 @@ namespace GServer.Services
                 await galaxy.LoginAsync(userName, token);
                 _galaxies.Add(galaxy);
             }
-        }
+        }*/
 
         public void Unregister(string galaxyName, string userName)
         {
@@ -192,21 +176,6 @@ namespace GServer.Services
             Logger.Debug("Galaxy {Galaxy} successfully registered to {User}", galaxyName, userName);
         }
 
-        private async Task RegisterGalaxyAsync(string galaxyName, string userName, CancellationToken token)
-        {
-            if (string.IsNullOrEmpty(galaxyName))
-                throw new ArgumentException("Value cannot be null or empty", nameof(galaxyName));
-
-            if (userName == null)
-                throw new ArgumentException("Value cannot be null", nameof(userName));
-
-            if (IsRegistered(galaxyName, userName)) return;
-
-            var galaxy = await _repositoryFactory.CreateAsync(galaxyName, token);
-            await galaxy.LoginAsync(userName, token);
-            _galaxies.Add(galaxy);
-        }
-        
         private void UnregisterGalaxy(string galaxyName, string userName)
         {
             if (string.IsNullOrEmpty(galaxyName))

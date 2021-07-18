@@ -4,6 +4,7 @@ using GServer.Archestra.Abstractions;
 using GCommon.Contracts;
 using GCommon.Core.Utilities;
 using GCommon.Data.Abstractions;
+using GServer.Services.Abstractions;
 
 namespace GServer.Services
 {

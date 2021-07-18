@@ -13,8 +13,7 @@ namespace GServer.Archestra
     public class GalaxyRepositoryFactory : IGalaxyRepositoryFactory
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private const string BaseGalaxyTemplate = "Base_Application_Server.cab";
-        
+
         public IGalaxyRepository Create(string galaxyName)
         {
             return new GalaxyRepository(galaxyName);
@@ -43,29 +42,6 @@ namespace GServer.Archestra
                 Logger.Debug("Creating repository instance for {Galaxy}", galaxy.Name);
                 yield return new GalaxyRepository(grAccess, galaxy);
             }
-        }
-
-        public IGalaxyRepository New(string galaxyName)
-        {
-            var grAccess = new GRAccessAppClass();
-            
-            var template = grAccess.ListCreateGalaxyTemplates().ToList().SingleOrDefault(x => x == BaseGalaxyTemplate);
-
-            if (string.IsNullOrEmpty(template))
-                throw new InvalidOperationException($"Could not find base template to create galaxy {galaxyName}");
-
-            grAccess.CreateGalaxyFromTemplate(template, galaxyName);
-
-            if (!grAccess.CommandResult.Successful)
-            {
-                throw new InvalidOperationException(
-                    $"Creating galaxy {galaxyName} failed. {grAccess.CommandResult.ID}. {grAccess.CommandResult.CustomMessage}");
-            }
-
-            var galaxy = grAccess.QueryGalaxies()[galaxyName];
-            if (galaxy == null) throw new InvalidOperationException($"Could not find created galaxy {galaxyName}");
-
-            return new GalaxyRepository(grAccess, galaxy);
         }
     }
 }

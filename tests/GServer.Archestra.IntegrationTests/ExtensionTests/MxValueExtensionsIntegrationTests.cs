@@ -1,7 +1,6 @@
 using ArchestrA.GRAccess;
 using GServer.Archestra.Extensions;
 using NUnit.Framework;
-using TestContext = GServer.Archestra.IntegrationTests.TestContext;
 
 namespace GServer.Archestra.IntegrationTests
 {

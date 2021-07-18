@@ -9,6 +9,26 @@ namespace GServer.Archestra.Extensions
 {
     public static class MxValueExtensions
     {
+        public static MxValue AsType<T>(this MxValueClass mxValueClass)
+        {
+            var type = typeof(T);
+            
+            if (type == typeof(bool))
+                mxValueClass.PutBoolean(default);
+            if (type == typeof(int))
+                mxValueClass.PutInteger(default);
+            if (type == typeof(double))
+                mxValueClass.PutDouble(default);
+            if (type == typeof(float))
+                mxValueClass.PutFloat(default);
+            if (type == typeof(string))
+                mxValueClass.PutString(default);
+            if (type == typeof(DateTime))
+                mxValueClass.PutTime(default);
+
+            return mxValueClass;
+        }
+        
         /// <summary>
         /// Generic method wraps all calls on MxValue to get value of specified type.
         /// This method will attempt to determine the data type from MxValue class, but you can also provide the type
@@ -85,10 +105,11 @@ namespace GServer.Archestra.Extensions
                     mxValue.SetValue<T, TimeSpan>(newValue, (v, x) => v.PutElapsedTime(x.ToVbLargeInteger()));
                     break;
                 case MxDataType.MxReferenceType:
+                    //TODO Need to figure out how this can be set especially for the script aliases
                     mxValue.SetReference(newValue);
                     break;
                 case MxDataType.MxStatusType:
-                    //TODO Need to figure this one out still. Takes MxStats which is complex object. Not even sure if it makes sense to set status?
+                    //Status is a runtime system writable attribute. It doesn't make sense to set this type.
                     break;
                 case MxDataType.MxDataTypeEnum:
                     mxValue.SetValue<T, DataType>(newValue, (v, x) => v.PutMxDataType(x.ToMxType()));
@@ -97,7 +118,7 @@ namespace GServer.Archestra.Extensions
                     mxValue.SetValue<T, SecurityClassification>(newValue, (v, x) => v.PutMxSecurityClassification(x.ToMxType()));
                     break;
                 case MxDataType.MxDataQualityType:
-                    //mxValue.SetValue<T, Quality>(newValue, (v, x) => v.PutMxDataQuality((int) Quality)); //TODO Make Quality a enumeration class
+                    //Quality is a runtime system writable attribute. It doesn't make sense to set this type.
                     break;
                 case MxDataType.MxQualifiedEnum:
                     mxValue.SetValue<T, string>(newValue, (v, x) => v.PutCustomEnum(x, 0, 0, 0));
@@ -124,9 +145,9 @@ namespace GServer.Archestra.Extensions
                 return getter(mxValue).ConvertTo<TReturn>();
 
             var results = new List<TGetter>();
-            mxValue.GetDimensionSize(out var count);
+            mxValue.GetDimensionSize(out var size);
             
-            for (var i = 1; i <= count; i++)
+            for (var i = 1; i <= size; i++)
             {
                 var item = new MxValueClass();
                 mxValue.GetElement(i, item);

@@ -13,6 +13,7 @@ using GCommon.Core.Extensions;
 using GCommon.Core.Utilities;
 using GCommon.Data.Abstractions;
 using GCommon.Primitives;
+using GServer.Services.Abstractions;
 
 namespace GServer.Services
 {

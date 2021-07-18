@@ -1,6 +1,5 @@
 using GServer.Archestra.Entities;
 using NUnit.Framework;
-using TestContext = GServer.Archestra.IntegrationTests.TestContext;
 
 namespace GServer.Archestra.IntegrationTests
 {
@@ -17,10 +16,10 @@ namespace GServer.Archestra.IntegrationTests
         }
         
         [Test]
-        [TestCase("$Test_Template")]
-        public void ToXml_WhenCalled_ReturnsNotNull(string tagName)
+        public void ToXml_WhenCalled_ReturnsNotNull()
         {
-            var template = (ArchestraObject) _galaxy.GetObject(tagName);
+            var tagName = Known.Templates.ReactorSet.TagName;
+            var template = _galaxy.GetObject(tagName);
 
             var serialized = template.ToXml();
             
@@ -28,10 +27,10 @@ namespace GServer.Archestra.IntegrationTests
         }
         
         [Test]
-        [TestCase("$Test_Template")]
-        public void ToXmlFromXml_SameData_ReturnsObjectWithSameProperties(string tagName)
+        public void ToXmlFromXml_SameData_ReturnsObjectWithSameProperties()
         {
-            var template = (ArchestraObject) _galaxy.GetObject(tagName);
+            var tagName = Known.Templates.ReactorSet.TagName;
+            var template = _galaxy.GetObject(tagName);
 
             var xml = template.ToXml();
             var galaxyObject = new ArchestraObject().FromXml(xml);

@@ -12,7 +12,7 @@ namespace GServer.Archestra.IntegrationTests
     {
         // ReSharper disable once ConvertToConstant.Local
         // This is a configuration bit. Determines if the setup create and deletes a test galaxy before running all tests.
-        private static readonly bool RunSetup = true;
+        private static readonly bool RunSetup = false;
         private const string BaseGalaxyTemplate = "Base_Application_Server.cab";
         private const string ReactorGalaxyTemplate = "Reactor_Demo_Application_Server.cab";
         private const string KnownGalaxyName = "TestReactor";

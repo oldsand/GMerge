@@ -27,15 +27,5 @@ namespace GServer.Archestra.IntegrationTests
             var connection = await  factory.CreateAsync(galaxyName, CancellationToken.None);
             Assert.NotNull(connection);
         }
-
-        [Test]
-        public void New_WhenCalled_ReturnsNotNull()
-        {
-            var factory = new GalaxyRepositoryFactory();
-            
-            var galaxy = factory.New("GMerge");
-            
-            Assert.NotNull(galaxy);
-        }
     }
 }

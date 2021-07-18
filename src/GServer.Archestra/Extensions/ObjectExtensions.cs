@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using ArchestrA.GRAccess;
-using GCommon.Core;
 using GCommon.Primitives;
 using GCommon.Primitives.Base;
 using GServer.Archestra.Entities;
@@ -12,46 +10,64 @@ using GServer.Archestra.Entities;
 
 namespace GServer.Archestra.Extensions
 {
+    /// <summary>
+    /// ObjectExtensions provides helper methods to make dealing with the IgObject class easier.
+    /// </summary>
     public static class ObjectExtensions
     {
+        /// <summary>
+        /// Determines if the object is checked out (either to user or someone else).
+        /// </summary>
+        /// <param name="gObject"></param>
+        /// <returns></returns>
         public static bool IsCheckedOut(this IgObject gObject)
         {
             return gObject.CheckoutStatus != ECheckoutStatus.notCheckedOut;
         }
 
+        /// <summary>
+        /// Determines if the object is a template using the template naming convention (i.e starts with '$').
+        /// </summary>
+        /// <param name="gObject"></param>
+        /// <returns></returns>
         public static bool IsTemplate(this IgObject gObject)
         {
             return gObject.Tagname.StartsWith("$");
         }
 
-        //TODO: This is not complete. Also not sure if it's necessary...
-        public static bool IsAssignableTo(this IgObject gObject, IgObject assignee)
+        /// <summary>
+        /// Closes the object without saving an changes. If changes do not exist, method will call UndoCheckout. If
+        /// Changes exist, then the object will call CheckIn without saving changes.
+        /// </summary>
+        /// <param name="gObject"></param>
+        public static void ForceClose(this IgObject gObject)
         {
-            if (assignee.category == ECATEGORY.idxCategoryArea)
-                return true;
-            if (assignee.category == ECATEGORY.idxCategoryApplicationObject)
-                return gObject.category == ECATEGORY.idxCategoryApplicationObject;
+            if (gObject.EditStatus == EEditStatus.notBeingEdited)
+                gObject.UndoCheckOut();
+            else
+                gObject.CheckIn("Close object without saving changes");
+            
+            gObject.CommandResult.Process();
+        }
+        
+        /// <summary>
+        /// Saves current changes and checks in the object.
+        /// </summary>
+        /// <param name="gObject"></param>
+        /// <param name="comment">Change comments to attach to check in</param>
+        public static void SaveChanges(this IgObject gObject, string comment)
+        {
+            gObject.Save();
+            gObject.CommandResult.Process();
+            
+            gObject.CheckIn(comment);
+            gObject.CommandResult.Process();
+        }
 
-            return false;
-        }
-        
-        //TODO: This is not complete/tested. Also not sure if it's necessary...
-        public static void Assign(this IgObject gObject, IgObject assignee)
-        {
-            switch (assignee.category)
-            {
-                case ECATEGORY.idxCategoryArea:
-                    gObject.Area = assignee.Tagname;
-                    return;
-                case ECATEGORY.idxCategoryApplicationObject:
-                    gObject.Container = assignee.Tagname;
-                    return;
-                default:
-                    gObject.Host = assignee.Tagname;
-                    break;
-            }
-        }
-        
+        /// <summary>
+        /// Deletes the current object from the galaxy. Calls either DeleteTemplate or DeleteInstance accordingly.
+        /// </summary>
+        /// <param name="gObject"></param>
         public static void Delete(this IgObject gObject)
         {
             if (gObject.IsTemplate())
@@ -65,19 +81,15 @@ namespace GServer.Archestra.Extensions
             gObject.CommandResult.Process();
         }
 
+        /// <summary>
+        /// Gets the specified attribute from the object.
+        /// </summary>
+        /// <param name="gObject"></param>
+        /// <param name="name">The name of the attribute to retrieve</param>
+        /// <returns></returns>
         public static IAttribute GetAttribute(this IgObject gObject, string name)
         {
             return gObject.Attributes[name];
-        }
-
-        public static IAttribute GetConfigurableAttribute(this IgObject gObject, string name)
-        {
-            return gObject.ConfigurableAttributes[name];
-        }
-
-        public static IEnumerable<IAttribute> GetAttributes(this IgObject gObject, IEnumerable<string> names)
-        {
-            return names.Select(name => gObject.Attributes[name]);
         }
 
         public static void SetUserDefinedAttributes(this IgObject gObject, ArchestraObject source)
@@ -166,9 +178,14 @@ namespace GServer.Archestra.Extensions
             }
         }
 
+        /// <summary>
+        /// Transforms the object to a ArchestraObject entity
+        /// </summary>
+        /// <param name="gObject"></param>
+        /// <returns></returns>
         public static ArchestraObject Map(this IgObject gObject)
         {
-            return new ArchestraObject
+            return new()
             {
                 TagName = gObject.Tagname,
                 HierarchicalName = gObject.HierarchicalName,
@@ -180,30 +197,55 @@ namespace GServer.Archestra.Extensions
                 HostName = gObject.Host,
                 AreaName = gObject.Area,
                 ContainerName = gObject.Container,
-                Attributes = gObject.Attributes.AsGalaxyAttributes()
+                Attributes = gObject.Attributes.Map()
             };
         }
 
+        /// <summary>
+        /// Transforms the template object to a ArchestraObject entity
+        /// </summary>
+        /// <param name="template"></param>
+        /// <returns></returns>
         public static ArchestraObject Map(this ITemplate template)
         {
             return template.AsObject().Map();
         }
 
+        /// <summary>
+        /// Transforms the instance object to a ArchestraObject entity
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <returns></returns>
         public static ArchestraObject Map(this IInstance instance)
         {
             return instance.AsObject().Map();
         }
 
+        /// <summary>
+        /// Casts the template object to a IgObject interface
+        /// </summary>
+        /// <param name="template"></param>
+        /// <returns></returns>
         public static IgObject AsObject(this ITemplate template)
         {
             return (IgObject) template;
         }
         
+        /// <summary>
+        /// Casts the instance object to a IgObject interface
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <returns></returns>
         public static IgObject AsObject(this IInstance instance)
         {
             return (IgObject) instance;
         }
 
+        /// <summary>
+        /// Casts the object to the type specified by the generic parameter. This should be IInstance or ITemplate!
+        /// </summary>
+        /// <param name="gObject"></param>
+        /// <returns></returns>
         public static T As<T>(this IgObject gObject)
         {
             return (T) gObject;

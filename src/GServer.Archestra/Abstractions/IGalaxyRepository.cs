@@ -35,14 +35,7 @@ namespace GServer.Archestra.Abstractions
         void UpdateSymbol(ArchestraGraphic archestraGraphic);
         void Deploy(IEnumerable<string> tagNames, DeploymentOptions options);
         void Undeploy(IEnumerable<string> tagNames, DeploymentOptions options);
-        void ExportPkg(string tagName, string fileName);
-        void ExportPkg(IEnumerable<string> tagNames, string fileName);
-        void ExportCsv(string tagName, string fileName);
-        void ExportCsv(IEnumerable<string> tagNames, string fileName);
-        void ExportGraphic(string tagName, string destination);
-        void ExportGraphic(IEnumerable<string> tagNames, string destination);
-        void ImportPkg(string fileName, bool overwrite);
-        void ImportCsv(string fileName);
-        void ImportGraphic(string fileName, string tagName, bool overwrite);
+        
+        
     }
 }

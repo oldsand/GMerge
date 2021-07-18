@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,30 +25,17 @@ namespace GServer.Services.IntegrationTests
         }
 
         [Test]
-        public async Task RegisterGalaxyAsync_ValidGalaxy_CanReturnProvidedGalaxy()
+        public void RegisterAll_WhenCalled_ReturnsAll()
         {
             var registry = new GalaxyRegistry();
-
-            await registry.RegisterAsync(Settings.CurrentTestGalaxy, Settings.CurrentTestUser, CancellationToken.None);
-
-            var connection = registry.GetGalaxy(Settings.CurrentTestGalaxy, Settings.CurrentTestUser);
+            var stopWatch = new Stopwatch();
             
-            Assert.NotNull(connection);
-            Assert.IsTrue(connection.Name == Settings.CurrentTestGalaxy);
-            Assert.IsTrue(connection.ConnectedUser == Settings.CurrentTestUser);
-        }
+            stopWatch.Start();
+            registry.RegisterAll();
+            stopWatch.Stop();
 
-        [Test]
-        public async Task RegisterGalaxiesAsync_WhenCalled_RegistryContainsAllGalaxies()
-        {
-            var registry = new GalaxyRegistry();
-
-            await registry.RegisterAllAsync(Settings.CurrentTestUser, CancellationToken.None);
-
-            var galaxies = registry.GetAll().ToList();
-            
-            Assert.AreEqual(3, galaxies.Count);
-            Assert.True(galaxies.Any(x => x.Name == Settings.CurrentTestGalaxy));
+            var results = registry.GetAll();
+            Assert.IsNotEmpty(results);
         }
     }
 }
