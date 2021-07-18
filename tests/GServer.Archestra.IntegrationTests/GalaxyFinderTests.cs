@@ -1,7 +1,6 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using GServer.Archestra;
 using NUnit.Framework;
 
 namespace GServer.Archestra.IntegrationTests
@@ -14,7 +13,7 @@ namespace GServer.Archestra.IntegrationTests
         {
             var finder = new GalaxyFinder();
 
-            var exists = finder.Exists(Global.GalaxyName);
+            var exists = finder.Exists(TestContext.GalaxyName);
 
             Assert.True(exists);
         }
@@ -34,7 +33,7 @@ namespace GServer.Archestra.IntegrationTests
         {
             var finder = new GalaxyFinder();
 
-            var exists = await finder.ExistsAsync(Global.GalaxyName, CancellationToken.None);
+            var exists = await finder.ExistsAsync(TestContext.GalaxyName, CancellationToken.None);
 
             Assert.True(exists);
         }
@@ -47,8 +46,8 @@ namespace GServer.Archestra.IntegrationTests
             var results = finder.FindAll().ToList();
             
             Assert.IsNotEmpty(results);
-            Assert.That(results.Count, Has.Count.GreaterThanOrEqualTo(1));
-            Assert.That(results, Contains.Item(Global.GalaxyName));
+            Assert.That(results, Has.Count.GreaterThanOrEqualTo(1));
+            Assert.That(results, Contains.Item(TestContext.GalaxyName));
         }
         
         [Test]
@@ -59,8 +58,8 @@ namespace GServer.Archestra.IntegrationTests
             var results = (await finder.FindAllAsync(CancellationToken.None)).ToList();
             
             Assert.IsNotEmpty(results);
-            Assert.That(results.Count, Has.Count.GreaterThanOrEqualTo(1));
-            Assert.That(results, Contains.Item(Global.GalaxyName));
+            Assert.That(results, Has.Count.GreaterThanOrEqualTo(1));
+            Assert.That(results, Contains.Item(TestContext.GalaxyName));
         }
     }
 }

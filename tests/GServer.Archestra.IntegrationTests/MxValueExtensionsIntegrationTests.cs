@@ -1,6 +1,7 @@
 using ArchestrA.GRAccess;
 using GServer.Archestra.Extensions;
 using NUnit.Framework;
+using TestContext = GServer.Archestra.IntegrationTests.TestContext;
 
 namespace GServer.Archestra.IntegrationTests
 {
@@ -12,8 +13,8 @@ namespace GServer.Archestra.IntegrationTests
         [SetUp]
         public void Setup()
         {
-            _galaxy = new GalaxyRepository(Global.GalaxyName);
-            _galaxy.Login(Global.UserName);
+            _galaxy = new GalaxyRepository(TestContext.GalaxyName);
+            _galaxy.Login(TestContext.UserName);
         }
         
         [Test]

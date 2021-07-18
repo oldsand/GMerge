@@ -12,6 +12,9 @@ namespace GServer.Archestra
     {
         public bool Exists(string galaxyName)
         {
+            if (galaxyName == null)
+                throw new ArgumentNullException(nameof(galaxyName), "galaxyName can not be null");
+            
             var host = Environment.MachineName;
             var grAccess = new GRAccessAppClass();
             return grAccess.QueryGalaxies(host)[galaxyName] != null;

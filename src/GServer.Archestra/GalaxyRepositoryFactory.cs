@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ArchestrA.GRAccess;
@@ -12,6 +13,7 @@ namespace GServer.Archestra
     public class GalaxyRepositoryFactory : IGalaxyRepositoryFactory
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private const string BaseGalaxyTemplate = "Base_Application_Server.cab";
         
         public IGalaxyRepository Create(string galaxyName)
         {
@@ -47,7 +49,12 @@ namespace GServer.Archestra
         {
             var grAccess = new GRAccessAppClass();
             
-            grAccess.CreateGalaxy(galaxyName);
+            var template = grAccess.ListCreateGalaxyTemplates().ToList().SingleOrDefault(x => x == BaseGalaxyTemplate);
+
+            if (string.IsNullOrEmpty(template))
+                throw new InvalidOperationException($"Could not find base template to create galaxy {galaxyName}");
+
+            grAccess.CreateGalaxyFromTemplate(template, galaxyName);
 
             if (!grAccess.CommandResult.Successful)
             {

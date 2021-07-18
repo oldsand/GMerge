@@ -143,9 +143,11 @@ namespace GServer.Archestra.Extensions
         {
             if (tagName == null) throw new ArgumentNullException(nameof(tagName), "Value cannot be null");
 
-            var template =
-                galaxy.QueryObjectsByName(EgObjectIsTemplateOrInstance.gObjectIsTemplate, new[] {tagName})[tagName];
+            var template = galaxy.QueryObjectsByName(EgObjectIsTemplateOrInstance.gObjectIsTemplate,
+                new[] {tagName})[tagName];
+            
             galaxy.CommandResult.Process();
+            
             return template.As<ITemplate>();
         }
 

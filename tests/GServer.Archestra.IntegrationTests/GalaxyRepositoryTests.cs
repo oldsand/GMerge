@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
 using NUnit.Framework;
+using TestContext = GServer.Archestra.IntegrationTests.TestContext;
 
 namespace GServer.Archestra.IntegrationTests
 {
@@ -13,8 +14,8 @@ namespace GServer.Archestra.IntegrationTests
         [SetUp]
         public void Setup()
         {
-            _galaxy = new GalaxyRepository(Global.GalaxyName);
-            _galaxy.Login(Global.UserName);
+            _galaxy = new GalaxyRepository(TestContext.GalaxyName);
+            _galaxy.Login(TestContext.UserName);
         }
 
         [Test]
@@ -23,7 +24,7 @@ namespace GServer.Archestra.IntegrationTests
         [TestCase("admin")]
         public void Login_WhenCalled_SetsConnectionProperties(string userName)
         {
-            var galaxy = new GalaxyRepository(Global.GalaxyName);
+            var galaxy = new GalaxyRepository(TestContext.GalaxyName);
 
             galaxy.Login(userName);
 
@@ -34,7 +35,7 @@ namespace GServer.Archestra.IntegrationTests
         [Test]
         public void Login_WindowsIdentity_ConnectsWithUserName()
         {
-            var galaxy = new GalaxyRepository(Global.GalaxyName);
+            var galaxy = new GalaxyRepository(TestContext.GalaxyName);
 
             var user = WindowsIdentity.GetCurrent();
             galaxy.Login(user.Name);

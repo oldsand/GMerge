@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using ArchestrA.GRAccess;
+using AutoFixture;
+using GCommon.Primitives;
 using GServer.Archestra.Extensions;
 using NUnit.Framework;
 
@@ -11,40 +12,62 @@ namespace GServer.Archestra.IntegrationTests
     public class GalaxyExtensionTests
     {
         private static IGalaxy _galaxy;
+        private GRAccessAppClass _grAccess;
 
-        [SetUp]
+        public static IEnumerable<TestCaseData> TestCaseTemplateNames
+        {
+            get
+            {
+                yield return new TestCaseData(Template.Area.Name);
+                yield return new TestCaseData(Template.UserDefined.Name);
+                yield return new TestCaseData(Template.ViewEngine.Name);
+                yield return new TestCaseData(Template.AppEngine.Name);
+            }
+        }
+
+        [OneTimeSetUp]
         public void Setup()
         {
-            var grAccess = new GRAccessAppClass();
-            _galaxy = grAccess.QueryGalaxies(Environment.MachineName)[Global.GalaxyName];
+            _grAccess = new GRAccessAppClass();
+            _galaxy = _grAccess.QueryGalaxies()[TestContext.GalaxyName];
             _galaxy.Login(string.Empty, string.Empty);
         }
 
-        [Test]
-        public void CheckoutObjects_ValidTagNames_AllObjectsReturnCheckedOut()
+        [OneTimeTearDown]
+        public void TearDown()
         {
-            var tagList = new List<string> {"$Test_Template", "Test_Template_001"};
-
-            var objects = _galaxy.GetObjectsByName(tagList);
-            objects.CheckOut();
-
-            foreach (IgObject gObject in objects)
-                Assert.True(gObject.IsCheckedOut());
-
-            _galaxy.DeepCheckIn(tagList);
-
-            foreach (IgObject gObject in objects)
-                Assert.False(gObject.IsCheckedOut());
+            _galaxy.Logout();
+            _galaxy = null;
         }
 
         [Test]
-        [TestCase("$Test_Template")]
-        [TestCase("SUN_GEN_Site_Data")]
-        [TestCase("SUN_GEN_Site_Area")]
-        [TestCase("ETDEVTEST1")]
-        [TestCase("$UserDefined")]
-        public void GetObjectByName_ValidObject_ReturnsInstanceWithTagName(string tagName)
+        public void DeepCheckIn_ValidTagNames_AllObjectsReturnCheckedOut()
         {
+            var target = _galaxy.GetObjectByName(Known.Template.ReactorSet);
+            target.CheckOut();
+            Assert.True(target.CheckoutStatus == ECheckoutStatus.checkedOutToMe);
+            
+            _galaxy.DeepCheckIn(Known.Template.ReactorSet);
+
+            Assert.True(target.CheckoutStatus == ECheckoutStatus.notCheckedOut);
+        }
+
+        [Test]
+        public void GetObjectByName_KnownTemplateName_ReturnsExpectedInstance()
+        {
+            const string tagName = Known.Template.ReactorSet;
+            
+            var result = _galaxy.GetObjectByName(tagName);
+
+            Assert.NotNull(result);
+            Assert.AreEqual(tagName, result.Tagname);
+        }
+        
+        [Test]
+        public void GetObjectByName_KnownInstanceName_ReturnsExpectedInstance()
+        {
+            const string tagName = Known.Instances.R31;
+            
             var result = _galaxy.GetObjectByName(tagName);
 
             Assert.NotNull(result);
@@ -52,12 +75,11 @@ namespace GServer.Archestra.IntegrationTests
         }
 
         [Test]
-        [TestCase("Test_Template")]
-        [TestCase("FakeObject")]
-        [TestCase("$UserUndefined")]
-        public void GetObjectByName_InvalidObject_ReturnsNull(string tagName)
+        public void GetObjectByName_InvalidObject_ReturnsNull()
         {
-            var result = _galaxy.GetObjectByName(tagName);
+            var fixture = new Fixture();
+            
+            var result = _galaxy.GetObjectByName(fixture.Create<string>());
 
             Assert.IsNull(result);
         }
@@ -69,11 +91,8 @@ namespace GServer.Archestra.IntegrationTests
         }
 
         [Test]
-        [TestCase("$ViewEngine")]
-        [TestCase("$UserDefined")]
-        [TestCase("$InTouchViewApp")]
-        [TestCase("$AppEngine")]
-        public void GetTemplateByName_ValidTemplate_ReturnsValidObject(string tagName)
+        [TestCaseSource(nameof(TestCaseTemplateNames))]
+        public void GetTemplateByName_ValidTemplateName_ReturnsExpectedInstance(string tagName)
         {
             var result = _galaxy.GetTemplateByName(tagName);
 
@@ -82,12 +101,11 @@ namespace GServer.Archestra.IntegrationTests
         }
 
         [Test]
-        [TestCase("$Test_Templates")]
-        [TestCase("$FakeObject")]
-        [TestCase("$UserUndefined")]
-        public void GetTemplateByName_InvalidObject_ReturnsNull(string tagName)
+        public void GetTemplateByName_InvalidTemplateName_ReturnsNull()
         {
-            var result = _galaxy.GetTemplateByName(tagName);
+            var fixture = new Fixture();
+            
+            var result = _galaxy.GetTemplateByName(fixture.Create<string>());
 
             Assert.IsNull(result);
         }
@@ -99,11 +117,14 @@ namespace GServer.Archestra.IntegrationTests
         }
 
         [Test]
-        public void GetTemplatesByName_ValidTemplates_ReturnsValidObjects()
+        public void GetTemplatesByName_ValidTemplates_ReturnsExpectedCount()
         {
             var tagNames = new List<string>
             {
-                "$ViewEngine", "$AppEngine", "$WinPlatform", "$InTouchViewApp"
+                Template.ViewEngine.Name,
+                Template.AppEngine.Name,
+                Template.WinPlatform.Name,
+                Template.InTouchViewApp.Name
             };
 
             var results = _galaxy.GetTemplatesByName(tagNames);
@@ -117,12 +138,10 @@ namespace GServer.Archestra.IntegrationTests
         }
 
         [Test]
-        public void GetTemplatesByName_InvalidObject_ReturnsNull()
+        public void GetTemplatesByName_InvalidObject_ReturnsIsEmpty()
         {
-            var tagNames = new List<string>
-            {
-                "$Test_Templates", "$FakeObject", "$UserUndefined", "Something"
-            };
+            var fixture = new Fixture();
+            var tagNames = fixture.CreateMany<string>(4);
 
             var results = _galaxy.GetTemplatesByName(tagNames);
 
@@ -136,9 +155,13 @@ namespace GServer.Archestra.IntegrationTests
         [Test]
         public void GetTemplatesByName_SomeRealSomeFake_ReturnsInstanceWithTagName()
         {
+            var fixture = new Fixture();
             var tagNames = new List<string>
             {
-                "$Test_Templates", "$FakeObject", "$UserDefined", "Something"
+                Template.ViewEngine.Name,
+                Template.AppEngine.Name,
+                fixture.Create<string>(),
+                fixture.Create<string>()
             };
 
             var results = _galaxy.GetTemplatesByName(tagNames);
@@ -148,8 +171,7 @@ namespace GServer.Archestra.IntegrationTests
                 actual.Add(result.Tagname);
 
             Assert.IsNotEmpty(actual);
-            Assert.That(actual, Has.Count.EqualTo(1));
-            Assert.IsTrue(actual.Any(t => t == "$UserDefined"));
+            Assert.That(actual, Has.Count.EqualTo(2));
         }
 
         [Test]
@@ -159,12 +181,10 @@ namespace GServer.Archestra.IntegrationTests
         }
 
         [Test]
-        [TestCase("SUN_GEN_Site_Data")]
-        [TestCase("SUN_GEN_Site_Area")]
-        [TestCase("GR_Node")]
-        [TestCase("ETDEVTEST1")]
-        public void GetInstanceByName_ValidTemplate_ReturnsValidObject(string tagName)
+        public void GetInstanceByName_ValidTemplate_ReturnsValidObject()
         {
+            const string tagName = Known.Instances.R31;
+            
             var result = _galaxy.GetInstanceByName(tagName);
 
             Assert.NotNull(result);
@@ -172,11 +192,11 @@ namespace GServer.Archestra.IntegrationTests
         }
 
         [Test]
-        [TestCase("DoesntMatter")]
-        [TestCase("FakeObject")]
-        [TestCase("$UserUndefined")]
-        public void GetInstanceByName_InvalidObject_ReturnsNull(string tagName)
+        public void GetInstanceByName_InvalidObject_ReturnsNull()
         {
+            var fixture = new Fixture();
+            var tagName = fixture.Create<string>();
+            
             var result = _galaxy.GetInstanceByName(tagName);
 
             Assert.IsNull(result);
@@ -189,11 +209,12 @@ namespace GServer.Archestra.IntegrationTests
         }
 
         [Test]
-        public void GetInstancesByName_ValidTemplates_ReturnsValidObjects()
+        public void GetInstancesByName_ValidTemplates_ReturnsExpectedCount()
         {
             var tagNames = new List<string>
             {
-                "SUN_GEN_Site_Data", "ETDEVTEST1", "GR_Node"
+                Known.Instances.R31,
+                Known.Instances.DrumConveyor
             };
 
             var results = _galaxy.GetInstancesByName(tagNames);
@@ -203,16 +224,14 @@ namespace GServer.Archestra.IntegrationTests
                 actual.Add(result.Tagname);
 
             Assert.IsNotEmpty(actual);
-            Assert.That(actual, Has.Count.EqualTo(3));
+            Assert.That(actual, Has.Count.EqualTo(2));
         }
 
         [Test]
-        public void GetInstancesByName_InvalidObject_ReturnsNull()
+        public void GetInstancesByName_InvalidObject_ReturnsIsEmpty()
         {
-            var tagNames = new List<string>
-            {
-                "Test_Fake", "FakeObject", "Something"
-            };
+            var fixture = new Fixture();
+            var tagNames = fixture.CreateMany<string>(4);
 
             var results = _galaxy.GetInstancesByName(tagNames);
 
@@ -224,11 +243,15 @@ namespace GServer.Archestra.IntegrationTests
         }
 
         [Test]
-        public void GetInstancesByName_SomeRealSomeFake_ReturnsInstanceWithTagName()
+        public void GetInstancesByName_SomeRealSomeFake_ReturnsExpectedCount()
         {
+            var fixture = new Fixture();
             var tagNames = new List<string>
             {
-                "SUN_GEN_Site_Data", "FakeObject", "", "Something"
+                Known.Instances.R31,
+                Known.Instances.DrumConveyor,
+                fixture.Create<string>(),
+                fixture.Create<string>()
             };
 
             var results = _galaxy.GetInstancesByName(tagNames);
@@ -238,8 +261,7 @@ namespace GServer.Archestra.IntegrationTests
                 actual.Add(result.Tagname);
 
             Assert.IsNotEmpty(actual);
-            Assert.That(actual, Has.Count.EqualTo(1));
-            Assert.IsTrue(actual.Any(t => t == "SUN_GEN_Site_Data"));
+            Assert.That(actual, Has.Count.EqualTo(2));
         }
 
         [Test]
@@ -249,29 +271,34 @@ namespace GServer.Archestra.IntegrationTests
         }
 
         [Test]
-        public void GetDerivedTemplates_WhenCalled_ReturnsTemplates()
+        public void GetDerivedTemplates_WhenCalled_ReturnsKnownTemplates()
         {
-            var templates = _galaxy.GetDerivedTemplates("$UserDefined");
-            foreach (IgObject template in templates)
-            {
-                var galaxyObject = template.Map();
-                Assert.NotNull(galaxyObject);
-            }
+            var templates = _galaxy.GetDerivedTemplates(Template.UserDefined.Name);
+            
+            var results = new List<string>();
+            foreach (IgObject result in templates)
+                results.Add(result.Tagname);
+            
+            Assert.That(results, Contains.Item(Known.Template.ReactorSet));
+            Assert.That(results, Contains.Item(Known.Template.DrumConveyor));
         }
 
         [Test]
-        public void GetDescendents_WhenCalled_ReturnsDerivedObjects()
+        public void GetDescendents_WhenCalled_ReturnsKnownObjects()
         {
-            var results = _galaxy.GetDescendents("$UserDefined");
+            var descendents = _galaxy.GetDescendents(Template.UserDefined.Name);
 
-            foreach (IgObject result in results)
-            {
-                var galaxyObject = result.Map();
-                Assert.NotNull(galaxyObject);
-            }
+            var results = new List<string>();
+            foreach (IgObject result in descendents)
+                results.Add(result.Tagname);
+            
+            Assert.That(results, Contains.Item(Known.Template.ReactorSet));
+            Assert.That(results, Contains.Item(Known.Template.DrumConveyor));
+            Assert.That(results, Contains.Item(Known.Instances.R31));
+            Assert.That(results, Contains.Item(Known.Instances.DrumConveyor));
         }
 
-        [Test]
+        /*[Test]
         public void AssignToHost_AreaObject_ReturnsExpectedHost()
         {
             var area = new[] {"Area_002"};
@@ -288,34 +315,56 @@ namespace GServer.Archestra.IntegrationTests
             var results = _galaxy.GetObjectsByName(tagNames);
             foreach (IgObject gObject in results)
                 Assert.AreEqual("Area_002", gObject.Area);
-        }
+        }*/
 
         [Test]
-        public void IsDerivedFrom_ObjectDerivedFromTemplate_ReturnsTrue()
+        public void IsDerivedFrom_DerivedTemplate_ReturnsTrue()
         {
-            var result = _galaxy.IsDescendentOf("$Test_Template", "$UserDefined");
+            var result = _galaxy.IsDescendentOf(Known.Template.ReactorSet, Template.UserDefined.Name);
             Assert.True(result);
+        }
+        
+        [Test]
+        public void IsDerivedFrom_NonDerivedTemplate_ReturnsFalse() 
+        {
+            var result = _galaxy.IsDescendentOf(Known.Template.DrumConveyor, Known.Template.ReactorSet);
+            Assert.False(result);
+        }
+        
+        [Test]
+        public void IsDerivedFrom_DerivedInstance_ReturnsTrue()  
+        {
+            var result = _galaxy.IsDescendentOf(Known.Instances.R31, Known.Template.ReactorSet);
+            Assert.True(result);
+        }
+        
+        [Test]
+        public void IsDerivedFrom_NonDerivedInstance_ReturnsFalse()   
+        {
+            var result = _galaxy.IsDescendentOf(Known.Template.ReactorSet, Known.Instances.DrumConveyor);
+            Assert.False(result);
         }
         
         [Test]
         public void CreateObject_WhenCalled_CreatedExpectedObject()
         {
-            var template = _galaxy.GetObjectByName("$Test_Template");
+            var template = _galaxy.GetObjectByName(Template.UserDefined.Name);
             Assert.NotNull(template);
 
-            _galaxy.CreateObject("$DerivedTemplate001", template.Tagname);
+            _galaxy.CreateObject("$Test_Template", template.Tagname);
 
-            var derived = _galaxy.GetObjectByName("$DerivedTemplate001");
+            var derived = _galaxy.GetObjectByName("$Test_Template");
             
             Assert.NotNull(derived);
-            Assert.AreEqual("$DerivedTemplate001", derived.Tagname);
+            Assert.AreEqual("$Test_Template", derived.Tagname);
         }
         
         [Test]
         public void CreateAndDeleteMultipleNonContainedObjects()
         {
-            var template = _galaxy.GetObjectByName("$Test_Template");
+            var template = _galaxy.GetObjectByName(Template.UserDefined.Name);
             var created = new List<string>();
+            var results = new List<string>();
 
             for (var i = 1; i <= 10; i++)
             {
@@ -332,26 +381,23 @@ namespace GServer.Archestra.IntegrationTests
             }
 
             var createdObjects = _galaxy.GetObjectsByName(created);
-
-            Assert.That(createdObjects, Has.Count.EqualTo(20));
+            
+            foreach (IgObject result in createdObjects)
+                results.Add(result.Tagname);
+            
+            Assert.That(results, Has.Count.EqualTo(20));
 
             foreach (IgObject createdObject in createdObjects)
                 _galaxy.DeepDelete(createdObject.Tagname);
 
 
             createdObjects = _galaxy.GetObjectsByName(created);
-
-            Assert.IsEmpty(createdObjects);
-        }
-
-        [Test]
-        public void RecursiveDelete_WhenCalled_DeleteAll()
-        {
-            _galaxy.DeepDelete("$LimitAlarms");
-
-            var result = _galaxy.GetObjectByName("$LimitAlarms");
             
-            Assert.Null(result);
+            results.Clear();
+            foreach (IgObject result in createdObjects)
+                results.Add(result.Tagname);
+            
+            Assert.IsEmpty(results);
         }
     }
 }

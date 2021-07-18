@@ -54,7 +54,7 @@
         <Compile Include="GalaxyFactoryTests.cs" />
         <Compile Include="GalaxyFinderTests.cs" />
         <Compile Include="GalaxyRepositoryTests.cs" />
-        <Compile Include="Global.cs" />
+        <Compile Include="Known.cs" />
         <Compile Include="MxValueExtensionsIntegrationTests.cs" />
         <Compile Include="MxValueExtensionsUnitTest.cs" />
         <Compile Include="CreateObjectTests.cs" />
@@ -63,6 +63,7 @@
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="AttributeExtensionTests.cs" />
         <Compile Include="ObjectExtensionTests.cs" />
+        <Compile Include="TestContext.cs" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\..\src\GServer.Archestra\GServer.Archestra.csproj">
@@ -86,6 +87,7 @@
       <None Include="app.config" />
     </ItemGroup>
     <ItemGroup>
+      <PackageReference Include="AutoFixture" Version="4.17.0" />
       <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="1.1.1" />
       <PackageReference Include="Microsoft.Bcl.HashCode" Version="1.1.0" />
       <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="3.1.10" />
