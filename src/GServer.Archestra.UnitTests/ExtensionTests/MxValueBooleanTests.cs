@@ -1,5 +1,6 @@
 using System.Linq;
 using AutoFixture;
+using FluentAssertions;
 using GServer.Archestra.Extensions;
 using GServer.Archestra.Helpers;
 using NUnit.Framework;
@@ -21,11 +22,11 @@ namespace GServer.Archestra.UnitTests.ExtensionTests
         public void GetValue_SingleValue_ReturnsExpectedValue()
         {
             var expected = _fixture.Create<bool>();
-            var mxValue = Mx.Create<bool>();
+            var mxValue = Mx.Create(expected);
 
             var result = mxValue.GetValue<bool>();
 
-            Assert.AreEqual(expected, result);
+            result.Should().Be(expected);
         }
 
         [Test]
@@ -47,11 +48,11 @@ namespace GServer.Archestra.UnitTests.ExtensionTests
         public void GetValue_AsObject_ReturnsExpectedValue()
         {
             var expected = _fixture.Create<bool>();
-            var mxValue = Mx.Create<bool>();
+            var mxValue = Mx.Create(expected);
 
             var result = mxValue.GetValue<object>();
 
-            Assert.AreEqual(expected, result);
+            result.Should().Be(expected);
         }
 
         [Test]
