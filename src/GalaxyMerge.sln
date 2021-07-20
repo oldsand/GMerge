@@ -87,6 +87,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GServer.Services.Integratio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GServer.Services.UnitTests", "GServer.Services.UnitTests\GServer.Services.UnitTests.csproj", "{2CC8C089-A140-41A7-9654-8F1FF702F853}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GServer.Archestra.UnitTests", "GServer.Archestra.UnitTests\GServer.Archestra.UnitTests.csproj", "{C95B486B-C5F5-460B-807E-A24D11A1AFED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -229,6 +231,10 @@ Global
 		{2CC8C089-A140-41A7-9654-8F1FF702F853}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2CC8C089-A140-41A7-9654-8F1FF702F853}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2CC8C089-A140-41A7-9654-8F1FF702F853}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C95B486B-C5F5-460B-807E-A24D11A1AFED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C95B486B-C5F5-460B-807E-A24D11A1AFED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C95B486B-C5F5-460B-807E-A24D11A1AFED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C95B486B-C5F5-460B-807E-A24D11A1AFED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -272,5 +278,6 @@ Global
 		{E866834A-A961-4B15-B138-4F95EE55C194} = {66C1D8A2-2DFC-4448-B5CF-55BFFB267749}
 		{9E336386-1B9C-41D5-A8F1-34E018B81F92} = {21A3E2BB-E1EC-46E6-83D1-5ACAE5926286}
 		{2CC8C089-A140-41A7-9654-8F1FF702F853} = {66C1D8A2-2DFC-4448-B5CF-55BFFB267749}
+		{C95B486B-C5F5-460B-807E-A24D11A1AFED} = {66C1D8A2-2DFC-4448-B5CF-55BFFB267749}
 	EndGlobalSection
 EndGlobal

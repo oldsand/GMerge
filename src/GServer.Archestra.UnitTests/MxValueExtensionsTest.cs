@@ -2,79 +2,17 @@ using System;
 using System.Collections;
 using System.Linq;
 using ArchestrA.GRAccess;
-using GServer.Archestra.Extensions;
 using GCommon.Core.Extensions;
 using GCommon.Primitives;
+using GServer.Archestra.Extensions;
 using NUnit.Framework;
 
-namespace GServer.Archestra.IntegrationTests
+namespace GServer.Archestra.UnitTests
 {
     [TestFixture]
-    public class MxValueExtensionsUnitTest
+    public class MxValueExtensionsTest
     {
-        [Test]
-        public void GetValueBoolean_SingleArgument_ReturnsExpectedValue()
-        {
-            var mxValue = new MxValueClass();
-            mxValue.PutBoolean(false);
-
-            var result = mxValue.GetValue<bool>();
-
-            Assert.False(result);
-        }
-
-        [Test]
-        public void GetValueBoolean_ArrayArgument_ReturnsExpectedValue()
-        {
-            var array = new MxValueClass();
-            for (var i = 1; i <= 20; i++)
-            {
-                var value = new MxValueClass();
-                value.PutBoolean(true);
-                array.PutElement(i, value);
-            }
-
-            var result = array.GetValue<bool[]>();
-
-            Assert.NotNull(result);
-            Assert.That(result, Has.Length.EqualTo(20));
-        }
-
-        [Test]
-        public void GetValueBoolean_AsObject_ReturnsExpectedValue()
-        {
-            var mxValue = new MxValueClass();
-            mxValue.PutBoolean(false);
-
-            var result = mxValue.GetValue<object>();
-
-            Assert.False((bool) result);
-        }
-        
-        [Test]
-        public void GetValueBoolean_ArrayToDelimitedString_ReturnsExpectedValue()
-        {
-            var array = new MxValueClass();
-            for (var i = 1; i <= 20; i++)
-            {
-                var value = new MxValueClass();
-                value.PutBoolean(true);
-                array.PutElement(i, value);
-            }
-
-            var result = array.GetValue<object>();
-            
-            var second = ((IEnumerable)result).Cast<object>()
-                .Select(x => x.ToString())
-                .ToArray();
-
-            var data = string.Join(",", second);
-
-            Assert.NotNull(data);
-            Assert.That(data, Contains.Substring("True"));
-        }
-
-        [Test]
+                [Test]
         public void GetValueInteger_SingleArgument_ReturnsExpectedValue()
         {
             var mxValue = new MxValueClass();
@@ -372,65 +310,7 @@ namespace GServer.Archestra.IntegrationTests
             Assert.Throws<InvalidCastException>(() => { mxValue.GetValue<bool[]>(); });
         }
 
-        [Test]
-        public void SetValueBoolean_SingleArgument_ReturnsExpectedValue()
-        {
-            var mxValue = new MxValueClass();
-            mxValue.PutBoolean(false);
-
-            mxValue.SetValue(true);
-
-            var result = mxValue.GetValue<bool>();
-            Assert.True(result);
-        }
-
-        [Test]
-        public void SetValueBoolean_ArrayArgument_ReturnsExpectedValue()
-        {
-            var array = new MxValueClass();
-            for (var i = 1; i <= 20; i++)
-            {
-                var value = new MxValueClass();
-                value.PutBoolean(true);
-                array.PutElement(i, value);
-            }
-
-            var data = new[] {true, false, true, false, true};
-
-            array.SetValue(data);
-
-            var result = array.GetValue<bool[]>();
-
-            Assert.NotNull(result);
-            Assert.That(result, Has.Length.EqualTo(5));
-            Assert.AreEqual(data, result);
-        }
-
-        [Test]
-        public void SetValueBoolean_AsObjectArgument_ReturnsExpectedValue()
-        {
-            var mxValue = new MxValueClass();
-            mxValue.PutBoolean(false);
-
-            object value = true;
-            mxValue.SetValue(value);
-
-            var result = mxValue.GetValue<bool>();
-            Assert.True(result);
-        }
-
-        [Test]
-        public void SetValueBoolean_AsStringArgument_ReturnsExpectedValue()
-        {
-            var mxValue = new MxValueClass();
-            mxValue.PutBoolean(false);
-
-            mxValue.SetValue("true");
-
-            var result = mxValue.GetValue<bool>();
-            Assert.True(result);
-        }
-
+        
         [Test]
         public void SetValueInteger_SingleArgument_ReturnsExpectedValue()
         {

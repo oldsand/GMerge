@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 
 namespace GCommon.Core.Extensions
 {
@@ -13,10 +14,14 @@ namespace GCommon.Core.Extensions
         {
             T returnValue;
 
-            if (value is T valueType)
-                returnValue = valueType;
+            if (value is T specifiedType)
+                returnValue = specifiedType;
             else
-                returnValue = (T)Convert.ChangeType(value, typeof(T));
+            {
+                var converter = TypeDescriptor.GetConverter(typeof(T));
+                return converter.IsValid(value) ? 
+                    (T)converter.ConvertFrom(value) : default;
+            }
 
             return returnValue;
         }

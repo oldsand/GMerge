@@ -55,8 +55,7 @@
         <Compile Include="ExtensionTests\AttributeExtensionTests.cs" />
         <Compile Include="ExtensionTests\GalaxyExtensionTests.cs" />
         <Compile Include="ExtensionTests\GrAccessTests.cs" />
-        <Compile Include="ExtensionTests\MxValueExtensionsIntegrationTests.cs" />
-        <Compile Include="ExtensionTests\MxValueExtensionsUnitTest.cs" />
+        <Compile Include="ExtensionTests\MxValueExtensionsTests.cs" />
         <Compile Include="ExtensionTests\ObjectCollectionExtensionTests.cs" />
         <Compile Include="ExtensionTests\ObjectExtensionTests.cs" />
         <Compile Include="GalaxyFactoryTests.cs" />

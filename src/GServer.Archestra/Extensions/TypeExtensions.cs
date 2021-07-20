@@ -2,11 +2,12 @@ using ArchestrA.GRAccess;
 using GCommon.Core;
 using GCommon.Primitives;
 using GCommon.Primitives.Base;
+using GServer.Archestra.Internal;
 using GServer.Archestra.Options;
 
 namespace GServer.Archestra.Extensions
 {
-    public static class TypeExtensions
+    internal static class TypeExtensions
     {
         public static ValidationStatus ToPrimitiveType(this EPACKAGESTATUS ePackageStatus)
         {
@@ -56,6 +57,27 @@ namespace GServer.Archestra.Extensions
         public static MxSecurityClassification ToMxType(this SecurityClassification securityClassification)
         {
             return (MxSecurityClassification) securityClassification.Id;
+        }
+        
+        public static Reference ToPrimitiveType(this IMxReference mxReference)
+        {
+            return new()
+            {
+                FullReference = mxReference.FullReferenceString,
+                ObjectReference = mxReference.AutomationObjectReferenceString,
+                AttributeReference = mxReference.AttributeReferenceString,
+            };
+        }
+        
+        public static IMxReference ToMxType(this Reference reference)
+        {
+            var mxValue = new MxValueClass();
+            mxValue.PutMxReference(new MxReference());
+            var value = mxValue.GetMxReference();
+            value.FullReferenceString = reference.FullReference ?? string.Empty;
+            value.AutomationObjectReferenceString = reference.ObjectReference  ?? string.Empty;
+            value.AttributeReferenceString = reference.AttributeReference ?? string.Empty;
+            return value;
         }
         
         public static LockType ToPrimitiveType(this MxPropertyLockedEnum mxPropertyLocked)

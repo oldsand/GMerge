@@ -2,30 +2,41 @@ using ArchestrA.GRAccess;
 using GServer.Archestra.Extensions;
 using NUnit.Framework;
 
-namespace GServer.Archestra.IntegrationTests
+namespace GServer.Archestra.IntegrationTests.ExtensionTests
 {
     [TestFixture]
-    public class MxValueExtensionsIntegrationTests
+    public class MxValueExtensionsTests
     {
-        private GalaxyRepository _galaxy;
+        private static IGalaxy _galaxy;
+        private GRAccessAppClass _grAccess;
 
-        [SetUp]
+        [OneTimeSetUp]
         public void Setup()
         {
-            _galaxy = new GalaxyRepository(TestContext.GalaxyName);
-            _galaxy.Login(TestContext.UserName);
+            _grAccess = new GRAccessAppClass();
+            _galaxy = _grAccess.QueryGalaxies()[TestContext.GalaxyName];
+            _galaxy.Login(string.Empty, string.Empty);
+        }
+
+        [OneTimeTearDown]
+        public void TearDown()
+        {
+            _galaxy.Logout();
+            _galaxy = null;
         }
         
         [Test]
         public void SetValueReference_SingleArgument_ReturnsExpectedValue()
         {
-            var knownObject = _galaxy.GetGalaxy().GetObjectByName("$Test_Template");
-            var mxReference = knownObject.GetAttribute("BoolTest.InputSource");
+            var tagName = Known.Templates.ReactorSet.TagName;
+            var knownObject = _galaxy.GetObjectByName(tagName);
             
-            /*mxReference.SetValue("MyNewReferenceString");
+            var reference = knownObject.GetAttribute("Auto.InputSource");
+            
+            reference.SetValue("InputReference");
 
-            var result = mxReference.GetValue<string>();
-            Assert.True(result);*/
+            var result = reference.GetValue<string>();
+            Assert.AreEqual("InputReference", result);
         }
 
         [Test]
@@ -52,7 +63,7 @@ namespace GServer.Archestra.IntegrationTests
         [Test]
         public void SetValue_CustomStruct_ReturnExpected()
         {
-            var knownObject = _galaxy.GetGalaxy().GetObjectByName("$Site_Data");
+            var knownObject = _galaxy.GetObjectByName("$Site_Data");
             var testStruct = knownObject.GetAttribute("DeployedNode._refAttrKey");
             var value = testStruct?.value;
             Assert.NotNull(value);

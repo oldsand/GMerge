@@ -1,34 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.Linq;
 using System.Runtime.InteropServices;
 using ArchestrA.GRAccess;
+using GCommon.Core.Extensions;
 using GCommon.Primitives;
 
 namespace GServer.Archestra.Extensions
 {
     public static class MxValueExtensions
     {
-        public static MxValue AsType<T>(this MxValueClass mxValueClass)
-        {
-            var type = typeof(T);
-            
-            if (type == typeof(bool))
-                mxValueClass.PutBoolean(default);
-            if (type == typeof(int))
-                mxValueClass.PutInteger(default);
-            if (type == typeof(double))
-                mxValueClass.PutDouble(default);
-            if (type == typeof(float))
-                mxValueClass.PutFloat(default);
-            if (type == typeof(string))
-                mxValueClass.PutString(default);
-            if (type == typeof(DateTime))
-                mxValueClass.PutTime(default);
-
-            return mxValueClass;
-        }
-        
         /// <summary>
         /// Generic method wraps all calls on MxValue to get value of specified type.
         /// This method will attempt to determine the data type from MxValue class, but you can also provide the type
@@ -54,7 +35,7 @@ namespace GServer.Archestra.Extensions
                         return fileTime.ToDateTime();
                     }),
                 MxDataType.MxElapsedTime => mxValue.GetValue<T, TimeSpan>(v => v.GetElapsedTime().ToTimeSpan()),
-                MxDataType.MxReferenceType => mxValue.GetValue<T, string>(v => v.GetMxReference().FullReferenceString),
+                MxDataType.MxReferenceType => mxValue.GetValue<T, Reference>(v => v.GetMxReference().ToPrimitiveType()),
                 MxDataType.MxStatusType => mxValue.GetValue<T, StatusCategory>(v => v.GetMxStatus().category.ToPrimitiveType()),
                 MxDataType.MxDataTypeEnum => mxValue.GetValue<T, DataType>(v => v.GetMxDataType().ToPrimitiveType()),
                 MxDataType.MxSecurityClassificationEnum => mxValue.GetValue<T, SecurityClassification>(v => v.GetMxSecurityClassification().ToPrimitiveType()),
@@ -105,8 +86,7 @@ namespace GServer.Archestra.Extensions
                     mxValue.SetValue<T, TimeSpan>(newValue, (v, x) => v.PutElapsedTime(x.ToVbLargeInteger()));
                     break;
                 case MxDataType.MxReferenceType:
-                    //TODO Need to figure out how this can be set especially for the script aliases
-                    mxValue.SetReference(newValue);
+                    mxValue.SetValue<T, Reference>(newValue, (v, x) => v.PutMxReference(x.ToMxType()));
                     break;
                 case MxDataType.MxStatusType:
                     //Status is a runtime system writable attribute. It doesn't make sense to set this type.
@@ -139,9 +119,19 @@ namespace GServer.Archestra.Extensions
             }
         }
         
+        public static bool IsArray(this IMxValue mxValue)
+        {
+            return mxValue.IsArrayInternal();
+        }
+        
+        public static void Resize(this IMxValue mxValue, int length)
+        {
+            mxValue.ResizeInternal(length);
+        }
+        
         private static TReturn GetValue<TReturn, TGetter>(this IMxValue mxValue, Func<IMxValue, TGetter> getter)
         {
-            if (!mxValue.IsArray())
+            if (!mxValue.IsArrayInternal())
                 return getter(mxValue).ConvertTo<TReturn>();
 
             var results = new List<TGetter>();
@@ -159,14 +149,14 @@ namespace GServer.Archestra.Extensions
         
         private static void SetValue<TValue, TSetter>(this IMxValue mxValue, TValue newValue, Action<IMxValue, TSetter> setter)
         {
-            if (!mxValue.IsArray())
+            if (!mxValue.IsArrayInternal())
             {
                 setter(mxValue, newValue.ConvertTo<TSetter>());
                 return;
             }
 
-            var array = newValue.ConvertTo<TSetter[]>();
-            mxValue.Resize(array.Length);
+            var array = newValue.ConvertTo<IEnumerable<TSetter>>().ToArray();
+            mxValue.ResizeInternal(array.Length);
                 
             for (var i = 0; i < array.Length; i++)
             {
@@ -175,63 +165,31 @@ namespace GServer.Archestra.Extensions
                 mxValue.PutElement(i + 1, item);
             }
         }
-        
-        private static T ConvertTo<T>(this object value)
+
+        public static void PutManyBoolean(this MxValue mxValue, bool[] array)
         {
-            T returnValue;
-
-            if (value is T specifiedType)
-                returnValue = specifiedType;
-            else
+            mxValue.ResizeInternal(array.Length);
+            
+            for (var i = 0; i < array.Length; i++)
             {
-                var converter = TypeDescriptor.GetConverter(typeof(T));
-                return converter.IsValid(value) ? 
-                    (T)converter.ConvertFrom(value) : default;
+                var value = new MxValueClass();
+                value.PutBoolean(array[i]);
+                value.PutBoolean(array[i]);
+                mxValue.PutElement(i + 1, value);
             }
-
-            return returnValue;
         }
-        
-        private static bool IsArray(this IMxValue mxValue)
+
+        private static bool IsArrayInternal(this IMxValue mxValue)
         {
             mxValue.GetDimensionCount(out var dimensions);
             return dimensions > 0;
         }
         
-        private static void Resize(this IMxValue mxValue, int length)
+        private static void ResizeInternal(this IMxValue mxValue, int length)
         {
             mxValue.GetDimensionSize(out var count);
             if (count > length)
                 mxValue.Empty();
-        }
-
-        private static void SetReference<T>(this IMxValue mxValue, T newValue)
-        {
-            if (mxValue.GetDataType() != MxDataType.MxReferenceType) return;
-
-            if (!mxValue.IsArray())
-            {
-                var reference = mxValue.GetMxReference();
-                reference.FullReferenceString = newValue.ConvertTo<string>();
-                mxValue.PutMxReference(reference);
-                return;
-            }
-
-            var array = newValue.ConvertTo<string[]>();
-            
-            var mxReference = new MxValueClass();
-            mxValue.GetElement(1, mxReference);
-            
-            mxValue.Resize(array.Length);
-            
-            for (var i = 0; i < array.Length; i++)
-            {
-                var reference = mxReference.GetMxReference();
-                reference.FullReferenceString = array[i];
-                var item = new MxValueClass();
-                item.PutMxReference(reference);
-                mxValue.PutElement(i + 1, item);
-            }
         }
 
         private struct CustomStruct

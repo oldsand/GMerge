@@ -112,7 +112,9 @@
         <Compile Include="GalaxyFileManager.cs" />
         <Compile Include="GalaxyRepository.cs" />
         <Compile Include="GalaxyRepositoryFactory.cs" />
+        <Compile Include="Helpers\Mx.cs" />
         <Compile Include="Helpers\SchemaValidator.cs" />
+        <Compile Include="Internal\MxReference.cs" />
         <Compile Include="Options\CsvImportOptions.cs" />
         <Compile Include="Options\CurrentlyDeployedOption.cs" />
         <Compile Include="Options\DeploymentOptions.cs" />

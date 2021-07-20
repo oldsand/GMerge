@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -16,8 +15,6 @@ using GServer.Archestra.Exceptions;
 using GServer.Archestra.Helpers;
 using GServer.Archestra.Options;
 using NLog;
-
-[assembly: InternalsVisibleTo("GServer.Archestra.IntegrationTests")]
 
 namespace GServer.Archestra
 {
@@ -387,11 +384,6 @@ namespace GServer.Archestra
 
             var result = _graphicAccess.ImportGraphicFromXml(_galaxy, tagName, fileName, overwrite);
             result.Process();
-        }
-
-        internal IGalaxy GetGalaxy()
-        {
-            return _galaxy;
         }
     }
 }
