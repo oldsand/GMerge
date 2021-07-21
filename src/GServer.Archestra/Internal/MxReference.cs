@@ -10,7 +10,8 @@ namespace GServer.Archestra.Internal
     
     /// <summary>
     /// Since Archestra doesn't give us a way to create a reference type, I am implementing the interface just to set
-    /// the public properties and pass into MxValue Get/Set extensions. Class only used for transferring data
+    /// the public properties and pass into MxValue Put method in order to actually set reference values.
+    /// Class only used for transferring data and has no implementation.
     /// </summary>
     internal class MxReference : IMxReference
     {

@@ -19,15 +19,6 @@ namespace GServer.Archestra
             return new GalaxyRepository(galaxyName);
         }
 
-        public Task<IGalaxyRepository> CreateAsync(string galaxyName, CancellationToken token)
-        {
-            return Task.Run(() =>
-            {
-                token.ThrowIfCancellationRequested();
-                return Create(galaxyName);
-            }, token);
-        }
-
         public IEnumerable<IGalaxyRepository> CreateAll()
         {
             var host = Environment.MachineName;

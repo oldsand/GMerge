@@ -30,22 +30,23 @@ namespace GServer.Archestra.Extensions
                 MxDataType.MxDouble => mxValue.GetValue<T, double>(v => v.GetDouble()),
                 MxDataType.MxString => mxValue.GetValue<T, string>(v => v.GetString()),
                 MxDataType.MxTime => mxValue.GetValue<T, DateTime>(v =>
-                    {
-                        v.GetTime(out var fileTime);
-                        return fileTime.ToDateTime();
-                    }),
+                {
+                    v.GetTime(out var fileTime);
+                    return fileTime.ToDateTime();
+                }),
                 MxDataType.MxElapsedTime => mxValue.GetValue<T, TimeSpan>(v => v.GetElapsedTime().ToTimeSpan()),
                 MxDataType.MxReferenceType => mxValue.GetValue<T, Reference>(v => v.GetMxReference().ToPrimitiveType()),
-                MxDataType.MxStatusType => mxValue.GetValue<T, StatusCategory>(v => v.GetMxStatus().category.ToPrimitiveType()),
+                MxDataType.MxStatusType => mxValue.GetValue<T, StatusCategory>(v =>
+                    v.GetMxStatus().category.ToPrimitiveType()),
                 MxDataType.MxDataTypeEnum => mxValue.GetValue<T, DataType>(v => v.GetMxDataType().ToPrimitiveType()),
-                MxDataType.MxSecurityClassificationEnum => mxValue.GetValue<T, SecurityClassification>(v => v.GetMxSecurityClassification().ToPrimitiveType()),
+                MxDataType.MxSecurityClassificationEnum => mxValue.GetValue<T, SecurityClassification>(v =>
+                    v.GetMxSecurityClassification().ToPrimitiveType()),
                 MxDataType.MxDataQualityType => mxValue.GetValue<T, Quality>(v => (Quality) v.GetMxDataQuality()),
                 MxDataType.MxQualifiedEnum => mxValue.GetValue<T, string>(v =>
                 {
                     mxValue.GetCustomEnum(out var value, out _, out _, out _);
                     return value;
                 }),
-                //MxDataType.MxQualifiedStruct => null,
                 MxDataType.MxInternationalizedString => mxValue.GetValue<T, string>(v => v.GetInternationalString(0)),
                 MxDataType.MxBigString => mxValue.GetValue<T, string>(v => v.GetString()),
                 _ => default
@@ -95,7 +96,8 @@ namespace GServer.Archestra.Extensions
                     mxValue.SetValue<T, DataType>(newValue, (v, x) => v.PutMxDataType(x.ToMxType()));
                     break;
                 case MxDataType.MxSecurityClassificationEnum:
-                    mxValue.SetValue<T, SecurityClassification>(newValue, (v, x) => v.PutMxSecurityClassification(x.ToMxType()));
+                    mxValue.SetValue<T, SecurityClassification>(newValue,
+                        (v, x) => v.PutMxSecurityClassification(x.ToMxType()));
                     break;
                 case MxDataType.MxDataQualityType:
                     //Quality is a runtime system writable attribute. It doesn't make sense to set this type.
@@ -104,7 +106,6 @@ namespace GServer.Archestra.Extensions
                     mxValue.SetValue<T, string>(newValue, (v, x) => v.PutCustomEnum(x, 0, 0, 0));
                     break;
                 case MxDataType.MxQualifiedStruct:
-                    //TODO Need to figure this one out still
                     break;
                 case MxDataType.MxInternationalizedString:
                     mxValue.SetValue<T, string>(newValue, (v, x) => v.PutInternationalString(0, x));
@@ -115,20 +116,21 @@ namespace GServer.Archestra.Extensions
                 case MxDataType.MxDataTypeEND:
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(dataType), "The data type for this object is not defined");
+                    throw new ArgumentOutOfRangeException(nameof(dataType),
+                        "The data type for this object is not defined");
             }
         }
-        
+
         public static bool IsArray(this IMxValue mxValue)
         {
             return mxValue.IsArrayInternal();
         }
-        
+
         public static void Resize(this IMxValue mxValue, int length)
         {
             mxValue.ResizeInternal(length);
         }
-        
+
         private static TReturn GetValue<TReturn, TGetter>(this IMxValue mxValue, Func<IMxValue, TGetter> getter)
         {
             if (!mxValue.IsArrayInternal())
@@ -136,7 +138,7 @@ namespace GServer.Archestra.Extensions
 
             var results = new List<TGetter>();
             mxValue.GetDimensionSize(out var size);
-            
+
             for (var i = 1; i <= size; i++)
             {
                 var item = new MxValueClass();
@@ -146,36 +148,29 @@ namespace GServer.Archestra.Extensions
 
             return results.ToArray().ConvertTo<TReturn>();
         }
-        
-        private static void SetValue<TValue, TSetter>(this IMxValue mxValue, TValue newValue, Action<IMxValue, TSetter> setter)
+
+        private static void SetValue<TValue, TSetter>(this IMxValue mxValue, TValue newValue,
+            Action<IMxValue, TSetter> setter)
         {
             if (!mxValue.IsArrayInternal())
             {
-                setter(mxValue, newValue.ConvertTo<TSetter>());
+                var value = newValue.ConvertTo<TSetter>();
+                if (value == null) throw new InvalidOperationException("Could not convert type to TSetter");
+                setter(mxValue, value);
                 return;
             }
 
             var array = newValue.ConvertTo<IEnumerable<TSetter>>().ToArray();
+            if (array == null)
+                throw new InvalidOperationException("Could not convert type to IEnumerable<TSetter>");
+
             mxValue.ResizeInternal(array.Length);
-                
+
             for (var i = 0; i < array.Length; i++)
             {
                 var item = new MxValueClass();
-                setter.Invoke(item, array[i]);
+                setter(item, array[i]);
                 mxValue.PutElement(i + 1, item);
-            }
-        }
-
-        public static void PutManyBoolean(this MxValue mxValue, bool[] array)
-        {
-            mxValue.ResizeInternal(array.Length);
-            
-            for (var i = 0; i < array.Length; i++)
-            {
-                var value = new MxValueClass();
-                value.PutBoolean(array[i]);
-                value.PutBoolean(array[i]);
-                mxValue.PutElement(i + 1, value);
             }
         }
 
@@ -184,7 +179,7 @@ namespace GServer.Archestra.Extensions
             mxValue.GetDimensionCount(out var dimensions);
             return dimensions > 0;
         }
-        
+
         private static void ResizeInternal(this IMxValue mxValue, int length)
         {
             mxValue.GetDimensionSize(out var count);
@@ -197,7 +192,7 @@ namespace GServer.Archestra.Extensions
             public byte[] Data { get; set; }
             public int Guid { get; set; }
         }
-        
+
         //TODO this doesn't work yet... I don't know how pointers work
         private static object TryGetCustomStruct(this IMxValue mxValue)
         {
@@ -205,19 +200,19 @@ namespace GServer.Archestra.Extensions
             {
                 var ptr = Marshal.AllocHGlobal(100);
                 mxValue.GetCustomStruct(out var guid, out var structSize, ptr);
-                
+
                 var str = new CustomStruct();
                 Marshal.StructureToPtr(str, ptr, true);
                 Marshal.FreeHGlobal(ptr);
                 return str;
-                
+
                 //var data = new List<byte>();
                 /*for (var i = 0; i < structSize; i++)
                 {
                     var item =  Marshal.ReadByte(ptr, i);
                     data.Add(item);
                 }*/
-                
+
                 /*var buffer = new byte[255];
                 fixed (byte* p = buffer)
                 {
@@ -231,6 +226,5 @@ namespace GServer.Archestra.Extensions
                 return null;
             }
         }
-
     }
 }

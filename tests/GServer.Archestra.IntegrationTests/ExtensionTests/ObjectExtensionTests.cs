@@ -70,7 +70,7 @@ namespace GServer.Archestra.IntegrationTests.ExtensionTests
         }
 
         [Test]
-        public void RevertChanged_WhenCalled_ReturnsOriginal()
+        public void ForceClose_WhenCalled_ReturnsOriginal()
         {
             var target = _galaxy.GetObjectByName(Known.Templates.ReactorSet.TagName);
             target.CheckOut();

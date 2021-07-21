@@ -1,3 +1,4 @@
+using FluentAssertions;
 using GServer.Archestra.Entities;
 using NUnit.Framework;
 
@@ -8,13 +9,19 @@ namespace GServer.Archestra.IntegrationTests
     {
         private GalaxyRepository _galaxy;
 
-        [SetUp]
+        [OneTimeSetUp]
         public void Setup()
         {
             _galaxy = new GalaxyRepository(TestContext.GalaxyName);
             _galaxy.Login(TestContext.UserName);
         }
-        
+
+        [OneTimeTearDown]
+        public void TearDown()
+        {
+            _galaxy.Logout();
+        }
+
         [Test]
         public void ToXml_WhenCalled_ReturnsNotNull()
         {
@@ -22,20 +29,20 @@ namespace GServer.Archestra.IntegrationTests
             var template = _galaxy.GetObject(tagName);
 
             var serialized = template.ToXml();
-            
-            Assert.NotNull(serialized);
+
+            serialized.Should().NotBeNull();
         }
-        
+
         [Test]
         public void ToXmlFromXml_SameData_ReturnsObjectWithSameProperties()
         {
             var tagName = Known.Templates.ReactorSet.TagName;
-            var template = _galaxy.GetObject(tagName);
+            var expected = _galaxy.GetObject(tagName);
 
-            var xml = template.ToXml();
-            var galaxyObject = new ArchestraObject().FromXml(xml);
-            
-            Assert.AreEqual(template.TagName, galaxyObject.TagName);
+            var xml = expected.ToXml();
+            var result = new ArchestraObject().FromXml(xml);
+
+            result.Should().BeEquivalentTo(expected);
         }
     }
 }

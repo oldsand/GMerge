@@ -1,12 +1,13 @@
 ﻿using System;
+using System.ComponentModel;
 using GCommon.Primitives.Base;
+using GCommon.Primitives.TypeConverters;
 
 namespace GCommon.Primitives
 {
+    [TypeConverter(typeof(DataTypeConverter))]
     public abstract class DataType : Enumeration
     {
-        // ReSharper disable once UnusedMember.Local
-        // Used for object serialization
         private DataType()
         {
         }
@@ -152,7 +153,7 @@ namespace GCommon.Primitives
             
             public override Type GetClrType()
             {
-                return typeof(string);
+                return typeof(Reference);
             }
         }
         

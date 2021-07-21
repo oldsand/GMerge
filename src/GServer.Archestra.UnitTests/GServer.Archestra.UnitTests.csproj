@@ -67,9 +67,8 @@
         <Reference Include="System.Xml.Linq" />
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="ExtensionTests\MxExtensionTests.cs" />
         <Compile Include="ExtensionTests\MxTests.cs" />
-        <Compile Include="ExtensionTests\MxReferenceTests.cs" />
-        <Compile Include="ExtensionTests\MxValueBooleanTests.cs" />
         <Compile Include="MxValueExtensionsTest.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>

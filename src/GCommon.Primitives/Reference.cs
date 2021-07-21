@@ -14,5 +14,10 @@ namespace GCommon.Primitives
         public string FullReference { get; set; }
         public string ObjectReference { get; set; }
         public string AttributeReference { get; set; }
+
+        public override string ToString()
+        {
+            return FullReference;
+        }
     }
 }

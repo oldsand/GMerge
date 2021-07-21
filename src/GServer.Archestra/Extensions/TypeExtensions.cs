@@ -1,3 +1,4 @@
+using System;
 using ArchestrA.GRAccess;
 using GCommon.Core;
 using GCommon.Primitives;
@@ -9,6 +10,7 @@ namespace GServer.Archestra.Extensions
 {
     internal static class TypeExtensions
     {
+        
         public static ValidationStatus ToPrimitiveType(this EPACKAGESTATUS ePackageStatus)
         {
             return (ValidationStatus) ePackageStatus;
@@ -37,8 +39,8 @@ namespace GServer.Archestra.Extensions
         public static MxDataType ToMxType(this DataType dataType)
         {
             return (MxDataType) dataType.Id;
-        } 
-        
+        }
+
         public static AttributeCategory ToPrimitiveType(this MxAttributeCategory mxAttributeCategory)
         {
             return Enumeration.FromId<AttributeCategory>((int)mxAttributeCategory);
@@ -58,7 +60,17 @@ namespace GServer.Archestra.Extensions
         {
             return (MxSecurityClassification) securityClassification.Id;
         }
+
+        public static LockType ToPrimitiveType(this MxPropertyLockedEnum mxPropertyLocked)
+        {
+            return Enumeration.FromId<LockType>((int)mxPropertyLocked);
+        }
         
+        public static MxPropertyLockedEnum ToMxType(this LockType lockType)
+        {
+            return (MxPropertyLockedEnum) lockType.Id;
+        }
+
         public static Reference ToPrimitiveType(this IMxReference mxReference)
         {
             return new()
@@ -78,16 +90,6 @@ namespace GServer.Archestra.Extensions
             value.AutomationObjectReferenceString = reference.ObjectReference  ?? string.Empty;
             value.AttributeReferenceString = reference.AttributeReference ?? string.Empty;
             return value;
-        }
-        
-        public static LockType ToPrimitiveType(this MxPropertyLockedEnum mxPropertyLocked)
-        {
-            return Enumeration.FromId<LockType>((int)mxPropertyLocked);
-        }
-        
-        public static MxPropertyLockedEnum ToMxType(this LockType lockType)
-        {
-            return (MxPropertyLockedEnum) lockType.Id;
         }
         
         public static StatusCategory ToPrimitiveType(this MxStatusCategory mxStatusCategory)
