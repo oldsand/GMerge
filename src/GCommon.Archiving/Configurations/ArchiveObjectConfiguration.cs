@@ -1,6 +1,6 @@
 using GCommon.Primitives;
 using GCommon.Primitives.Base;
-using GCommon.Archiving.Entities;
+using GCommon.Primitives.Enumerations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -14,7 +14,7 @@ namespace GCommon.Archiving.Configurations
             
             builder.Property(x => x.TagName).IsRequired();
             builder.Property(x => x.Template).IsRequired()
-                .HasConversion(x => x.Name, x => Enumeration.FromName<Template>(x));
+                .HasConversion(x => x.Value, x => Template.FromValue(x));
             builder.Property(x => x.Version).IsRequired();
             builder.Property(x => x.AddedOn).IsRequired();
             builder.Property(x => x.ModifiedOn).IsRequired();

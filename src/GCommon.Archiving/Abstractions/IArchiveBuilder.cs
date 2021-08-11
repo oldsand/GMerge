@@ -1,3 +1,5 @@
+using GCommon.Primitives;
+
 namespace GCommon.Archiving.Abstractions
 {
     /// <summary>
@@ -8,7 +10,8 @@ namespace GCommon.Archiving.Abstractions
         /// <summary>
         /// Builds an archive database using the provided archive configuration
         /// </summary>
-        /// <param name="configuration">The configuration used to build the database</param>
-        void Build(ArchiveConfiguration configuration);
+        /// <param name="archive">The archive used to build the database</param>
+        /// <param name="connectionString">Optionally provide the connection string for the database</param>
+        void Build(Archive archive, string connectionString = null);
     }
 }

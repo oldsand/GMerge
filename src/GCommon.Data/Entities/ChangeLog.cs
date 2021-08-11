@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using GCommon.Primitives;
 using GCommon.Primitives.Base;
+using GCommon.Primitives.Enumerations;
 
 namespace GCommon.Data.Entities
 {
@@ -14,8 +15,8 @@ namespace GCommon.Data.Entities
         internal int OperationId { get; private set; }
         public Operation Operation
         {
-            get => Enumeration.FromId<Operation>(OperationId);
-            set => OperationId = value.Id;
+            get => Operation.FromValue(OperationId);
+            set => OperationId = value.Value;
         }
         public int ConfigurationVersion { get; set; }
         public string Comment { get; set; }

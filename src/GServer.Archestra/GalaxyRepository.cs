@@ -9,10 +9,10 @@ using ArchestrA.GRAccess;
 using ArchestrA.Visualization.GraphicAccess;
 using GServer.Archestra.Extensions;
 using GCommon.Core.Utilities;
+using GCommon.Primitives;
 using GServer.Archestra.Abstractions;
-using GServer.Archestra.Entities;
 using GServer.Archestra.Exceptions;
-using GServer.Archestra.Helpers;
+using GServer.Archestra.Internal;
 using GServer.Archestra.Options;
 using NLog;
 
@@ -105,23 +105,12 @@ namespace GServer.Archestra
             return false;
         }
 
-        public void Delete()
-        {
-            if (_galaxy == null) throw new InvalidOperationException("Galaxy not initialized");
-            
-            _grAccessApp.DeleteGalaxy(_galaxy.Name);
-            
-            if (_grAccessApp.CommandResult.Successful) return;
-
-            throw new InvalidOperationException($"Failed to delete galaxy {_galaxy.Name}. " +
-                                                $"{_grAccessApp.CommandResult.ID}. " +
-                                                $"{_grAccessApp.CommandResult.CustomMessage}");
-        }
-
         public ArchestraObject GetObject(string tagName)
         {
             _galaxy.SynchronizeClient();
+            
             var gObject = _galaxy.GetObjectByName(tagName);
+            
             return gObject?.Map();
         }
 
@@ -136,13 +125,14 @@ namespace GServer.Archestra
         public ArchestraGraphic GetGraphic(string tagName)
         {
             _galaxy.SynchronizeClient();
+            
             using var tempDirectory = new TempDirectory(ApplicationPath.TempSymbolSubPath);
             var fileName = Path.Combine(tempDirectory.FullName, $@"{tagName}.xml");
 
             ExportGraphic(tagName, fileName);
             var symbol = XElement.Load(fileName);
 
-            return new ArchestraGraphic(tagName).FromXml(symbol);
+            return new ArchestraGraphic(tagName).Materialize(symbol);
         }
 
         public IEnumerable<ArchestraGraphic> GetGraphics(IEnumerable<string> tagNames)
@@ -150,46 +140,46 @@ namespace GServer.Archestra
             return tagNames.Select(GetGraphic);
         }
 
-        public void CreateObject(ArchestraObject archestraObject)
+        public void CreateObject(ArchestraObject source)
         {
             _galaxy.SynchronizeClient();
-            var repositoryObject = _galaxy.CreateObject(archestraObject.TagName, archestraObject.DerivedFromName);
+            var archestraObject = _galaxy.CreateObject(source.TagName, source.DerivedFromName);
 
             try
             {
-                repositoryObject.CheckOut();
+                archestraObject.CheckOut();
 
-                repositoryObject.SetUserDefinedAttributes(archestraObject);
-                repositoryObject.SetFieldAttributes(archestraObject);
-                repositoryObject.Save();
+                archestraObject.SetUserDefinedAttributes(source);
+                archestraObject.SetFieldAttributes(source);
+                archestraObject.Save();
 
-                repositoryObject.ConfigureAttributes(archestraObject);
-                repositoryObject.Save();
+                archestraObject.ConfigureAttributes(source);
+                archestraObject.Save();
 
-                repositoryObject.ConfigureExtensions(archestraObject);
-                repositoryObject.Save();
+                archestraObject.ConfigureExtensions(source);
+                archestraObject.Save();
 
-                repositoryObject.CheckIn($"Galaxy Merge Service Created Object '{archestraObject.TagName}'");
+                archestraObject.CheckIn($"Galaxy Merge Service Created Object '{source.TagName}'");
             }
             catch (Exception)
             {
-                repositoryObject.CheckIn();
-                repositoryObject.Delete();
+                archestraObject.CheckIn();
+                archestraObject.Delete();
                 throw;
             }
         }
 
-        public void CreateObjects(IEnumerable<ArchestraObject> galaxyObjects)
+        public void CreateObjects(IEnumerable<ArchestraObject> source)
         {
-            foreach (var galaxyObject in galaxyObjects)
-                CreateObject(galaxyObject);
+            foreach (var archestraObject in source)
+                CreateObject(archestraObject);
         }
 
         public void CreateGraphic(ArchestraGraphic archestraGraphic)
         {
             _galaxy.SynchronizeClient();
 
-            var graphic = archestraGraphic.ToXml();
+            var graphic = archestraGraphic.Serialize();
             var doc = new XDocument(new XDeclaration("1.0", "utf-8", "yes"), graphic);
             SchemaValidator.ValidateSymbol(doc);
 

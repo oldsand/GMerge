@@ -1,8 +1,7 @@
 using System.Linq;
-using GServer.Archestra.Entities;
-using GCommon.Archiving.Entities;
 using GCommon.Contracts;
 using GCommon.Data.Entities;
+using GCommon.Primitives;
 using TableDependency.SqlClient.Base;
 
 namespace GServer.Services

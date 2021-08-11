@@ -4,7 +4,7 @@ using System.Xml.Linq;
 using ArchestrA.GRAccess;
 using GCommon.Primitives;
 using GCommon.Primitives.Base;
-using GServer.Archestra.Entities;
+using GCommon.Primitives.Enumerations;
 
 // ReSharper disable SuspiciousTypeConversion.Global
 
@@ -171,7 +171,7 @@ namespace GServer.Archestra.Extensions
                 var name = extension.Attribute("Name")?.Value;
                 var type = extension.Attribute("ExtensionType")?.Value;
                 var isObjectExtension = extension.Name == "Extension";
-                var extensionType = Enumeration.FromName<ExtensionType>(type);
+                var extensionType = ExtensionType.FromName(type);
 
                 gObject.AddExtensionPrimitive(type, name, isObjectExtension);
                 gObject.ConfigureExtension(name, extensionType, source);

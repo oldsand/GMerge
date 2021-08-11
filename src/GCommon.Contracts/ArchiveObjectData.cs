@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using GCommon.Primitives;
+using GCommon.Primitives.Enumerations;
 
 namespace GCommon.Contracts
 {

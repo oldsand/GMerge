@@ -1,6 +1,7 @@
 using System.Linq;
 using ArchestrA.GRAccess;
 using GCommon.Primitives;
+using GCommon.Primitives.Enumerations;
 using GServer.Archestra.Extensions;
 using NUnit.Framework;
 

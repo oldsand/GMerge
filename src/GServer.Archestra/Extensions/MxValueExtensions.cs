@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using ArchestrA.GRAccess;
 using GCommon.Core.Extensions;
 using GCommon.Primitives;
+using GCommon.Primitives.Enumerations;
 
 namespace GServer.Archestra.Extensions
 {

@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using GCommon.Primitives;
 using GCommon.Archiving;
+using GCommon.Primitives.Enumerations;
 using NUnit.Framework;
 
 namespace GCommon.Archiving.IntegrationTests
@@ -9,7 +10,7 @@ namespace GCommon.Archiving.IntegrationTests
     [TestFixture]
     public class ArchiveConfigurationTests
     {
-        [Test]
+        /*[Test]
         public void Default_WhenCalled_ReturnsNotNull()
         {
             var config = ArchiveConfiguration.Default("GalaxyName");
@@ -133,6 +134,6 @@ namespace GCommon.Archiving.IntegrationTests
             var config = ArchiveConfiguration.Default("Galaxy");
 
             Assert.Throws<ArgumentNullException>(() => config = config.ConfigureInclusion(null));
-        }
+        }*/
     }
 }

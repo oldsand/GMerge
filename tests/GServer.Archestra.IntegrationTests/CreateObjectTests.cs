@@ -1,4 +1,4 @@
-using GServer.Archestra.Entities;
+using GCommon.Primitives;
 using NUnit.Framework;
 using TestContext = GServer.Archestra.IntegrationTests.TestContext;
 
@@ -24,8 +24,8 @@ namespace GServer.Archestra.IntegrationTests
             Assert.NotNull(template);
 
             //Serialize data to in memory object
-            var data = template.ToXml();
-            var galaxyObject = new ArchestraObject().FromXml(data);
+            var data = template.Serialize();
+            var galaxyObject = ArchestraObject.Materialize(data);
             Assert.NotNull(galaxyObject);
 
             //Delete the current template
@@ -47,8 +47,8 @@ namespace GServer.Archestra.IntegrationTests
             Assert.NotNull(template);
 
             //Serialize data to in memory object
-            var data = template.ToXml();
-            var galaxyObject = new ArchestraObject().FromXml(data);
+            var data = template.Serialize();
+            var galaxyObject = ArchestraObject.Materialize(data);
             Assert.NotNull(galaxyObject);
 
             //Delete the current template
@@ -70,8 +70,8 @@ namespace GServer.Archestra.IntegrationTests
             Assert.NotNull(template);
 
             //Serialize data to in memory object
-            var data = template.ToXml();
-            var galaxyObject = new ArchestraObject().FromXml(data);
+            var data = template.Serialize();
+            var galaxyObject = ArchestraObject.Materialize(data);
             Assert.NotNull(galaxyObject);
 
             //Delete the current template
@@ -93,8 +93,8 @@ namespace GServer.Archestra.IntegrationTests
             Assert.NotNull(template);
 
             //Serialize data to in memory object
-            var data = template.ToXml();
-            var galaxyObject = new ArchestraObject().FromXml(data);
+            var data = template.Serialize();
+            var galaxyObject = ArchestraObject.Materialize(data);
             Assert.NotNull(galaxyObject);
 
             //Delete the current template
@@ -116,8 +116,8 @@ namespace GServer.Archestra.IntegrationTests
             Assert.NotNull(template);
 
             //Serialize data to in memory object
-            var data = template.ToXml();
-            var galaxyObject = new ArchestraObject().FromXml(data);
+            var data = template.Serialize();
+            var galaxyObject = ArchestraObject.Materialize(data);
             Assert.NotNull(galaxyObject);
 
             //Delete the current template
@@ -139,8 +139,8 @@ namespace GServer.Archestra.IntegrationTests
             Assert.NotNull(template);
 
             //Serialize data to in memory object
-            var data = template.ToXml();
-            var galaxyObject = new ArchestraObject().FromXml(data);
+            var data = template.Serialize();
+            var galaxyObject = ArchestraObject.Materialize(data);
             Assert.NotNull(galaxyObject);
 
             //Delete the current template

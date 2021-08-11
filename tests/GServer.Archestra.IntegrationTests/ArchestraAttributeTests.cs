@@ -1,5 +1,6 @@
 using System.Linq;
 using GCommon.Primitives;
+using GCommon.Primitives.Enumerations;
 using NUnit.Framework;
 
 namespace GServer.Archestra.IntegrationTests

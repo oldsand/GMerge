@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using GCommon.Archiving.Entities;
+using GCommon.Primitives;
 
 namespace GCommon.Archiving.Abstractions
 {

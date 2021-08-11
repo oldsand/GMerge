@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using GCommon.Primitives;
 using GCommon.Archiving.Abstractions;
-using GCommon.Archiving.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace GCommon.Archiving.Repositories

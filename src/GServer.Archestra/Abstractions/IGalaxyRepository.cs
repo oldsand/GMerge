@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
-using GServer.Archestra.Entities;
+using GCommon.Primitives;
 using GServer.Archestra.Options;
 
 namespace GServer.Archestra.Abstractions
@@ -25,8 +25,8 @@ namespace GServer.Archestra.Abstractions
         IEnumerable<ArchestraObject> GetObjects(IEnumerable<string> tagNames);
         ArchestraGraphic GetGraphic(string tagName);
         IEnumerable<ArchestraGraphic> GetGraphics(IEnumerable<string> tagNames);
-        void CreateObject(ArchestraObject archestraObject);
-        void CreateObjects(IEnumerable<ArchestraObject> galaxyObjects);
+        void CreateObject(ArchestraObject source);
+        void CreateObjects(IEnumerable<ArchestraObject> source);
         void CreateGraphic(ArchestraGraphic archestraGraphic);
         void CreateSymbols(IEnumerable<ArchestraGraphic> galaxySymbols);
         void DeleteObject(string tagName, bool recursive);

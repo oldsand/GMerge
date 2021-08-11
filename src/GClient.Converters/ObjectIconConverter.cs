@@ -16,11 +16,11 @@ namespace GClient.Converters
 
             if (gObject.TemplateDefinition == null)
                 throw new InvalidOperationException("GObject Template Definition cannot be null");
-                
-            var category = (ObjectCategory) gObject.TemplateDefinition.CategoryId;
+            
+            //var category = ObjectCategory.FromName("One");
             var baseType = gObject.TemplateDefinition.ObjectId;
 
-            return category switch
+            /*return category switch
             {
                 ObjectCategory.Galaxy => ResourceFinder.Find<ControlTemplate>("Icon.Galaxy"),
                 ObjectCategory.Area => ResourceFinder.Find<ControlTemplate>("Icon.Galaxy.Area"),
@@ -34,7 +34,9 @@ namespace GClient.Converters
                 // BaseType 12 == OPCClient
                 ObjectCategory.IoNetwork when baseType == 12 => ResourceFinder.Find<ControlTemplate>("Icon.Galaxy.OpcClient"),
                 _ => ResourceFinder.Find<ControlTemplate>("Icon.Galaxy.ApplicationObject")
-            };
+            };*/
+
+            return ResourceFinder.Find<ControlTemplate>("Icon.Galaxy.ApplicationObject");
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using GCommon.Archiving.Repositories;
 using GCommon.Primitives;
 using GCommon.Primitives.Base;
+using GCommon.Primitives.Enumerations;
 using Microsoft.Data.Sqlite;
 using NUnit.Framework;
 
@@ -19,12 +20,10 @@ namespace GCommon.Archiving.IntegrationTests
         {
             _builder = new SqliteConnectionStringBuilder {DataSource = @"\TestArchive.db"};
 
-            var config = ArchiveConfiguration
-                .Default("TestArchive")
-                .OverrideConnectionString(_builder.ConnectionString);
+            var archive = new Archive("TestArchive");
             
             var archiveBuilder = new ArchiveBuilder();
-            archiveBuilder.Build(config);
+            archiveBuilder.Build(archive, _builder.ConnectionString);
         }
 
         [TearDown]
@@ -91,7 +90,7 @@ namespace GCommon.Archiving.IntegrationTests
         public void GetAll_WhenCalled_ReturnsNumbersOfExpectedOperations()
         {
             using var repo = new ArchiveRepository(_builder.ConnectionString);
-            var count = Enumeration.GetAll<Operation>().ToList().Count;
+            var count = Operation.List.Count;
 
             var operations = repo.Events.GetAll().ToList();
             

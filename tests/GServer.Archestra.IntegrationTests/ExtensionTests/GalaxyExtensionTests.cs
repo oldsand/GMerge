@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ArchestrA.GRAccess;
 using AutoFixture;
 using GCommon.Primitives;
+using GCommon.Primitives.Enumerations;
 using GServer.Archestra.Extensions;
 using NUnit.Framework;
 

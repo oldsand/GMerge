@@ -1,7 +1,7 @@
 using GCommon.Core;
 using GCommon.Primitives;
 using GCommon.Primitives.Base;
-using GCommon.Archiving.Entities;
+using GCommon.Primitives.Enumerations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -14,10 +14,10 @@ namespace GCommon.Archiving.Configurations
             builder.ToTable(nameof(EventSetting)).HasKey(x => x.EventId);
             
             builder.Property(x => x.Operation)
-                .HasConversion(x => x.Name, x => Enumeration.FromName<Operation>(x))
+                .HasConversion(x => x.Value, x => Operation.FromValue(x))
                 .IsRequired();
             builder.Property(x => x.OperationType)
-                .HasConversion(x => x.Name, x => Enumeration.FromName<OperationType>(x))
+                .HasConversion(x => x.Value, x => OperationType.FromValue(x))
                 .IsRequired();
             builder.Property(x => x.IsArchiveEvent).IsRequired();
             

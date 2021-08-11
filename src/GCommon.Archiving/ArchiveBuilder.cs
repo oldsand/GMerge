@@ -1,16 +1,15 @@
 using GCommon.Archiving.Abstractions;
 using GCommon.Core.Utilities;
+using GCommon.Primitives;
 using Microsoft.EntityFrameworkCore;
 
 namespace GCommon.Archiving
 {
     public class ArchiveBuilder : IArchiveBuilder
     {
-        public void Build(ArchiveConfiguration config)
+        public void Build(Archive archive, string connectionString = null)
         {
-            var archive = config.GenerateArchive();
-            var connectionString = config.GetConnectionString();
-            
+            connectionString ??= DbStringBuilder.ArchiveString(archive.GalaxyName);
             var options = new DbContextOptionsBuilder<ArchiveContext>().UseSqlite(connectionString).Options;
             using var context = new ArchiveContext(options);
             

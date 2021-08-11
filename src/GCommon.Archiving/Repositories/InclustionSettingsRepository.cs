@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GCommon.Primitives;
 using GCommon.Archiving.Abstractions;
-using GCommon.Archiving.Entities;
+using GCommon.Primitives.Enumerations;
 
 namespace GCommon.Archiving.Repositories
 {

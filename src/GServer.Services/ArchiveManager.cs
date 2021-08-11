@@ -5,14 +5,13 @@ using System.Linq;
 using System.ServiceModel;
 using System.Xml.Linq;
 using GServer.Archestra.Abstractions;
-using GServer.Archestra.Entities;
 using GCommon.Archiving.Abstractions;
-using GCommon.Archiving.Entities;
 using GCommon.Contracts;
 using GCommon.Core.Extensions;
 using GCommon.Core.Utilities;
 using GCommon.Data.Abstractions;
 using GCommon.Primitives;
+using GCommon.Primitives.Enumerations;
 using GServer.Services.Abstractions;
 
 namespace GServer.Services
@@ -133,16 +132,16 @@ namespace GServer.Services
 
         private static GalaxyObjectData MaterializeObject(ArchiveEntry latest)
         {
-            var xml = XElement.Load(new MemoryStream(latest.CompressedData.Decompress()));
-            var galaxyObject = new ArchestraObject().FromXml(xml);
-            return DataMapper.Map(galaxyObject);
+            var element = XElement.Load(new MemoryStream(latest.CompressedData.Decompress()));
+            var archestraObject = ArchestraObject.Materialize(element);
+            return DataMapper.Map(archestraObject);
         }
 
         //todo figure out tag name here
         private static GalaxySymbolData MaterializeSymbol(ArchiveEntry latest)
         {
             var xml = XElement.Load(new MemoryStream(latest.CompressedData.Decompress()));
-            var galaxyObject = new ArchestraGraphic("").FromXml(xml);
+            var galaxyObject = new ArchestraGraphic("").Materialize(xml);
             return DataMapper.Map(galaxyObject);
         }
 

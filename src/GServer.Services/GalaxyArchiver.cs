@@ -1,9 +1,9 @@
 using System;
 using GServer.Archestra.Abstractions;
 using GCommon.Archiving.Abstractions;
-using GCommon.Archiving.Entities;
 using GCommon.Core.Extensions;
 using GCommon.Primitives;
+using GCommon.Primitives.Enumerations;
 using GServer.Services.Abstractions;
 
 namespace GServer.Services
@@ -37,8 +37,8 @@ namespace GServer.Services
         private byte[] GetArchiveData(ArchiveObject archiveObject)
         {
             return archiveObject.Template == Template.Symbol
-                ? _galaxyRepository.GetGraphic(archiveObject.TagName).ToXml().ToByteArray()
-                : _galaxyRepository.GetObject(archiveObject.TagName).ToXml().ToByteArray();
+                ? _galaxyRepository.GetGraphic(archiveObject.TagName).Serialize().ToByteArray()
+                : _galaxyRepository.GetObject(archiveObject.TagName).Serialize().ToByteArray();
         }
     }
 }

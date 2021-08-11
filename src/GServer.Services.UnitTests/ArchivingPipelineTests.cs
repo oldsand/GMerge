@@ -1,11 +1,10 @@
 ﻿using System;
 using GCommon.Archiving.Abstractions;
-using GCommon.Archiving.Entities;
 using GCommon.Data.Abstractions;
 using GCommon.Data.Entities;
 using GCommon.Primitives;
+using GCommon.Primitives.Enumerations;
 using GServer.Archestra.Abstractions;
-using GServer.Archestra.Entities;
 using Moq;
 using NUnit.Framework;
 

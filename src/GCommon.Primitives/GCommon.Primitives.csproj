@@ -5,4 +5,12 @@
         <LangVersion>8</LangVersion>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Ardalis.SmartEnum" Version="2.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\GCommon.Core\GCommon.Core.csproj" />
+    </ItemGroup>
+
 </Project>

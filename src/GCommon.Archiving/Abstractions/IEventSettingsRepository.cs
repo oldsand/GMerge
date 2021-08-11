@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using GCommon.Primitives;
-using GCommon.Archiving.Entities;
+using GCommon.Primitives.Enumerations;
 
 namespace GCommon.Archiving.Abstractions
 {

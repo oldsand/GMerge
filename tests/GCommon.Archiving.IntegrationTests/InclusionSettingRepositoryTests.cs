@@ -1,12 +1,12 @@
 using System;
 using System.IO;
 using System.Linq;
-using GCommon.Archiving.Entities;
 using GCommon.Archiving.Repositories;
 using GCommon.Core.Utilities;
 using GCommon.Primitives;
 using GCommon.Primitives.Base;
 using GCommon.Archiving;
+using GCommon.Primitives.Enumerations;
 using Microsoft.Data.Sqlite;
 using NUnit.Framework;
 
@@ -22,12 +22,10 @@ namespace GCommon.Archiving.IntegrationTests
         {
             _builder = new SqliteConnectionStringBuilder {DataSource = @"\TestArchive.db"};
 
-            var config = ArchiveConfiguration
-                .Default("TestArchive")
-                .OverrideConnectionString(_builder.ConnectionString);
+            var archive = new Archive("TestArchive");
             
             var archiveBuilder = new ArchiveBuilder();
-            archiveBuilder.Build(config);
+            archiveBuilder.Build(archive, _builder.ConnectionString);
         }
 
         [TearDown]
@@ -108,7 +106,7 @@ namespace GCommon.Archiving.IntegrationTests
         public void GetAll_WhenCalled_ReturnsNumbersOfExpectedTemplates()
         {
             using var repo = new ArchiveRepository(_builder.ConnectionString);
-            var count = Enumeration.GetAll<Template>().ToList().Count;
+            var count = Template.List.Count;
 
             var templates = repo.Inclusions.GetAll().ToList();
             

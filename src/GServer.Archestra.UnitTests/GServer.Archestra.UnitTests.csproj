@@ -39,6 +39,10 @@
         <Reference Include="ArchestrA.Visualization.GraphicAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=23106a86e706d0ae">
           <HintPath>..\Lib\ArchestrA.Visualization.GraphicAccess.dll</HintPath>
         </Reference>
+        <Reference Include="Ardalis.SmartEnum, Version=1.0.8.0, Culture=neutral, PublicKeyToken=null">
+          <HintPath>..\packages\Ardalis.SmartEnum.2.0.1\lib\netstandard2.0\Ardalis.SmartEnum.dll</HintPath>
+          <Private>True</Private>
+        </Reference>
         <Reference Include="AutoFixture, Version=4.17.0.0, Culture=neutral, PublicKeyToken=b24654c590009d4f">
           <HintPath>..\packages\AutoFixture.4.17.0\lib\net452\AutoFixture.dll</HintPath>
           <Private>True</Private>
@@ -67,9 +71,8 @@
         <Reference Include="System.Xml.Linq" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="ExtensionTests\MxExtensionTests.cs" />
-        <Compile Include="ExtensionTests\MxTests.cs" />
-        <Compile Include="MxValueExtensionsTest.cs" />
+        <Compile Include="MxExtensionTests.cs" />
+        <Compile Include="MxFactoryTests.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
     <ItemGroup>

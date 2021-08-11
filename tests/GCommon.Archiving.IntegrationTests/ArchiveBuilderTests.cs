@@ -4,6 +4,7 @@ using GCommon.Core.Utilities;
 
 using GCommon.Archiving;
 using GCommon.Primitives;
+using GCommon.Primitives.Enumerations;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 
@@ -15,10 +16,10 @@ namespace GCommon.Archiving.IntegrationTests
         [Test]
         public void Build_DefaultConfiguration_CreatesDatabaseWithExpectedData()
         {
-            var config = ArchiveConfiguration.Default("GalaxyName");
+            var archive = new Archive("GalaxyName");
             var builder = new ArchiveBuilder();
             
-            builder.Build(config);
+            builder.Build(archive);
 
             var fileName = Path.Combine(ApplicationPath.Archives, "GalaxyName.db");
             FileAssert.Exists(fileName);
@@ -27,9 +28,9 @@ namespace GCommon.Archiving.IntegrationTests
             var options = new DbContextOptionsBuilder<Archiving.ArchiveContext>().UseSqlite(connectionString).Options;
             var context = new Archiving.ArchiveContext(options);
             
-            var archive = context.Archive.Single();
-            Assert.AreEqual("GalaxyName", archive.GalaxyName);
-            Assert.AreEqual(ArchestraVersion.SystemPlatform2012R2P3, archive.Version);
+            var result = context.Archive.Single();
+            Assert.AreEqual("GalaxyName", result.GalaxyName);
+            Assert.AreEqual(ArchestraVersion.SystemPlatform2012R2P3, result.Version);
 
             context.Database.EnsureDeleted();
 

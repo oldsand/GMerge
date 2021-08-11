@@ -1,9 +1,9 @@
 using System.IO;
 using System.Security.Principal;
 using GCommon.Archiving;
-using GCommon.Archiving.Entities;
 using GCommon.Archiving.Repositories;
 using GCommon.Primitives;
+using GCommon.Primitives.Enumerations;
 using GServer.Archestra;
 using GTest.Core;
 using Microsoft.Data.Sqlite;
@@ -22,15 +22,14 @@ namespace GServer.Services.IntegrationTests
         public void Setup()
         {
             _fileName = @$"\{Settings.CurrentTestGalaxy}.db";
+            
             var testConnectionString = new SqliteConnectionStringBuilder 
                 {DataSource = _fileName}.ConnectionString;
-            
-            var testConfig = ArchiveConfiguration
-                .Default(Settings.CurrentTestGalaxy, ArchestraVersion.SystemPlatform2014)
-                .OverrideConnectionString(testConnectionString);
-            
+
+            var archive = new Archive(Settings.CurrentTestGalaxy, ArchestraVersion.SystemPlatform2014);
+
             var builder = new ArchiveBuilder();
-            builder.Build(testConfig);
+            builder.Build(archive, testConnectionString);
             
             _galaxyRepo = new GalaxyRepository(Settings.CurrentTestGalaxy);
             _galaxyRepo.Login(WindowsIdentity.GetCurrent().Name);

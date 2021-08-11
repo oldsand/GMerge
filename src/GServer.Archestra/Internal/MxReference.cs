@@ -3,7 +3,6 @@ using System.Runtime.CompilerServices;
 using ArchestrA.GRAccess;
 
 [assembly: InternalsVisibleTo("GServer.Archestra.UnitTests")]
-[assembly: InternalsVisibleTo("GServer.Archestra.UnitTests.ExtensionTests")]
 
 namespace GServer.Archestra.Internal
 {

@@ -1,4 +1,4 @@
-using GCommon.Archiving.Entities;
+using GCommon.Primitives;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

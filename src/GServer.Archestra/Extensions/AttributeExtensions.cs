@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using ArchestrA.GRAccess;
 using GCommon.Primitives;
-using GServer.Archestra.Entities;
+using GCommon.Primitives.Enumerations;
 
 namespace GServer.Archestra.Extensions
 {
@@ -91,10 +91,8 @@ namespace GServer.Archestra.Extensions
 
         public static ArchestraAttribute Map(this IAttribute attribute)
         {
-            return new()
+            return new(attribute.Name, attribute.DataType.ToPrimitiveType())
             {
-                Name = attribute.Name,
-                DataType = attribute.DataType.ToPrimitiveType(),
                 Category = attribute.AttributeCategory.ToPrimitiveType(),
                 Security = attribute.SecurityClassification.ToPrimitiveType(),
                 Locked = attribute.Locked.ToPrimitiveType(),

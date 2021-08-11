@@ -6,6 +6,7 @@ using GCommon.Archiving.Abstractions;
 using GCommon.Data;
 using GCommon.Data.Abstractions;
 using GCommon.Primitives;
+using GCommon.Primitives.Enumerations;
 using GServer.Services;
 using GServer.Services.Abstractions;
 using NLog;
@@ -79,8 +80,8 @@ namespace GServer.Host.Archiving
 
             foreach (var galaxy in galaxies)
             {
-                var version = ArchestraVersion.FromCid(galaxy.CdiVersion);
-                builder.Build(ArchiveConfiguration.Default(galaxy.Name, version));
+                var version = ArchestraVersion.FromCdi(galaxy.CdiVersion);
+                builder.Build(new Archive(galaxy.Name, version));
             }
         }
     }

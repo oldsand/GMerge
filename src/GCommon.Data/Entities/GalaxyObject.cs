@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using GCommon.Primitives;
 using GCommon.Primitives.Base;
+using GCommon.Primitives.Enumerations;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
@@ -22,8 +23,8 @@ namespace GCommon.Data.Entities
         internal int TemplateId { get; private set; }
         public Template Template
         {
-            get => Enumeration.FromId<Template>(TemplateId);
-            set => TemplateId = value.Id;
+            get => Template.FromValue(TemplateId);
+            set => TemplateId = value.Value;
         }
         public int DerivedFromId { get; set; }
         public int ContainedById { get; set; }

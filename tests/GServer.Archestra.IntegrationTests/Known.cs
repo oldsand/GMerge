@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using GCommon.Primitives;
-using GServer.Archestra.Entities;
+using GCommon.Primitives.Enumerations;
 
 namespace GServer.Archestra.IntegrationTests
 {
@@ -24,55 +24,43 @@ namespace GServer.Archestra.IntegrationTests
                 ContainerName = "",
                 Attributes = new List<ArchestraAttribute>
                 {
-                    new()
+                    new("Auto", DataType.Boolean)
                     {
-                        Name = "Auto",
-                        DataType = DataType.Boolean,
                         Category = AttributeCategory.Writeable_UC_Lockable,
                         Locked = LockType.Unlocked,
                         Security = SecurityClassification.FreeAccess,
                         Value = false
                     },
-                    new()
+                    new("BatchNum", DataType.Integer)
                     {
-                        Name = "BatchNum",
-                        DataType = DataType.Integer,
                         Category = AttributeCategory.Writeable_UC_Lockable,
                         Locked = LockType.Unlocked,
                         Security = SecurityClassification.FreeAccess,
                         Value = 0
                     },
-                    new()
+                    new("BatchPhase", DataType.Integer)
                     {
-                        Name = "BatchPhase",
-                        DataType = DataType.Integer,
                         Category = AttributeCategory.Writeable_UC_Lockable,
                         Locked = LockType.Unlocked,
                         Security = SecurityClassification.FreeAccess,
                         Value = 0
                     },
-                    new()
+                    new("ConcentratePercent", DataType.Double)
                     {
-                        Name = "ConcentratePercent",
-                        DataType = DataType.Double,
                         Category = AttributeCategory.Writeable_UC_Lockable,
                         Locked = LockType.Unlocked,
                         Security = SecurityClassification.FreeAccess,
                         Value = 0.0
                     },
-                    new()
+                    new("Ref_Done", DataType.Boolean)
                     {
-                        Name = "Ref_Done",
-                        DataType = DataType.Boolean,
                         Category = AttributeCategory.Writeable_UC_Lockable,
                         Locked = LockType.Unlocked,
                         Security = SecurityClassification.FreeAccess,
                         Value = false
                     },
-                    new()
+                    new("SimID", DataType.String)
                     {
-                        Name = "SimID",
-                        DataType = DataType.String,
                         Category = AttributeCategory.Writeable_UC_Lockable,
                         Locked = LockType.Unlocked,
                         Security = SecurityClassification.FreeAccess,

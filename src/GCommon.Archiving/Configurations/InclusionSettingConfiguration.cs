@@ -1,7 +1,7 @@
 using GCommon.Core;
 using GCommon.Primitives;
 using GCommon.Primitives.Base;
-using GCommon.Archiving.Entities;
+using GCommon.Primitives.Enumerations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -14,10 +14,10 @@ namespace GCommon.Archiving.Configurations
             builder.ToTable(nameof(InclusionSetting)).HasKey(x => x.InclusionId);
 
             builder.Property(x => x.Template)
-                .HasConversion(x => x.Name, x => Enumeration.FromName<Template>(x))
+                .HasConversion(x => x.Value, x => Template.FromValue(x))
                 .IsRequired();
             builder.Property(x => x.InclusionOption)
-                .HasConversion(x => x.Name, x => Enumeration.FromName<InclusionOption>(x))
+                .HasConversion(x => x.Value, x => InclusionOption.FromValue(x))
                 .IsRequired();
             builder.Property(x => x.IncludeInstances).IsRequired();
 

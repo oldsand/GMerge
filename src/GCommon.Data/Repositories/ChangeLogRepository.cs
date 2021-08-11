@@ -3,6 +3,7 @@ using GCommon.Data.Abstractions;
 using GCommon.Data.Base;
 using GCommon.Data.Entities;
 using GCommon.Primitives;
+using GCommon.Primitives.Enumerations;
 using Microsoft.EntityFrameworkCore;
 
 namespace GCommon.Data.Repositories
