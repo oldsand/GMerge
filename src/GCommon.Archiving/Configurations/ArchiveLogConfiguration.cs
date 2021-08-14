@@ -18,9 +18,7 @@ namespace GCommon.Archiving.Configurations
             builder.Property(x => x.Operation)
                 .HasConversion(x => x.Name, x => Operation.FromName(x, false))
                 .IsRequired();
-            builder.Property(x => x.State)
-                .HasConversion(x => x.Name, x => ArchiveState.FromName(x, false))
-                .IsRequired();
+           
 
             builder.Ignore(x => x.Entry);
         }

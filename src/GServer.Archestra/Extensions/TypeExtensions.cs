@@ -11,12 +11,12 @@ namespace GServer.Archestra.Extensions
     {
         public static ValidationStatus ToPrimitiveType(this EPACKAGESTATUS ePackageStatus)
         {
-            return (ValidationStatus) ePackageStatus;
+            return ValidationStatus.FromValue((int) ePackageStatus);
         }
 
         public static EPACKAGESTATUS ToMxType(this ValidationStatus validationStatus)
         {
-            return (EPACKAGESTATUS) validationStatus;
+            return (EPACKAGESTATUS) validationStatus.Value;
         }
 
         public static ObjectCategory ToPrimitiveType(this ECATEGORY category)
@@ -92,22 +92,22 @@ namespace GServer.Archestra.Extensions
 
         public static StatusCategory ToPrimitiveType(this MxStatusCategory mxStatusCategory)
         {
-            return (StatusCategory) mxStatusCategory;
+            return StatusCategory.FromValue((int) mxStatusCategory);
         }
 
         public static MxStatusCategory ToMxType(this StatusCategory statusCategory)
         {
-            return (MxStatusCategory) statusCategory;
+            return (MxStatusCategory) statusCategory.Value;
         }
 
         public static Quality ToPrimitiveType(this DataQuality mxDataQuality)
         {
-            return (Quality) mxDataQuality;
+            return Quality.FromValue((int) mxDataQuality);
         }
 
         public static DataQuality ToMxType(this Quality quality)
         {
-            return (DataQuality) quality;
+            return (DataQuality) quality.Value;
         }
 
         public static CurrentlyDeployedOption ToPrimitiveType(this EActionForCurrentlyDeployedObjects deployedOption)

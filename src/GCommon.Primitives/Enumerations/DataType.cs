@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using Ardalis.SmartEnum;
+using GCommon.Core.Extensions;
 
 namespace GCommon.Primitives.Enumerations
 {
@@ -30,6 +32,8 @@ namespace GCommon.Primitives.Enumerations
 
         public virtual object DefaultValue => default;
         public abstract Type GetClrType();
+        public abstract object Parse(string value);
+        public abstract object Parse(string[] value);
 
         private class UnknownInternal : DataType
         {
@@ -38,6 +42,16 @@ namespace GCommon.Primitives.Enumerations
             }
 
             public override Type GetClrType()
+            {
+                return null;
+            }
+
+            public override object Parse(string value)
+            {
+                return null;
+            }
+
+            public override object Parse(string[] value)
             {
                 return null;
             }
@@ -50,6 +64,16 @@ namespace GCommon.Primitives.Enumerations
             }
 
             public override Type GetClrType()
+            {
+                return null;
+            }
+
+            public override object Parse(string value)
+            {
+                return null;
+            }
+
+            public override object Parse(string[] value)
             {
                 return null;
             }
@@ -67,6 +91,16 @@ namespace GCommon.Primitives.Enumerations
             {
                 return typeof(bool);
             }
+
+            public override object Parse(string value)
+            {
+                return value.ConvertTo<bool>();
+            }
+
+            public override object Parse(string[] value)
+            {
+                return value.ConvertTo<bool[]>();
+            }
         }
 
         private class IntegerInternal : DataType
@@ -80,6 +114,16 @@ namespace GCommon.Primitives.Enumerations
             public override Type GetClrType()
             {
                 return typeof(int);
+            }
+
+            public override object Parse(string value)
+            {
+                return value.ConvertTo<int>();
+            }
+
+            public override object Parse(string[] value)
+            {
+                return value.ConvertTo<int[]>();
             }
         }
 
@@ -95,6 +139,16 @@ namespace GCommon.Primitives.Enumerations
             {
                 return typeof(float);
             }
+
+            public override object Parse(string value)
+            {
+                return value.ConvertTo<float>();
+            }
+
+            public override object Parse(string[] value)
+            {
+                return value.ConvertTo<float[]>();
+            }
         }
 
         private class DoubleInternal : DataType
@@ -108,6 +162,16 @@ namespace GCommon.Primitives.Enumerations
             public override Type GetClrType()
             {
                 return typeof(double);
+            }
+            
+            public override object Parse(string value)
+            {
+                return value.ConvertTo<double>();
+            }
+
+            public override object Parse(string[] value)
+            {
+                return value.ConvertTo<double[]>();
             }
         }
 
@@ -123,6 +187,16 @@ namespace GCommon.Primitives.Enumerations
             {
                 return typeof(string);
             }
+            
+            public override object Parse(string value)
+            {
+                return value;
+            }
+
+            public override object Parse(string[] value)
+            {
+                return value;
+            }
         }
 
         private class TimeInternal : DataType
@@ -136,6 +210,16 @@ namespace GCommon.Primitives.Enumerations
             public override Type GetClrType()
             {
                 return typeof(DateTime);
+            }
+            
+            public override object Parse(string value)
+            {
+                return value.ConvertTo<DateTime>();
+            }
+
+            public override object Parse(string[] value)
+            {
+                return value.ConvertTo<DateTime[]>();
             }
         }
 
@@ -151,6 +235,16 @@ namespace GCommon.Primitives.Enumerations
             {
                 return typeof(TimeSpan);
             }
+            
+            public override object Parse(string value)
+            {
+                return value.ConvertTo<TimeSpan>();
+            }
+
+            public override object Parse(string[] value)
+            {
+                return value.ConvertTo<TimeSpan[]>();
+            }
         }
 
         private class ReferenceTypeInternal : DataType
@@ -162,6 +256,16 @@ namespace GCommon.Primitives.Enumerations
             public override Type GetClrType()
             {
                 return typeof(Reference);
+            }
+
+            public override object Parse(string value)
+            {
+                return new Reference {FullReference = value};
+            }
+
+            public override object Parse(string[] value)
+            {
+                return null;
             }
         }
         
@@ -175,6 +279,16 @@ namespace GCommon.Primitives.Enumerations
             {
                 return typeof(StatusCategory);
             }
+
+            public override object Parse(string value)
+            {
+                return StatusCategory.FromName(value);
+            }
+
+            public override object Parse(string[] value)
+            {
+                return null;
+            }
         }
 
         private class DataTypeEnumInternal : DataType
@@ -186,6 +300,16 @@ namespace GCommon.Primitives.Enumerations
             public override Type GetClrType()
             {
                 return typeof(DataType);
+            }
+
+            public override object Parse(string value)
+            {
+                return FromName(value);
+            }
+
+            public override object Parse(string[] value)
+            {
+                return null;
             }
         }
         
@@ -199,6 +323,16 @@ namespace GCommon.Primitives.Enumerations
             {
                 return typeof(SecurityClassification);
             }
+
+            public override object Parse(string value)
+            {
+                return SecurityClassification.FromName(value);
+            }
+
+            public override object Parse(string[] value)
+            {
+                return null;
+            }
         }
         
         private class DataQualityInternal : DataType
@@ -210,6 +344,16 @@ namespace GCommon.Primitives.Enumerations
             public override Type GetClrType()
             {
                 return typeof(Quality);
+            }
+
+            public override object Parse(string value)
+            {
+                return Quality.FromName(value);
+            }
+
+            public override object Parse(string[] value)
+            {
+                return null;
             }
         }
 
@@ -223,6 +367,16 @@ namespace GCommon.Primitives.Enumerations
             {
                 return typeof(string);
             }
+            
+            public override object Parse(string value)
+            {
+                return value;
+            }
+
+            public override object Parse(string[] value)
+            {
+                return null;
+            }
         }
         
         private class QualifiedStructInternal : DataType
@@ -234,6 +388,16 @@ namespace GCommon.Primitives.Enumerations
             public override Type GetClrType()
             {
                 return typeof(byte[]);
+            }
+            
+            public override object Parse(string value)
+            {
+                return value;
+            }
+
+            public override object Parse(string[] value)
+            {
+                return null;
             }
         }
 
@@ -249,6 +413,16 @@ namespace GCommon.Primitives.Enumerations
             {
                 return typeof(string);
             }
+            
+            public override object Parse(string value)
+            {
+                return value;
+            }
+
+            public override object Parse(string[] value)
+            {
+                return value;
+            }
         }
 
         private class BigStringInternal : DataType
@@ -262,6 +436,16 @@ namespace GCommon.Primitives.Enumerations
             public override Type GetClrType()
             {
                 return typeof(string);
+            }
+
+            public override object Parse(string value)
+            {
+                return value;
+            }
+
+            public override object Parse(string[] value)
+            {
+                return value;
             }
         }
     }

@@ -26,7 +26,7 @@ namespace GCommon.Archiving.Repositories
         {
             return _context.Logs
                 .Include(x => x.ArchiveObject)
-                .Include(x => x.EntryLog)
+                .Include(x => x.Entry)
                 .SingleOrDefault(x => x.ChangeLogId == changeLogId);
         }
 

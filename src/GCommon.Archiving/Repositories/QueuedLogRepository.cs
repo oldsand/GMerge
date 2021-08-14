@@ -22,12 +22,11 @@ namespace GCommon.Archiving.Repositories
             return _context.Queue.Find(changelogId);
         }
 
-        public void Enqueue(int changeLogId)
+        public void Enqueue(QueuedLog log)
         {
-            var target = _context.Queue.Find(changeLogId);
+            var target = _context.Queue.Find(log.ChangeLogId);
             if (target != null) return;
             
-            var log = new QueuedLog(changeLogId);
             _context.Queue.Add(log);
         }
 

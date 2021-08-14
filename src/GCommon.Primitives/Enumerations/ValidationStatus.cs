@@ -1,10 +1,16 @@
-﻿namespace GCommon.Primitives.Enumerations
+﻿using Ardalis.SmartEnum;
+
+namespace GCommon.Primitives.Enumerations
 {
-    public enum ValidationStatus
+    public class ValidationStatus : SmartEnum<ValidationStatus>
     {
-        Unknown = -1,
-        Good = 0,
-        Bad = 1,
-        Warning = 2
+        private ValidationStatus(string name, int value) : base(name, value)
+        {
+        }
+
+        public static ValidationStatus Unknown = new ValidationStatus("Unknown", -1);
+        public static ValidationStatus Good = new ValidationStatus("Good", 0);
+        public static ValidationStatus Bad = new ValidationStatus("Bad", 1);
+        public static ValidationStatus Warning = new ValidationStatus("Warning", 2);
     }
 }

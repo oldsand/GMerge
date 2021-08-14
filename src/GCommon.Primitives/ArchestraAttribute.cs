@@ -9,15 +9,15 @@ namespace GCommon.Primitives
 {
     public class ArchestraAttribute : IXSerializable
     {
-        private ArchestraAttribute()
+        private ArchestraAttribute(XElement element)
         {
-            Name = "Attribute001";
-            DataType = DataType.Boolean;
-            Category = AttributeCategory.Writeable_UC_Lockable;
-            Security = SecurityClassification.Operate;
-            Locked = LockType.Unlocked;
-            Value = DataType.Boolean.DefaultValue;
-            ArrayCount = -1;
+            Name = element.Attribute(nameof(Name))?.Value;
+            DataType = DataType.FromName(element.Attribute(nameof(DataType))?.Value);
+            Category = AttributeCategory.FromName(element.Attribute(nameof(Category))?.Value);
+            Security = SecurityClassification.FromName(element.Attribute(nameof(Security))?.Value);
+            Locked = LockType.FromName(element.Attribute(nameof(Locked))?.Value);
+            ArrayCount = Convert.ToInt32(element.Attribute(nameof(ArrayCount))?.Value);
+            Value = ReadValue(element);
         }
 
         public ArchestraAttribute(string name, DataType dataType)
@@ -41,19 +41,7 @@ namespace GCommon.Primitives
 
         public static ArchestraAttribute Materialize(XElement element)
         {
-            return new ArchestraAttribute
-            {
-                Name = element.Attribute(nameof(Name))?.Value,
-                DataType = DataType.FromName(element.Attribute(nameof(DataType))?.Value),
-                Category = AttributeCategory.FromName(element.Attribute(nameof(Category))?.Value),
-                Security = SecurityClassification.FromName(element.Attribute(nameof(Security))?.Value),
-                Locked = LockType.FromName(element.Attribute(nameof(Locked))?.Value),
-                ArrayCount = Convert.ToInt32(element.Attribute(nameof(ArrayCount))?.Value),
-
-                /*Value = Convert.ToInt32(element.Attribute(nameof(ArrayCount))?.Value) == -1
-                    ? element.Value.Trim()
-                    : element.Descendants("Element").Select(e => e.Value.Trim()).ToArray()*/
-            };
+            return new ArchestraAttribute(element);
         }
 
         public XElement Serialize()
@@ -65,22 +53,35 @@ namespace GCommon.Primitives
             element.Add(new XAttribute(nameof(Security), Security.Name));
             element.Add(new XAttribute(nameof(Locked), Locked.Name));
             element.Add(new XAttribute(nameof(ArrayCount), ArrayCount));
+            element.Add(WriteValue());
+            return element;
+        }
+        
+        private static object ReadValue(XElement element)
+        {
+            var dataType = DataType.FromName(element.Attribute(nameof(DataType))?.Value);
+            if (dataType == null) throw new InvalidOperationException();
 
+            return Convert.ToInt32(element.Attribute(nameof(ArrayCount))?.Value) == -1
+                ? dataType.Parse(element.Value.Trim())
+                : element.Descendants("Element").Select(e => dataType.Parse(e.Value.Trim())).ToArray();
+        }
+        
+        private XElement WriteValue()
+        {
             var value = new XElement("Value");
-            if (Value != null)
+            if (Value == null) return value;
+            
+            if (ArrayCount == -1)
+                value.Add(new XCData(Value.ToString()));
+            else
             {
-                if (ArrayCount == -1)
-                    value.Add(new XCData(Value.ToString()));
-                else
-                {
-                    var array = ((IEnumerable) Value).Cast<object>().Select(s => s.ToString());
-                    foreach (var item in array)
-                        value.Add(new XElement("Element", new XCData(item)));
-                }
+                var array = ((IEnumerable) Value).Cast<object>().Select(s => s.ToString());
+                foreach (var item in array)
+                    value.Add(new XElement("Element", new XCData(item)));
             }
 
-            element.Add(value);
-            return element;
+            return value;
         }
     }
 }

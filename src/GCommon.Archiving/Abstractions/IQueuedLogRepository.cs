@@ -6,7 +6,7 @@ namespace GCommon.Archiving.Abstractions
     public interface IQueuedLogRepository : IDisposable
     {
         QueuedLog Get(int changelogId);
-        void Enqueue(int changeLogId);
+        void Enqueue(QueuedLog log);
         void Dequeue(int changeLogId);
     }
 }

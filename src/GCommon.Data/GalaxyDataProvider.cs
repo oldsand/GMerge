@@ -41,15 +41,10 @@ namespace GCommon.Data
         }
 
         public IObjectRepository Objects { get; private set; }
-
         public IDefinitionRepository Definitions { get; private set; }
-
         public IFolderRepository Folders { get; private set; }
-
         public IChangeLogRepository ChangeLogs { get; private set; }
-
         public IUserRepository Users { get; private set; }
-
         public ILookupRepository Lookup { get; private set; }
 
         public void Dispose()

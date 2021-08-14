@@ -91,7 +91,7 @@ namespace GServer.Services.UnitTests
             pipeline.Complete();
             pipeline.Completion.Wait();
             
-            Mock.Get(_queuedLogRepositoryMock).Verify(x => x.Enqueue(_changeLog.ChangeLogId), Times.Once);
+            Mock.Get(_queuedLogRepositoryMock).Verify(x => x.Enqueue(It.IsAny<QueuedLog>()), Times.Once);
         }
     }
 }

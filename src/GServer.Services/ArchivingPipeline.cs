@@ -91,7 +91,9 @@ namespace GServer.Services
                 ? new ArchiveRepository(_archiveString)
                 : _archiveRepositoryFactory.Create(_archiveString);
 
-            archive.Queue.Enqueue(log.ChangeLogId);
+            var queued = 
+                new QueuedLog(log.ChangeLogId, log.ObjectId, log.ChangeDate, log.Operation, log.Comment, log.UserName);
+            archive.Queue.Enqueue(queued);
         }
 
         private void RemoveLog(Tuple<GalaxyObject, ChangeLog> payload)
@@ -136,7 +138,6 @@ namespace GServer.Services
             Logger.Trace("Generating archive object with id {ObjectId}", obj.ObjectId);
 
             var archiveObject = new ArchiveObject(obj.ObjectId, obj.TagName, obj.ConfigVersion, obj.Template);
-            archiveObject.AddLog(log.ChangeLogId, log.ChangeDate, log.Operation, log.Comment, log.UserName);
             return archiveObject;
         }
 

@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Text;
 using GCommon.Archiving.Repositories;
 using GCommon.Primitives;
 using GCommon.Primitives.Enumerations;
@@ -22,7 +23,7 @@ namespace GCommon.Archiving.IntegrationTests
             _builder = new SqliteConnectionStringBuilder {DataSource = @"\TestArchive.db"};
 
             var archive = new Archive("TestArchive");
-            
+
             var archiveBuilder = new ArchiveBuilder();
             archiveBuilder.Build(archive, _builder.ConnectionString);
         }
@@ -41,7 +42,7 @@ namespace GCommon.Archiving.IntegrationTests
             var repo = new ArchiveRepository(_builder.ConnectionString);
 
             var result = repo.Logs.Get(1);
-            
+
             Assert.NotNull(result);
             Assert.NotNull(result.ArchiveObject);
             Assert.AreEqual(1, result.ChangeLogId);
@@ -58,10 +59,10 @@ namespace GCommon.Archiving.IntegrationTests
             var repo = new ArchiveRepository(_builder.ConnectionString);
 
             var result = repo.Logs.Get(10);
-            
+
             Assert.Null(result);
         }
-        
+
         [Test]
         public void GetAll_WhenCalled_ReturnsExpectedCount()
         {
@@ -69,10 +70,10 @@ namespace GCommon.Archiving.IntegrationTests
             var repo = new ArchiveRepository(_builder.ConnectionString);
 
             var results = repo.Logs.GetAll().ToList();
-            
+
             Assert.That(results, Has.Count.EqualTo(4));
         }
-        
+
         [Test]
         public void GetAll_EmptyDatabase_ReturnsIsEmpty()
         {
@@ -82,7 +83,7 @@ namespace GCommon.Archiving.IntegrationTests
 
             Assert.IsEmpty(results);
         }
-        
+
         [Test]
         public void Find_ByOperation_ReturnsExpectedEntity()
         {
@@ -94,7 +95,7 @@ namespace GCommon.Archiving.IntegrationTests
             Assert.IsNotEmpty(results);
             Assert.True(results.All(x => x.Operation == Operation.CreateInstance));
         }
-        
+
         [Test]
         public void Find_ByDateTime_ReturnsExpectedEntities()
         {
@@ -105,25 +106,6 @@ namespace GCommon.Archiving.IntegrationTests
 
             Assert.That(results, Has.Count.EqualTo(1));
         }
-        
-        [Test]
-        public void Update_ExistingLog_ReturnsUpdatedEntity()
-        {
-            Seed();
-            var repo = new ArchiveRepository(_builder.ConnectionString);
-            var target = repo.Logs.Get(2);
-            target.State = ArchiveState.Processing;
-            repo.Logs.Update(target);
-            repo.Save();
-            
-            Assert.AreEqual(ArchiveState.Processing, target.State);
-
-            var result = repo.Logs.Get(2);
-
-            Assert.NotNull(result);
-            Assert.AreEqual(2, result.ChangeLogId);
-            Assert.AreEqual(ArchiveState.Processing, result.State);
-        }
 
         private void Seed()
         {
@@ -131,16 +113,18 @@ namespace GCommon.Archiving.IntegrationTests
                 .UseSqlite(_builder.ConnectionString).Options;
             using var context = new ArchiveContext(options);
 
-            context.Objects.Add(new ArchiveObject(1, "Tag1", 21, Template.UserDefined));
-            
-            context.Logs.Add(new ArchiveLog(1, 1, DateTime.Today, Operation.CreateInstance,
-                "Created new instance", Environment.UserName));
-            context.Logs.Add(new ArchiveLog(2, 1, DateTime.Today.AddHours(2), Operation.CheckInSuccess,
-                "Updated current object", Environment.UserName));
-            context.Logs.Add(new ArchiveLog(3, 1, DateTime.Today.AddHours(3), Operation.Rename,
-                "Renamed instance", Environment.UserName));
-            context.Logs.Add(new ArchiveLog(4, 1, DateTime.Today.AddHours(4),
-                Operation.ModifiedAutomationObjectOnly, "Modified something", Environment.UserName));
+            var obj = new ArchiveObject(1, "Tag1", 21, Template.UserDefined);
+            context.Objects.Add(obj);
+
+            context.Logs.Add(new ArchiveLog(1, new ArchiveEntry(obj, Encoding.UTF8.GetBytes("Test1")), DateTime.Today,
+                Operation.CreateInstance, "Created new instance", Environment.UserName));
+            context.Logs.Add(new ArchiveLog(2, new ArchiveEntry(obj, Encoding.UTF8.GetBytes("Test2")),
+                DateTime.Today.AddHours(2), Operation.CheckInSuccess, "Updated current object", Environment.UserName));
+            context.Logs.Add(new ArchiveLog(3, new ArchiveEntry(obj, Encoding.UTF8.GetBytes("Test3")),
+                DateTime.Today.AddHours(3), Operation.Rename, "Renamed instance", Environment.UserName));
+            context.Logs.Add(new ArchiveLog(4, new ArchiveEntry(obj, Encoding.UTF8.GetBytes("Test4")),
+                DateTime.Today.AddHours(4), Operation.ModifiedAutomationObjectOnly, "Modified something",
+                Environment.UserName));
 
             context.SaveChanges();
         }

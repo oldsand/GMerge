@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using GCommon.Core.Extensions;
 using GCommon.Primitives.Enumerations;
+using NLog.Fluent;
 
 namespace GCommon.Primitives
 {
     public class ArchiveObject
     {
         private readonly List<ArchiveEntry> _entries = new List<ArchiveEntry>();
-        private readonly List<ArchiveLog> _logs = new List<ArchiveLog>();
 
         private ArchiveObject()
         {
@@ -24,6 +24,7 @@ namespace GCommon.Primitives
             IsTemplate = tagName.StartsWith("$");
             AddedOn = DateTime.Now;
             ModifiedOn = DateTime.Now;
+            Logs = new List<ArchiveLog>();
         }
 
         public int ObjectId { get; private set; }
@@ -34,7 +35,7 @@ namespace GCommon.Primitives
         public DateTime AddedOn { get; private set; }
         public DateTime ModifiedOn { get; private set; }
         public IEnumerable<ArchiveEntry> Entries => _entries.AsReadOnly();
-        public IEnumerable<ArchiveLog> Logs => _logs.AsReadOnly();
+        public IEnumerable<ArchiveLog> Logs { get; private set; }
 
         public ArchiveEntry GetLatestEntry()
         {
@@ -43,7 +44,7 @@ namespace GCommon.Primitives
         
         public ArchiveLog GetLatestLog()
         {
-            return _logs.OrderByDescending(x => x.ChangedOn).FirstOrDefault();
+            return Logs.OrderByDescending(x => x.ChangedOn).FirstOrDefault();
         }
 
         public void Archive(byte[] data)
@@ -55,15 +56,6 @@ namespace GCommon.Primitives
             _entries.Add(entry);
             
             ModifiedOn = DateTime.Now;
-        }
-
-        public void AddLog(int logId, DateTime changedOn, Operation operation, string comment, string userName)
-        {
-            if (changedOn == null) throw new ArgumentNullException(nameof(changedOn), "changedOn can not be null");
-            if (operation == null) throw new ArgumentNullException(nameof(operation), "operation can not be null");
-
-            var log = new ArchiveLog(logId, this, changedOn, operation, comment, userName);
-            _logs.Add(log);
         }
 
         private bool IsCurrent(IEnumerable<byte> data)
