@@ -1,6 +1,9 @@
+using AnyDiff.Extensions;
 using FluentAssertions;
+using GCommon.Differencing;
 using GCommon.Primitives.Enumerations;
 using NUnit.Framework;
+using Extensions = AnyDiff.Extensions.Extensions;
 
 namespace GCommon.Primitives.UnitTests
 {
@@ -68,6 +71,17 @@ namespace GCommon.Primitives.UnitTests
             result.Locked.Should().Be(LockType.Unlocked);
             result.ArrayCount.Should().Be(-1);
             result.Value.Should().Be(false);
+        }
+
+        [Test]
+        public void Diff_WhenCalled_ShouldReturnExpected()
+        {
+            var att1 = new ArchestraAttribute("Name1", DataType.Boolean);
+            var att2 = new ArchestraAttribute("Name2", DataType.Boolean);
+
+            var diff = Extensions.Diff(att1, att2);
+
+            diff.Should().HaveCount(1);
         }
     }
 }

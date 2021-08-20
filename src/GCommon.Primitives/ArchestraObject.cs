@@ -9,13 +9,32 @@ namespace GCommon.Primitives
 {
     public class ArchestraObject : IXSerializable
     {
+        public ArchestraObject()
+        {
+        }
+
+        private ArchestraObject(XElement element)
+        {
+            TagName = element.Attribute(nameof(TagName))?.Value;
+            HierarchicalName = element.Attribute(nameof(HierarchicalName))?.Value;
+            ContainedName = element.Attribute(nameof(ContainedName))?.Value;
+            ConfigVersion = Convert.ToInt32(element.Attribute(nameof(ConfigVersion))?.Value);
+            Category = ObjectCategory.FromName(element.Attribute(nameof(Category))?.Value);
+            DerivedFromName = element.Attribute(nameof(DerivedFromName))?.Value;
+            BasedOnName = element.Attribute(nameof(BasedOnName))?.Value;
+            HostName = element.Attribute(nameof(HostName))?.Value;
+            AreaName = element.Attribute(nameof(AreaName))?.Value;
+            ContainerName = element.Attribute(nameof(ContainerName))?.Value;
+            Attributes = element.Descendants("Attribute").Select(ArchestraAttribute.Materialize).ToList();
+        }
+
         public string TagName { get; set; }
         public string ContainedName { get; set; }
         public string HierarchicalName { get; set; }
+        public ObjectCategory Category { get; set; }
         public int ConfigVersion { get; set; }
         public string DerivedFromName { get; set; }
         public string BasedOnName { get; set; }
-        public ObjectCategory Category { get; set; }
         public string HostName { get; set; }
         public string AreaName { get; set; }
         public string ContainerName { get; set; }
@@ -23,21 +42,7 @@ namespace GCommon.Primitives
 
         public static ArchestraObject Materialize(XElement element)
         {
-            return new ArchestraObject
-            {
-                TagName = element.Attribute(nameof(TagName))?.Value,
-                HierarchicalName = element.Attribute(nameof(HierarchicalName))?.Value,
-                ContainedName = element.Attribute(nameof(ContainedName))?.Value,
-                ConfigVersion = Convert.ToInt32(element.Attribute(nameof(ConfigVersion))?.Value),
-                Category = (ObjectCategory) Enum.Parse(typeof(ObjectCategory),
-                element.Attribute(nameof(Category))?.Value ?? string.Empty),
-                DerivedFromName = element.Attribute(nameof(DerivedFromName))?.Value,
-                BasedOnName = element.Attribute(nameof(BasedOnName))?.Value,
-                HostName = element.Attribute(nameof(HostName))?.Value,
-                AreaName = element.Attribute(nameof(AreaName))?.Value,
-                ContainerName = element.Attribute(nameof(ContainerName))?.Value,
-                Attributes = element.Descendants("Attribute").Select(ArchestraAttribute.Materialize).ToList()
-            };
+            return new ArchestraObject(element);
         }
 
         public XElement Serialize()
@@ -47,7 +52,7 @@ namespace GCommon.Primitives
             root.Add(new XAttribute(nameof(HierarchicalName), HierarchicalName ?? string.Empty));
             root.Add(new XAttribute(nameof(ContainedName), ContainedName ?? string.Empty));
             root.Add(new XAttribute(nameof(ConfigVersion), ConfigVersion));
-            root.Add(new XAttribute(nameof(Category), Category));
+            root.Add(new XAttribute(nameof(Category), Category ?? ObjectCategory.Undefined));
             root.Add(new XAttribute(nameof(DerivedFromName), DerivedFromName ?? string.Empty));
             root.Add(new XAttribute(nameof(BasedOnName), BasedOnName ?? string.Empty));
             root.Add(new XAttribute(nameof(HostName), HostName ?? string.Empty));

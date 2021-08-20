@@ -7,7 +7,7 @@ using GCommon.Primitives.Enumerations;
 
 namespace GCommon.Primitives
 {
-    public class ArchestraAttribute : IXSerializable
+    public class ArchestraAttribute : IXSerializable, IEquatable<ArchestraAttribute>
     {
         private ArchestraAttribute(XElement element)
         {
@@ -44,6 +44,14 @@ namespace GCommon.Primitives
             return new ArchestraAttribute(element);
         }
 
+        public bool Equals(ArchestraAttribute other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return Name == other.Name && Equals(DataType, other.DataType) && Equals(Category, other.Category) &&
+                   Equals(Locked, other.Locked) && Equals(Value, other.Value) && ArrayCount == other.ArrayCount;
+        }
+
         public XElement Serialize()
         {
             var element = new XElement("Attribute");
@@ -56,7 +64,21 @@ namespace GCommon.Primitives
             element.Add(WriteValue());
             return element;
         }
-        
+
+        public void SetCategory(AttributeCategory category)
+        {
+            category.When(AttributeCategory.Calculated).Then(() => Category = category);
+            category.When(AttributeCategory.CalculatedRetentive).Then(() => Category = category);
+            category.When(AttributeCategory.Writeable_UC_Lockable).Then(() => Category = category);
+        }
+
+        public void SetLocked(LockType lockType)
+        {
+            if (Locked.Equals(LockType.InParent)) return;
+
+            Locked = lockType;
+        }
+
         private static object ReadValue(XElement element)
         {
             var dataType = DataType.FromName(element.Attribute(nameof(DataType))?.Value);
@@ -66,12 +88,12 @@ namespace GCommon.Primitives
                 ? dataType.Parse(element.Value.Trim())
                 : element.Descendants("Element").Select(e => dataType.Parse(e.Value.Trim())).ToArray();
         }
-        
+
         private XElement WriteValue()
         {
             var value = new XElement("Value");
             if (Value == null) return value;
-            
+
             if (ArrayCount == -1)
                 value.Add(new XCData(Value.ToString()));
             else
@@ -82,6 +104,11 @@ namespace GCommon.Primitives
             }
 
             return value;
+        }
+
+        public override string ToString()
+        {
+            return $"Name: {Name}; Type: {DataType}; Value: {Value}";
         }
     }
 }

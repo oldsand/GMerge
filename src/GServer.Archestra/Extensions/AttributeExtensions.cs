@@ -91,6 +91,31 @@ namespace GServer.Archestra.Extensions
 
         public static ArchestraAttribute Map(this IAttribute attribute)
         {
+            return attribute.MapInternal();
+        }
+
+        public static IEnumerable<ArchestraAttribute> Map(this IAttributes attributes)
+        {
+            foreach (IAttribute attribute in attributes)
+                yield return attribute.MapInternal();
+        }
+        
+        public static IEnumerable<ArchestraAttribute> ByDataType(this IAttributes attributes, DataType dataType)
+        {
+            foreach (IAttribute attribute in attributes)
+                if (attribute.DataType == dataType.ToMxType())
+                    yield return attribute.MapInternal();
+        }
+        
+        public static IEnumerable<ArchestraAttribute> ByNameContains(this IAttributes attributes, string name)
+        {
+            foreach (IAttribute attribute in attributes)
+                if (attribute.Name.Contains(name))
+                    yield return attribute.MapInternal();
+        }
+
+        private static ArchestraAttribute MapInternal(this IAttribute attribute)
+        {
             return new(attribute.Name, attribute.DataType.ToPrimitiveType())
             {
                 Category = attribute.AttributeCategory.ToPrimitiveType(),
@@ -99,26 +124,6 @@ namespace GServer.Archestra.Extensions
                 ArrayCount = attribute.UpperBoundDim1,
                 Value = attribute.GetValue<object>()
             };
-        }
-
-        public static IEnumerable<ArchestraAttribute> Map(this IAttributes attributes)
-        {
-            foreach (IAttribute attribute in attributes)
-                yield return attribute.Map();
-        }
-        
-        public static IEnumerable<ArchestraAttribute> ByDataType(this IAttributes attributes, DataType dataType)
-        {
-            foreach (IAttribute attribute in attributes)
-                if (attribute.DataType == dataType.ToMxType())
-                    yield return attribute.Map();
-        }
-        
-        public static IEnumerable<ArchestraAttribute> ByNameContains(this IAttributes attributes, string name)
-        {
-            foreach (IAttribute attribute in attributes)
-                if (attribute.Name.Contains(name))
-                    yield return attribute.Map();
         }
     }
 }

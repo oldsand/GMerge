@@ -2,16 +2,11 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
-        <LangVersion>8</LangVersion>
+        <LangVersion>default</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Ardalis.SmartEnum" Version="2.0.1" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\GCommon.Core\GCommon.Core.csproj" />
-      <ProjectReference Include="..\GCommon.Differencing\GCommon.Differencing.csproj" />
     </ItemGroup>
 
 </Project>
