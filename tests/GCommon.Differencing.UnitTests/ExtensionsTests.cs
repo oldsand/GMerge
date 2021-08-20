@@ -23,7 +23,7 @@ namespace GCommon.Differencing.UnitTests
             var first = "Test1";
             var second = "Test2";
 
-            var result = first.DiffersBy(second);
+            var result = first.DiffersFrom(second);
 
             result.Should().HaveCount(1);
         }
@@ -34,7 +34,7 @@ namespace GCommon.Differencing.UnitTests
             var first = _fixture.Create<Car>();
             var second = _fixture.Create<Car>();
 
-            var result = first.DiffersBy(second);
+            var result = Extensions.DiffersFrom(first, second);
 
             result.Should().HaveCount(5);
         }

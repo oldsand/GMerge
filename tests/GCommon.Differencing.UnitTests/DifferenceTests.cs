@@ -25,38 +25,5 @@ namespace GCommon.Differencing.UnitTests
 
             result.Should().HaveCount(1);
         }
-        
-        [Test]
-        public void Between_Collections_ResultShouldContainExpectedCount()
-        {
-            var v1 = new[] {"A", "B", "C"};
-            var v2 = new[] {"A", "C", "B"};
-
-            var result = Difference.BetweenCollection(v1, v2);
-
-            result.Should().HaveCount(0);
-        }
-        
-        [Test]
-        public void BetweenCollections_FirstHasOneMore_ResultShouldHaveOneDifference()
-        {
-            var first = new[] {"A", "B", "C", "D"};
-            var second = new[] {"A", "C", "B"};
-
-            var result = Difference.BetweenCollection(first, second);
-
-            result.Should().HaveCount(1);
-        }
-        
-        [Test]
-        public void BetweenCollections_SecondHasOneMore_ResultShouldHaveOneDifference()
-        {
-            var first = new[] {"A", "B", "C"};
-            var second = new[] {"A", "C", "B", "D"};
-
-            var result = Difference.BetweenCollection(first, second);
-
-            result.Should().HaveCount(1);
-        }
     }
 }

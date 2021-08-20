@@ -7,10 +7,10 @@ namespace GCommon.Differencing
 {
     public static class Extensions
     {
-        public static IEnumerable<Difference> DiffersBy<T>(this T me, T other) =>
+        public static IEnumerable<Difference> DiffersFrom<T>(this T me, T other) =>
             GetDifferences(me, other, EqualityComparer<T>.Default);
 
-        public static IEnumerable<Difference> DiffersBy<T>(this T me, T other, IEqualityComparer<T> comparer) =>
+        public static IEnumerable<Difference> DiffersFrom<T>(this T me, T other, IEqualityComparer<T> comparer) =>
             GetDifferences(me, other, comparer);
 
         public static IEnumerable<Difference> SequenceDiffersBy<TSource>(this IEnumerable<TSource> me,
@@ -49,6 +49,7 @@ namespace GCommon.Differencing
 
             var joined = me.FullOuterJoin(other, key, key, (first, second) => new
             {
+                //If the join produced null for the 'first' object, used the second in place to avoid null reference exception
                 First = first != null ? first : second,
                 Second = first != null ? second : default
             });

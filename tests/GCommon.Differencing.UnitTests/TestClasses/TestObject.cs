@@ -12,11 +12,6 @@ namespace GCommon.Differencing.UnitTests.TestClasses
         public int Year { get; set; }
         public DateTime Sold { get; set; }
         public int Mileage { get; set; }
-        
-        public int CompareTo(Car other)
-        {
-            throw new NotImplementedException();
-        }
 
         public IEnumerable<Difference> DiffersFrom(Car other)
         {
@@ -44,11 +39,6 @@ namespace GCommon.Differencing.UnitTests.TestClasses
                 differences.Add(Difference.Create(Mileage, other.Mileage, GetType()));
             
             return differences;
-        }
-
-        public int CompareTo(object obj)
-        {
-            throw new NotImplementedException();
         }
 
         public bool Equals(Car other)
