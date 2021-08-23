@@ -36,7 +36,7 @@ namespace GCommon.Differencing
             
             if (!comparer.Equals(me, other))
             {
-                differences.Add(Difference.Create(me, other, typeof(T)));
+                differences.Add(Difference.Create(me, other, string.Empty, typeof(T)));
             }
 
             return differences;

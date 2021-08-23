@@ -3,7 +3,7 @@ using GCommon.Differencing.Abstractions;
 
 namespace GCommon.Differencing.Differentiators
 {
-    public class DefaultDifferentiator<T> : IDifferentiator<T>
+    public class ReflectiveDiffer<T> : IDifferentiator<T>
     {
         public bool Equals(T x, T y)
         {

@@ -34,7 +34,7 @@ namespace GCommon.Differencing.UnitTests
             var first = _fixture.Create<Car>();
             var second = _fixture.Create<Car>();
 
-            var result = Extensions.DiffersFrom(first, second);
+            var result = first.DiffersFrom(second);
 
             result.Should().HaveCount(5);
         }

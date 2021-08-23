@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using GCommon.Differencing.Abstractions;
-using GCommon.Differencing.Differentiators;
 
 namespace GCommon.Differencing
 {
@@ -16,33 +16,57 @@ namespace GCommon.Differencing
             ObjectType = objectType;
         }
 
-        public object Left { get; set; }
-        public object Right { get; set; }
-        public string PropertyName { get; set; }
-        public Type PropertyType { get; set; }
-        public Type ObjectType { get; set; }
-        
-        public static Difference Create(object left, object right, Type propertyType, string propertyName, Type objectType)
-        {
-            return new(left, right, propertyType, propertyName, objectType);
-        }
-        
-        public static Difference Create<T>(T left, T right, Type objectType)
-        {
-            var propertyType = typeof(T);
-            return new Difference(left, right, propertyType, propertyType.Name, objectType);
-        }
-        
-        public static IEnumerable<Difference> Between<TSource>(TSource me, TSource other) =>
-            Compute(me, other, Differentiator<TSource>.Default);
-        
-        public static IEnumerable<Difference> Between<TSource>(TSource me, TSource other, 
-            IDifferentiator<TSource> differentiator) => Compute(me, other, differentiator);
+        public string PropertyName { get; }
+        public Type PropertyType { get; }
+        public object Left { get; }
+        public object Right { get; }
+        public Type ObjectType { get; }
 
-        private static IEnumerable<Difference> Compute<TSource>(TSource me, TSource other, 
+        public static Difference Create<TSource>(TSource left, TSource right, string propertyName = null,
+            Type objectType = null)
+        {
+            var propertyType = typeof(TSource);
+            propertyName ??= propertyType.Name;
+            return new Difference(left, right, propertyType, propertyName, objectType);
+        }
+
+        public static Difference Create<TSource>(TSource left, string propertyName = null, Type objectType = null)
+        {
+            var propertyType = typeof(TSource);
+            propertyName ??= propertyType.Name;
+            return new Difference(left, default, propertyType, propertyName, objectType);
+        }
+
+        public static Difference Create<TSource, TValue>(TSource left, TSource right,
+            Expression<Func<TSource, TValue>> propertyExpression)
+        {
+            var propertyName = GetMemberName(propertyExpression);
+
+            var valueGetter = propertyExpression.Compile();
+            
+            var leftValue = valueGetter.Invoke(left);
+            var rightValue = valueGetter.Invoke(right);
+
+            return new Difference(leftValue, rightValue, typeof(TValue), propertyName, typeof(TSource));
+        }
+
+        public static IEnumerable<Difference> Between<TSource>(TSource left, TSource right) =>
+            ComputeDifference(left, right, Differentiator<TSource>.Default);
+
+        public static IEnumerable<Difference> Between<TSource>(TSource left, TSource right,
+            IDifferentiator<TSource> differentiator) => ComputeDifference(left, right, differentiator);
+
+        private static IEnumerable<Difference> ComputeDifference<TSource>(TSource left, TSource right,
             IDifferentiator<TSource> differentiator)
         {
-            return differentiator.DifferenceIn(me, other);
+            return differentiator.DifferenceIn(left, right);
+        }
+
+        private static string GetMemberName<TSource, TValue>(Expression<Func<TSource, TValue>> propertyExpression)
+        {
+            return propertyExpression.Body is MemberExpression memberExpression
+                ? memberExpression.Member.Name
+                : string.Empty;
         }
     }
 }

@@ -17,26 +17,16 @@ namespace GCommon.Differencing.UnitTests.TestClasses
         {
             var differences = new List<Difference>();
 
-            if (other == null)
-            {
-                differences.Add(Difference.Create(Make, null, GetType()));
-                differences.Add(Difference.Create(Model, null, GetType()));
-                differences.Add(Difference.Create(Year, null, Year.GetType(), nameof(Year), GetType()));
-                differences.Add(Difference.Create(Sold, null, Sold.GetType(), nameof(Sold), GetType()));
-                differences.Add(Difference.Create(Mileage, null, Mileage.GetType(), nameof(Mileage), GetType()));
-                return differences;
-            }
-            
             if (!Equals(Make, other.Make))
-                differences.Add(Difference.Create(Make, other.Make, GetType()));
+                differences.Add(Difference.Create(this, other, c => c.Make));
             if (!Equals(Model, other.Model))
-                differences.Add(Difference.Create(Model, other.Model, GetType()));
+                differences.Add(Difference.Create(this, other, c => c.Model));
             if (!Equals(Year, other.Year))
-                differences.Add(Difference.Create(Year, other.Year, GetType()));
+                differences.Add(Difference.Create(this, other, c => c.Year));
             if (!Equals(Sold, other.Sold))
-                differences.Add(Difference.Create(Sold, other.Sold, GetType()));
+                differences.Add(Difference.Create(this, other, c => c.Sold));
             if (!Equals(Mileage, other.Mileage))
-                differences.Add(Difference.Create(Mileage, other.Mileage, GetType()));
+                differences.Add(Difference.Create(this, other, c => c.Mileage));
             
             return differences;
         }
@@ -69,13 +59,13 @@ namespace GCommon.Differencing.UnitTests.TestClasses
             var differences = new List<Difference>();
             
             if (!Equals(FirstName, other.FirstName))
-                differences.Add(Difference.Create(FirstName, other.FirstName, GetType()));
+                differences.Add(Difference.Create(this, other, c => c.FirstName));
             if (!Equals(LastName, other.LastName))
-                differences.Add(Difference.Create(LastName, other.LastName, GetType()));
+                differences.Add(Difference.Create(this, other, c => c.LastName));
             if (!Equals(Age, other.Age))
-                differences.Add(Difference.Create(Age, other.Age, GetType()));
+                differences.Add(Difference.Create(this, other, c => c.Age));
             if (!Equals(Cars, other.Cars))
-                differences.Add(Difference.Create(Cars, other.Cars, GetType()));
+                differences.AddRange(Cars.SequenceDiffersBy(other.Cars));
             
             return differences;
         }
