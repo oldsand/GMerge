@@ -17,17 +17,12 @@ namespace GCommon.Differencing.UnitTests.TestClasses
         {
             var differences = new List<Difference<object>>();
             
-            if (!Equals(Make, other.Make))
-                differences.Add(Difference<object>.Create(this, other, c => c.Make));
-            if (!Equals(Model, other.Model))
-                differences.Add(Difference<object>.Create(this, other, c => c.Model));
-            if (!Equals(Year, other.Year))
-                differences.Add(Difference<object>.Create(this, other, c => c.Year));
-            if (!Equals(Sold, other.Sold))
-                differences.Add(Difference<object>.Create(this, other, c => c.Sold));
-            if (!Equals(Mileage, other.Mileage))
-                differences.Add(Difference<object>.Create(this, other, c => c.Mileage));
-            
+            differences.AddRange(this.DiffersFrom<Car, object>(other, c => c.Make));
+            differences.AddRange(Difference<object>.Between(this, other, c => c.Model));
+            differences.AddRange(Difference<object>.Between(this, other, c => c.Year));
+            differences.AddRange(Difference<object>.Between(this, other, c => c.Sold));
+            differences.AddRange(Difference<object>.Between(this, other, c => c.Mileage));
+
             return differences;
         }
 
@@ -36,6 +31,26 @@ namespace GCommon.Differencing.UnitTests.TestClasses
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
             return Make == other.Make && Model == other.Model && Year == other.Year && Sold.Equals(other.Sold) && Mileage == other.Mileage;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Car);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Make, Model, Year, Sold, Mileage);
+        }
+
+        public static bool operator ==(Car left, Car right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(Car left, Car right)
+        {
+            return !Equals(left, right);
         }
     }
 
@@ -58,74 +73,33 @@ namespace GCommon.Differencing.UnitTests.TestClasses
         {
             var differences = new List<Difference<object>>();
             
-            if (!Equals(FirstName, other.FirstName))
-                differences.Add(Difference<object>.Create(this, other, c => c.FirstName));
-            if (!Equals(LastName, other.LastName))
-                differences.Add(Difference<object>.Create(this, other, c => c.LastName));
-            if (!Equals(Age, other.Age))
-                differences.Add(Difference<object>.Create(this, other, c => c.Age));
+            differences.AddRange(Difference<object>.Between(this, other, c => c.FirstName));
+            differences.AddRange(Difference<object>.Between(this, other, c => c.LastName));
+            differences.AddRange(Difference<object>.Between(this, other, c => c.Age));
             /*if (!Equals(Cars, other.Cars))
                 differences.AddRange(Cars.SequenceDiffersFrom(other.Cars));*/
             
             return differences;
         }
 
-        public int CompareTo(Owner other)
+        public override bool Equals(object obj)
         {
-            if (ReferenceEquals(this, other)) return 0;
-            if (ReferenceEquals(null, other)) return 1;
-            var firstNameComparison = string.Compare(FirstName, other.FirstName, StringComparison.Ordinal);
-            if (firstNameComparison != 0) return firstNameComparison;
-            var lastNameComparison = string.Compare(LastName, other.LastName, StringComparison.Ordinal);
-            if (lastNameComparison != 0) return lastNameComparison;
-            return Age.CompareTo(other.Age);
+            return Equals(obj as Owner);
         }
 
-        public int CompareTo(object obj)
+        public override int GetHashCode()
         {
-            if (ReferenceEquals(null, obj)) return 1;
-            if (ReferenceEquals(this, obj)) return 0;
-            return obj is Owner other
-                ? CompareTo(other)
-                : throw new ArgumentException($"Object must be of type {nameof(Owner)}");
+            return HashCode.Combine(FirstName, LastName, Age, Cars);
         }
 
-        public static bool operator <(Owner left, Owner right)
+        public static bool operator ==(Owner left, Owner right)
         {
-            return Comparer<Owner>.Default.Compare(left, right) < 0;
+            return Equals(left, right);
         }
 
-        public static bool operator >(Owner left, Owner right)
+        public static bool operator !=(Owner left, Owner right)
         {
-            return Comparer<Owner>.Default.Compare(left, right) > 0;
-        }
-
-        public static bool operator <=(Owner left, Owner right)
-        {
-            return Comparer<Owner>.Default.Compare(left, right) <= 0;
-        }
-
-        public static bool operator >=(Owner left, Owner right)
-        {
-            return Comparer<Owner>.Default.Compare(left, right) >= 0;
-        }
-    }
-
-    public class CarComparer : IEqualityComparer<Car>
-    {
-        public bool Equals(Car x, Car y)
-        {
-            if (ReferenceEquals(x, y)) return true;
-            if (ReferenceEquals(x, null)) return false;
-            if (ReferenceEquals(y, null)) return false;
-            if (x.GetType() != y.GetType()) return false;
-            return x.Make == y.Make && x.Model == y.Model && x.Year == y.Year && x.Sold.Equals(y.Sold) &&
-                   x.Mileage == y.Mileage;
-        }
-
-        public int GetHashCode(Car obj)
-        {
-            return HashCode.Combine(obj.Make, obj.Model, obj.Year, obj.Sold, obj.Mileage);
+            return !Equals(left, right);
         }
     }
 }

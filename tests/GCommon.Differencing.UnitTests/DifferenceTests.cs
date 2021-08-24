@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using AutoFixture;
 using FluentAssertions;
 using GCommon.Differencing.UnitTests.TestClasses;
@@ -82,6 +83,58 @@ namespace GCommon.Differencing.UnitTests
             var result = Difference<string>.Between(first, second);
 
             result.Should().HaveCount(1);
+        }
+
+        [Test]
+        public void Between_ComplexTypeDiffers_ResultShouldHaveSingleCount()
+        {
+            var first = _fixture.Create<Car>();
+            var second = _fixture.Create<Car>();
+
+            var differences = Difference<Car>.Between(first, second).ToList();
+
+            differences.Should().HaveCount(1);
+            differences.First().Left.Should().Be(first);
+            differences.First().Right.Should().Be(second);
+            differences.First().PropertyName.Should().Be(string.Empty);
+            differences.First().PropertyType.Should().Be(typeof(Car));
+            differences.First().ObjectType.Should().Be(typeof(Car));
+        }
+        
+        [Test]
+        public void Between_ComplexTypeSameReference_ResultShouldNoDifference()
+        {
+            var car = _fixture.Create<Car>();
+
+            var differences = Difference<Car>.Between(car, car).ToList();
+
+            differences.Should().HaveCount(0);
+        }
+        
+        [Test]
+        public void Between_ComplexIEquatableDifferentReferenceSameValues_DifferencesShouldHaveNoItems()
+        {
+            var first = new Car
+            {
+                Make = "Make",
+                Model = "Model",
+                Year = 2000,
+                Sold = DateTime.Today,
+                Mileage = 60000
+            };
+            
+            var second = new Car
+            {
+                Make = "Make",
+                Model = "Model",
+                Year = 2000,
+                Sold = DateTime.Today,
+                Mileage = 60000
+            };
+
+            var differences = Difference<Car>.Between(first, second).ToList();
+
+            differences.Should().HaveCount(0);
         }
         
     }

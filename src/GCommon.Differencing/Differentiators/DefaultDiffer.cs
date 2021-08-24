@@ -8,6 +8,7 @@ namespace GCommon.Differencing.Differentiators
         public IEnumerable<Difference<T>> DifferenceIn(T first, T second, IEqualityComparer<T> comparer = null)
         {
             comparer ??= EqualityComparer<T>.Default;
+            
             var differences = new List<Difference<T>>();
             
             if (!comparer.Equals(first, second))

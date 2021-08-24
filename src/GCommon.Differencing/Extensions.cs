@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using GCommon.Core.Extensions;
-using GCommon.Differencing.Abstractions;
 
 namespace GCommon.Differencing
 {
@@ -12,6 +12,14 @@ namespace GCommon.Differencing
 
         public static IEnumerable<Difference<T>> DiffersFrom<T>(this T me, T other, IEqualityComparer<T> comparer) =>
             GetDifferences(me, other, comparer);
+        
+        public static IEnumerable<Difference<TValue>> DiffersFrom<TSource, TValue>(this TSource me, TSource other,
+            Expression<Func<TSource, TValue>> propertyExpression) =>
+            GetDifferences(me, other, propertyExpression, EqualityComparer<TValue>.Default);
+        
+        public static IEnumerable<Difference<TValue>> DiffersFrom<TSource, TValue>(this TSource me, TSource other,
+            Expression<Func<TSource, TValue>> propertyExpression, IEqualityComparer<TValue> comparer) =>
+            GetDifferences(me, other, propertyExpression, comparer);
 
         public static IEnumerable<Difference<TSource>> CollectionDiffersFrom<TSource>(this IEnumerable<TSource> me,
             IEnumerable<TSource> other) =>
@@ -25,21 +33,23 @@ namespace GCommon.Differencing
             IEnumerable<TSource> other, Func<TSource, TValue> sortKey, IEqualityComparer<TSource> comparer) =>
             GetCollectionDifferences(me, other, sortKey, comparer);
         
+        public static IEnumerable<Difference<TSource>> SequenceDiffersFrom<TSource>(this IEnumerable<TSource> me,
+            IEnumerable<TSource> other) =>
+            GetSequenceDifferences(me, other, EqualityComparer<TSource>.Default);
+        
+        public static IEnumerable<Difference<TSource>> SequenceDiffersFrom<TSource>(this IEnumerable<TSource> me,
+            IEnumerable<TSource> other, IEqualityComparer<TSource> comparer) =>
+            GetSequenceDifferences(me, other, comparer);
+        
         private static IEnumerable<Difference<T>> GetDifferences<T>(this T me, T other, IEqualityComparer<T> comparer)
         {
-            if (me is IDifferentiable<T, T> differentiable)
-            {
-                return differentiable.DiffersFrom(other);
-            }
-            
-            var differences = new List<Difference<T>>();
-            
-            if (!comparer.Equals(me, other))
-            {
-                differences.Add(Difference<T>.Create(me, other, x => x));
-            }
-
-            return differences;
+            return Difference<T>.Between(me, other, comparer);
+        }
+        
+        private static IEnumerable<Difference<TValue>> GetDifferences<TSource, TValue>(this TSource me, TSource other,
+            Expression<Func<TSource, TValue>> propertyExpression, IEqualityComparer<TValue> comparer)
+        {
+            return Difference<TValue>.Between(me, other, propertyExpression, comparer);
         }
         
         private static IEnumerable<Difference<TSource>> GetCollectionDifferences<TSource, TValue>(this IEnumerable<TSource> me,
@@ -56,7 +66,35 @@ namespace GCommon.Differencing
 
             foreach (var pair in joined)
             {
-                differences.AddRange(pair.First.GetDifferences(pair.Second, comparer));
+                differences.AddRange(Difference<TSource>.Between(pair.First, pair.Second, comparer));
+            }
+
+            return differences;
+        }
+        
+        private static IEnumerable<Difference<TSource>> GetSequenceDifferences<TSource>(this IEnumerable<TSource> me,
+            IEnumerable<TSource> other, IEqualityComparer<TSource> comparer)
+        {
+            var differences = new List<Difference<TSource>>();
+
+            using var e1 = me.GetEnumerator();
+            using var e2 = other.GetEnumerator();
+
+            while (e1.MoveNext())
+            {
+                if (e2.MoveNext())
+                {
+                    differences.AddRange(e1.Current.GetDifferences(e2.Current, comparer));
+                }
+                else
+                {
+                    differences.Add(new Difference<TSource>(e1.Current));
+                }
+            }
+
+            while (e2.MoveNext())
+            {
+                differences.Add(new Difference<TSource>(e2.Current));
             }
 
             return differences;

@@ -13,7 +13,8 @@ namespace GCommon.Differencing.Differentiators
             _comparisonType = comparisonType;
         }
 
-        public IEnumerable<Difference<char?>> DifferenceIn(string first, string second, IEqualityComparer<string> comparer = null)
+        public IEnumerable<Difference<char?>> DifferenceIn(string first, string second, 
+            IEqualityComparer<string> comparer = null)
         {
             comparer ??= EqualityComparer<string>.Default;
             var differences = new List<Difference<char?>>();

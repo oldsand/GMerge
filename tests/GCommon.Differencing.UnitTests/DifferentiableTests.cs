@@ -22,7 +22,7 @@ namespace GCommon.Differencing.UnitTests
         }
         
         [Test]
-        public void Diff_SomePropertiesDifferent_ShouldHaveCorrectCount()
+        public void DiffersFrom_SomePropertiesDifferent_ShouldHaveCorrectCount()
         {
             var fixture = new Fixture();
             fixture.Customize<Car>(c => c.Without(p => p.Model));
@@ -35,7 +35,7 @@ namespace GCommon.Differencing.UnitTests
         }
 
         [Test]
-        public void Diff_AllPropertiesDifference_ShouldHaveCorrectCount()
+        public void DiffersFrom_AllPropertiesDifference_ShouldHaveCorrectCount()
         {
             var fixture = new Fixture();
             var owner1 = fixture.Create<Owner>();
