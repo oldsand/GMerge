@@ -7,45 +7,45 @@ namespace GCommon.Differencing
 {
     public static class Extensions
     {
-        public static IEnumerable<Difference> DiffersFrom<T>(this T me, T other) =>
+        public static IEnumerable<Difference<T>> DiffersFrom<T>(this T me, T other) =>
             GetDifferences(me, other, EqualityComparer<T>.Default);
 
-        public static IEnumerable<Difference> DiffersFrom<T>(this T me, T other, IEqualityComparer<T> comparer) =>
+        public static IEnumerable<Difference<T>> DiffersFrom<T>(this T me, T other, IEqualityComparer<T> comparer) =>
             GetDifferences(me, other, comparer);
 
-        public static IEnumerable<Difference> SequenceDiffersBy<TSource>(this IEnumerable<TSource> me,
+        public static IEnumerable<Difference<TSource>> CollectionDiffersFrom<TSource>(this IEnumerable<TSource> me,
             IEnumerable<TSource> other) =>
-            GetSequentialDifferences(me, other, s => s, EqualityComparer<TSource>.Default);
+            GetCollectionDifferences(me, other, s => s, EqualityComparer<TSource>.Default);
         
-        public static IEnumerable<Difference> SequenceDiffersBy<TSource, TValue>(this IEnumerable<TSource> me, 
+        public static IEnumerable<Difference<TSource>> CollectionDiffersFrom<TSource, TValue>(this IEnumerable<TSource> me, 
             IEnumerable<TSource> other, Func<TSource, TValue> sortKey) =>
-            GetSequentialDifferences(me, other, sortKey, EqualityComparer<TSource>.Default);
+            GetCollectionDifferences(me, other, sortKey, EqualityComparer<TSource>.Default);
         
-        public static IEnumerable<Difference> SequenceDiffersBy<TSource, TValue>(this IEnumerable<TSource> me, 
+        public static IEnumerable<Difference<TSource>> CollectionDiffersFrom<TSource, TValue>(this IEnumerable<TSource> me, 
             IEnumerable<TSource> other, Func<TSource, TValue> sortKey, IEqualityComparer<TSource> comparer) =>
-            GetSequentialDifferences(me, other, sortKey, comparer);
+            GetCollectionDifferences(me, other, sortKey, comparer);
         
-        private static IEnumerable<Difference> GetDifferences<T>(this T me, T other, IEqualityComparer<T> comparer)
+        private static IEnumerable<Difference<T>> GetDifferences<T>(this T me, T other, IEqualityComparer<T> comparer)
         {
-            if (me is IDifferentiable<T> differentiable)
+            if (me is IDifferentiable<T, T> differentiable)
             {
                 return differentiable.DiffersFrom(other);
             }
             
-            var differences = new List<Difference>();
+            var differences = new List<Difference<T>>();
             
             if (!comparer.Equals(me, other))
             {
-                differences.Add(Difference.Create(me, other, string.Empty, typeof(T)));
+                differences.Add(Difference<T>.Create(me, other, x => x));
             }
 
             return differences;
         }
         
-        private static IEnumerable<Difference> GetSequentialDifferences<TSource, TValue>(this IEnumerable<TSource> me,
+        private static IEnumerable<Difference<TSource>> GetCollectionDifferences<TSource, TValue>(this IEnumerable<TSource> me,
             IEnumerable<TSource> other, Func<TSource, TValue> key, IEqualityComparer<TSource> comparer)
         {
-            var differences = new List<Difference>();
+            var differences = new List<Difference<TSource>>();
 
             var joined = me.FullOuterJoin(other, key, key, (first, second) => new
             {

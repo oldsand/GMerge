@@ -5,40 +5,48 @@ using GCommon.Differencing.Abstractions;
 
 namespace GCommon.Differencing
 {
-    public class Difference
+    public class Difference<T>
     {
-        private Difference(object left, object right, Type propertyType, string propertyName, Type objectType)
+        public Difference(T? left, T? right, string propertyName = null, Type objectType = null)
         {
             Left = left;
             Right = right;
+            PropertyType = typeof(T);
             PropertyName = propertyName;
-            PropertyType = propertyType;
+            ObjectType = objectType;
+        }
+        
+        public Difference(T? left, string propertyName = null, Type objectType = null)
+        {
+            Left = left;
+            Right = default;
+            PropertyType = typeof(T);
+            PropertyName = propertyName;
             ObjectType = objectType;
         }
 
-        public string PropertyName { get; }
+        public T? Left { get; }
+        public T? Right { get; }
         public Type PropertyType { get; }
-        public object Left { get; }
-        public object Right { get; }
+        public string PropertyName { get; }
         public Type ObjectType { get; }
-
-        public static Difference Create<TSource>(TSource left, TSource right, string propertyName = null,
-            Type objectType = null)
+        public DifferenceType DifferenceType
         {
-            var propertyType = typeof(TSource);
-            propertyName ??= propertyType.Name;
-            return new Difference(left, right, propertyType, propertyName, objectType);
+            get
+            {
+                if (Left != null && Right == null)
+                    return DifferenceType.Removed;
+                
+                if (Left == null && Right != null)
+                    return DifferenceType.Added;
+                
+                return DifferenceType.Changed;
+            }
+            
         }
-
-        public static Difference Create<TSource>(TSource left, string propertyName = null, Type objectType = null)
-        {
-            var propertyType = typeof(TSource);
-            propertyName ??= propertyType.Name;
-            return new Difference(left, default, propertyType, propertyName, objectType);
-        }
-
-        public static Difference Create<TSource, TValue>(TSource left, TSource right,
-            Expression<Func<TSource, TValue>> propertyExpression)
+        
+        public static Difference<T> Create<TSource>(TSource left, TSource right,
+            Expression<Func<TSource, T>> propertyExpression)
         {
             var propertyName = GetMemberName(propertyExpression);
 
@@ -47,17 +55,20 @@ namespace GCommon.Differencing
             var leftValue = valueGetter.Invoke(left);
             var rightValue = valueGetter.Invoke(right);
 
-            return new Difference(leftValue, rightValue, typeof(TValue), propertyName, typeof(TSource));
+            return new Difference<T>(leftValue, rightValue, propertyName, typeof(TSource));
         }
 
-        public static IEnumerable<Difference> Between<TSource>(TSource left, TSource right) =>
-            ComputeDifference(left, right, Differentiator<TSource>.Default);
+        public static IEnumerable<Difference<T>> Between(T left, T right) =>
+            ComputeDifference(left, right, Differentiator<T>.Default);
+        
+        public static IEnumerable<Difference<T>> Between(T left, T right, IDifferentiator<T, T> differentiator) =>
+            ComputeDifference(left, right, differentiator);
 
-        public static IEnumerable<Difference> Between<TSource>(TSource left, TSource right,
-            IDifferentiator<TSource> differentiator) => ComputeDifference(left, right, differentiator);
+        public static IEnumerable<Difference<TDifference>> Between<TSource, TDifference>(TSource left, TSource right,
+            IDifferentiator<TSource, TDifference> differentiator) => ComputeDifference(left, right, differentiator);
 
-        private static IEnumerable<Difference> ComputeDifference<TSource>(TSource left, TSource right,
-            IDifferentiator<TSource> differentiator)
+        private static IEnumerable<Difference<TDifference>> ComputeDifference<TSource, TDifference>(
+            TSource left, TSource right, IDifferentiator<TSource, TDifference> differentiator)
         {
             return differentiator.DifferenceIn(left, right);
         }

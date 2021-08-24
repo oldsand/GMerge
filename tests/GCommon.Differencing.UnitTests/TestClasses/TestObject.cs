@@ -5,7 +5,7 @@ using GCommon.Differencing.Abstractions;
 
 namespace GCommon.Differencing.UnitTests.TestClasses
 {
-    public class Car : IDifferentiable<Car>
+    public class Car : IDifferentiable<Car, object>
     {
         public string Make { get; set; }
         public string Model { get; set; }
@@ -13,20 +13,20 @@ namespace GCommon.Differencing.UnitTests.TestClasses
         public DateTime Sold { get; set; }
         public int Mileage { get; set; }
 
-        public IEnumerable<Difference> DiffersFrom(Car other)
+        public IEnumerable<Difference<object>> DiffersFrom(Car other)
         {
-            var differences = new List<Difference>();
-
+            var differences = new List<Difference<object>>();
+            
             if (!Equals(Make, other.Make))
-                differences.Add(Difference.Create(this, other, c => c.Make));
+                differences.Add(Difference<object>.Create(this, other, c => c.Make));
             if (!Equals(Model, other.Model))
-                differences.Add(Difference.Create(this, other, c => c.Model));
+                differences.Add(Difference<object>.Create(this, other, c => c.Model));
             if (!Equals(Year, other.Year))
-                differences.Add(Difference.Create(this, other, c => c.Year));
+                differences.Add(Difference<object>.Create(this, other, c => c.Year));
             if (!Equals(Sold, other.Sold))
-                differences.Add(Difference.Create(this, other, c => c.Sold));
+                differences.Add(Difference<object>.Create(this, other, c => c.Sold));
             if (!Equals(Mileage, other.Mileage))
-                differences.Add(Difference.Create(this, other, c => c.Mileage));
+                differences.Add(Difference<object>.Create(this, other, c => c.Mileage));
             
             return differences;
         }
@@ -39,7 +39,7 @@ namespace GCommon.Differencing.UnitTests.TestClasses
         }
     }
 
-    public class Owner : IDifferentiable<Owner>
+    public class Owner : IDifferentiable<Owner, object>
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -54,18 +54,18 @@ namespace GCommon.Differencing.UnitTests.TestClasses
                    Cars.SequenceEqual(other.Cars);
         }
 
-        public IEnumerable<Difference> DiffersFrom(Owner other)
+        public IEnumerable<Difference<object>> DiffersFrom(Owner other)
         {
-            var differences = new List<Difference>();
+            var differences = new List<Difference<object>>();
             
             if (!Equals(FirstName, other.FirstName))
-                differences.Add(Difference.Create(this, other, c => c.FirstName));
+                differences.Add(Difference<object>.Create(this, other, c => c.FirstName));
             if (!Equals(LastName, other.LastName))
-                differences.Add(Difference.Create(this, other, c => c.LastName));
+                differences.Add(Difference<object>.Create(this, other, c => c.LastName));
             if (!Equals(Age, other.Age))
-                differences.Add(Difference.Create(this, other, c => c.Age));
-            if (!Equals(Cars, other.Cars))
-                differences.AddRange(Cars.SequenceDiffersBy(other.Cars));
+                differences.Add(Difference<object>.Create(this, other, c => c.Age));
+            /*if (!Equals(Cars, other.Cars))
+                differences.AddRange(Cars.SequenceDiffersFrom(other.Cars));*/
             
             return differences;
         }

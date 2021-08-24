@@ -8,7 +8,7 @@ namespace GCommon.Differencing
         public T First { get; set; }
         public T Second { get; set; }
         public DateTime LastRan { get; set; }
-        public IEnumerable<Difference> Differences { get; set; }
+        public IEnumerable<Difference<T>> Differences { get; set; }
 
         public void Run(T first, T second)
         {

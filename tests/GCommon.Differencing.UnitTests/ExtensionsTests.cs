@@ -45,7 +45,7 @@ namespace GCommon.Differencing.UnitTests
             var first = new[] {"A", "B", "C"};
             var second = new[] {"A", "B", "C"};
 
-            var result = first.SequenceDiffersBy(second).ToList();
+            var result = first.CollectionDiffersFrom(second).ToList();
 
             result.Should().HaveCount(0);
         }
@@ -56,7 +56,7 @@ namespace GCommon.Differencing.UnitTests
             var first = new[] {"A", "B", "C"};
             var second = new[] {"A", "C", "B"};
 
-            var result = first.SequenceDiffersBy(second).ToList();
+            var result = first.CollectionDiffersFrom(second).ToList();
 
             result.Should().HaveCount(0);
         }
@@ -67,7 +67,7 @@ namespace GCommon.Differencing.UnitTests
             var first = new[] {"A", "B", "C"};
             var second = new[] {"D", "E", "F"};
 
-            var result = first.SequenceDiffersBy(second).ToList();
+            var result = first.CollectionDiffersFrom(second).ToList();
 
             result.Should().HaveCount(6);
         }
@@ -78,7 +78,7 @@ namespace GCommon.Differencing.UnitTests
             var first = new[] {"A", "B", "C", "D"};
             var second = new[] {"A", "C", "B"};
 
-            var result = first.SequenceDiffersBy(second).ToList();
+            var result = first.CollectionDiffersFrom(second).ToList();
 
             result.Should().HaveCount(1);
             result.First().Left.Should().Be("D");
@@ -90,7 +90,7 @@ namespace GCommon.Differencing.UnitTests
             var first = new[] {"A", "B", "C"};
             var second = new[] {"A", "C", "B", "D"};
 
-            var result = first.SequenceDiffersBy(second).ToList();
+            var result = first.CollectionDiffersFrom(second).ToList();
 
             result.Should().HaveCount(1);
             result.First().Right.Should().Be("D");
@@ -102,7 +102,7 @@ namespace GCommon.Differencing.UnitTests
             var first = _fixture.CreateMany<Car>();
             var second = _fixture.CreateMany<Car>();
 
-            var result = first.SequenceDiffersBy(second, c => c.Make).ToList();
+            var result = first.CollectionDiffersFrom(second, c => c.Make).ToList();
 
             result.Should().HaveCount(10);
         }
