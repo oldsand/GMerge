@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using GCommon.Core.Extensions;
 using GCommon.Differencing.Abstractions;
+using GCommon.Differencing.Differentiators;
 
 namespace GCommon.Differencing
 {
@@ -13,16 +15,7 @@ namespace GCommon.Differencing
             Right = right;
             PropertyType = typeof(T);
             PropertyName = propertyName;
-            ObjectType = objectType;
-        }
-        
-        public Difference(T left, string propertyName = null, Type objectType = null)
-        {
-            Left = left;
-            Right = default;
-            PropertyType = typeof(T);
-            PropertyName = propertyName;
-            ObjectType = objectType;
+            ObjectType = objectType ?? typeof(T);
         }
 
         public T Left { get; }
@@ -30,37 +23,20 @@ namespace GCommon.Differencing
         public Type PropertyType { get; }
         public string PropertyName { get; }
         public Type ObjectType { get; }
-        public DifferenceType DifferenceType
-        {
-            get
-            {
-                if (Left != null && Right == null)
-                    return DifferenceType.Removed;
-                
-                if (Left == null && Right != null)
-                    return DifferenceType.Added;
-                
-                return DifferenceType.Changed;
-            }
-            
-        }
-        
-        public static Difference<T> Create<TSource>(TSource left, TSource right,
-            Expression<Func<TSource, T>> propertyExpression)
-        {
-            var propertyName = GetMemberName(propertyExpression);
+        public DifferenceType DifferenceType => DetermineDifferenceType(Left, Right);
 
-            var valueGetter = propertyExpression.Compile();
-            
-            var leftValue = valueGetter.Invoke(left);
-            var rightValue = valueGetter.Invoke(right);
-
-            return new Difference<T>(leftValue, rightValue, propertyName, typeof(TSource));
-        }
+        public static IEnumerable<Difference<T>> Between(T left, T right) =>
+            ComputeDifference(left, right, new GenericDiffer<T>());
         
         public static IEnumerable<Difference<T>> Between(T left, T right, IEqualityComparer<T> comparer) =>
-            ComputeDifference(left, right, comparer);
-
+            ComputeDifference(left, right, new GenericDiffer<T>(comparer));
+        
+        public static IEnumerable<Difference<T>> Between(T left, T right, IDifferentiator<T, T> differentiator) =>
+            ComputeDifference(left, right, differentiator);
+        
+        public static IEnumerable<Difference<TDifference>> Between<TSource, TDifference>(TSource left, TSource right,
+            IDifferentiator<TSource, TDifference> differentiator) => ComputeDifference(left, right, differentiator);
+        
         public static IEnumerable<Difference<T>> Between<TSource>(TSource left, TSource right,
             Expression<Func<TSource, T>> propertyExpression) =>
             ComputeDifference(left, right, propertyExpression, EqualityComparer<T>.Default);
@@ -69,27 +45,10 @@ namespace GCommon.Differencing
             Expression<Func<TSource, T>> propertyExpression, IEqualityComparer<T> comparer) =>
             ComputeDifference(left, right, propertyExpression, comparer);
 
-        public static IEnumerable<Difference<T>> Between(T left, T right) =>
-            ComputeDifference(left, right, Differentiator<T>.Default);
-        
-        public static IEnumerable<Difference<T>> Between(T left, T right, IDifferentiator<T, T> differentiator) =>
-            ComputeDifference(left, right, differentiator);
-
-        public static IEnumerable<Difference<TDifference>> Between<TSource, TDifference>(TSource left, TSource right,
-            IDifferentiator<TSource, TDifference> differentiator) => ComputeDifference(left, right, differentiator);
-
-        private static IEnumerable<Difference<T>> ComputeDifference(T left, T right, IEqualityComparer<T> comparer)
+        private static IEnumerable<Difference<TDifference>> ComputeDifference<TSource, TDifference>(
+            TSource left, TSource right,  IDifferentiator<TSource, TDifference> differentiator)
         {
-            var differences = new List<Difference<T>>();
-            
-            comparer ??= EqualityComparer<T>.Default;
-            
-            if (!comparer.Equals(left, right))
-            {
-                differences.Add(Create(left, right, x => x));
-            }
-            
-            return differences;
+            return differentiator.DifferenceIn(left, right);
         }
         
         private static IEnumerable<Difference<TDifference>> ComputeDifference<TSource, TDifference>(TSource left,
@@ -113,10 +72,14 @@ namespace GCommon.Differencing
             return differences;
         }
         
-        private static IEnumerable<Difference<TDifference>> ComputeDifference<TSource, TDifference>(
-            TSource left, TSource right,  IDifferentiator<TSource, TDifference> differentiator)
+        private static IEnumerable<Difference<TSource>> ComputeCollectionDifference<TSource, TValue>(
+            IEnumerable<TSource> left,
+            IEnumerable<TSource> right,
+            Func<TSource, TValue> key, 
+            CollectionMatchMode mode, 
+            ICollectionDifferentiator<TSource, TSource> differentiator)
         {
-            return differentiator.DifferenceIn(left, right);
+            return differentiator.DifferenceIn(left, right, key, mode);
         }
 
         private static string GetMemberName<TSource, TValue>(Expression<Func<TSource, TValue>> propertyExpression)
@@ -124,6 +87,13 @@ namespace GCommon.Differencing
             return propertyExpression.Body is MemberExpression memberExpression
                 ? memberExpression.Member.Name
                 : string.Empty;
+        }
+
+        private static DifferenceType DetermineDifferenceType(T left, T right)
+        {
+            return left == null && right != null ? DifferenceType.Added
+                : left != null && right == null ? DifferenceType.Removed
+                : DifferenceType.Changed;
         }
     }
 }

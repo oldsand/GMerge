@@ -2,9 +2,8 @@ using System.Collections.Generic;
 
 namespace GCommon.Differencing.Abstractions
 {
-    public interface IDifferentiator<TSource, TDifference>
+    public interface IDifferentiator<in TSource, TDifference> : IEqualityComparer<TSource>
     {
-        IEnumerable<Difference<TDifference>> DifferenceIn(TSource first, TSource second,
-            IEqualityComparer<TSource> comparer = null); 
+        IEnumerable<Difference<TDifference>> DifferenceIn(TSource first, TSource second);
     }
 }

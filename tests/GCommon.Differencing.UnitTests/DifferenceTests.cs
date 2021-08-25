@@ -24,7 +24,7 @@ namespace GCommon.Differencing.UnitTests
             var first = _fixture.Create<string>();
             var second = _fixture.Create<string>();
 
-            var difference = Difference<string>.Create(first, second, x => x);
+            var difference = new Difference<string>(first, right: second);
 
             difference.Left.Should().Be(first);
             difference.Right.Should().Be(second);
@@ -39,7 +39,7 @@ namespace GCommon.Differencing.UnitTests
             var first = _fixture.Create<DateTime>();
             var second = _fixture.Create<DateTime>();
 
-            var difference = Difference<DateTime>.Create(first, second, x => x);
+            var difference = new Difference<DateTime>(first, second);
 
             difference.Left.Should().Be(first);
             difference.Right.Should().Be(second);
@@ -54,7 +54,7 @@ namespace GCommon.Differencing.UnitTests
             var first = _fixture.Create<Car>();
             var second = _fixture.Create<Car>();
 
-            var difference = Difference<string>.Create(first, second, x => x.Model);
+            var difference = new Difference<string>(first.Model, second.Model, nameof(first.Model), typeof(Car));
 
             difference.Left.Should().Be(first.Model);
             difference.Right.Should().Be(second.Model);
