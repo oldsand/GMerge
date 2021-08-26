@@ -43,7 +43,7 @@ namespace GCommon.Differencing.UnitTests
 
             var results = owner1.DiffersFrom(owner2);
 
-            results.Should().HaveCountGreaterThan(4);
+            results.Should().HaveCountGreaterThan(6);
         }
 
         [Test]
@@ -52,6 +52,7 @@ namespace GCommon.Differencing.UnitTests
             var fixture = new Fixture();
             
             fixture.Customize<Owner>(c => c.Without(p => p.Cars));
+            
             var owner1 = new Owner
             {
                 FirstName = "John",

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 namespace GCommon.Differencing.Abstractions
 {
-    public interface IDifferentiable<TSource, TDifference> : IEquatable<TSource>
+    public interface IDifferentiable<T> : IEquatable<T>
     {
-        IEnumerable<Difference<TDifference>> DiffersFrom(TSource other);
+        IEnumerable<Difference> DiffersFrom(T other);
     }
 }

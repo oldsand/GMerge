@@ -4,7 +4,7 @@ using GCommon.Differencing.Abstractions;
 
 namespace GCommon.Differencing.Differentiators
 {
-    public class WordDiffer : IDifferentiator<string, char?>
+    public class WordDiffer : IDifferentiator<string>
     {
         private readonly StringComparison _comparisonType;
 
@@ -23,9 +23,9 @@ namespace GCommon.Differencing.Differentiators
             return obj.GetHashCode();
         }
 
-        public IEnumerable<Difference<char?>> DifferenceIn(string first, string second)
+        public IEnumerable<Difference> DifferenceIn(string first, string second)
         {
-            var differences = new List<Difference<char?>>();
+            var differences = new List<Difference>();
 
             if (Equals(first, second))
                 return differences;
@@ -38,15 +38,10 @@ namespace GCommon.Differencing.Differentiators
                 char? c2 = i <= second.Length - 1 ? second[i] : null;
 
                 if (!Equals(c1, c2))
-                    differences.Add(new Difference<char?>(c1, c2));
+                    differences.Add(Difference.Create(c1, c2));
             }
 
             return differences;
-        }
-
-        public IEnumerable<Difference<char?>> DifferenceIn(IEnumerable<string> first, IEnumerable<string> second)
-        {
-            throw new NotImplementedException();
         }
 
         /// <summary>

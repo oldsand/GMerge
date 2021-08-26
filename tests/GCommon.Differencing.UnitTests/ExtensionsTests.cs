@@ -104,7 +104,7 @@ namespace GCommon.Differencing.UnitTests
 
             var result = first.CollectionDiffersFrom(second, c => c.Make).ToList();
 
-            result.Should().HaveCount(10);
+            result.Should().HaveCount(6);
         }
     }
 }

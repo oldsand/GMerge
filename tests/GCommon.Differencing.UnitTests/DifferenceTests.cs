@@ -24,13 +24,13 @@ namespace GCommon.Differencing.UnitTests
             var first = _fixture.Create<string>();
             var second = _fixture.Create<string>();
 
-            var difference = new Difference<string>(first, right: second);
+            var difference = Difference.Create(first, second);
 
             difference.Left.Should().Be(first);
             difference.Right.Should().Be(second);
             difference.PropertyType.Should().Be(typeof(string));
-            difference.ObjectType.Should().Be(typeof(string));
-            difference.PropertyName.Should().Be(string.Empty);
+            difference.ObjectType.Should().Be(null);
+            difference.PropertyName.Should().Be(null);
         }
         
         [Test]
@@ -39,13 +39,13 @@ namespace GCommon.Differencing.UnitTests
             var first = _fixture.Create<DateTime>();
             var second = _fixture.Create<DateTime>();
 
-            var difference = new Difference<DateTime>(first, second);
+            var difference = Difference.Create(first, second);
 
             difference.Left.Should().Be(first);
             difference.Right.Should().Be(second);
             difference.PropertyType.Should().Be(typeof(DateTime));
-            difference.ObjectType.Should().Be(typeof(DateTime));
-            difference.PropertyName.Should().Be(string.Empty);
+            difference.ObjectType.Should().Be(null);
+            difference.PropertyName.Should().Be(null);
         }
         
         [Test]
@@ -54,7 +54,7 @@ namespace GCommon.Differencing.UnitTests
             var first = _fixture.Create<Car>();
             var second = _fixture.Create<Car>();
 
-            var difference = new Difference<string>(first.Model, second.Model, nameof(first.Model), typeof(Car));
+            var difference = Difference.Create(first.Model, second.Model, nameof(first.Model), typeof(Car));
 
             difference.Left.Should().Be(first.Model);
             difference.Right.Should().Be(second.Model);
@@ -69,7 +69,7 @@ namespace GCommon.Differencing.UnitTests
             var first = _fixture.Create<int>();
             var second = _fixture.Create<int>();
 
-            var result = Difference<int>.Between(first, second);
+            var result = Difference.Between(first, second);
 
             result.Should().HaveCount(1);
         }
@@ -80,7 +80,7 @@ namespace GCommon.Differencing.UnitTests
             var first = _fixture.Create<string>();
             var second = _fixture.Create<string>();
 
-            var result = Difference<string>.Between(first, second);
+            var result = Difference.Between(first, second);
 
             result.Should().HaveCount(1);
         }
@@ -91,14 +91,9 @@ namespace GCommon.Differencing.UnitTests
             var first = _fixture.Create<Car>();
             var second = _fixture.Create<Car>();
 
-            var differences = Difference<Car>.Between(first, second).ToList();
+            var differences = Difference.Between(first, second).ToList();
 
-            differences.Should().HaveCount(1);
-            differences.First().Left.Should().Be(first);
-            differences.First().Right.Should().Be(second);
-            differences.First().PropertyName.Should().Be(string.Empty);
-            differences.First().PropertyType.Should().Be(typeof(Car));
-            differences.First().ObjectType.Should().Be(typeof(Car));
+            differences.Should().HaveCount(5);
         }
         
         [Test]
@@ -106,7 +101,7 @@ namespace GCommon.Differencing.UnitTests
         {
             var car = _fixture.Create<Car>();
 
-            var differences = Difference<Car>.Between(car, car).ToList();
+            var differences = Difference.Between(car, car).ToList();
 
             differences.Should().HaveCount(0);
         }
@@ -132,7 +127,7 @@ namespace GCommon.Differencing.UnitTests
                 Mileage = 60000
             };
 
-            var differences = Difference<Car>.Between(first, second).ToList();
+            var differences = Difference.Between(first, second).ToList();
 
             differences.Should().HaveCount(0);
         }
