@@ -7,6 +7,7 @@ namespace GCommon.Differencing.UnitTests.TestClasses
 {
     public class Car : IDifferentiable<Car>
     {
+        public int VinNumber { get; set; }
         public string Make { get; set; }
         public string Model { get; set; }
         public int Year { get; set; }
@@ -17,11 +18,12 @@ namespace GCommon.Differencing.UnitTests.TestClasses
         {
             var differences = new List<Difference>();
             
-            differences.AddRange(Make.DiffersFrom(other.Make));
-            differences.AddRange(Model.DiffersFrom(other.Model));
-            differences.AddRange(Year.DiffersFrom(other.Year));
-            differences.AddRange(Sold.DiffersFrom(other.Sold));
-            differences.AddRange(Mileage.DiffersFrom(other.Mileage));
+            differences.AddRange(Difference.Between(this, other, x => x.VinNumber));
+            differences.AddRange(Difference.Between(this, other, x => x.Make));
+            differences.AddRange(Difference.Between(this, other, x => x.Model));
+            differences.AddRange(Difference.Between(this, other, x => x.Year));
+            differences.AddRange(Difference.Between(this, other, x => x.Sold));
+            differences.AddRange(Difference.Between(this, other, x => x.Mileage));
 
             return differences;
         }
@@ -30,7 +32,8 @@ namespace GCommon.Differencing.UnitTests.TestClasses
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return Make == other.Make && Model == other.Model && Year == other.Year && Sold.Equals(other.Sold) && Mileage == other.Mileage;
+            return VinNumber == other.VinNumber && Make == other.Make && Model == other.Model && Year == other.Year &&
+                   Sold.Equals(other.Sold) && Mileage == other.Mileage;
         }
 
         public override bool Equals(object obj)
@@ -73,11 +76,11 @@ namespace GCommon.Differencing.UnitTests.TestClasses
         {
             var differences = new List<Difference>();
             
-            differences.AddRange(FirstName.DiffersFrom(other.FirstName));
-            differences.AddRange(LastName.DiffersFrom(other.LastName));
-            differences.AddRange(Age.DiffersFrom(other.Age));
-            differences.AddRange(Cars.SequenceDiffersFrom(other.Cars, c => c.Make));
-            
+            differences.AddRange(Difference.Between(this, other, x => x.FirstName));
+            differences.AddRange(Difference.Between(this, other, x => x.LastName));
+            differences.AddRange(Difference.Between(this, other, x => x.Age));
+            differences.AddRange(Difference.BetweenCollection(this, other, x => x.Cars, c => c.VinNumber));
+
             return differences;
         }
 
