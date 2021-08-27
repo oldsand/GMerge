@@ -1,8 +1,15 @@
+using Ardalis.SmartEnum;
+
 namespace GCommon.Primitives.Enumerations
 {
-    public enum WizardOptionType
+    public class WizardOptionType : SmartEnum<WizardOptionType>
     {
-        Option,
-        ChoiceGroup
+        private WizardOptionType(string name, int value) : base(name, value)
+        {
+        }
+        
+        public static readonly WizardOptionType Option = new WizardOptionType("Option", 0);
+        public static readonly WizardOptionType ChoiceGroup = new WizardOptionType("ChoiceGroup", 1);
+
     }
 }

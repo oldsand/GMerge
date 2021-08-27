@@ -26,9 +26,9 @@ namespace GCommon.Primitives
             var root = new XElement(element);
             root.RemoveNodes();
             Root = root;
-            CustomProperties = element.Descendants("CustomProperty").Select(p => new CustomProperty().Materialize(p)).ToList();
-            WizardOptions = element.Element("WizardOptions")?.Elements().Select(o => new WizardOption().Materialize(o)).ToList();
-            WizardLayers = element.Descendants("Layer").Select(l => new WizardLayer().Materialize(l)).ToList();
+            CustomProperties = element.Descendants("CustomProperty").Select(CustomProperty.Materialize).ToList();
+            WizardOptions = element.Element("WizardOptions")?.Elements().Select(WizardOption.Materialize).ToList();
+            WizardLayers = element.Descendants("Layer").Select(WizardLayer.Materialize).ToList();
             VisualTree = element.Element("GraphicElements");
             PredefinedScripts = element.Element("PredefinedScripts")?.Descendants().Select(n => new PredefinedScript().Materialize(n)).ToList();;
             NamedScripts = element.Descendants("NamedScript").Select(n => new NamedScript().Materialize(n)).ToList();
