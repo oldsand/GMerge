@@ -8,6 +8,7 @@
 
     <ItemGroup>
         <PackageReference Include="AnyDiff" Version="1.0.88" />
+        <PackageReference Include="Ardalis.SmartEnum.AutoFixture" Version="1.0.3" />
         <PackageReference Include="AutoFixture" Version="4.17.0" />
         <PackageReference Include="FluentAssertions" Version="5.10.3" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />

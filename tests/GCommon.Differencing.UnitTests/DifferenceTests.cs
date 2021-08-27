@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoFixture;
 using FluentAssertions;
@@ -93,7 +94,7 @@ namespace GCommon.Differencing.UnitTests
 
             var differences = Difference.Between(first, second).ToList();
 
-            differences.Should().HaveCount(5);
+            differences.Should().HaveCount(1);
         }
         
         [Test]
@@ -130,6 +131,98 @@ namespace GCommon.Differencing.UnitTests
             var differences = Difference.Between(first, second).ToList();
 
             differences.Should().HaveCount(0);
+        }
+
+        [Test]
+        public void Between_PropertyExpressionToSimpleType_ShouldHaveExpectedDifference()
+        {
+            var first = _fixture.Create<Car>();
+            var second = _fixture.Create<Car>();
+
+            var differences = Difference.Between(first, second, c => c.VinNumber).ToList();
+
+            differences.Should().HaveCount(1);
+            differences.First().Left.Should().Be(first.VinNumber);
+            differences.First().Right.Should().Be(second.VinNumber);
+            differences.First().PropertyType.Should().Be(typeof(int));
+            differences.First().PropertyName.Should().Be(nameof(first.VinNumber));
+            differences.First().ObjectType.Should().Be(typeof(Car));
+            differences.First().DifferenceType.Should().Be(DifferenceType.Changed);
+        }
+        
+        [Test]
+        public void Between_PropertyExpressionToComplexTypeAreDifferent_ShouldHaveExpectedDifference()
+        {
+            var first = _fixture.Create<CarTitle>();
+            var second = _fixture.Create<CarTitle>();
+
+            var differences = Difference.Between(first, second, c => c.Car).ToList();
+
+            differences.Should().HaveCount(1);
+            differences.First().Left.Should().Be(first.Car);
+            differences.First().Right.Should().Be(second.Car);
+            differences.First().PropertyType.Should().Be(typeof(Car));
+            differences.First().PropertyName.Should().Be(nameof(first.Car));
+            differences.First().ObjectType.Should().Be(typeof(CarTitle));
+            differences.First().DifferenceType.Should().Be(DifferenceType.Changed);
+        }
+        
+        [Test]
+        public void Between_PropertyExpressionToComplexTypeAreSame_ShouldHaveExpectedDifference()
+        {
+            var first = _fixture.Create<CarTitle>();
+
+            var differences = Difference.Between(first, first, c => c.Car).ToList();
+
+            differences.Should().HaveCount(0);
+        }
+        
+        [Test]
+        public void Between_PropertyExpressionToComplexTypeAreEqual_ShouldHaveExpectedDifference()
+        {
+            var car1 = new Car
+            {
+                VinNumber = 123
+            };
+            var car2 = new Car
+            {
+                VinNumber = 123
+            };
+            var first = _fixture.Build<CarTitle>().With(x => x.Car, car1).Create();
+            var second = _fixture.Build<CarTitle>().With(x => x.Car, car2).Create();
+
+            var differences = Difference.Between(first, second, c => c.Car).ToList();
+
+            differences.Should().HaveCount(0);
+        }
+        
+        [Test]
+        public void Between_PropertyExpressionToCollection_ShouldHaveExpectedDifference()
+        {
+            var first = _fixture.Create<Owner>();
+            var second = _fixture.Create<Owner>();
+
+            var differences = Difference.Between(first, second, c => c.Cars).ToList();
+
+            differences.Should().HaveCount(1);
+            differences.First().Left.Should().Be(first.Cars);
+            differences.First().Right.Should().Be(second.Cars);
+            differences.First().PropertyType.Should().Be(typeof(IEnumerable<Car>));
+            differences.First().PropertyName.Should().Be(nameof(first.Cars));
+            differences.First().ObjectType.Should().Be(typeof(Owner));
+            differences.First().DifferenceType.Should().Be(DifferenceType.Changed);
+        }
+        
+        
+        [Test]
+        public void BetweenSequence_OfTypeThatImplementsIEquatable_ShouldHaveExpectedDifference()
+        {
+            var first = _fixture.CreateMany<Car>().ToList();
+            var second = _fixture.CreateMany<Car>().ToList();
+
+            var differences = Difference.BetweenSequence(first, second).ToList();
+
+            differences.Should().HaveCount(3);
         }
         
     }

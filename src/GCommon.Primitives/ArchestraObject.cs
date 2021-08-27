@@ -2,12 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
+using GCommon.Differencing;
+using GCommon.Differencing.Abstractions;
 using GCommon.Primitives.Base;
 using GCommon.Primitives.Enumerations;
 
 namespace GCommon.Primitives
 {
-    public class ArchestraObject : IXSerializable
+    public class ArchestraObject : IXSerializable, IDifferentiable<ArchestraObject>
     {
         public ArchestraObject()
         {
@@ -63,6 +65,72 @@ namespace GCommon.Primitives
                 root.Add(new XElement("Attributes", Attributes.Select(a => a.Serialize())));
 
             return root;
+        }
+
+        public bool Equals(ArchestraObject other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return TagName == other.TagName && ContainedName == other.ContainedName &&
+                   HierarchicalName == other.HierarchicalName && Equals(Category, other.Category) &&
+                   ConfigVersion == other.ConfigVersion && DerivedFromName == other.DerivedFromName &&
+                   BasedOnName == other.BasedOnName && HostName == other.HostName && AreaName == other.AreaName &&
+                   ContainerName == other.ContainerName && Equals(Attributes, other.Attributes);
+        }
+        
+        public IEnumerable<Difference> DiffersFrom(ArchestraObject other)
+        {
+            var differences = new List<Difference>();
+
+            differences.AddRange(Difference.Between(this, other, x => x.TagName));
+            differences.AddRange(Difference.Between(this, other, x => x.ContainedName));
+            differences.AddRange(Difference.Between(this, other, x => x.HierarchicalName));
+            differences.AddRange(Difference.Between(this, other, x => x.Category));
+            differences.AddRange(Difference.Between(this, other, x => x.ConfigVersion));
+            differences.AddRange(Difference.Between(this, other, x => x.DerivedFromName));
+            differences.AddRange(Difference.Between(this, other, x => x.BasedOnName));
+            differences.AddRange(Difference.Between(this, other, x => x.HostName));
+            differences.AddRange(Difference.Between(this, other, x => x.AreaName));
+            differences.AddRange(Difference.Between(this, other, x => x.ContainerName));
+            differences.AddRange(Difference.BetweenCollection(Attributes, other.Attributes, a => a.Name));
+
+            return differences;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            return obj.GetType() == GetType() && Equals((ArchestraObject) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                var hashCode = (TagName != null ? TagName.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (ContainedName != null ? ContainedName.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (HierarchicalName != null ? HierarchicalName.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (Category != null ? Category.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ ConfigVersion;
+                hashCode = (hashCode * 397) ^ (DerivedFromName != null ? DerivedFromName.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (BasedOnName != null ? BasedOnName.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (HostName != null ? HostName.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (AreaName != null ? AreaName.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (ContainerName != null ? ContainerName.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (Attributes != null ? Attributes.GetHashCode() : 0);
+                return hashCode;
+            }
+        }
+
+        public static bool operator ==(ArchestraObject left, ArchestraObject right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(ArchestraObject left, ArchestraObject right)
+        {
+            return !Equals(left, right);
         }
     }
 }

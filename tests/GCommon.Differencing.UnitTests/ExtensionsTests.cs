@@ -36,7 +36,7 @@ namespace GCommon.Differencing.UnitTests
 
             var result = first.DiffersFrom(second);
 
-            result.Should().HaveCount(5);
+            result.Should().HaveCount(6);
         }
 
         [Test]

@@ -1,13 +1,16 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
+using GCommon.Differencing;
+using GCommon.Differencing.Abstractions;
 using GCommon.Primitives.Base;
 using GCommon.Primitives.Enumerations;
 
 namespace GCommon.Primitives
 {
-    public class ArchestraAttribute : IXSerializable, IEquatable<ArchestraAttribute>
+    public class ArchestraAttribute : IXSerializable, IDifferentiable<ArchestraAttribute>
     {
         private ArchestraAttribute(XElement element)
         {
@@ -44,14 +47,6 @@ namespace GCommon.Primitives
             return new ArchestraAttribute(element);
         }
 
-        public bool Equals(ArchestraAttribute other)
-        {
-            if (ReferenceEquals(null, other)) return false;
-            if (ReferenceEquals(this, other)) return true;
-            return Name == other.Name && Equals(DataType, other.DataType) && Equals(Category, other.Category) &&
-                   Equals(Locked, other.Locked) && Equals(Value, other.Value) && ArrayCount == other.ArrayCount;
-        }
-
         public XElement Serialize()
         {
             var element = new XElement("Attribute");
@@ -77,6 +72,35 @@ namespace GCommon.Primitives
             if (Locked.Equals(LockType.InParent)) return;
 
             Locked = lockType;
+        }
+        
+        public bool Equals(ArchestraAttribute other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return Name == other.Name && Equals(DataType, other.DataType) && Equals(Category, other.Category) &&
+                   Equals(Security, other.Security) && Equals(Locked, other.Locked) && Equals(Value, other.Value) &&
+                   ArrayCount == other.ArrayCount;
+        }
+
+        public IEnumerable<Difference> DiffersFrom(ArchestraAttribute other)
+        {
+            var differences = new List<Difference>();
+
+            differences.AddRange(Difference.Between(this, other, x => x.Name));
+            differences.AddRange(Difference.Between(this, other, x => x.DataType));
+            differences.AddRange(Difference.Between(this, other, x => x.Category));
+            differences.AddRange(Difference.Between(this, other, x => x.Security));
+            differences.AddRange(Difference.Between(this, other, x => x.Locked));
+            differences.AddRange(Difference.Between(this, other, x => x.Value));
+            differences.AddRange(Difference.Between(this, other, x => x.ArrayCount));
+
+            return differences;
+        }
+
+        public override string ToString()
+        {
+            return $"Name: {Name}; Type: {DataType}; Value: {Value}";
         }
 
         private static object ReadValue(XElement element)
@@ -104,11 +128,6 @@ namespace GCommon.Primitives
             }
 
             return value;
-        }
-
-        public override string ToString()
-        {
-            return $"Name: {Name}; Type: {DataType}; Value: {Value}";
         }
     }
 }

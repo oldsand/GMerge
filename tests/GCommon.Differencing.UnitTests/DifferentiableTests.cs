@@ -18,7 +18,7 @@ namespace GCommon.Differencing.UnitTests
 
             var result = car1.DiffersFrom(car2);
 
-            result.Should().HaveCount(5);
+            result.Should().HaveCount(6);
         }
         
         [Test]
@@ -31,7 +31,7 @@ namespace GCommon.Differencing.UnitTests
 
             var result = car1.DiffersFrom(car2);
 
-            result.Should().HaveCount(4);
+            result.Should().HaveCount(5);
         }
 
         [Test]

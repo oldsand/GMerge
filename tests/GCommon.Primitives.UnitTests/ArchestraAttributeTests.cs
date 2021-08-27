@@ -1,4 +1,7 @@
+using System.Linq;
 using AnyDiff.Extensions;
+using Ardalis.SmartEnum.AutoFixture;
+using AutoFixture;
 using FluentAssertions;
 using GCommon.Differencing;
 using GCommon.Primitives.Enumerations;
@@ -74,14 +77,34 @@ namespace GCommon.Primitives.UnitTests
         }
 
         [Test]
-        public void Diff_WhenCalled_ShouldReturnExpected()
+        public void DiffersFrom_DifferentName_ShouldReturnExpected()
         {
             var att1 = new ArchestraAttribute("Name1", DataType.Boolean);
             var att2 = new ArchestraAttribute("Name2", DataType.Boolean);
 
-            var diff = Extensions.Diff(att1, att2);
+            var differences = att1.DiffersFrom(att2).ToList(); 
 
-            diff.Should().HaveCount(1);
+            differences.Should().HaveCount(1);
+            differences.First().Left.Should().Be("Name1");
+            differences.First().Right.Should().Be("Name2");
+            differences.First().PropertyName.Should().Be(nameof(att1.Name));
+            differences.First().PropertyType.Should().Be(typeof(string));
+            differences.First().ObjectType.Should().Be(typeof(ArchestraAttribute));
+            differences.First().DifferenceType.Should().Be(DifferenceType.Changed);
+        }
+        
+        [Test]
+        public void DiffersFrom_EverythingDifferent_ShouldReturnSevenDifferences()
+        {
+            var fixture = new Fixture()
+                .Customize(new SmartEnumCustomization());
+            
+            var first = fixture.Create<ArchestraAttribute>();
+            var second = fixture.Create<ArchestraAttribute>();
+
+            var differences = first.DiffersFrom(second).ToList(); 
+
+            differences.Should().HaveCount(7);
         }
     }
 }
