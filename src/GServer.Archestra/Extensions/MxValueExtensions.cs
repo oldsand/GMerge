@@ -36,12 +36,12 @@ namespace GServer.Archestra.Extensions
                     return fileTime.ToDateTime();
                 }),
                 MxDataType.MxElapsedTime => mxValue.GetValue<T, TimeSpan>(v => v.GetElapsedTime().ToTimeSpan()),
-                MxDataType.MxReferenceType => mxValue.GetValue<T, Reference>(v => v.GetMxReference().ToPrimitiveType()),
+                MxDataType.MxReferenceType => mxValue.GetValue<T, Reference>(v => v.GetMxReference().ToPrimitive()),
                 MxDataType.MxStatusType => mxValue.GetValue<T, StatusCategory>(v =>
-                    v.GetMxStatus().category.ToPrimitiveType()),
-                MxDataType.MxDataTypeEnum => mxValue.GetValue<T, DataType>(v => v.GetMxDataType().ToPrimitiveType()),
+                    v.GetMxStatus().category.ToPrimitive()),
+                MxDataType.MxDataTypeEnum => mxValue.GetValue<T, DataType>(v => v.GetMxDataType().ToPrimitive()),
                 MxDataType.MxSecurityClassificationEnum => mxValue.GetValue<T, SecurityClassification>(v =>
-                    v.GetMxSecurityClassification().ToPrimitiveType()),
+                    v.GetMxSecurityClassification().ToPrimitive()),
                 MxDataType.MxDataQualityType => mxValue.GetValue<T, Quality>(v => (Quality) v.GetMxDataQuality()),
                 MxDataType.MxQualifiedEnum => mxValue.GetValue<T, string>(v =>
                 {
@@ -57,7 +57,7 @@ namespace GServer.Archestra.Extensions
         public static void SetValue<T>(this MxValue mxValue, T newValue, DataType dataType = null)
         {
             var mxDataType = mxValue.GetDataType();
-            var type = dataType == null ? mxDataType : dataType.ToMxType();
+            var type = dataType == null ? mxDataType : dataType.ToMx();
 
             switch (type)
             {
@@ -88,17 +88,17 @@ namespace GServer.Archestra.Extensions
                     mxValue.SetValue<T, TimeSpan>(newValue, (v, x) => v.PutElapsedTime(x.ToVbLargeInteger()));
                     break;
                 case MxDataType.MxReferenceType:
-                    mxValue.SetValue<T, Reference>(newValue, (v, x) => v.PutMxReference(x.ToMxType()));
+                    mxValue.SetValue<T, Reference>(newValue, (v, x) => v.PutMxReference(x.ToMx()));
                     break;
                 case MxDataType.MxStatusType:
                     //Status is a runtime system writable attribute. It doesn't make sense to set this type.
                     break;
                 case MxDataType.MxDataTypeEnum:
-                    mxValue.SetValue<T, DataType>(newValue, (v, x) => v.PutMxDataType(x.ToMxType()));
+                    mxValue.SetValue<T, DataType>(newValue, (v, x) => v.PutMxDataType(x.ToMx()));
                     break;
                 case MxDataType.MxSecurityClassificationEnum:
                     mxValue.SetValue<T, SecurityClassification>(newValue,
-                        (v, x) => v.PutMxSecurityClassification(x.ToMxType()));
+                        (v, x) => v.PutMxSecurityClassification(x.ToMx()));
                     break;
                 case MxDataType.MxDataQualityType:
                     //Quality is a runtime system writable attribute. It doesn't make sense to set this type.

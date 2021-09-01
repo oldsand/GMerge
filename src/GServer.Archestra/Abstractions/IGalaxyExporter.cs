@@ -9,6 +9,5 @@ namespace GServer.Archestra.Abstractions
         void ExportCsv(string tagName, string fileName);
         void ExportCsv(IEnumerable<string> tagNames, string fileName);
         void ExportGraphic(string tagName, string destination);
-        void ExportGraphic(IEnumerable<string> tagNames, string destination);
     }
 }

@@ -5,6 +5,7 @@ using AutoFixture;
 using GCommon.Primitives;
 using GCommon.Primitives.Enumerations;
 using GServer.Archestra.Extensions;
+using GServer.Archestra.IntegrationTests.Base;
 using NUnit.Framework;
 
 namespace GServer.Archestra.IntegrationTests.ExtensionTests
@@ -30,7 +31,7 @@ namespace GServer.Archestra.IntegrationTests.ExtensionTests
         public void Setup()
         {
             _grAccess = new GRAccessAppClass();
-            _galaxy = _grAccess.QueryGalaxies()[TestContext.GalaxyName];
+            _galaxy = _grAccess.QueryGalaxies()[TestConfig.GalaxyName];
             _galaxy.Login(string.Empty, string.Empty);
         }
 
@@ -299,25 +300,6 @@ namespace GServer.Archestra.IntegrationTests.ExtensionTests
             Assert.That(results, Contains.Item(Known.Instances.DrumConveyor));
         }
 
-        /*[Test]
-        public void AssignToHost_AreaObject_ReturnsExpectedHost()
-        {
-            var area = new[] {"Area_002"};
-            _galaxy.AssignToHost(area, "ObjectEngine_001");
-            var result = _galaxy.GetObjectByName("Area_002");
-            Assert.AreEqual("ObjectEngine_001", result.Host);
-        }
-        
-        [Test]
-        public void AssignToArea_ApplicationObject_ReturnsExpectedArea()
-        {
-            var tagNames = new[] {"AlarmExtension_001", "AlarmExtension_002", "AnalogExtensions_001"};
-            _galaxy.AssignToArea(tagNames, "Area_002");
-            var results = _galaxy.GetObjectsByName(tagNames);
-            foreach (IgObject gObject in results)
-                Assert.AreEqual("Area_002", gObject.Area);
-        }*/
-
         [Test]
         public void IsDerivedFrom_DerivedTemplate_ReturnsTrue()
         {
@@ -328,7 +310,7 @@ namespace GServer.Archestra.IntegrationTests.ExtensionTests
         [Test]
         public void IsDerivedFrom_NonDerivedTemplate_ReturnsFalse()
         {
-            var result = _galaxy.IsDescendentOf(Known.Templates.DrumConveyor, Known.Templates.ReactorSet.TagName);
+            var result = _galaxy.IsDescendentOf(Known.Templates.DrumConveyor.TagName, Known.Templates.ReactorSet.TagName);
             Assert.False(result);
         }
 

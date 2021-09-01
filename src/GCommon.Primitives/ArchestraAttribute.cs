@@ -22,16 +22,21 @@ namespace GCommon.Primitives
             ArrayCount = Convert.ToInt32(element.Attribute(nameof(ArrayCount))?.Value);
             Value = ReadValue(element);
         }
-
-        public ArchestraAttribute(string name, DataType dataType)
+        
+        public ArchestraAttribute(string name, DataType dataType, 
+            AttributeCategory category = null,
+            SecurityClassification security = null, 
+            LockType locked = null, 
+            object value = null, 
+            int arrayCount = -1)
         {
             Name = name;
             DataType = dataType;
-            Category = AttributeCategory.Writeable_UC_Lockable;
-            Security = SecurityClassification.Operate;
-            Locked = LockType.Unlocked;
-            Value = dataType.DefaultValue;
-            ArrayCount = -1;
+            Category = category ?? AttributeCategory.Writeable_UC_Lockable;
+            Security = security ?? SecurityClassification.Operate;
+            Locked = locked ?? LockType.Unlocked;
+            Value = value ?? dataType.DefaultValue;
+            ArrayCount = arrayCount;
         }
 
         public string Name { get; set; }
@@ -73,7 +78,7 @@ namespace GCommon.Primitives
 
             Locked = lockType;
         }
-        
+
         public bool Equals(ArchestraAttribute other)
         {
             if (ReferenceEquals(null, other)) return false;
@@ -122,7 +127,7 @@ namespace GCommon.Primitives
                 value.Add(new XCData(Value.ToString()));
             else
             {
-                var array = ((IEnumerable) Value).Cast<object>().Select(s => s.ToString());
+                var array = ((IEnumerable)Value).Cast<object>().Select(s => s.ToString());
                 foreach (var item in array)
                     value.Add(new XElement("Element", new XCData(item)));
             }

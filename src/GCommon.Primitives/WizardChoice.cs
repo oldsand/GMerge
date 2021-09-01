@@ -8,11 +8,12 @@ namespace GCommon.Primitives
 {
     public class WizardChoice : IXSerializable, IDifferentiable<WizardChoice>
     {
-        public WizardChoice(XElement element)
+        private WizardChoice(XElement element)
         {
             Name = element.Attribute(nameof(Name))?.Value;
             Rule = element.Attribute(nameof(Rule))?.Value;
         }
+        
         public string Name { get; set; }
         public string Rule { get; set; }
 

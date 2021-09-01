@@ -5,7 +5,7 @@ using ArchestrA.GRAccess;
 using GServer.Archestra.Extensions;
 using NUnit.Framework;
 
-namespace GServer.Archestra.IntegrationTests
+namespace GServer.Archestra.IntegrationTests.ExtensionTests
 {
     [TestFixture]
     public class ObjectCollectionExtensionTests

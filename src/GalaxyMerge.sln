@@ -97,6 +97,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GCommon.Differencing.UnitTe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GCommon.Core.UnitTests", "GCommon.Core.UnitTests\GCommon.Core.UnitTests.csproj", "{30FA2E88-BD36-46C8-B36F-7C23C7BABD40}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GCommon.FileServices", "GCommon.FileServices\GCommon.FileServices.csproj", "{EE98B772-5ED9-433B-A27E-6A80AD0214D4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -259,6 +261,10 @@ Global
 		{30FA2E88-BD36-46C8-B36F-7C23C7BABD40}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{30FA2E88-BD36-46C8-B36F-7C23C7BABD40}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30FA2E88-BD36-46C8-B36F-7C23C7BABD40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE98B772-5ED9-433B-A27E-6A80AD0214D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE98B772-5ED9-433B-A27E-6A80AD0214D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE98B772-5ED9-433B-A27E-6A80AD0214D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE98B772-5ED9-433B-A27E-6A80AD0214D4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -307,5 +313,6 @@ Global
 		{AE54813C-D492-49CF-99D8-42C22F7A6414} = {F315C569-1436-4161-A7BA-60BD073E707C}
 		{35CF01ED-87BE-4970-8614-45FD171E6397} = {66C1D8A2-2DFC-4448-B5CF-55BFFB267749}
 		{30FA2E88-BD36-46C8-B36F-7C23C7BABD40} = {66C1D8A2-2DFC-4448-B5CF-55BFFB267749}
+		{EE98B772-5ED9-433B-A27E-6A80AD0214D4} = {F315C569-1436-4161-A7BA-60BD073E707C}
 	EndGlobalSection
 EndGlobal

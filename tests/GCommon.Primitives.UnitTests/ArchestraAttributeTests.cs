@@ -1,12 +1,12 @@
 using System.Linq;
-using AnyDiff.Extensions;
+using ApprovalTests;
+using ApprovalTests.Reporters;
 using Ardalis.SmartEnum.AutoFixture;
 using AutoFixture;
 using FluentAssertions;
 using GCommon.Differencing;
 using GCommon.Primitives.Enumerations;
 using NUnit.Framework;
-using Extensions = AnyDiff.Extensions.Extensions;
 
 namespace GCommon.Primitives.UnitTests
 {
@@ -47,6 +47,17 @@ namespace GCommon.Primitives.UnitTests
             result.Should().HaveAttribute(nameof(attribute.Security), attribute.Security.ToString());
             result.Should().HaveAttribute(nameof(attribute.Locked), attribute.Locked.ToString());
             result.Should().HaveAttribute(nameof(attribute.ArrayCount), attribute.ArrayCount.ToString());
+        }
+
+        [Test]
+        [UseReporter(typeof(DiffReporter))]
+        public void Serialize_WhenCalled_ShouldHaveApprovedValue()
+        {
+            var attribute = new ArchestraAttribute("Test", DataType.Boolean);
+
+            var result = attribute.Serialize();
+            
+            Approvals.VerifyXml(result.ToString());
         }
 
         [Test]

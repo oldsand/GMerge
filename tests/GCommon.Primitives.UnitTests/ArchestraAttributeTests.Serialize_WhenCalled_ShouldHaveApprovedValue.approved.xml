@@ -1,0 +1,3 @@
+﻿<Attribute Name="Test" DataType="Boolean" Category="Writeable_UC_Lockable" Security="Operate" Locked="Unlocked" ArrayCount="-1">
+  <Value><![CDATA[False]]></Value>
+</Attribute>

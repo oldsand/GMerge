@@ -1,8 +1,6 @@
 using System.IO;
 using System.Linq;
 using GCommon.Core.Utilities;
-
-using GCommon.Archiving;
 using GCommon.Primitives;
 using GCommon.Primitives.Enumerations;
 using Microsoft.EntityFrameworkCore;
@@ -25,8 +23,8 @@ namespace GCommon.Archiving.IntegrationTests
             FileAssert.Exists(fileName);
 
             var connectionString = DbStringBuilder.ArchiveString("GalaxyName");
-            var options = new DbContextOptionsBuilder<Archiving.ArchiveContext>().UseSqlite(connectionString).Options;
-            var context = new Archiving.ArchiveContext(options);
+            var options = new DbContextOptionsBuilder<ArchiveContext>().UseSqlite(connectionString).Options;
+            var context = new ArchiveContext(options);
             
             var result = context.Archive.Single();
             Assert.AreEqual("GalaxyName", result.GalaxyName);

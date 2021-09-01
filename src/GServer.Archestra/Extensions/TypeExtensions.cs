@@ -9,67 +9,72 @@ namespace GServer.Archestra.Extensions
 {
     internal static class TypeExtensions
     {
-        public static ValidationStatus ToPrimitiveType(this EPACKAGESTATUS ePackageStatus)
+        public static ValidationStatus ToPrimitive(this EPACKAGESTATUS ePackageStatus)
         {
             return ValidationStatus.FromValue((int) ePackageStatus);
         }
 
-        public static EPACKAGESTATUS ToMxType(this ValidationStatus validationStatus)
+        public static EPACKAGESTATUS ToMx(this ValidationStatus validationStatus)
         {
             return (EPACKAGESTATUS) validationStatus.Value;
         }
 
-        public static ObjectCategory ToPrimitiveType(this ECATEGORY category)
+        /// <summary>
+        /// Convert the GRAccess API ECATEGORY to the primitive library type
+        /// </summary>
+        /// <param name="category"></param>
+        /// <returns></returns>
+        public static ObjectCategory ToPrimitive(this ECATEGORY category)
         {
             return ObjectCategory.FromValue((int) category);
         }
 
-        public static ECATEGORY ToMxType(this ObjectCategory category)
+        public static ECATEGORY ToMx(this ObjectCategory category)
         {
             return (ECATEGORY) category.Value;
         }
 
-        public static DataType ToPrimitiveType(this MxDataType mxDataType)
+        public static DataType ToPrimitive(this MxDataType mxDataType)
         {
             return DataType.FromValue((int) mxDataType);
         }
 
-        public static MxDataType ToMxType(this DataType dataType)
+        public static MxDataType ToMx(this DataType dataType)
         {
             return (MxDataType) dataType.Value;
         }
 
-        public static AttributeCategory ToPrimitiveType(this MxAttributeCategory mxAttributeCategory)
+        public static AttributeCategory ToPrimitive(this MxAttributeCategory mxAttributeCategory)
         {
             return AttributeCategory.FromValue((int) mxAttributeCategory);
         }
 
-        public static MxAttributeCategory ToMxType(this AttributeCategory attributeCategory)
+        public static MxAttributeCategory ToMx(this AttributeCategory attributeCategory)
         {
             return (MxAttributeCategory) attributeCategory.Value;
         }
 
-        public static SecurityClassification ToPrimitiveType(this MxSecurityClassification mxSecurityClassification)
+        public static SecurityClassification ToPrimitive(this MxSecurityClassification mxSecurityClassification)
         {
             return SecurityClassification.FromValue((int) mxSecurityClassification);
         }
 
-        public static MxSecurityClassification ToMxType(this SecurityClassification securityClassification)
+        public static MxSecurityClassification ToMx(this SecurityClassification securityClassification)
         {
             return (MxSecurityClassification) securityClassification.Value;
         }
 
-        public static LockType ToPrimitiveType(this MxPropertyLockedEnum mxPropertyLocked)
+        public static LockType ToPrimitive(this MxPropertyLockedEnum mxPropertyLocked)
         {
             return LockType.FromValue((int) mxPropertyLocked);
         }
 
-        public static MxPropertyLockedEnum ToMxType(this LockType lockType)
+        public static MxPropertyLockedEnum ToMx(this LockType lockType)
         {
             return (MxPropertyLockedEnum) lockType.Value;
         }
 
-        public static Reference ToPrimitiveType(this IMxReference mxReference)
+        public static Reference ToPrimitive(this IMxReference mxReference)
         {
             return new()
             {
@@ -79,7 +84,7 @@ namespace GServer.Archestra.Extensions
             };
         }
 
-        public static IMxReference ToMxType(this Reference reference)
+        public static IMxReference ToMx(this Reference reference)
         {
             var mxValue = new MxValueClass();
             mxValue.PutMxReference(new MxReference());
@@ -90,32 +95,32 @@ namespace GServer.Archestra.Extensions
             return value;
         }
 
-        public static StatusCategory ToPrimitiveType(this MxStatusCategory mxStatusCategory)
+        public static StatusCategory ToPrimitive(this MxStatusCategory mxStatusCategory)
         {
             return StatusCategory.FromValue((int) mxStatusCategory);
         }
 
-        public static MxStatusCategory ToMxType(this StatusCategory statusCategory)
+        public static MxStatusCategory ToMx(this StatusCategory statusCategory)
         {
             return (MxStatusCategory) statusCategory.Value;
         }
 
-        public static Quality ToPrimitiveType(this DataQuality mxDataQuality)
+        public static Quality ToPrimitive(this DataQuality mxDataQuality)
         {
             return Quality.FromValue((int) mxDataQuality);
         }
 
-        public static DataQuality ToMxType(this Quality quality)
+        public static DataQuality ToMx(this Quality quality)
         {
             return (DataQuality) quality.Value;
         }
 
-        public static CurrentlyDeployedOption ToPrimitiveType(this EActionForCurrentlyDeployedObjects deployedOption)
+        public static CurrentlyDeployedOption ToPrimitive(this EActionForCurrentlyDeployedObjects deployedOption)
         {
             return (CurrentlyDeployedOption) deployedOption;
         }
 
-        public static EActionForCurrentlyDeployedObjects ToMxType(this CurrentlyDeployedOption deployedOption)
+        public static EActionForCurrentlyDeployedObjects ToMx(this CurrentlyDeployedOption deployedOption)
         {
             return (EActionForCurrentlyDeployedObjects) deployedOption;
         }

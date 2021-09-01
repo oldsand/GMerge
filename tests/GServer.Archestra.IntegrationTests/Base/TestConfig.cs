@@ -1,14 +1,13 @@
 using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Security.Principal;
 using ArchestrA.GRAccess;
 using NUnit.Framework;
 
-namespace GServer.Archestra.IntegrationTests
+namespace GServer.Archestra.IntegrationTests.Base
 {
     [SetUpFixture]
-    public class TestContext
+    public class TestConfig
     {
         // ReSharper disable once ConvertToConstant.Local
         // This is a configuration bit. Determines if the setup create and deletes a test galaxy before running all tests.
@@ -32,10 +31,6 @@ namespace GServer.Archestra.IntegrationTests
             
             GalaxyName = TestGalaxyName;
             
-            Console.WriteLine($"Running one time setup for test project. Building test galaxy {GalaxyName}");
-            var stopWatch = new Stopwatch();
-            stopWatch.Start();
-
             var access = new GRAccessAppClass();
 
             var templates = access.ListCreateGalaxyTemplates().ToList();
@@ -46,19 +41,12 @@ namespace GServer.Archestra.IntegrationTests
                 throw new InvalidOperationException("Could not find template for test galaxy");
 
             access.CreateGalaxyFromTemplate(template, GalaxyName);
-
-            stopWatch.Stop();
-            Console.WriteLine($"Galaxy creation completed in {stopWatch.Elapsed}. Integration testing ready...");
         }
 
         [OneTimeTearDown]
         public void TearDown()
         {
             if (!RunSetup) return;
-            
-            Console.WriteLine($"Running one time tear down for test project. Deleting test galaxy {GalaxyName}");
-            var stopWatch = new Stopwatch();
-            stopWatch.Start();
 
             var access = new GRAccessAppClass();
 
@@ -67,9 +55,6 @@ namespace GServer.Archestra.IntegrationTests
             if (!access.CommandResult.Successful)
                 throw new InvalidOperationException(
                     $"Could not delete galaxy {GalaxyName}. {access.CommandResult.ID}. {access.CommandResult.CustomMessage}");
-
-            stopWatch.Stop();
-            Console.WriteLine($"Galaxy deletion completed in {stopWatch.Elapsed}. Integration testing finished!");
         }
     }
 }

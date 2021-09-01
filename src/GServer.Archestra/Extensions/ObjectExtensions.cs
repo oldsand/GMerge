@@ -110,8 +110,8 @@ namespace GServer.Archestra.Extensions
         {
             var target = gObject.GetAttribute(attribute.Name);
             target.SetValue(attribute.Value);
-            target.SetSecurityClassification(attribute.Security.ToMxType());
-            target.SetLocked(attribute.Locked.ToMxType());
+            target.SetSecurityClassification(attribute.Security.ToMx());
+            target.SetLocked(attribute.Locked.ToMx());
 
             if (!string.IsNullOrEmpty(description))
                 target.Description = description;
@@ -155,8 +155,8 @@ namespace GServer.Archestra.Extensions
                 targetAttribute.SetValue(sourceAttribute.ArrayCount > 0
                     ? sourceAttribute.Value.ToString().Split(',')
                     : sourceAttribute.Value);
-                targetAttribute.SetSecurityClassification(sourceAttribute.Security.ToMxType());
-                targetAttribute.SetLocked(sourceAttribute.Locked.ToMxType());
+                targetAttribute.SetSecurityClassification(sourceAttribute.Security.ToMx());
+                targetAttribute.SetLocked(sourceAttribute.Locked.ToMx());
             }
         }
 
@@ -193,7 +193,7 @@ namespace GServer.Archestra.Extensions
                 ConfigVersion = gObject.ConfigVersion,
                 DerivedFromName = gObject.DerivedFrom,
                 BasedOnName = gObject.basedOn,
-                Category = gObject.category.ToPrimitiveType(),
+                Category = gObject.category.ToPrimitive(),
                 HostName = gObject.Host,
                 AreaName = gObject.Area,
                 ContainerName = gObject.Container,

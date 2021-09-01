@@ -16,23 +16,17 @@ namespace GServer.Archestra.Abstractions
         string VersionString { get; }
         int? VersionNumber { get; }
         string CdiVersion { get; }
-        void SynchronizeClient();
         void Login(string userName);
-        Task LoginAsync(string userName, CancellationToken token);
         void Logout();
         bool UserIsAuthorized(string userName);
         ArchestraObject GetObject(string tagName);
-        IEnumerable<ArchestraObject> GetObjects(IEnumerable<string> tagNames);
         ArchestraGraphic GetGraphic(string tagName);
-        IEnumerable<ArchestraGraphic> GetGraphics(IEnumerable<string> tagNames);
         void CreateObject(ArchestraObject source);
-        void CreateObjects(IEnumerable<ArchestraObject> source);
         void CreateGraphic(ArchestraGraphic archestraGraphic);
-        void CreateSymbols(IEnumerable<ArchestraGraphic> galaxySymbols);
         void DeleteObject(string tagName, bool recursive);
         void DeleteObjects(IEnumerable<string> tagNames, bool recursive);
         void UpdateObject(ArchestraObject archestraObject);
-        void UpdateSymbol(ArchestraGraphic archestraGraphic);
+        void UpdateGraphic(ArchestraGraphic archestraGraphic);
         void Deploy(IEnumerable<string> tagNames, DeploymentOptions options);
         void Undeploy(IEnumerable<string> tagNames, DeploymentOptions options);
         

@@ -14,7 +14,7 @@ namespace GServer.Archestra.Extensions
         /// </summary>
         /// <param name="attribute"></param>
         /// <returns>string</returns>
-        public static string TryGetEngUnits(this IAttribute attribute)
+        public static string TryGetUnits(this IAttribute attribute)
         {
             try
             {
@@ -85,7 +85,7 @@ namespace GServer.Archestra.Extensions
         public static void SetValue<T>(this IAttribute attribute, T value)
         {
             attribute.value.Clone(out var mxValue); 
-            mxValue.SetValue(value, attribute.DataType.ToPrimitiveType());
+            mxValue.SetValue(value, attribute.DataType.ToPrimitive());
             attribute.SetValue(mxValue);
         }
 
@@ -103,7 +103,7 @@ namespace GServer.Archestra.Extensions
         public static IEnumerable<ArchestraAttribute> ByDataType(this IAttributes attributes, DataType dataType)
         {
             foreach (IAttribute attribute in attributes)
-                if (attribute.DataType == dataType.ToMxType())
+                if (attribute.DataType == dataType.ToMx())
                     yield return attribute.MapInternal();
         }
         
@@ -116,14 +116,13 @@ namespace GServer.Archestra.Extensions
 
         private static ArchestraAttribute MapInternal(this IAttribute attribute)
         {
-            return new(attribute.Name, attribute.DataType.ToPrimitiveType())
-            {
-                Category = attribute.AttributeCategory.ToPrimitiveType(),
-                Security = attribute.SecurityClassification.ToPrimitiveType(),
-                Locked = attribute.Locked.ToPrimitiveType(),
-                ArrayCount = attribute.UpperBoundDim1,
-                Value = attribute.GetValue<object>()
-            };
+            return new ArchestraAttribute(attribute.Name, 
+                attribute.DataType.ToPrimitive(),
+                attribute.AttributeCategory.ToPrimitive(),
+                attribute.SecurityClassification.ToPrimitive(),
+                attribute.Locked.ToPrimitive(),
+                attribute.GetValue<object>(),
+                attribute.UpperBoundDim1);
         }
     }
 }

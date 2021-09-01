@@ -1,5 +1,6 @@
 using ArchestrA.GRAccess;
 using GServer.Archestra.Extensions;
+using GServer.Archestra.IntegrationTests.Base;
 using NUnit.Framework;
 
 namespace GServer.Archestra.IntegrationTests.ExtensionTests
@@ -14,7 +15,7 @@ namespace GServer.Archestra.IntegrationTests.ExtensionTests
         public void Setup()
         {
             _grAccess = new GRAccessAppClass();
-            _galaxy = _grAccess.QueryGalaxies()[TestContext.GalaxyName];
+            _galaxy = _grAccess.QueryGalaxies()[TestConfig.GalaxyName];
             _galaxy.Login(string.Empty, string.Empty);
         }
 

@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using GServer.Archestra.Exceptions;
+using GServer.Archestra.IntegrationTests.Base;
 using NUnit.Framework;
 
 namespace GServer.Archestra.IntegrationTests
@@ -63,7 +64,7 @@ namespace GServer.Archestra.IntegrationTests
         {
             var galaxyAccess = new GalaxyAccess();
 
-            var exists = galaxyAccess.Exists(TestContext.GalaxyName);
+            var exists = galaxyAccess.Exists(TestConfig.GalaxyName);
 
             Assert.True(exists);
         }
@@ -87,7 +88,7 @@ namespace GServer.Archestra.IntegrationTests
 
             Assert.IsNotEmpty(results);
             Assert.That(results, Has.Count.GreaterThanOrEqualTo(1));
-            Assert.That(results, Contains.Item(TestContext.GalaxyName));
+            Assert.That(results, Contains.Item(TestConfig.GalaxyName));
         }
     }
 }

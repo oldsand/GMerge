@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.IO;
 using ArchestrA.GRAccess;
 using ArchestrA.Visualization.GraphicAccess;
 using GServer.Archestra.Abstractions;
@@ -12,9 +11,10 @@ namespace GServer.Archestra
         private readonly IGalaxy _galaxy;
         private readonly GraphicAccess _graphicAccess;
 
-        internal GalaxyFileManager(IGalaxy galaxy)
+        public GalaxyFileManager(IGalaxyRepository galaxyRepository)
         {
-            _galaxy = galaxy;
+            var gr = (GalaxyRepository) galaxyRepository;
+            _galaxy = gr.Galaxy;
             _graphicAccess = new GraphicAccess();
         }
         
@@ -66,18 +66,6 @@ namespace GServer.Archestra
 
             var result = _graphicAccess.ExportGraphicToXml(_galaxy, tagName, fileName);
             result.Process();
-        }
-
-        public void ExportGraphic(IEnumerable<string> tagNames, string destination)
-        {
-            _galaxy.SynchronizeClient();
-
-            foreach (var tagName in tagNames)
-            {
-                var fileName = Path.Combine(destination, $"{tagName}.xml");
-                var result = _graphicAccess.ExportGraphicToXml(_galaxy, tagName, fileName);
-                result.Process();
-            }
         }
 
         public void ImportPkg(string fileName, bool overwrite)

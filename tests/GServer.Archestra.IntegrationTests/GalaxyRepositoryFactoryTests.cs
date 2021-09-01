@@ -1,19 +1,17 @@
-using System.Threading;
-using System.Threading.Tasks;
 using FluentAssertions;
-using GServer.Archestra;
+using GServer.Archestra.IntegrationTests.Base;
 using NUnit.Framework;
 
 namespace GServer.Archestra.IntegrationTests
 {
     [TestFixture]
-    public class GalaxyFactoryTests
+    public class GalaxyRepositoryFactoryTests
     {
         [Test]
         public void Create_KnownGalaxyName_ReturnsNotNull()
         {
             var factory = new GalaxyRepositoryFactory();
-            var connection = factory.Create(TestContext.GalaxyName);
+            var connection = factory.Create(TestConfig.GalaxyName);
             Assert.NotNull(connection);
         }
 

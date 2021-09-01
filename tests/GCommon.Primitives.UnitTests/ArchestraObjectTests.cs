@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using ApprovalTests;
+using ApprovalTests.Reporters;
 using FluentAssertions;
 using GCommon.Primitives.Enumerations;
 using NUnit.Framework;
@@ -85,6 +87,35 @@ namespace GCommon.Primitives.UnitTests
             result.Should().HaveAttribute(nameof(obj.HostName), obj.HostName);
             result.Should().HaveAttribute(nameof(obj.AreaName), obj.AreaName);
             result.Should().HaveAttribute(nameof(obj.ContainerName), obj.ContainerName);
+        }
+        
+        [Test]
+        [UseReporter(typeof(DiffReporter))]
+        public void Serialize_WhenCalled_ShouldHaveApprovedOutput()
+        {
+            var obj = new ArchestraObject
+            {
+                TagName = "Test",
+                ContainedName = "Contained",
+                HierarchicalName = "Test.Contained",
+                Category = ObjectCategory.Galaxy,
+                ConfigVersion = 100,
+                DerivedFromName = "Derived",
+                BasedOnName = "BasedOn",
+                HostName = "Host",
+                AreaName = "Area",
+                ContainerName = "Container",
+                Attributes = new List<ArchestraAttribute>
+                {
+                    new ArchestraAttribute("Attribute1", DataType.Boolean),
+                    new ArchestraAttribute("Attribute2", DataType.Integer),
+                    new ArchestraAttribute("Attribute3", DataType.String)
+                }
+            };
+
+            var result = obj.Serialize();
+
+            Approvals.VerifyXml(result.ToString());
         }
     }
 }

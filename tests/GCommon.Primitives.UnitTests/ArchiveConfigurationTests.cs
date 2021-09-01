@@ -1,43 +1,37 @@
 using System;
 using System.Linq;
-using GCommon.Primitives;
-using GCommon.Archiving;
+using FluentAssertions;
 using GCommon.Primitives.Enumerations;
 using NUnit.Framework;
 
-namespace GCommon.Archiving.IntegrationTests
+namespace GCommon.Primitives.UnitTests
 {
     [TestFixture]
     public class ArchiveConfigurationTests
     {
-        /*[Test]
-        public void Default_WhenCalled_ReturnsNotNull()
+        [Test]
+        public void Constructor_GalaxyName_ArchiveShouldNotBeNull()
         {
-            var config = ArchiveConfiguration.Default("GalaxyName");
+            var config = new Archive("GalaxyName");
 
             Assert.NotNull(config);
         }
 
         [Test]
-        public void GenerateConfig_FromDefault_ReturnsExpectedGalaxyNameAndVersion()
+        public void Constructor_GalaxyName_ShouldHaveExpectedDefaultNameAndVersion()
         {
-            var config = ArchiveConfiguration.Default("GalaxyName");
-
-            var archive = config.GenerateArchive();
-
-            Assert.NotNull(archive);
+            var archive = new Archive("GalaxyName");
+            
             Assert.AreEqual("GalaxyName", archive.GalaxyName);
             Assert.AreEqual(ArchestraVersion.SystemPlatform2012R2P3, archive.Version);
         }
 
         [Test]
-        public void GenerateConfig_FromDefault_ReturnsExpectedEventSettings()
+        public void Constructor_GalaxyName_ShouldHaveExpectedDefaultEventSettings()
         {
-            var config = ArchiveConfiguration.Default("GalaxyName");
+            var archive = new Archive("GalaxyName");
 
-            var archive = config.GenerateArchive();
-
-            Assert.IsNotEmpty(archive.EventSettings);
+            archive.EventSettings.Should().NotBeEmpty();
             Assert.True(archive.EventSettings.All(x => x.Operation.Name != ""));
 
             var operations = archive.EventSettings.Where(x => x.IsArchiveEvent).Select(x => x.Operation).ToList();
@@ -53,9 +47,7 @@ namespace GCommon.Archiving.IntegrationTests
         [Test]
         public void GenerateConfig_FromDefault_ReturnsExpectedInclusionSettings()
         {
-            var config = ArchiveConfiguration.Default("GalaxyName");
-
-            var archive = config.GenerateArchive();
+            var archive = new Archive("GalaxyName");
 
             Assert.IsNotEmpty(archive.InclusionSettings);
             Assert.True(archive.InclusionSettings.All(x => x.Template.Name != ""));
@@ -69,13 +61,12 @@ namespace GCommon.Archiving.IntegrationTests
         [Test]
         public void ConfigureEvent_ValidOperations_ReturnsExpectedArchiveEventSetting()
         {
-            var config = ArchiveConfiguration.Default("Galaxy")
+            var archive = new Archive("GalaxyName")
                 .ConfigureEvent(Operation.AssignSuccess)
                 .ConfigureEvent(Operation.SaveObject, false)
                 .ConfigureEvent(Operation.PublishSuccess)
                 .ConfigureEvent(Operation.CreateInstance, false);
-
-            var archive = config.GenerateArchive();
+            
             var assignSuccess = archive.EventSettings.Single(x => x.Operation == Operation.AssignSuccess);
             var saveObject = archive.EventSettings.Single(x => x.Operation == Operation.SaveObject);
             var publishSuccess = archive.EventSettings.Single(x => x.Operation == Operation.PublishSuccess);
@@ -90,22 +81,20 @@ namespace GCommon.Archiving.IntegrationTests
         [Test]
         public void ConfigureEvent_NullReference_ThrowsArgumentException()
         {
-            var config = ArchiveConfiguration.Default("Galaxy");
+            var archive = new Archive("GalaxyName");
 
-            Assert.Throws<ArgumentNullException>(() => config = config.ConfigureEvent(null));
+            Assert.Throws<ArgumentNullException>(() => archive = archive.ConfigureEvent(null));
         }
 
         [Test]
         public void ConfigureInclusion_ValidArguments_ReturnsExpectedValues()
         {
-            var config = ArchiveConfiguration.Default("Galaxy")
+            var archive = new Archive("GalaxyName")
                 .ConfigureInclusion(Template.Area)
                 .ConfigureInclusion(Template.UserDefined, InclusionOption.Select, true)
                 .ConfigureInclusion(Template.Symbol, InclusionOption.None)
                 .ConfigureInclusion(Template.AppEngine, InclusionOption.All, true)
                 .ConfigureInclusion(Template.ViewEngine, includeInstances: true);
-
-            var archive = config.GenerateArchive();
 
             var area = archive.InclusionSettings.Single(x => x.Template == Template.Area);
             Assert.AreEqual(area.InclusionOption, InclusionOption.All);
@@ -131,9 +120,9 @@ namespace GCommon.Archiving.IntegrationTests
         [Test]
         public void ConfigureInclusion_NullReference_ThrowsArgumentException()
         {
-            var config = ArchiveConfiguration.Default("Galaxy");
+            var archive = new Archive("GalaxyName");
 
-            Assert.Throws<ArgumentNullException>(() => config = config.ConfigureInclusion(null));
-        }*/
+            Assert.Throws<ArgumentNullException>(() => archive = archive.ConfigureInclusion(null));
+        }
     }
 }

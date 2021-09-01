@@ -11,7 +11,7 @@ namespace GCommon.Primitives
 {
     public class WizardOption : IXSerializable, IDifferentiable<WizardOption>
     {
-        public WizardOption(XElement element)
+        private WizardOption(XElement element)
         {
             Name = element.Attribute(nameof(Name))?.Value;
             OptionType = (WizardOptionType) Enum.Parse(typeof(WizardOptionType), element.Name.ToString());
@@ -35,7 +35,7 @@ namespace GCommon.Primitives
 
         public XElement Serialize()
         {
-            var element = new XElement(OptionType.ToString());
+            var element = new XElement(OptionType.Name);
             element.Add(new XAttribute(nameof(Name), Name));
             element.Add(new XAttribute(nameof(Rule), Rule));
             element.Add(new XAttribute(nameof(Description), Description));

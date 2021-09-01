@@ -10,7 +10,7 @@ namespace GCommon.Primitives
 {
     public class WizardAssociation : IXSerializable, IDifferentiable<WizardAssociation>
     {
-        public WizardAssociation(XElement element)
+        private WizardAssociation(XElement element)
         {
             Name = element.Attribute(nameof(Name))?.Value;
             AssociationType = WizardAssociationType.FromName(element.Name.ToString());

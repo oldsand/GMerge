@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
 using AutoFixture;
-using GCommon.Primitives;
 using GCommon.Primitives.Enumerations;
+using GServer.Archestra.IntegrationTests.Base;
 using NUnit.Framework;
 
 namespace GServer.Archestra.IntegrationTests
@@ -16,8 +16,8 @@ namespace GServer.Archestra.IntegrationTests
         [OneTimeSetUp]
         public void Setup()
         {
-            _galaxy = new GalaxyRepository(TestContext.GalaxyName);
-            _galaxy.Login(TestContext.UserName);
+            _galaxy = new GalaxyRepository(TestConfig.GalaxyName);
+            _galaxy.Login(TestConfig.UserName);
         }
 
         [OneTimeTearDown]
@@ -29,18 +29,18 @@ namespace GServer.Archestra.IntegrationTests
         [Test]
         public void Login_TestUser_SetsConnectionProperties()
         {
-            var galaxy = new GalaxyRepository(TestContext.GalaxyName);
+            var galaxy = new GalaxyRepository(TestConfig.GalaxyName);
 
-            galaxy.Login(TestContext.UserName);
+            galaxy.Login(TestConfig.UserName);
 
             Assert.IsTrue(galaxy.Connected);
-            Assert.AreEqual(TestContext.UserName, galaxy.ConnectedUser);
+            Assert.AreEqual(TestConfig.UserName, galaxy.ConnectedUser);
         }
 
         [Test]
         public void Login_WindowsIdentity_ConnectsWithUserName()
         {
-            var galaxy = new GalaxyRepository(TestContext.GalaxyName);
+            var galaxy = new GalaxyRepository(TestConfig.GalaxyName);
 
             var user = WindowsIdentity.GetCurrent();
             galaxy.Login(user.Name);
@@ -52,7 +52,7 @@ namespace GServer.Archestra.IntegrationTests
         [Test]
         public void Logout_WhenCalled_ResetsConnectionProperties()
         {
-            var galaxy = new GalaxyRepository(TestContext.GalaxyName);
+            var galaxy = new GalaxyRepository(TestConfig.GalaxyName);
 
             var user = WindowsIdentity.GetCurrent();
             galaxy.Login(user.Name);
@@ -69,7 +69,7 @@ namespace GServer.Archestra.IntegrationTests
         [Test]
         public void UserIsAuthorized_ValidUser_ReturnsTrue()
         {
-            var result = _galaxy.UserIsAuthorized(TestContext.UserName);
+            var result = _galaxy.UserIsAuthorized(TestConfig.UserName);
             Assert.True(result);
         }
         

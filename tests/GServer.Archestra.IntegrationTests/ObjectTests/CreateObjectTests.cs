@@ -1,8 +1,8 @@
 using GCommon.Primitives;
+using GServer.Archestra.IntegrationTests.Base;
 using NUnit.Framework;
-using TestContext = GServer.Archestra.IntegrationTests.TestContext;
 
-namespace GServer.Archestra.IntegrationTests
+namespace GServer.Archestra.IntegrationTests.ObjectTests
 {
     [TestFixture]
     public class ObjectEditorTests
@@ -12,15 +12,15 @@ namespace GServer.Archestra.IntegrationTests
         [SetUp]
         public void Setup()
         {
-            _galaxy = new GalaxyRepository(TestContext.GalaxyName);
-            _galaxy.Login(TestContext.UserName);
+            _galaxy = new GalaxyRepository(TestConfig.GalaxyName);
+            _galaxy.Login(TestConfig.UserName);
         }
 
         [Test]
         public void CreateObject_LimitAlarms_ReturnsCorrectConfiguration()
         {
             //Get the known template
-            var template = (ArchestraObject) _galaxy.GetObject("$LimitAlarms");
+            var template = _galaxy.GetObject("$LimitAlarms");
             Assert.NotNull(template);
 
             //Serialize data to in memory object
@@ -43,7 +43,7 @@ namespace GServer.Archestra.IntegrationTests
         public void CreateObject_AlarmExtension_ReturnsCorrectConfiguration()
         {
             //Get the known template
-            var template = (ArchestraObject) _galaxy.GetObject("$AlarmExtension");
+            var template = _galaxy.GetObject("$AlarmExtension");
             Assert.NotNull(template);
 
             //Serialize data to in memory object
@@ -66,7 +66,7 @@ namespace GServer.Archestra.IntegrationTests
         public void CreateObject_RocAlarms_ReturnsCorrectConfiguration()
         {
             //Get the known template
-            var template = (ArchestraObject) _galaxy.GetObject("$ROCAlarms");
+            var template = _galaxy.GetObject("$ROCAlarms");
             Assert.NotNull(template);
 
             //Serialize data to in memory object
@@ -89,7 +89,7 @@ namespace GServer.Archestra.IntegrationTests
         public void CreateObject_IOExtensions_ReturnsCorrectConfiguration()
         {
             //Get the known template
-            var template = (ArchestraObject) _galaxy.GetObject("$IOExtensions");
+            var template = _galaxy.GetObject("$IOExtensions");
             Assert.NotNull(template);
 
             //Serialize data to in memory object
@@ -112,7 +112,7 @@ namespace GServer.Archestra.IntegrationTests
         public void CreateObject_ScriptExtension_ReturnsCorrectConfiguration()
         {
             //Get the known template
-            var template = (ArchestraObject) _galaxy.GetObject("$ScriptExtension");
+            var template = _galaxy.GetObject("$ScriptExtension");
             Assert.NotNull(template);
 
             //Serialize data to in memory object
@@ -135,7 +135,7 @@ namespace GServer.Archestra.IntegrationTests
         public void CreateObject_SiteData_ReturnsCorrectConfiguration()
         {
             //Get the known template
-            var template = (ArchestraObject) _galaxy.GetObject("$Site_Data");
+            var template = _galaxy.GetObject("$Site_Data");
             Assert.NotNull(template);
 
             //Serialize data to in memory object
