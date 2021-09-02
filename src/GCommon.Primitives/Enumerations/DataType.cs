@@ -20,8 +20,8 @@ namespace GCommon.Primitives.Enumerations
         public static readonly DataType String = new StringInternal();
         public static readonly DataType Time = new TimeInternal();
         public static readonly DataType ElapsedTime = new ElapsedTimeInternal();
-        public static readonly DataType ReferenceType = new ReferenceTypeInternal();
-        public static readonly DataType StatusType = new StatusTypeInternal();
+        public static readonly DataType Reference = new ReferenceTypeInternal();
+        public static readonly DataType Status = new StatusTypeInternal();
         public static readonly DataType DataTypeEnum = new DataTypeEnumInternal();
         public static readonly DataType SecurityClassificationEnum = new SecurityClassificationEnumInternal();
         public static readonly DataType DataQuality = new DataQualityInternal();
@@ -249,7 +249,7 @@ namespace GCommon.Primitives.Enumerations
 
         private class ReferenceTypeInternal : DataType
         {
-            public ReferenceTypeInternal() : base("ReferenceType", 8)
+            public ReferenceTypeInternal() : base("Reference", 8)
             {
             }
 
@@ -271,7 +271,7 @@ namespace GCommon.Primitives.Enumerations
         
         private class StatusTypeInternal : DataType
         {
-            public StatusTypeInternal() : base("StatusType", 9)
+            public StatusTypeInternal() : base("Status", 9)
             {
             }
             

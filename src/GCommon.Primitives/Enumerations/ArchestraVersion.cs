@@ -99,7 +99,7 @@ namespace GCommon.Primitives.Enumerations
         
         private class Version2014 : ArchestraVersion
         {
-            public Version2014() : base("SP2012R2 Patch 03", 5)
+            public Version2014() : base("2014", 6)
             {
             }
 
@@ -110,7 +110,7 @@ namespace GCommon.Primitives.Enumerations
         
         private class Version2014P1 : ArchestraVersion
         {
-            public Version2014P1() : base("2014P1", 5)
+            public Version2014P1() : base("2014P1", 7)
             {
             }
 
@@ -121,7 +121,7 @@ namespace GCommon.Primitives.Enumerations
         
         private class Version2014R2 : ArchestraVersion
         {
-            public Version2014R2() : base("2014R2", 5)
+            public Version2014R2() : base("2014R2", 8)
             {
             }
 
@@ -132,7 +132,7 @@ namespace GCommon.Primitives.Enumerations
         
         private class Version2014R2P1 : ArchestraVersion
         {
-            public Version2014R2P1() : base("2014R2P1", 5)
+            public Version2014R2P1() : base("2014R2P1", 9)
             {
             }
 
@@ -143,7 +143,7 @@ namespace GCommon.Primitives.Enumerations
         
         private class Version2014R2S1 : ArchestraVersion
         {
-            public Version2014R2S1() : base("2014R2S1", 5)
+            public Version2014R2S1() : base("2014R2S1", 10)
             {
             }
 
@@ -154,7 +154,7 @@ namespace GCommon.Primitives.Enumerations
         
         private class Version2014R2S1P2 : ArchestraVersion
         {
-            public Version2014R2S1P2() : base("2014R2S1P1", 5)
+            public Version2014R2S1P2() : base("2014R2S1P1", 11)
             {
             }
 

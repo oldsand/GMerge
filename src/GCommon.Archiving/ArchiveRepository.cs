@@ -29,13 +29,21 @@ namespace GCommon.Archiving
                 .Single();
         }
         
-        public bool IsArchivable(ArchiveObject archiveObject)
+        public bool IsArchivable(ArchiveObject archiveObject, Operation operation = null)
         {
-            var operation = archiveObject.Logs.OrderByDescending(x => x.ChangedOn).FirstOrDefault()?.Operation;
+            if (archiveObject == null) 
+                throw new ArgumentNullException(nameof(archiveObject), "archiveObject can not be null");
+            
+            operation ??= archiveObject.Logs.OrderByDescending(x => x.ChangedOn).FirstOrDefault()?.Operation;
+            
             if (operation == null)
                 throw new InvalidOperationException("Could not find log operation for archive object");
 
-            return false; // Inclusions.IsIncluded(archiveObject) && Events.IsTrigger(operation);
+            var config = GetConfig();
+            var exists = ObjectExists(archiveObject.ObjectId);
+
+            return config.HasInclusionFor(archiveObject.Template, archiveObject.IsTemplate, exists) 
+                   && config.HasTriggerFor(operation);
         }
 
         public bool ObjectExists(int objectId)
@@ -63,12 +71,12 @@ namespace GCommon.Archiving
 
         public void UpsertObject(ArchiveObject archiveObject)
         {
-            foreach (var archiveLog in archiveObject.Logs)
+            /*foreach (var archiveLog in archiveObject.Logs)
             {
                 if (_context.Logs.Any(x => x.ChangeLogId == archiveLog.ChangeLogId))
                     _context.Entry(archiveLog).State = EntityState.Modified;
                 _context.Entry(archiveLog).State = EntityState.Added;
-            }
+            }*/
             
             if (_context.Objects.All(x => x.ObjectId != archiveObject.ObjectId))
             {
@@ -115,23 +123,6 @@ namespace GCommon.Archiving
             return _context.Logs.Where(predicate);
         }
 
-        public bool IsIncluded(ArchiveObject archiveObject)
-        {
-            if (archiveObject == null) throw new ArgumentNullException(nameof(archiveObject), "archiveObject can not be null");
-
-            var config = _context.Archive.Single();
-            
-            var setting = config.InclusionSettings.Single(x => x.Template == archiveObject.Template);
-
-            if (setting.InclusionOption == InclusionOption.None) return false;
-            
-            if (setting.InclusionOption == InclusionOption.All)
-                return archiveObject.IsTemplate || setting.IncludeInstances;
-
-            return setting.InclusionOption == InclusionOption.Select 
-                   && _context.Objects.Any(x => x.ObjectId == archiveObject.ObjectId);
-        }
-        
         public QueuedLog GetQueuedLog(int changelogId)
         {
             return _context.Queue.Find(changelogId);

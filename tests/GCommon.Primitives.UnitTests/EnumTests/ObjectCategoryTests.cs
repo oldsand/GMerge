@@ -2,7 +2,7 @@ using FluentAssertions;
 using GCommon.Primitives.Enumerations;
 using NUnit.Framework;
 
-namespace GCommon.Primitives.UnitTests
+namespace GCommon.Primitives.UnitTests.EnumTests
 {
     [TestFixture]
     public class ObjectCategoryTests

@@ -38,8 +38,10 @@ namespace GCommon.Primitives
         {
             if (changed == null) throw new ArgumentNullException(nameof(changed), "changed can not be null");
             if (operation == null) throw new ArgumentNullException(nameof(operation), "operation can not be null");
+            if (comment == null) throw new ArgumentNullException(nameof(comment), "comment can not be null");
+            if (userName == null) throw new ArgumentNullException(nameof(userName), "userName can not be null");
             
-            Log = new ArchiveLog(changeLogId, this, changed, operation, comment, userName);
+            Log = new ArchiveLog(this, changeLogId, changed, operation, comment, userName);
         }
     }
 }

@@ -27,7 +27,7 @@ namespace GCommon.Primitives
             Logs = new List<ArchiveLog>();
         }
 
-        public int ObjectId { get; private set; }
+        public int ObjectId { get; }
         public string TagName { get; private set; }
         public int Version { get; private set; }
         public Template Template { get; private set; }

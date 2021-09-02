@@ -10,16 +10,21 @@ namespace GCommon.Archiving.Configurations
     {
         public void Configure(EntityTypeBuilder<ArchiveLog> builder)
         {
-            builder.ToTable(nameof(ArchiveLog)).HasKey(x => x.ChangeLogId);
+            builder.ToTable(nameof(ArchiveLog)).HasKey(x => x.EntryId);
 
-            builder.Property(x => x.ChangeLogId).ValueGeneratedNever();
+            builder.Property(x => x.EntryId).ValueGeneratedNever();
+            builder.Property(x => x.ChangeLogId).IsRequired();
             builder.Property(x => x.ObjectId).IsRequired();
             builder.Property(x => x.ChangedOn).IsRequired();
             builder.Property(x => x.Operation)
                 .HasConversion(x => x.Name, x => Operation.FromName(x, false))
                 .IsRequired();
+            builder.Property(x => x.Comment).IsRequired();
+            builder.Property(x => x.UserName).IsRequired();
 
-            builder.Ignore(x => x.Entry);
+            builder.HasIndex(x => x.ChangeLogId).IsUnique();
+
+            builder.HasOne(x => x.Entry).WithOne(x => x.Log).HasForeignKey<ArchiveLog>(x => x.EntryId);
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using GCommon.Primitives;
+using GCommon.Primitives.Enumerations;
 
 namespace GCommon.Archiving.Abstractions
 {
@@ -13,13 +14,14 @@ namespace GCommon.Archiving.Abstractions
         /// </summary>
         /// <returns></returns>
         ArchiveConfig GetConfig();
-        
+
         /// <summary>
         /// Determines if the given archive object is able to be archived under the current archive settings
         /// </summary>
         /// <param name="archiveObject"></param>
+        /// <param name="operation"></param>
         /// <returns></returns>
-        bool IsArchivable(ArchiveObject archiveObject);
+        bool IsArchivable(ArchiveObject archiveObject, Operation operation = null);
         
         /// <summary>
         /// Determines if the given archive object exists in the archive database

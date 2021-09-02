@@ -69,6 +69,21 @@ namespace GCommon.Primitives
             return _eventSettings.Single(x => x.Operation == operation).IsArchiveEvent;
         }
         
+        public bool HasInclusionFor(Template template, bool isObjectTemplate, bool objectExists)
+        {
+            if (template == null) 
+                throw new ArgumentNullException(nameof(template), "template can not be null");
+
+            var setting = _inclusionSettings.Single(x => x.Template == template);
+
+            if (setting.InclusionOption == InclusionOption.None) return false;
+            
+            if (setting.InclusionOption == InclusionOption.All)
+                return isObjectTemplate || setting.IncludeInstances;
+
+            return setting.InclusionOption == InclusionOption.Select && objectExists;
+        }
+        
         public EventSetting GetEventFor(Operation operation)
         {
             if (operation == null) 
@@ -76,7 +91,7 @@ namespace GCommon.Primitives
             
             return _eventSettings.Single(x => x.Operation == operation);
         }
-        
+
         public InclusionSetting GetInclusionFor(Template template)
         {
             if (template == null) 
@@ -90,7 +105,7 @@ namespace GCommon.Primitives
             return _eventSettings.Where(x => x.IsArchiveEvent);
         }
         
-        public IEnumerable<InclusionSetting> InclusionsWithOption(InclusionOption option)
+        public IEnumerable<InclusionSetting> GetInclusionsWith(InclusionOption option)
         {
             return _inclusionSettings.Where(x => x.InclusionOption == option);
         }

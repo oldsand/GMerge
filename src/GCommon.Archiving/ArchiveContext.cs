@@ -4,6 +4,7 @@ using GCommon.Primitives;
 using Microsoft.EntityFrameworkCore;
 
 [assembly:InternalsVisibleTo("GCommon.Archiving.IntegrationTests")]
+
 namespace GCommon.Archiving
 {
     internal class ArchiveContext : DbContext

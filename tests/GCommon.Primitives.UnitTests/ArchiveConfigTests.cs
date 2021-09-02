@@ -150,10 +150,76 @@ namespace GCommon.Primitives.UnitTests
         {
             var archive = new ArchiveConfig("GalaxyName");
             
+            Assert.Throws<ArgumentNullException>(() => { archive.HasTriggerFor(null); }, "operation can not be null");
+        }
+        
+        [Test]
+        public void HasInclusionFor_UserDefinedTemplateNonExistent_ShouldBeTrue()
+        {
+            var archive = new ArchiveConfig("GalaxyName");
+            
+            var result = archive.HasInclusionFor(Template.UserDefined, true, false);
+
+            result.Should().BeTrue();
+        }
+        
+        [Test]
+        public void HasInclusionFor_UserDefinedInstanceNonExistent_ShouldBeFalse()
+        {
+            var archive = new ArchiveConfig("GalaxyName");
+            
+            var result = archive.HasInclusionFor(Template.UserDefined, false, false);
+
+            result.Should().BeFalse();
+        }
+        
+        [Test]
+        public void HasInclusionFor_UserDefinedTemplateExistent_ShouldBeTrue()
+        {
+            var archive = new ArchiveConfig("GalaxyName");
+            
+            var result = archive.HasInclusionFor(Template.UserDefined, true, true);
+
+            result.Should().BeTrue();
+        }
+        
+        [Test]
+        public void HasInclusionFor_SymbolInstanceNonExistent_ShouldBeTrue()
+        {
+            var archive = new ArchiveConfig("GalaxyName");
+            
+            var result = archive.HasInclusionFor(Template.UserDefined, true, false);
+
+            result.Should().BeTrue();
+        }
+        
+        [Test]
+        public void HasInclusionFor_ViewEngineTemplateNonExistent_ShouldBeFalse()
+        {
+            var archive = new ArchiveConfig("GalaxyName");
+            
+            var result = archive.HasInclusionFor(Template.ViewEngine, true, false);
+
+            result.Should().BeFalse();
+        }
+        
+        [Test]
+        public void HasInclusionFor_ViewEngineTemplateExistent_ShouldBeTrue()
+        {
+            var archive = new ArchiveConfig("GalaxyName");
+            
+            var result = archive.HasInclusionFor(Template.ViewEngine, true, true);
+
+            result.Should().BeTrue();
+        }
+        
+        [Test]
+        public void HasInclusionFor_Null_ShouldBeFalse()
+        {
+            var archive = new ArchiveConfig("GalaxyName");
+            
             Assert.Throws<ArgumentNullException>(() =>
-            {
-                var result = archive.HasTriggerFor(null);
-            }, "operation can not be null");
+                { archive.HasInclusionFor(null, true, true); }, "template can not be null");
         }
         
         [Test]
@@ -237,7 +303,7 @@ namespace GCommon.Primitives.UnitTests
         {
             var archive = new ArchiveConfig("GalaxyName");
             
-            var settings = archive.InclusionsWithOption(InclusionOption.All).ToList();
+            var settings = archive.GetInclusionsWith(InclusionOption.All).ToList();
 
             settings.Should().HaveCount(2);
         }

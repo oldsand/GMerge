@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Text;
+using FluentAssertions;
 using GCommon.Core.Extensions;
 using GCommon.Primitives;
 using GCommon.Primitives.Enumerations;
@@ -39,8 +40,8 @@ namespace GCommon.Archiving.IntegrationTests
             using var repo = new ArchiveRepository(_builder.ConnectionString);
 
             var archive = repo.GetConfig();
-            
-            Assert.NotNull(archive);
+
+            archive.Should().NotBeNull();
         }
         
         [Test]
@@ -49,71 +50,27 @@ namespace GCommon.Archiving.IntegrationTests
             using var repo = new ArchiveRepository(_builder.ConnectionString);
 
             var archive = repo.GetConfig();
-            
-            Assert.AreEqual(1, archive.ArchiveId);
-            Assert.AreEqual("TestArchive", archive.GalaxyName);
-            Assert.AreEqual(ArchestraVersion.SystemPlatform2012R2P3, archive.Version);
-            Assert.That(archive.CreatedOn, Is.EqualTo(DateTime.Now).Within(5).Seconds);
-            Assert.That(archive.UpdatedOn, Is.EqualTo(DateTime.Now).Within(5).Seconds);
-        }
-        
-        [Test]
-        public void GetArchiveSettings_WhenCalled_ReturnsNotEmptySettings()
-        {
-            using var repo = new ArchiveRepository(_builder.ConnectionString);
 
-            var archive = repo.GetConfig();
-            
-            Assert.NotNull(archive.EventSettings);
-            Assert.NotNull(archive.InclusionSettings);
-            Assert.NotNull(archive.IgnoreSettings);
-            
-            Assert.IsNotEmpty(archive.EventSettings);
-            Assert.IsNotEmpty(archive.InclusionSettings);
+            archive.ArchiveId.Should().Be(1);
+            archive.GalaxyName.Should().Be("TestArchive");
+            archive.Version.Should().Be(ArchestraVersion.SystemPlatform2012R2P3);
+            archive.CreatedOn.Should().BeWithin(TimeSpan.FromSeconds(1));
+            archive.UpdatedOn.Should().BeWithin(TimeSpan.FromSeconds(1));
+            archive.EventSettings.Should().NotBeEmpty();
+            archive.InclusionSettings.Should().NotBeNull();
         }
-        
+
         [Test]
-        public void IsIncluded_TemplateWithOptionAll_ReturnsTrue()
+        public void IsArchivable_ValidArchivableObject_ShouldReturnTrue()
         {
             using var repo = new ArchiveRepository(_builder.ConnectionString);
             var archiveObject = new ArchiveObject(1, "$SomeTag", 1, Template.UserDefined);
             
-            var result = repo.IsIncluded(archiveObject);
+            var result = repo.IsArchivable(archiveObject);
 
-            Assert.True(result);
+            result.Should().BeTrue();
         }
-        
-        [Test]
-        public void IsIncluded_TemplateWithOptionSelect_ReturnsFalse()
-        {
-            using var repo = new ArchiveRepository(_builder.ConnectionString);
-            var archiveObject = new ArchiveObject(1, "SomeTag", 1, Template.Area);
-            
-            var result = repo.IsIncluded(archiveObject);
 
-            Assert.False(result);
-        }
-        
-        [Test]
-        public void IsIncluded_TemplateWithOptionNone_ReturnsFalse()
-        {
-            /*using var repo = new ArchiveRepository(_builder.ConnectionString);
-            repo.Inclusions.Configure(Template.InTouchViewApp, InclusionOption.None, false);
-            var archiveObject = new ArchiveObject(1, "SomeTag", 31, Template.InTouchViewApp);
-            
-            var result = repo.Inclusions.IsIncluded(archiveObject);
-
-            Assert.False(result);*/
-        }
-        
-        [Test]
-        public void IsIncluded_Null_ThrowsArgumentNullException()
-        {
-            using var repo = new ArchiveRepository(_builder.ConnectionString);
-            
-            Assert.Throws<ArgumentNullException>(() => { repo.IsIncluded(null); }, "archiveObject can not be null");
-        }
-        
         [Test]
         public void ObjectExists_ObjectExists_ReturnsTrue()
         {
@@ -178,18 +135,20 @@ namespace GCommon.Archiving.IntegrationTests
         }
         
         [Test]
-        public void GetObject_ExistingObjectIdWithLogs_IncludesLogs()
+        public void GetObject_ObjectWithLog_LogsShouldBeExpectedValues()
         {
             Seed();
             using var repo = new ArchiveRepository(_builder.ConnectionString);
 
-            var result = repo.GetObject(411);
+            var result = repo.GetObject(311);
+            result.Logs.Should().NotBeEmpty();
 
-            Assert.That(result.Logs, Has.Count.EqualTo(1));
-
-            var log = result.Logs.Single();
-            Assert.NotNull(log);
-            Assert.AreEqual(1, log.ChangeLogId);
+            var log = result.Logs.First();
+            log.Should().NotBeNull();
+            log.ChangeLogId.Should().Be(14);
+            log.ObjectId.Should().Be(311);
+            log.ChangedOn.Should().Be(DateTime.Today);
+            log.Operation.Should().Be(Operation.CreateInstance);
         }
 
         [Test]
@@ -268,13 +227,13 @@ namespace GCommon.Archiving.IntegrationTests
         {
             Seed();
             using var repo = new ArchiveRepository(_builder.ConnectionString);
-            var archiveObject = new ArchiveObject(1, "Some Test Object", 2, Template.UserDefined);
+            var archiveObject = new ArchiveObject(2, "Some Test Object", 2, Template.UserDefined);
             archiveObject.Archive(Encoding.UTF8.GetBytes("This is a new entry test"));
 
             repo.UpsertObject(archiveObject);
             repo.Save();
 
-            var target = repo.GetObject(1);
+            var target = repo.GetObject(2);
 
             Assert.That(target.Entries, Has.Count.EqualTo(1));
 
@@ -285,18 +244,18 @@ namespace GCommon.Archiving.IntegrationTests
             Assert.AreEqual("This is a new entry test", data);
         }
         
-         /*[Test]
-        public void Upsert_ExistingObjectAddLog_ReturnsExpectedLog()
+         [Test]
+        public void UpsertObject_ExistingObjectAddLog_ReturnsExpectedLog()
         {
             Seed();
             using var repo = new ArchiveRepository(_builder.ConnectionString);
-            var archiveObject = new ArchiveObject(1, "Some Test Object", 2, Template.UserDefined);
-            archiveObject.AddLog(213, DateTime.Now, Operation.Rename, "Comment", Environment.UserName);
+            var archiveObject = new ArchiveObject(2, "Some Test Object", 2, Template.UserDefined);
+            archiveObject.GetLatestEntry().UpdateLog(213, DateTime.Now, Operation.Rename, "Comment", Environment.UserName);
 
-            repo.Objects.Upsert(archiveObject);
+            repo.UpsertObject(archiveObject);
             repo.Save();
 
-            var target = repo.Objects.Get(1);
+            var target = repo.GetObject(2);
 
             Assert.That(target.Logs, Has.Count.EqualTo(1));
 
@@ -304,24 +263,6 @@ namespace GCommon.Archiving.IntegrationTests
             Assert.NotNull(log);
             Assert.AreEqual(213, log.ChangeLogId);
         }
-        
-        [Test]
-        public void Upsert_ExistingObjectAddLog_AfterSaveTheInstanceRetainsState()
-        {
-            Seed();
-            using var repo = new ArchiveRepository(_builder.ConnectionString);
-            var archiveObject = new ArchiveObject(1, "Some Test Object", 2, Template.UserDefined);
-            archiveObject.AddLog(213, DateTime.Now, Operation.Rename, "Comment", Environment.UserName);
-
-            repo.Objects.Upsert(archiveObject);
-            repo.Save();
-
-            Assert.That(archiveObject.Logs, Has.Count.EqualTo(1));
-
-            var log = archiveObject.Logs.First();
-            Assert.NotNull(log);
-            Assert.AreEqual(213, log.ChangeLogId);
-        }*/
 
         [Test]
         public void UpsertObject_ExistingObjectWithEntryAddEntry_ReturnsExpectedEntries()
@@ -343,18 +284,18 @@ namespace GCommon.Archiving.IntegrationTests
             Assert.AreEqual("This is a new entry test", Encoding.UTF8.GetString(latest.CompressedData.Decompress()));
         }
 
-        /*[Test]
-        public void Upsert_ExistingObjectWithLogAddLog_ReturnsExpectedEntries()
+        [Test]
+        public void UpsertObject_ExistingObjectWithLogAddLog_ShouldHaveExpectedLogs()
         {
             Seed();
             using var repo = new ArchiveRepository(_builder.ConnectionString);
-            var archiveObject = new ArchiveObject(411, "Upsert Tester", 123, Template.UserDefined);
-            archiveObject.AddLog(213, DateTime.Now, Operation.Rename, "Comment", Environment.UserName);
+            var archiveObject = new ArchiveObject(311, "Upsert Tester", 123, Template.UserDefined);
+            archiveObject.GetLatestEntry().UpdateLog(213, DateTime.Now, Operation.Rename, "Comment", Environment.UserName);
 
-            repo.Objects.Upsert(archiveObject);
+            repo.UpsertObject(archiveObject);
             repo.Save();
 
-            var target = repo.Objects.Get(411);
+            var target = repo.GetObject(311);
 
             Assert.That(target.Logs, Has.Count.EqualTo(2));
 
@@ -365,27 +306,6 @@ namespace GCommon.Archiving.IntegrationTests
             Assert.AreEqual("Comment", latest.Comment);
             Assert.AreEqual(Environment.UserName, latest.UserName);
         }
-        
-        [Test]
-        public void Upsert_ExistingObjectWithLogAddLog_AfterSaveTheInstanceRetainsState()
-        {
-            Seed();
-            using var repo = new ArchiveRepository(_builder.ConnectionString);
-            var archiveObject = new ArchiveObject(411, "Upsert Tester", 123, Template.UserDefined);
-            archiveObject.AddLog(213, DateTime.Now, Operation.Rename, "Comment", Environment.UserName);
-
-            repo.Objects.Upsert(archiveObject);
-            repo.Save();
-
-            Assert.That(archiveObject.Logs, Has.Count.EqualTo(1));
-
-            var log = archiveObject.GetLatestLog();
-            Assert.NotNull(log);
-            Assert.AreEqual(213, log.ChangeLogId);
-            Assert.AreEqual(Operation.Rename, log.Operation);
-            Assert.AreEqual("Comment", log.Comment);
-            Assert.AreEqual(Environment.UserName, log.UserName);
-        }*/
 
         [Test]
         public void UpsertObject_NewObjectAddEntry_ReturnsExpectedEntries()
@@ -471,7 +391,7 @@ namespace GCommon.Archiving.IntegrationTests
 
             var results = repo.GetLogs().ToList();
 
-            Assert.That(results, Has.Count.EqualTo(4));
+            Assert.That(results, Has.Count.EqualTo(5));
         }
 
         [Test]
@@ -504,12 +424,13 @@ namespace GCommon.Archiving.IntegrationTests
 
             var results = repo.FindLogs(x => x.ChangedOn == DateTime.Today).ToList();
 
-            Assert.That(results, Has.Count.EqualTo(1));
+            Assert.That(results, Has.Count.EqualTo(2));
         }
         
         [Test]
         public void GetQueuedLog_ExistingLog_ReturnsExpected()
         {
+            Seed();
             var repo = new ArchiveRepository(_builder.ConnectionString);
 
             var result = repo.GetQueuedLog(2);
@@ -548,7 +469,7 @@ namespace GCommon.Archiving.IntegrationTests
         }
 
         [Test]
-        public void Enqueue_ExistingId_AddsEntity()
+        public void Enqueue_ExistingId_ShouldBeAbleToGetEntity()
         {
             var repo = new ArchiveRepository(_builder.ConnectionString);
 
@@ -591,6 +512,7 @@ namespace GCommon.Archiving.IntegrationTests
         [Test]
         public void UpdateState_ExistingLog_ReturnsUpdatedEntity()
         {
+            Seed();
             var repo = new ArchiveRepository(_builder.ConnectionString);
             var target = repo.GetQueuedLog(2);
             Assert.AreEqual(ArchiveState.New, target.State);
@@ -616,26 +538,32 @@ namespace GCommon.Archiving.IntegrationTests
             context.Objects.Add(new ArchiveObject(3, "Tag3", 13, Template.Symbol));
             context.Objects.Add(new ArchiveObject(4, "Tag1", 2, Template.ViewEngine));
 
-            var aObjectWithEntry = new ArchiveObject(311, "TestObject", 2, Template.UserDefined);
-            aObjectWithEntry.Archive(Encoding.UTF8.GetBytes("This is some data to convert to binary"));
-            context.Objects.Add(aObjectWithEntry);
+            var aObjectWithEntryAndLog = new ArchiveObject(311, "TestObject", 2, Template.UserDefined);
+            aObjectWithEntryAndLog.Archive(Encoding.UTF8.GetBytes("This is some data to convert to binary"));
+            var entry = aObjectWithEntryAndLog.GetLatestEntry();
+            entry.UpdateLog(14, DateTime.Today, Operation.CreateInstance, "Created object", "username");
+            context.Objects.Add(aObjectWithEntryAndLog);
 
-            context.Logs.Add(new ArchiveLog(1, new ArchiveEntry(obj, Encoding.UTF8.GetBytes("Test1")), DateTime.Today,
+            context.Entries.Add(new ArchiveEntry(obj, Encoding.UTF8.GetBytes("Entry Data 1")));
+            context.Entries.Add(new ArchiveEntry(obj, Encoding.UTF8.GetBytes("Entry Data 2")));
+            context.Entries.Add(new ArchiveEntry(obj, Encoding.UTF8.GetBytes("Entry Data 3")));
+
+            context.Logs.Add(new ArchiveLog(new ArchiveEntry(obj, Encoding.UTF8.GetBytes("Test1")), 1, DateTime.Today,
                 Operation.CreateInstance, "Created new instance", Environment.UserName));
-            context.Logs.Add(new ArchiveLog(2, new ArchiveEntry(obj, Encoding.UTF8.GetBytes("Test2")),
+            context.Logs.Add(new ArchiveLog(new ArchiveEntry(obj, Encoding.UTF8.GetBytes("Test2")), 2,
                 DateTime.Today.AddHours(2), Operation.CheckInSuccess, "Updated current object", Environment.UserName));
-            context.Logs.Add(new ArchiveLog(3, new ArchiveEntry(obj, Encoding.UTF8.GetBytes("Test3")),
+            context.Logs.Add(new ArchiveLog(new ArchiveEntry(obj, Encoding.UTF8.GetBytes("Test3")), 3,
                 DateTime.Today.AddHours(3), Operation.Rename, "Renamed instance", Environment.UserName));
-            context.Logs.Add(new ArchiveLog(4, new ArchiveEntry(obj, Encoding.UTF8.GetBytes("Test4")),
+            context.Logs.Add(new ArchiveLog(new ArchiveEntry(obj, Encoding.UTF8.GetBytes("Test4")), 4,
                 DateTime.Today.AddHours(4), Operation.ModifiedAutomationObjectOnly, "Modified something",
                 Environment.UserName));
 
             
-            context.Queue.Add(new QueuedLog(1, 321, DateTime.Today, Operation.CreateInstance, "Comment", "username"));
-            context.Queue.Add(new QueuedLog(2, 321, DateTime.Now, Operation.CheckInSuccess, "Comment", "username"));
-            context.Queue.Add(new QueuedLog(3, 321, DateTime.Now, Operation.CheckInSuccess, "Comment", "username"));
-            context.Queue.Add(new QueuedLog(4, 321, DateTime.Now, Operation.CheckInSuccess, "Comment", "username"));
-            context.Queue.Add(new QueuedLog(5, 321, DateTime.Now, Operation.CheckInSuccess, "Comment", "username"));
+            context.Queue.Add(new QueuedLog(1, 311, DateTime.Today, Operation.CreateInstance, "Comment", "username"));
+            context.Queue.Add(new QueuedLog(2, 311, DateTime.Now, Operation.CheckInSuccess, "Comment", "username"));
+            context.Queue.Add(new QueuedLog(3, 311, DateTime.Now, Operation.CheckInSuccess, "Comment", "username"));
+            context.Queue.Add(new QueuedLog(4, 311, DateTime.Now, Operation.CheckInSuccess, "Comment", "username"));
+            context.Queue.Add(new QueuedLog(5, 311, DateTime.Now, Operation.CheckInSuccess, "Comment", "username"));
 
             context.SaveChanges();
         }

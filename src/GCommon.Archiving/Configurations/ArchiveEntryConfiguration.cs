@@ -16,8 +16,6 @@ namespace GCommon.Archiving.Configurations
             builder.Property(g => g.OriginalSize).IsRequired();
             builder.Property(g => g.CompressedSize).IsRequired();
             builder.Property(g => g.CompressedData).IsRequired();
-
-            builder.Ignore(x => x.Log);
         }
     }
 }
