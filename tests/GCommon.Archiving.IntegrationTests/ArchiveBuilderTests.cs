@@ -14,7 +14,7 @@ namespace GCommon.Archiving.IntegrationTests
         [Test]
         public void Build_DefaultConfiguration_CreatesDatabaseWithExpectedData()
         {
-            var archive = new Archive("GalaxyName");
+            var archive = new ArchiveConfig("GalaxyName");
             var builder = new ArchiveBuilder();
             
             builder.Build(archive);

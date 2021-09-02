@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks.Dataflow;
+using GCommon.Archiving;
 using GCommon.Archiving.Abstractions;
-using GCommon.Archiving.Repositories;
 using GCommon.Core.Utilities;
 using GCommon.Data;
 using GCommon.Data.Abstractions;
@@ -93,7 +93,7 @@ namespace GServer.Services
 
             var queued = 
                 new QueuedLog(log.ChangeLogId, log.ObjectId, log.ChangeDate, log.Operation, log.Comment, log.UserName);
-            archive.Queue.Enqueue(queued);
+            archive.Enqueue(queued);
         }
 
         private void RemoveLog(Tuple<GalaxyObject, ChangeLog> payload)
@@ -104,7 +104,7 @@ namespace GServer.Services
                 ? new ArchiveRepository(_archiveString)
                 : _archiveRepositoryFactory.Create(_archiveString);
 
-            archive.Queue.Dequeue(log.ChangeLogId);
+            archive.Dequeue(log.ChangeLogId);
         }
 
         private void RemoveLog(ArchiveObject obj)
@@ -118,7 +118,7 @@ namespace GServer.Services
             var log = obj.Logs.SingleOrDefault();
             if (log == null) return;
 
-            archive.Queue.Dequeue(log.ChangeLogId);
+            archive.Dequeue(log.ChangeLogId);
         }
 
         private GalaxyObject RetrieveObject(ChangeLog changeLog)

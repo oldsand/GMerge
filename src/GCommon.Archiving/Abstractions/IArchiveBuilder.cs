@@ -10,8 +10,8 @@ namespace GCommon.Archiving.Abstractions
         /// <summary>
         /// Builds an archive database using the provided archive configuration
         /// </summary>
-        /// <param name="archive">The archive used to build the database</param>
+        /// <param name="archiveConfig">The archive used to build the database</param>
         /// <param name="connectionString">Optionally provide the connection string for the database</param>
-        void Build(Archive archive, string connectionString = null);
+        void Build(ArchiveConfig archiveConfig, string connectionString = null);
     }
 }

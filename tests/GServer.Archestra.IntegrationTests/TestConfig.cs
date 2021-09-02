@@ -4,7 +4,7 @@ using System.Security.Principal;
 using ArchestrA.GRAccess;
 using NUnit.Framework;
 
-namespace GServer.Archestra.IntegrationTests.Base
+namespace GServer.Archestra.IntegrationTests
 {
     [SetUpFixture]
     public class TestConfig

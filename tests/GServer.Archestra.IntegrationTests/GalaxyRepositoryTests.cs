@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
 using AutoFixture;
+using FluentAssertions;
 using GCommon.Primitives.Enumerations;
 using GServer.Archestra.IntegrationTests.Base;
 using NUnit.Framework;
@@ -85,10 +86,10 @@ namespace GServer.Archestra.IntegrationTests
         public void GetObject_ValidTagName_ReturnsCorrectTemplates()
         {
             var tagName = Known.Templates.ReactorSet.TagName;
-            var template = _galaxy.GetObject(tagName);
+            var result = _galaxy.GetObject(tagName);
 
-            Assert.NotNull(template);
-            Assert.AreEqual(tagName, template.TagName);
+            Assert.NotNull(result);
+            Assert.AreEqual(tagName, result.TagName);
         }
 
         [Test]
@@ -103,11 +104,10 @@ namespace GServer.Archestra.IntegrationTests
         [Test]
         public void GetObject_TagNameWithMultipleObjects_ReturnsNotNull()
         {
-            //todo need to figure out this test
             var tagName = Known.Templates.ReactorSet.TagName;
             var result = _galaxy.GetObject(tagName);
 
-            Assert.NotNull(result);
+            result.Should().NotBeNull();
         }
 
         [Test]
@@ -143,39 +143,5 @@ namespace GServer.Archestra.IntegrationTests
             Assert.NotNull(result);
             Assert.AreEqual(tagName, result.TagName);
         }
-
-        /*[Test]
-        public void ExportPkg_ValidObjects_CreatesFile()
-        {
-            _galaxy.ExportPkg("$Test_Template",
-                @"C:\Users\tnunnink\Documents\Export\GalaxyAccess\TestExport.aaPKG");
-
-            FileAssert.Exists(@"C:\Users\tnunnink\Documents\Export\GalaxyAccess\TestExport.aaPKG");
-        }
-
-        [Test]
-        public void ExportSymbol_ValidSymbol_CreatesFile()
-        {
-            _galaxy.ExportGraphic("TestSymbol",
-                @"C:\Users\tnunnink\Documents\Export\GalaxyAccess\TestSymbol.xml");
-            
-            FileAssert.Exists(@"C:\Users\tnunnink\Documents\Export\GalaxyAccess\TestSymbol.xml");
-        }
-
-        [Test]
-        public void ImportSymbol_ValidSymbol_LoadsSymbol()
-        {
-            _galaxy.ImportGraphic(@"C:\Users\tnunnink\Documents\Export\GalaxyAccess\TestSymbol.xml", "NewTestSymbol", false);
-            
-            Assert.Pass();
-        }
-        
-        [Test]
-        public void ImportSymbol_Overwrite_LoadsSymbol()
-        {
-            _galaxy.ImportGraphic(@"C:\Users\tnunnink\Documents\Export\GalaxyAccess\TestSymbol.xml", "TestSymbol", true);
-            
-            Assert.Pass();
-        }*/
     }
 }

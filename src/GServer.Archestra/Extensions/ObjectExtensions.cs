@@ -91,6 +91,18 @@ namespace GServer.Archestra.Extensions
         {
             return gObject.Attributes[name];
         }
+        
+        public static IAttribute GetUdaConfig(this IgObject gObject)
+        {
+            return gObject.Attributes["UDAs"];
+        }
+        
+        public static void SetUdaConfig(this IgObject gObject, string xml)
+        {
+            //Validate xml
+            
+            gObject.Attributes["UDAs"].SetValue(xml);
+        }
 
         public static void SetUserDefinedAttributes(this IgObject gObject, ArchestraObject source)
         {
@@ -185,7 +197,7 @@ namespace GServer.Archestra.Extensions
         /// <returns></returns>
         public static ArchestraObject Map(this IgObject gObject)
         {
-            return new()
+            return new ArchestraObject
             {
                 TagName = gObject.Tagname,
                 HierarchicalName = gObject.HierarchicalName,

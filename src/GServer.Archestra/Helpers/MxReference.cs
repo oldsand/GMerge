@@ -4,7 +4,7 @@ using ArchestrA.GRAccess;
 
 [assembly: InternalsVisibleTo("GServer.Archestra.UnitTests")]
 
-namespace GServer.Archestra.Internal
+namespace GServer.Archestra.Helpers
 {
     
     /// <summary>

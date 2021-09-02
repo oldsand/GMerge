@@ -20,7 +20,7 @@ namespace GCommon.Archiving.Configurations
             builder.Property(x => x.Template)
                 .HasConversion(x => x.Value, x => Template.FromValue(x));
 
-            builder.HasOne(x => x.Archive).WithMany(x => x.IgnoreSettings).HasForeignKey(x => x.ArchiveId);
+            builder.HasOne(x => x.ArchiveConfig).WithMany(x => x.IgnoreSettings).HasForeignKey(x => x.ArchiveId);
         }
     }
 }

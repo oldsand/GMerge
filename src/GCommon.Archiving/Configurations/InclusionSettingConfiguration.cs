@@ -23,7 +23,7 @@ namespace GCommon.Archiving.Configurations
 
             builder.HasIndex(x => x.Template).IsUnique();
 
-            builder.HasOne(x => x.Archive).WithMany(x => x.InclusionSettings).HasForeignKey(x => x.ArchiveId);
+            builder.HasOne(x => x.ArchiveConfig).WithMany(x => x.InclusionSettings).HasForeignKey(x => x.ArchiveId);
         }
     }
 }

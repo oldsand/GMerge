@@ -1,9 +1,7 @@
 using ArchestrA.GRAccess;
 using GCommon.Primitives;
-using GCommon.Primitives.Base;
 using GCommon.Primitives.Enumerations;
-using GServer.Archestra.Internal;
-using GServer.Archestra.Options;
+using GServer.Archestra.Helpers;
 
 namespace GServer.Archestra.Extensions
 {
@@ -76,7 +74,7 @@ namespace GServer.Archestra.Extensions
 
         public static Reference ToPrimitive(this IMxReference mxReference)
         {
-            return new()
+            return new Reference
             {
                 FullReference = mxReference.FullReferenceString,
                 ObjectReference = mxReference.AutomationObjectReferenceString,
@@ -113,16 +111,6 @@ namespace GServer.Archestra.Extensions
         public static DataQuality ToMx(this Quality quality)
         {
             return (DataQuality) quality.Value;
-        }
-
-        public static CurrentlyDeployedOption ToPrimitive(this EActionForCurrentlyDeployedObjects deployedOption)
-        {
-            return (CurrentlyDeployedOption) deployedOption;
-        }
-
-        public static EActionForCurrentlyDeployedObjects ToMx(this CurrentlyDeployedOption deployedOption)
-        {
-            return (EActionForCurrentlyDeployedObjects) deployedOption;
         }
     }
 }

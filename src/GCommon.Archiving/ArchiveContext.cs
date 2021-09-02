@@ -23,10 +23,7 @@ namespace GCommon.Archiving
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ArchiveContext).Assembly);
         }
 
-        public DbSet<Archive> Archive { get; set; }
-        public DbSet<EventSetting> EventSettings { get; set; }
-        public DbSet<InclusionSetting> InclusionSettings { get; set; }
-        public DbSet<IgnoreSetting> IgnoreSettings { get; set; }
+        public DbSet<ArchiveConfig> Archive { get; set; }
         public DbSet<ArchiveObject> Objects { get; set; }
         public DbSet<ArchiveEntry> Entries { get; set; }
         public DbSet<ArchiveLog> Logs { get; set; }

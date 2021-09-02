@@ -18,7 +18,6 @@ namespace GCommon.Archiving.Configurations
             builder.Property(x => x.Operation)
                 .HasConversion(x => x.Name, x => Operation.FromName(x, false))
                 .IsRequired();
-           
 
             builder.Ignore(x => x.Entry);
         }

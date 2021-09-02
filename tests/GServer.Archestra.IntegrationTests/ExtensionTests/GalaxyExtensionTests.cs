@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using ArchestrA.GRAccess;
 using AutoFixture;
+using FluentAssertions;
+using GCommon.Core.Utilities;
 using GCommon.Primitives;
 using GCommon.Primitives.Enumerations;
 using GServer.Archestra.Extensions;
@@ -381,6 +384,40 @@ namespace GServer.Archestra.IntegrationTests.ExtensionTests
                 results.Add(result.Tagname);
 
             Assert.IsEmpty(results);
+        }
+        
+        
+        [Test]
+        public void ExportObjects_KnownGraphic_FileShouldExist()
+        {
+            using var temp = new TempDirectory();
+            var fileName = Path.Combine(temp.FullName, $"{Known.Symbols.React.TagName}.aaPKG");
+
+            _galaxy.ExportObjects(Known.Templates.ReactorSet.TagName, fileName);
+
+            File.Exists(fileName).Should().BeTrue();
+        }
+
+        [Test]
+        public void ExportGraphic_WhenCalled_FileShouldExist()
+        {
+            using var temp = new TempDirectory();
+            var fileName = Path.Combine(temp.FullName, $"{Known.Symbols.React.TagName}.xml");
+
+            _galaxy.ExportGraphic(Known.Symbols.React.TagName, fileName);
+
+            File.Exists(fileName).Should().BeTrue();
+        }
+        
+        [Test]
+        public void ImportGraphic_ValidXmlFile_ShouldExistAfterImport()
+        {
+            using var temp = new TempDirectory();
+            var fileName = Path.Combine(temp.FullName, $"{Known.Symbols.React.TagName}.xml");
+
+            _galaxy.ExportGraphic(Known.Symbols.React.TagName, fileName);
+
+            File.Exists(fileName).Should().BeTrue();
         }
     }
 }

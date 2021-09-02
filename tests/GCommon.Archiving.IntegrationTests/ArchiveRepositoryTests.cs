@@ -1,11 +1,12 @@
 using System;
 using System.IO;
-using GCommon.Archiving.Repositories;
-using GCommon.Core.Utilities;
+using System.Linq;
+using System.Text;
+using GCommon.Core.Extensions;
 using GCommon.Primitives;
-using GCommon.Archiving;
 using GCommon.Primitives.Enumerations;
 using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 
 namespace GCommon.Archiving.IntegrationTests
@@ -19,7 +20,7 @@ namespace GCommon.Archiving.IntegrationTests
         {
             _builder = new SqliteConnectionStringBuilder {DataSource = @"\TestArchive.db"};
 
-            var archive = new Archive("TestArchive");
+            var archive = new ArchiveConfig("TestArchive");
             
             var archiveBuilder = new ArchiveBuilder();
             archiveBuilder.Build(archive, _builder.ConnectionString);
@@ -33,21 +34,21 @@ namespace GCommon.Archiving.IntegrationTests
         }
 
         [Test]
-        public void GetArchiveInfo_WhenCalled_ReturnsNotNull()
+        public void GetConfig_WhenCalled_ShouldNotBeNull()
         {
             using var repo = new ArchiveRepository(_builder.ConnectionString);
 
-            var archive = repo.GetArchiveInfo();
+            var archive = repo.GetConfig();
             
             Assert.NotNull(archive);
         }
         
         [Test]
-        public void GetArchiveInfo_WhenCalled_ReturnsExpectedInfo()
+        public void GetConfig_WhenCalled_ReturnsExpectedProperties()
         {
             using var repo = new ArchiveRepository(_builder.ConnectionString);
 
-            var archive = repo.GetArchiveInfo();
+            var archive = repo.GetConfig();
             
             Assert.AreEqual(1, archive.ArchiveId);
             Assert.AreEqual("TestArchive", archive.GalaxyName);
@@ -61,7 +62,7 @@ namespace GCommon.Archiving.IntegrationTests
         {
             using var repo = new ArchiveRepository(_builder.ConnectionString);
 
-            var archive = repo.GetArchiveSettings();
+            var archive = repo.GetConfig();
             
             Assert.NotNull(archive.EventSettings);
             Assert.NotNull(archive.InclusionSettings);
@@ -70,26 +71,573 @@ namespace GCommon.Archiving.IntegrationTests
             Assert.IsNotEmpty(archive.EventSettings);
             Assert.IsNotEmpty(archive.InclusionSettings);
         }
+        
+        [Test]
+        public void IsIncluded_TemplateWithOptionAll_ReturnsTrue()
+        {
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
+            var archiveObject = new ArchiveObject(1, "$SomeTag", 1, Template.UserDefined);
+            
+            var result = repo.IsIncluded(archiveObject);
 
-        /*private void Seed()
+            Assert.True(result);
+        }
+        
+        [Test]
+        public void IsIncluded_TemplateWithOptionSelect_ReturnsFalse()
+        {
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
+            var archiveObject = new ArchiveObject(1, "SomeTag", 1, Template.Area);
+            
+            var result = repo.IsIncluded(archiveObject);
+
+            Assert.False(result);
+        }
+        
+        [Test]
+        public void IsIncluded_TemplateWithOptionNone_ReturnsFalse()
+        {
+            /*using var repo = new ArchiveRepository(_builder.ConnectionString);
+            repo.Inclusions.Configure(Template.InTouchViewApp, InclusionOption.None, false);
+            var archiveObject = new ArchiveObject(1, "SomeTag", 31, Template.InTouchViewApp);
+            
+            var result = repo.Inclusions.IsIncluded(archiveObject);
+
+            Assert.False(result);*/
+        }
+        
+        [Test]
+        public void IsIncluded_Null_ThrowsArgumentNullException()
+        {
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
+            
+            Assert.Throws<ArgumentNullException>(() => { repo.IsIncluded(null); }, "archiveObject can not be null");
+        }
+        
+        [Test]
+        public void ObjectExists_ObjectExists_ReturnsTrue()
+        {
+            Seed();
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
+
+            var result = repo.ObjectExists(1);
+
+            Assert.True(result);
+        }
+
+        [Test]
+        public void ObjectExists_ObjectDoesNotExist_ReturnsFalse()
+        {
+            Seed();
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
+
+            var result = repo.ObjectExists(21);
+
+            Assert.False(result);
+        }
+
+        [Test]
+        public void GetObject_ExistingObjectId_ReturnsExpectedObject()
+        {
+            Seed();
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
+
+            var result = repo.GetObject(1);
+
+            Assert.NotNull(result);
+            Assert.AreEqual("Tag1", result.TagName);
+            Assert.AreEqual(21, result.Version);
+            Assert.AreEqual(Template.UserDefined, result.Template);
+        }
+
+        [Test]
+        public void GetObject_NonExistingObjectId_ReturnsNull()
+        {
+            Seed();
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
+
+            var result = repo.GetObject(100);
+
+            Assert.Null(result);
+        }
+
+        [Test]
+        public void GetObject_ExistingObjectIdWithEntries_IncludesEntries()
+        {
+            Seed();
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
+
+            var result = repo.GetObject(311);
+
+            Assert.That(result.Entries, Has.Count.EqualTo(1));
+
+            var entry = result.Entries.Single();
+            Assert.NotNull(entry);
+            Assert.AreEqual("This is some data to convert to binary",
+                Encoding.UTF8.GetString(entry.CompressedData.Decompress()));
+        }
+        
+        [Test]
+        public void GetObject_ExistingObjectIdWithLogs_IncludesLogs()
+        {
+            Seed();
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
+
+            var result = repo.GetObject(411);
+
+            Assert.That(result.Logs, Has.Count.EqualTo(1));
+
+            var log = result.Logs.Single();
+            Assert.NotNull(log);
+            Assert.AreEqual(1, log.ChangeLogId);
+        }
+
+        [Test]
+        public void GetObjects_ExistingObjectTagName_IncludesEntries()
+        {
+            Seed();
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
+
+            var results = repo.GetObjects("Tag1").ToList();
+
+            Assert.That(results, Has.Count.EqualTo(2));
+        }
+
+        [Test]
+        public void GetObjects_NonExistingObjectTagName_ReturnsEmptyCollection()
+        {
+            Seed();
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
+
+            var results = repo.GetObjects("Tag4").ToList();
+
+            Assert.IsEmpty(results);
+        }
+
+        [Test]
+        public void GetObjects_WhenCalled_ReturnsExpectedObjects()
+        {
+            Seed();
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
+
+            var all = repo.GetObjects().ToList();
+
+            Assert.That(all.Select(x => x.TagName), Contains.Item("Tag1"));
+            Assert.That(all.Select(x => x.TagName), Contains.Item("Tag2"));
+            Assert.That(all.Select(x => x.TagName), Contains.Item("Tag3"));
+            Assert.That(all.Select(x => x.TagName), Contains.Item("TestObject"));
+        }
+
+        [Test]
+        public void UpsertObject_ExistingObject_ReturnsExpectedObject()
+        {
+            Seed();
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
+            var archiveObject = new ArchiveObject(1, "Some Test Object", 2, Template.UserDefined);
+
+            repo.UpsertObject(archiveObject);
+            repo.Save();
+
+            var target = repo.GetObject(1);
+
+            Assert.NotNull(target);
+            Assert.AreEqual("Some Test Object", target.TagName);
+            Assert.AreEqual(2, target.Version);
+        }
+
+        [Test]
+        public void UpsertObject_NewObject_ReturnsExpectedObject()
+        {
+            Seed();
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
+            var archiveObject = new ArchiveObject(12, "New Object", 1, Template.Symbol);
+
+            repo.UpsertObject(archiveObject);
+            repo.Save();
+
+            var target = repo.GetObject(12);
+
+            Assert.NotNull(target);
+            Assert.AreEqual("New Object", target.TagName);
+            Assert.AreEqual(1, target.Version);
+            Assert.AreEqual(Template.Symbol, target.Template);
+        }
+
+        [Test]
+        public void UpsertObject_ExistingObjectAddEntry_ReturnsExpectedEntries()
+        {
+            Seed();
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
+            var archiveObject = new ArchiveObject(1, "Some Test Object", 2, Template.UserDefined);
+            archiveObject.Archive(Encoding.UTF8.GetBytes("This is a new entry test"));
+
+            repo.UpsertObject(archiveObject);
+            repo.Save();
+
+            var target = repo.GetObject(1);
+
+            Assert.That(target.Entries, Has.Count.EqualTo(1));
+
+            var entry = target.Entries.First();
+            Assert.NotNull(entry);
+
+            var data = Encoding.UTF8.GetString(entry.CompressedData.Decompress());
+            Assert.AreEqual("This is a new entry test", data);
+        }
+        
+         /*[Test]
+        public void Upsert_ExistingObjectAddLog_ReturnsExpectedLog()
+        {
+            Seed();
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
+            var archiveObject = new ArchiveObject(1, "Some Test Object", 2, Template.UserDefined);
+            archiveObject.AddLog(213, DateTime.Now, Operation.Rename, "Comment", Environment.UserName);
+
+            repo.Objects.Upsert(archiveObject);
+            repo.Save();
+
+            var target = repo.Objects.Get(1);
+
+            Assert.That(target.Logs, Has.Count.EqualTo(1));
+
+            var log = target.Logs.First();
+            Assert.NotNull(log);
+            Assert.AreEqual(213, log.ChangeLogId);
+        }
+        
+        [Test]
+        public void Upsert_ExistingObjectAddLog_AfterSaveTheInstanceRetainsState()
+        {
+            Seed();
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
+            var archiveObject = new ArchiveObject(1, "Some Test Object", 2, Template.UserDefined);
+            archiveObject.AddLog(213, DateTime.Now, Operation.Rename, "Comment", Environment.UserName);
+
+            repo.Objects.Upsert(archiveObject);
+            repo.Save();
+
+            Assert.That(archiveObject.Logs, Has.Count.EqualTo(1));
+
+            var log = archiveObject.Logs.First();
+            Assert.NotNull(log);
+            Assert.AreEqual(213, log.ChangeLogId);
+        }*/
+
+        [Test]
+        public void UpsertObject_ExistingObjectWithEntryAddEntry_ReturnsExpectedEntries()
+        {
+            Seed();
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
+            var archiveObject = new ArchiveObject(311, "Upsert Tester", 123, Template.UserDefined);
+            archiveObject.Archive(Encoding.UTF8.GetBytes("This is a new entry test"));
+
+            repo.UpsertObject(archiveObject);
+            repo.Save();
+
+            var target = repo.GetObject(311);
+
+            Assert.That(target.Entries, Has.Count.EqualTo(2));
+
+            var latest = target.GetLatestEntry();
+            Assert.NotNull(latest);
+            Assert.AreEqual("This is a new entry test", Encoding.UTF8.GetString(latest.CompressedData.Decompress()));
+        }
+
+        /*[Test]
+        public void Upsert_ExistingObjectWithLogAddLog_ReturnsExpectedEntries()
+        {
+            Seed();
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
+            var archiveObject = new ArchiveObject(411, "Upsert Tester", 123, Template.UserDefined);
+            archiveObject.AddLog(213, DateTime.Now, Operation.Rename, "Comment", Environment.UserName);
+
+            repo.Objects.Upsert(archiveObject);
+            repo.Save();
+
+            var target = repo.Objects.Get(411);
+
+            Assert.That(target.Logs, Has.Count.EqualTo(2));
+
+            var latest = target.GetLatestLog();
+            Assert.NotNull(latest);
+            Assert.AreEqual(213, latest.ChangeLogId);
+            Assert.AreEqual(Operation.Rename, latest.Operation);
+            Assert.AreEqual("Comment", latest.Comment);
+            Assert.AreEqual(Environment.UserName, latest.UserName);
+        }
+        
+        [Test]
+        public void Upsert_ExistingObjectWithLogAddLog_AfterSaveTheInstanceRetainsState()
+        {
+            Seed();
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
+            var archiveObject = new ArchiveObject(411, "Upsert Tester", 123, Template.UserDefined);
+            archiveObject.AddLog(213, DateTime.Now, Operation.Rename, "Comment", Environment.UserName);
+
+            repo.Objects.Upsert(archiveObject);
+            repo.Save();
+
+            Assert.That(archiveObject.Logs, Has.Count.EqualTo(1));
+
+            var log = archiveObject.GetLatestLog();
+            Assert.NotNull(log);
+            Assert.AreEqual(213, log.ChangeLogId);
+            Assert.AreEqual(Operation.Rename, log.Operation);
+            Assert.AreEqual("Comment", log.Comment);
+            Assert.AreEqual(Environment.UserName, log.UserName);
+        }*/
+
+        [Test]
+        public void UpsertObject_NewObjectAddEntry_ReturnsExpectedEntries()
+        {
+            Seed();
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
+            var archiveObject = new ArchiveObject(12, "New Object", 1, Template.Symbol);
+            archiveObject.Archive(Encoding.UTF8.GetBytes("This is a new entry test"));
+
+            repo.UpsertObject(archiveObject);
+            repo.Save();
+
+            var target = repo.GetObject(12);
+
+            Assert.That(target.Entries, Has.Count.EqualTo(1));
+
+            var entry = target.Entries.First();
+            Assert.NotNull(entry);
+
+            var data = Encoding.UTF8.GetString(entry.CompressedData.Decompress());
+            Assert.AreEqual("This is a new entry test", data);
+        }
+
+        [Test]
+        public void DeleteObject_ExistingObjet_ObjectExistsReturnFalse()
+        {
+            Seed();
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
+
+            repo.DeleteObject(2);
+            repo.Save();
+
+            var result = repo.ObjectExists(2);
+            Assert.False(result);
+        }
+
+        [Test]
+        public void DeleteObject_NonExistingObjet_ObjectExistsReturnFalse()
+        {
+            Seed();
+            using var repo = new ArchiveRepository(_builder.ConnectionString);
+
+            repo.DeleteObject(6);
+            repo.Save();
+
+            var result = repo.ObjectExists(6);
+            Assert.False(result);
+        }
+        
+        [Test]
+        public void GetLog_ExistingLog_ReturnsExpectedEntity()
+        {
+            Seed();
+            var repo = new ArchiveRepository(_builder.ConnectionString);
+
+            var result = repo.GetLog(1);
+
+            Assert.NotNull(result);
+            Assert.NotNull(result.ArchiveObject);
+            Assert.AreEqual(1, result.ChangeLogId);
+            Assert.AreEqual(DateTime.Today, result.ChangedOn);
+            Assert.AreEqual(Operation.CreateInstance, result.Operation);
+            Assert.AreEqual("Created new instance", result.Comment);
+            Assert.AreEqual(Environment.UserName, result.UserName);
+        }
+
+        [Test]
+        public void GetLog_NonExistingLog_ReturnsReturnsNull()
+        {
+            Seed();
+            var repo = new ArchiveRepository(_builder.ConnectionString);
+
+            var result = repo.GetLog(10);
+
+            Assert.Null(result);
+        }
+
+        [Test]
+        public void GetLogs_WhenCalled_ReturnsExpectedCount()
+        {
+            Seed();
+            var repo = new ArchiveRepository(_builder.ConnectionString);
+
+            var results = repo.GetLogs().ToList();
+
+            Assert.That(results, Has.Count.EqualTo(4));
+        }
+
+        [Test]
+        public void GetLogs_EmptyDatabase_ReturnsIsEmpty()
+        {
+            var repo = new ArchiveRepository(_builder.ConnectionString);
+
+            var results = repo.GetLogs().ToList();
+
+            Assert.IsEmpty(results);
+        }
+
+        [Test]
+        public void FindLogs_ByOperation_ReturnsExpectedEntity()
+        {
+            Seed();
+            var repo = new ArchiveRepository(_builder.ConnectionString);
+
+            var results = repo.FindLogs(x => x.Operation == Operation.CreateInstance).ToList();
+
+            Assert.IsNotEmpty(results);
+            Assert.True(results.All(x => x.Operation == Operation.CreateInstance));
+        }
+
+        [Test]
+        public void FindLogs_ByDateTime_ReturnsExpectedEntities()
+        {
+            Seed();
+            var repo = new ArchiveRepository(_builder.ConnectionString);
+
+            var results = repo.FindLogs(x => x.ChangedOn == DateTime.Today).ToList();
+
+            Assert.That(results, Has.Count.EqualTo(1));
+        }
+        
+        [Test]
+        public void GetQueuedLog_ExistingLog_ReturnsExpected()
+        {
+            var repo = new ArchiveRepository(_builder.ConnectionString);
+
+            var result = repo.GetQueuedLog(2);
+
+            Assert.NotNull(result);
+            Assert.AreEqual(2, result.ChangeLogId);
+        }
+
+        [Test]
+        public void GetQueuedLog_NonExistingLog_ReturnsNull()
+        {
+            var repo = new ArchiveRepository(_builder.ConnectionString);
+
+            var result = repo.GetQueuedLog(2221);
+
+            Assert.Null(result);
+        }
+
+        [Test]
+        public void Enqueue_NonExistingId_AddsEntity()
+        {
+            var repo = new ArchiveRepository(_builder.ConnectionString);
+
+            var log = new QueuedLog(6, 321, DateTime.Now, Operation.CheckInSuccess, "Comment", "username");
+            repo.Enqueue(log);
+            repo.Save();
+
+            var result = repo.GetQueuedLog(6);
+
+            Assert.NotNull(result);
+            Assert.AreEqual(6, result.ChangeLogId);
+            Assert.AreEqual(321, result.ObjectId);
+            Assert.AreEqual(Operation.CheckInSuccess, result.Operation);
+            Assert.AreEqual("Comment", result.Comment);
+            Assert.AreEqual("username", result.UserName);
+        }
+
+        [Test]
+        public void Enqueue_ExistingId_AddsEntity()
+        {
+            var repo = new ArchiveRepository(_builder.ConnectionString);
+
+            var log = new QueuedLog(2, 321, DateTime.Now, Operation.CheckInSuccess, "Comment", "username");
+            repo.Enqueue(log);
+            repo.Save();
+
+            var result = repo.GetQueuedLog(2);
+
+            Assert.NotNull(result);
+            Assert.AreEqual(2, result.ChangeLogId);
+        }
+
+        [Test]
+        public void Dequeue_ExistingId_RemovesEntity()
+        {
+            var repo = new ArchiveRepository(_builder.ConnectionString);
+
+            repo.Dequeue(3);
+            repo.Save();
+
+            var result = repo.GetQueuedLog(3);
+
+            Assert.Null(result);
+        }
+
+        [Test]
+        public void Dequeue_NonExistingId_ReturnsNull()
+        {
+            var repo = new ArchiveRepository(_builder.ConnectionString);
+
+            repo.Dequeue(300);
+            repo.Save();
+
+            var result = repo.GetQueuedLog(300);
+
+            Assert.Null(result);
+        }
+        
+        [Test]
+        public void UpdateState_ExistingLog_ReturnsUpdatedEntity()
+        {
+            var repo = new ArchiveRepository(_builder.ConnectionString);
+            var target = repo.GetQueuedLog(2);
+            Assert.AreEqual(ArchiveState.New, target.State);
+            
+            target.State = ArchiveState.Processing;
+            repo.Save();
+            
+            target = repo.GetQueuedLog(2);
+            Assert.AreEqual(ArchiveState.Processing, target.State);
+        }
+
+        private void Seed()
         {
             var options = new DbContextOptionsBuilder<ArchiveContext>()
                 .UseSqlite(_builder.ConnectionString).Options;
             using var context = new ArchiveContext(options);
+            
+            var obj = new ArchiveObject(1, "Tag1", 21, Template.UserDefined);
+            context.Objects.Add(obj);
 
-            context.Objects.Add(new ArchiveObject(1, "Tag1", 21, Template.UserDefined));
+            context.Objects.Add(obj);
             context.Objects.Add(new ArchiveObject(2, "Tag2", 33, Template.Area));
             context.Objects.Add(new ArchiveObject(3, "Tag3", 13, Template.Symbol));
+            context.Objects.Add(new ArchiveObject(4, "Tag1", 2, Template.ViewEngine));
 
-            var archiveObject = new ArchiveObject(311, "TestObject", 2, Template.UserDefined);
-            archiveObject.AddEntry(Encoding.UTF8.GetBytes("This is some data to convert to binary"), 34523);
-            context.Objects.Add(archiveObject);
+            var aObjectWithEntry = new ArchiveObject(311, "TestObject", 2, Template.UserDefined);
+            aObjectWithEntry.Archive(Encoding.UTF8.GetBytes("This is some data to convert to binary"));
+            context.Objects.Add(aObjectWithEntry);
 
-            context.Queue.Add(new QueuedEntry(132432, 2, 0, DateTime.Today));
-            context.Queue.Add(new QueuedEntry(123523, 311, 4, DateTime.Now));
-            context.Queue.Add(new QueuedEntry(577854, 3, 14, DateTime.Today.AddHours(1)));
+            context.Logs.Add(new ArchiveLog(1, new ArchiveEntry(obj, Encoding.UTF8.GetBytes("Test1")), DateTime.Today,
+                Operation.CreateInstance, "Created new instance", Environment.UserName));
+            context.Logs.Add(new ArchiveLog(2, new ArchiveEntry(obj, Encoding.UTF8.GetBytes("Test2")),
+                DateTime.Today.AddHours(2), Operation.CheckInSuccess, "Updated current object", Environment.UserName));
+            context.Logs.Add(new ArchiveLog(3, new ArchiveEntry(obj, Encoding.UTF8.GetBytes("Test3")),
+                DateTime.Today.AddHours(3), Operation.Rename, "Renamed instance", Environment.UserName));
+            context.Logs.Add(new ArchiveLog(4, new ArchiveEntry(obj, Encoding.UTF8.GetBytes("Test4")),
+                DateTime.Today.AddHours(4), Operation.ModifiedAutomationObjectOnly, "Modified something",
+                Environment.UserName));
+
+            
+            context.Queue.Add(new QueuedLog(1, 321, DateTime.Today, Operation.CreateInstance, "Comment", "username"));
+            context.Queue.Add(new QueuedLog(2, 321, DateTime.Now, Operation.CheckInSuccess, "Comment", "username"));
+            context.Queue.Add(new QueuedLog(3, 321, DateTime.Now, Operation.CheckInSuccess, "Comment", "username"));
+            context.Queue.Add(new QueuedLog(4, 321, DateTime.Now, Operation.CheckInSuccess, "Comment", "username"));
+            context.Queue.Add(new QueuedLog(5, 321, DateTime.Now, Operation.CheckInSuccess, "Comment", "username"));
 
             context.SaveChanges();
-        }*/
+        }
     }
 }

@@ -1,5 +1,4 @@
 using GCommon.Archiving.Abstractions;
-using GCommon.Archiving.Repositories;
 
 namespace GCommon.Archiving
 {

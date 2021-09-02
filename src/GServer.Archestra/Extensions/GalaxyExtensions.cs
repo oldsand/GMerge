@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security;
 using System.ServiceModel.Security;
 using ArchestrA.GRAccess;
+using ArchestrA.Visualization.GraphicAccess;
 using GServer.Archestra.Exceptions;
 
 namespace GServer.Archestra.Extensions
@@ -11,16 +12,20 @@ namespace GServer.Archestra.Extensions
     public static class GalaxyExtensions
     {
         /// <summary>
-        /// In testing the Login method, it appears that it does not actually validate the user against Archestra
-        /// security settings. In fact, it appears that login will always succeed regardless of the provided string parameters.
-        /// Login does, however, need to be called prior to any call on the IGalaxy interface.
-        /// Therefore, we will login with provided username and empty string, and subsequently validate the user against the
-        /// security settings obtained by the IGalaxySecurity interface.
+        /// Logs into the galaxy with the given credentials and validates the user.
         /// </summary>
         /// <param name="galaxy">The current galaxy object</param>
-        /// <param name="userName">The Username to login with</param>
-        /// <param name="password">The password is optional and the user name will still be authorized against galaxy
-        /// security settings after login</param>
+        /// <param name="userName">The user name to login with</param>
+        /// <param name="password">The password to login with. Recommended to not use password unless galaxy based
+        /// security is expected</param>
+        /// <exception cref="InvalidOperationException">Thrown when security settings are retrievable</exception>
+        /// <exception cref="SecurityAccessDeniedException">Thrown when user is not validated</exception>
+        /// <remarks>
+        /// In testing the provided Login method, it appears that it does not actually validate the user against Archestra
+        /// security settings. In fact, it appears that login will always succeed regardless of the provided parameters.
+        /// Login does, however, need to be called prior to any call on the IGalaxy interface.
+        /// This extension will login and int turn validate the user name against the galaxy security settings. 
+        /// </remarks>
         public static void SecureLogin(this IGalaxy galaxy, string userName, string password = null)
         {
             password ??= string.Empty;
@@ -33,7 +38,7 @@ namespace GServer.Archestra.Extensions
             if (security == null)
                 throw new InvalidOperationException(
                     "Could not obtain IGalaxySecurity instance. Unable to authorize user");
-            
+
             if (security.AuthenticationMode == EAUTHMODE.eNone) return;
 
             // ReSharper disable once ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
@@ -46,14 +51,17 @@ namespace GServer.Archestra.Extensions
         }
 
         /// <summary>
-        /// Depth first recursive check-in of all object instances and templates that are descendents of the specified tag name.
-        /// This extension provides a simple API for checking in objects without having to worry about checked out descendents,
-        /// since the check in call on a single gObject will fail if it has checked out descendents.
+        /// Depth first recursive check-in of all object instances and templates that are descendents of the specified
+        /// tag name.
         /// </summary>
         /// <param name="galaxy">The current galaxy object</param>
         /// <param name="tagName">The base instance or template to check in</param>
         /// <exception cref="ArgumentNullException">Thrown when tagName is null</exception>
         /// <exception cref="GalaxyException">Thrown when command result is not successful</exception>
+        /// <remarks>This extension allows you to perform a hierarchical check in of an object and is descendents
+        /// without having to worry about checked out derived templates or instances,
+        /// since the  provided CheckIn method on a single gObject will fail if it has checked out descendents.
+        /// </remarks>
         public static void DeepCheckIn(this IGalaxy galaxy, string tagName)
         {
             if (tagName == null) throw new ArgumentNullException(nameof(tagName), "Value cannot be null");
@@ -144,10 +152,10 @@ namespace GServer.Archestra.Extensions
             if (tagName == null) throw new ArgumentNullException(nameof(tagName), "Value cannot be null");
 
             var template = galaxy.QueryObjectsByName(EgObjectIsTemplateOrInstance.gObjectIsTemplate,
-                new[] {tagName})[tagName];
-            
+                new[] { tagName })[tagName];
+
             galaxy.CommandResult.Process();
-            
+
             return template.As<ITemplate>();
         }
 
@@ -186,7 +194,7 @@ namespace GServer.Archestra.Extensions
             if (tagName == null) throw new ArgumentNullException(nameof(tagName), "Value cannot be null");
 
             var instance =
-                galaxy.QueryObjectsByName(EgObjectIsTemplateOrInstance.gObjectIsInstance, new[] {tagName})[tagName];
+                galaxy.QueryObjectsByName(EgObjectIsTemplateOrInstance.gObjectIsInstance, new[] { tagName })[tagName];
             galaxy.CommandResult.Process();
             return instance.As<IInstance>();
         }
@@ -439,15 +447,75 @@ namespace GServer.Archestra.Extensions
             instances.CommandResults.Process();
         }
 
-        public static void Unassign(this IGalaxy galaxy, IEnumerable<string> tagNames)
+        public static void UnAssign(this IGalaxy galaxy, IEnumerable<string> tagNames)
         {
             var instances = galaxy.GetInstancesByName(tagNames);
+
             instances.Host = string.Empty;
             instances.CommandResults.Process();
+
             instances.Area = string.Empty;
             instances.CommandResults.Process();
+
             instances.Container = string.Empty;
             instances.CommandResults.Process();
+        }
+
+        /// <summary>
+        /// Exports object to aaPKG file
+        /// </summary>
+        /// <param name="galaxy"></param>
+        /// <param name="tagName">Name of objects to export</param>
+        /// <param name="fileName">Name of file to export to</param>
+        ///<remarks>Can only export template and instance objects. Graphics/Symbols are not supported. This is a
+        /// limitation of the GRAccess SDK. Make sure to append fileName with .aaPKG</remarks>
+        public static void ExportObjects(this IGalaxy galaxy, string tagName, string fileName) =>
+            ExportObjectsInternal(galaxy, new[] { tagName }, fileName);
+
+        /// <summary>
+        /// Exports objects to aaPKG file
+        /// </summary>
+        /// <param name="galaxy"></param>
+        /// <param name="tagNames">Names of objects to export</param>
+        /// <param name="fileName">Name of file to export to</param>
+        /// <remarks>Can only export template and instance objects. Graphics/Symbols are not supported. This is a
+        /// limitation of the GRAccess SDK. Make sure to append fileName with .aaPKG</remarks>
+        public static void ExportObjects(this IGalaxy galaxy, IEnumerable<string> tagNames, string fileName) =>
+            ExportObjectsInternal(galaxy, tagNames, fileName);
+        
+        public static void ImportObjects(this IGalaxy galaxy, string fileName, bool overwrite)
+        {
+            if (fileName == null) throw new ArgumentNullException(nameof(fileName));
+            
+            galaxy.ImportObjects(fileName, overwrite);
+            galaxy.CommandResults.Process();
+        }
+
+        public static void ExportGraphic(this IGalaxy galaxy, string tagName, string fileName)
+        {
+            var access = new GraphicAccess();
+            var result = access.ExportGraphicToXml(galaxy, tagName, fileName);
+            result.Process();
+        }
+
+        public static void ImportGraphic(this IGalaxy galaxy, string fileName, string tagName, bool overwrite)
+        {
+            var access = new GraphicAccess();
+            var result = access.ImportGraphicFromXml(galaxy, tagName, fileName, overwrite);
+            result.Process();
+        }
+
+        public static void Dump(this IGalaxy galaxy, string tagName, string fileName) =>
+            DumpInternal(galaxy, new[] { tagName }, fileName);
+
+        public static void Dump(this IGalaxy galaxy, IEnumerable<string> tagNames, string fileName) =>
+            DumpInternal(galaxy, tagNames, fileName);
+        
+        public static void Load(this IGalaxy galaxy, string fileName, bool overwrite)
+        {
+            var mode = overwrite ? GRLoadMode.GRLoadModeUpdate : GRLoadMode.GRLoadModeIgnore; 
+            galaxy.GRLoad(fileName, mode);
+            galaxy.CommandResults.Process();
         }
 
         /// <summary>
@@ -498,6 +566,43 @@ namespace GServer.Archestra.Extensions
             if (!tagName.StartsWith("$"))
                 tagName = tagName.Insert(0, "$");
             return tagName;
+        }
+
+        /// <summary>
+        /// Exports the list of provided objects as an aaPKG file. 
+        /// </summary>
+        /// <param name="galaxy"></param>
+        /// <param name="tagNames">List of tag names to export</param>
+        /// <param name="fileName">Destination file name of the aaPKG</param>
+        /// <exception cref="InvalidOperationException"></exception>
+        private static void ExportObjectsInternal(IGalaxy galaxy, IEnumerable<string> tagNames, string fileName)
+        {
+            if (tagNames == null) throw new ArgumentNullException(nameof(tagNames));
+            if (fileName == null) throw new ArgumentNullException(nameof(fileName));
+
+            var collection = galaxy.GetObjectsByName(tagNames);
+
+            if (collection == null)
+                throw new InvalidOperationException(
+                    "Could not find provided tagNames in galaxy. Ensure that the objects are either templates or instances");
+
+            collection.ExportObjects(EExportType.exportAsPDF, fileName);
+            collection.CommandResults.Process();
+        }
+
+        private static void DumpInternal(IGalaxy galaxy, IEnumerable<string> tagNames, string fileName)
+        {
+            if (tagNames == null) throw new ArgumentNullException(nameof(tagNames));
+            if (fileName == null) throw new ArgumentNullException(nameof(fileName));
+
+            var collection = galaxy.GetInstancesByName(tagNames);
+
+            if (collection == null)
+                throw new InvalidOperationException(
+                    "Could not find provided tagNames in galaxy. Ensure that the objects are either templates or instances");
+
+            collection.ExportObjects(EExportType.exportAsCSV, fileName);
+            collection.CommandResults.Process();
         }
     }
 }

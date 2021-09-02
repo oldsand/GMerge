@@ -60,7 +60,7 @@ namespace GServer.Archestra.IntegrationTests.Base
         
         public static class Symbols
         {
-            public const string React = nameof(React);
+            public static ArchestraGraphic React => new("React");
             public const string ReactorDisplay = nameof(ReactorDisplay);
         }
     }

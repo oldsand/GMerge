@@ -17,7 +17,7 @@ namespace GCommon.Primitives
 
         public int InclusionId { get; private set; }
         public int ArchiveId { get; private set; }
-        public Archive Archive { get; private set; }
+        public ArchiveConfig ArchiveConfig { get; private set; }
         public Template Template { get; private set; }
         public InclusionOption InclusionOption { get; set; }
         public bool IncludeInstances { get; set; }

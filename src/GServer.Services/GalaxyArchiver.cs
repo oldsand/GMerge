@@ -30,7 +30,7 @@ namespace GServer.Services
             
             archiveObject.Archive(data);
             
-            _archiveRepository.Objects.Upsert(archiveObject);
+            _archiveRepository.UpsertObject(archiveObject);
             _archiveRepository.Save();
         }
         

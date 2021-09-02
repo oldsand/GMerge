@@ -1,19 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 using ArchestrA.GRAccess;
-using ArchestrA.Visualization.GraphicAccess;
 using GServer.Archestra.Extensions;
 using GCommon.Core.Utilities;
 using GCommon.Primitives;
 using GServer.Archestra.Abstractions;
 using GServer.Archestra.Exceptions;
-using GServer.Archestra.Internal;
-using GServer.Archestra.Options;
+using GServer.Archestra.Helpers;
 using NLog;
 
 namespace GServer.Archestra
@@ -24,12 +19,13 @@ namespace GServer.Archestra
 
         // ReSharper disable PrivateFieldCanBeConvertedToLocalVariable because this has to be in memory for operations to work (according to documentation)
         private readonly GRAccessAppClass _grAccessApp;
-        private readonly GraphicAccess _graphicAccess;
 
         public GalaxyRepository(string galaxyName)
         {
+            if (string.IsNullOrEmpty(galaxyName))
+                throw new ArgumentNullException(nameof(galaxyName), "Value can not be null");
+
             _grAccessApp = new GRAccessAppClass();
-            _graphicAccess = new GraphicAccess();
             Galaxy = _grAccessApp.QueryGalaxies(Environment.MachineName)[galaxyName];
 
             var result = _grAccessApp.CommandResult;
@@ -42,9 +38,8 @@ namespace GServer.Archestra
         {
             _grAccessApp = grAccessApp ?? throw new ArgumentNullException(nameof(grAccessApp), "Value cannot be null");
             Galaxy = galaxy ?? throw new ArgumentNullException(nameof(galaxy), "Value cannot be null");
-            _graphicAccess = new GraphicAccess();
         }
-        
+
         internal readonly IGalaxy Galaxy;
         public string Name => Galaxy.Name;
         public string Host => Environment.MachineName;
@@ -93,9 +88,9 @@ namespace GServer.Archestra
         public ArchestraObject GetObject(string tagName)
         {
             Galaxy.SynchronizeClient();
-            
+
             var gObject = Galaxy.GetObjectByName(tagName);
-            
+
             return gObject?.Map();
         }
 
@@ -110,13 +105,12 @@ namespace GServer.Archestra
         public ArchestraGraphic GetGraphic(string tagName)
         {
             Galaxy.SynchronizeClient();
-            
+
             using var tempDirectory = new TempDirectory(ApplicationPath.TempSymbolSubPath);
             var fileName = Path.Combine(tempDirectory.FullName, $@"{tagName}.xml");
 
-            var fileManager = new GalaxyFileManager(this);
-            fileManager.ExportGraphic(tagName, fileName);
-            
+            Galaxy.ExportGraphic(tagName, fileName);
+
             var symbol = XElement.Load(fileName);
 
             return new ArchestraGraphic(tagName).Materialize(symbol);
@@ -163,8 +157,7 @@ namespace GServer.Archestra
             var fileName = Path.Combine(tempDirectory.FullName, $"{archestraGraphic.TagName}.xml");
             doc.Save(fileName);
             
-            var fileManager = new GalaxyFileManager(this);
-            fileManager.ImportGraphic(fileName, archestraGraphic.TagName, false);
+            Galaxy.ImportGraphic(fileName, archestraGraphic.TagName, false);
 
             //TODO: Can we then set the folder container or no?
         }
@@ -236,40 +229,8 @@ namespace GServer.Archestra
             using var tempDirectory = new TempDirectory(ApplicationPath.TempSymbolSubPath);
             var fileName = Path.Combine(tempDirectory.FullName, $"{archestraGraphic.TagName}.xml");
             doc.Save(fileName);
-            
-            var fileManager = new GalaxyFileManager(this);
-            fileManager.ImportGraphic(fileName, archestraGraphic.TagName, true);
-        }
 
-        public void Deploy(IEnumerable<string> tagNames, DeploymentOptions options)
-        {
-            if (options == null) throw new ArgumentException("Value cannot be null");
-
-            Galaxy.SynchronizeClient();
-
-            var deployedOption = options.DeployedOption.ToMx();
-            var skipUnDeployed = options.SkipUnDeployed
-                ? ESkipIfCurrentlyUndeployed.doSkipIfCurrentlyUndeployed
-                : ESkipIfCurrentlyUndeployed.dontSkipIfCurrentlyUndeployed;
-            var deployOnScan = options.DeployOnScan
-                ? EDeployOnScan.doDeployOnScan
-                : EDeployOnScan.dontDeployOnScan;
-            var forceOffScan = options.ForceOffScan
-                ? EForceOffScan.doForceOffScan
-                : EForceOffScan.dontForceOffScan;
-
-            var instances = Galaxy.GetInstancesByName(tagNames);
-
-            instances.Deploy(deployedOption, skipUnDeployed, deployOnScan, forceOffScan,
-                options.MarkAsDeployOnStatusMismatch);
-            Galaxy.CommandResults.Process();
-        }
-
-        public void Undeploy(IEnumerable<string> tagNames, DeploymentOptions options = null)
-        {
-            var instances = Galaxy.GetInstancesByName(tagNames);
-            instances.Undeploy();
-            Galaxy.CommandResults.Process();
+            Galaxy.ImportGraphic(fileName, archestraGraphic.TagName, true);
         }
     }
 }

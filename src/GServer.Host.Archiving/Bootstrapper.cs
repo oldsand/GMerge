@@ -81,7 +81,7 @@ namespace GServer.Host.Archiving
             foreach (var galaxy in galaxies)
             {
                 var version = ArchestraVersion.FromCdi(galaxy.CdiVersion);
-                builder.Build(new Archive(galaxy.Name, version));
+                builder.Build(new ArchiveConfig(galaxy.Name, version));
             }
         }
     }

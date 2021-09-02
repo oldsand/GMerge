@@ -1,9 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Threading;
-using System.Threading.Tasks;
 using GCommon.Primitives;
-using GServer.Archestra.Options;
 
 namespace GServer.Archestra.Abstractions
 {
@@ -27,9 +23,5 @@ namespace GServer.Archestra.Abstractions
         void DeleteObjects(IEnumerable<string> tagNames, bool recursive);
         void UpdateObject(ArchestraObject archestraObject);
         void UpdateGraphic(ArchestraGraphic archestraGraphic);
-        void Deploy(IEnumerable<string> tagNames, DeploymentOptions options);
-        void Undeploy(IEnumerable<string> tagNames, DeploymentOptions options);
-        
-        
     }
 }

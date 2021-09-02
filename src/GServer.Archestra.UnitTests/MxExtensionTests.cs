@@ -7,7 +7,7 @@ using FluentAssertions;
 using GCommon.Primitives;
 using GCommon.Primitives.Enumerations;
 using GServer.Archestra.Extensions;
-using GServer.Archestra.Internal;
+using GServer.Archestra.Helpers;
 using NUnit.Framework;
 
 namespace GServer.Archestra.UnitTests

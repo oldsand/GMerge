@@ -5,7 +5,7 @@ using GCommon.Core.Utilities;
 
 [assembly: InternalsVisibleTo("GServer.Archestra.UnitTests")]
 
-namespace GServer.Archestra.Internal
+namespace GServer.Archestra.Helpers
 {
     internal static class SchemaValidator
     {

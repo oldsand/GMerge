@@ -1,7 +1,6 @@
 using System.IO;
 using System.Security.Principal;
 using GCommon.Archiving;
-using GCommon.Archiving.Repositories;
 using GCommon.Primitives;
 using GCommon.Primitives.Enumerations;
 using GServer.Archestra;
@@ -26,7 +25,7 @@ namespace GServer.Services.IntegrationTests
             var testConnectionString = new SqliteConnectionStringBuilder 
                 {DataSource = _fileName}.ConnectionString;
 
-            var archive = new Archive(Settings.CurrentTestGalaxy, ArchestraVersion.SystemPlatform2014);
+            var archive = new ArchiveConfig(Settings.CurrentTestGalaxy, ArchestraVersion.SystemPlatform2014);
 
             var builder = new ArchiveBuilder();
             builder.Build(archive, testConnectionString);
@@ -59,7 +58,7 @@ namespace GServer.Services.IntegrationTests
             
             archiver.Archive(knownObject);
 
-            var result = _archiveRepo.Objects.Get(14);
+            var result = _archiveRepo.GetObject(14);
             
             Assert.NotNull(result);
             Assert.AreEqual(knownObject.ObjectId, result.ObjectId);
@@ -79,7 +78,7 @@ namespace GServer.Services.IntegrationTests
             archiver.Archive(knownObject);
             archiver.Archive(knownObject);
 
-            var result = _archiveRepo.Objects.Get(14);
+            var result = _archiveRepo.GetObject(14);
             
             Assert.NotNull(result);
             Assert.AreEqual(knownObject.ObjectId, result.ObjectId);

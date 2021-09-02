@@ -5,17 +5,17 @@ using GCommon.Primitives.Enumerations;
 
 namespace GCommon.Primitives
 {
-    public class Archive
+    public class ArchiveConfig
     {
         private readonly List<EventSetting> _eventSettings = new List<EventSetting>();
         private readonly List<InclusionSetting> _inclusionSettings = new List<InclusionSetting>();
         private readonly List<IgnoreSetting> _ignoreSettings = new List<IgnoreSetting>();
 
-        private Archive()
+        private ArchiveConfig()
         {
         }
 
-        public Archive(string galaxyName, ArchestraVersion version = null)
+        public ArchiveConfig(string galaxyName, ArchestraVersion version = null)
         {
             GalaxyName = galaxyName;
             Version = version ?? ArchestraVersion.SystemPlatform2012R2P3;
@@ -24,11 +24,11 @@ namespace GCommon.Primitives
             
             var operations = Operation.List;
             foreach (var operation in operations)
-                UpsertEvent(operation, DefaultIsArchiveEvent(operation));
+                UpsertEvent(operation, IsDefaultArchiveEvent(operation));
             
             var templates = Template.List;
             foreach (var template in templates)
-                UpsertInclusion(template, DefaultInclusionOption(template), DefaultIncludeInstances(template));
+                UpsertInclusion(template, GetDefaultInclusionOption(template), DefaultIncludeInstances(template));
         }
 
         public int ArchiveId { get; private set; }
@@ -41,22 +41,58 @@ namespace GCommon.Primitives
         public IEnumerable<InclusionSetting> InclusionSettings => _inclusionSettings.AsReadOnly();
         public IEnumerable<IgnoreSetting> IgnoreSettings => _ignoreSettings.AsReadOnly();
 
-        public Archive ConfigureEvent(Operation operation, bool isArchiveEvent = true)
+        public ArchiveConfig Configure(Operation operation, bool isArchiveEvent = true)
         {
-            if (operation == null) throw new ArgumentNullException(nameof(operation), "operation can not be null");
+            if (operation == null)
+                throw new ArgumentNullException(nameof(operation), "operation can not be null");
             
             UpsertEvent(operation, isArchiveEvent);
             return this;
         }
         
-        public Archive ConfigureInclusion(Template template, InclusionOption option = null, bool includeInstances = false)
+        public ArchiveConfig Configure(Template template, InclusionOption option = null, bool includeInstances = false)
         {
-            if (template == null) throw new ArgumentNullException(nameof(template), "template can not be null");
+            if (template == null) 
+                throw new ArgumentNullException(nameof(template), "template can not be null");
 
             option ??= InclusionOption.All;
             UpsertInclusion(template, option, includeInstances);
             
             return this;
+        }
+        
+        public bool HasTriggerFor(Operation operation)
+        {
+            if (operation == null)
+                throw new ArgumentNullException(nameof(operation), "operation can not be null");
+            
+            return _eventSettings.Single(x => x.Operation == operation).IsArchiveEvent;
+        }
+        
+        public EventSetting GetEventFor(Operation operation)
+        {
+            if (operation == null) 
+                throw new ArgumentNullException(nameof(operation), "operation can not be null");
+            
+            return _eventSettings.Single(x => x.Operation == operation);
+        }
+        
+        public InclusionSetting GetInclusionFor(Template template)
+        {
+            if (template == null) 
+                throw new ArgumentNullException(nameof(template), "template can not be null");
+            
+            return _inclusionSettings.Single(x => x.Template == template);
+        }
+        
+        public IEnumerable<EventSetting> GetArchiveEvents()
+        {
+            return _eventSettings.Where(x => x.IsArchiveEvent);
+        }
+        
+        public IEnumerable<InclusionSetting> InclusionsWithOption(InclusionOption option)
+        {
+            return _inclusionSettings.Where(x => x.InclusionOption == option);
         }
 
         private void UpsertEvent(Operation operation, bool isArchiveEvent)
@@ -88,7 +124,7 @@ namespace GCommon.Primitives
             inclusionSetting.IncludeInstances = includeInstances;
         }
         
-        private static bool DefaultIsArchiveEvent(Operation operation)
+        private static bool IsDefaultArchiveEvent(Operation operation)
         {
             return operation == Operation.CheckInSuccess ||
                    operation == Operation.CreateDerivedTemplate ||
@@ -99,7 +135,7 @@ namespace GCommon.Primitives
                    operation == Operation.Upload;
         }
 
-        private static InclusionOption DefaultInclusionOption(Template template)
+        private static InclusionOption GetDefaultInclusionOption(Template template)
         {
             return template == Template.UserDefined || template == Template.Symbol
                 ? InclusionOption.All

@@ -56,8 +56,6 @@
     <ItemGroup>
         <Compile Include="Abstractions\IGalaxyCreator.cs" />
         <Compile Include="Abstractions\IGalaxyDestroyer.cs" />
-        <Compile Include="Abstractions\IGalaxyExporter.cs" />
-        <Compile Include="Abstractions\IGalaxyImporter.cs" />
         <Compile Include="Abstractions\IGalaxyRepositoryFactory.cs" />
         <Compile Include="Abstractions\IGalaxyFinder.cs" />
         <Compile Include="Abstractions\IGalaxyRepository.cs" />
@@ -99,15 +97,12 @@
         <Compile Include="Extensions\TypeExtensions.cs" />
         <Compile Include="Extensions\MxValueExtensions.cs" />
         <Compile Include="GalaxyAccess.cs" />
-        <Compile Include="GalaxyFileManager.cs" />
         <Compile Include="GalaxyRepository.cs" />
         <Compile Include="GalaxyRepositoryFactory.cs" />
-        <Compile Include="Internal\MxFactory.cs" />
-        <Compile Include="Internal\MxReference.cs" />
-        <Compile Include="Internal\SchemaValidator.cs" />
-        <Compile Include="Options\CsvImportOptions.cs" />
-        <Compile Include="Options\CurrentlyDeployedOption.cs" />
-        <Compile Include="Options\DeploymentOptions.cs" />
+        <Compile Include="Helpers\MxFactory.cs" />
+        <Compile Include="Helpers\MxReference.cs" />
+        <Compile Include="Helpers\ObjectEditor.cs" />
+        <Compile Include="Helpers\SchemaValidator.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
     <ItemGroup>

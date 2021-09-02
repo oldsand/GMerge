@@ -41,28 +41,28 @@ namespace GServer.Services
         public ArchiveObjectData GetArchiveObject(int objectId)
         {
             using var repo = _archiveRepositoryFactory.Create(DbStringBuilder.ArchiveString(_galaxyRepository.Name));
-            var archiveObject = repo.Objects.Get(objectId);
+            var archiveObject = repo.GetObject(objectId);
             return DataMapper.Map(archiveObject);
         }
 
         public IEnumerable<ArchiveObjectData> GetArchiveObjects()
         {
             using var repo = _archiveRepositoryFactory.Create(DbStringBuilder.ArchiveString(_galaxyRepository.Name));
-            var archiveObjects = repo.Objects.GetAll();
+            var archiveObjects = repo.GetObjects();
             return archiveObjects.Select(DataMapper.Map);
         }
 
         public IEnumerable<ArchiveEntryData> GetArchiveEntries()
         {
             using var repo = _archiveRepositoryFactory.Create(DbStringBuilder.ArchiveString(_galaxyRepository.Name));
-            var archiveEntries = repo.Objects.GetAll().SelectMany(o => o.Entries);
+            var archiveEntries = repo.GetObjects().SelectMany(o => o.Entries);
             return archiveEntries.Select(DataMapper.Map);
         }
 
         public GalaxyObjectData GetGalaxyObject(int objectId)
         {
             using var repo = _archiveRepositoryFactory.Create(DbStringBuilder.ArchiveString(_galaxyRepository.Name));
-            var archiveObject = repo.Objects.Get(objectId);
+            var archiveObject = repo.GetObject(objectId);
             if (archiveObject == null) return null;
 
             if (archiveObject.Template == Template.Symbol)
@@ -75,7 +75,7 @@ namespace GServer.Services
         public GalaxySymbolData GetGalaxySymbol(int objectId)
         {
             using var repo = _archiveRepositoryFactory.Create(DbStringBuilder.ArchiveString(_galaxyRepository.Name));
-            var archiveObject = repo.Objects.Get(objectId);
+            var archiveObject = repo.GetObject(objectId);
             if (archiveObject == null) return null;
 
             if (archiveObject.Template != Template.Symbol)
@@ -88,13 +88,15 @@ namespace GServer.Services
         public IEnumerable<EventSettingData> GetEventSettings()
         {
             using var repo = _archiveRepositoryFactory.Create(DbStringBuilder.ArchiveString(_galaxyRepository.Name));
-            return repo.Events.GetAll().Select(DataMapper.Map);
+            var config = repo.GetConfig();
+            return config.EventSettings.Select(DataMapper.Map);
         }
 
         public IEnumerable<InclusionSettingData> GetInclusionSettings()
         {
             using var repo = _archiveRepositoryFactory.Create(DbStringBuilder.ArchiveString(_galaxyRepository.Name));
-            return repo.Inclusions.GetAll().Select(DataMapper.Map);
+            var config = repo.GetConfig();
+            return config.InclusionSettings.Select(DataMapper.Map);
         }
 
         public void ArchiveObject(int objectId)
@@ -115,7 +117,7 @@ namespace GServer.Services
         public void RemoveObject(int objectId)
         {
             using var repo = _archiveRepositoryFactory.Create(DbStringBuilder.ArchiveString(_galaxyRepository.Name));
-            repo.Objects.Delete(objectId);
+            repo.DeleteObject(objectId);
         }
 
         public void UpdateEventSetting(IEnumerable<EventSettingData> eventSettings)
