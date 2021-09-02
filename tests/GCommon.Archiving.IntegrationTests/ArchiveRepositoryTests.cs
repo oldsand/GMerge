@@ -66,7 +66,7 @@ namespace GCommon.Archiving.IntegrationTests
             using var repo = new ArchiveRepository(_builder.ConnectionString);
             var archiveObject = new ArchiveObject(1, "$SomeTag", 1, Template.UserDefined);
             
-            var result = repo.IsArchivable(archiveObject);
+            var result = repo.IsArchivable(archiveObject, Operation.CreateInstance);
 
             result.Should().BeTrue();
         }
@@ -188,7 +188,7 @@ namespace GCommon.Archiving.IntegrationTests
         }
 
         [Test]
-        public void UpsertObject_ExistingObject_ReturnsExpectedObject()
+        public void UpsertObject_ExistingObject_ShouldReturnExpectedProperties()
         {
             Seed();
             using var repo = new ArchiveRepository(_builder.ConnectionString);
@@ -199,13 +199,15 @@ namespace GCommon.Archiving.IntegrationTests
 
             var target = repo.GetObject(1);
 
-            Assert.NotNull(target);
-            Assert.AreEqual("Some Test Object", target.TagName);
-            Assert.AreEqual(2, target.Version);
+            target.TagName.Should().Be("Some Test Object");
+            target.Version.Should().Be(2);
+            target.Template.Should().Be(Template.UserDefined);
+            target.IsTemplate.Should().BeFalse();
+            target.ModifiedOn.Should().BeWithin(TimeSpan.FromSeconds(1));
         }
 
         [Test]
-        public void UpsertObject_NewObject_ReturnsExpectedObject()
+        public void UpsertObject_NewObject_ShouldReturnExpectedProperties()
         {
             Seed();
             using var repo = new ArchiveRepository(_builder.ConnectionString);
@@ -216,14 +218,17 @@ namespace GCommon.Archiving.IntegrationTests
 
             var target = repo.GetObject(12);
 
-            Assert.NotNull(target);
-            Assert.AreEqual("New Object", target.TagName);
-            Assert.AreEqual(1, target.Version);
-            Assert.AreEqual(Template.Symbol, target.Template);
+            target.Should().NotBeNull();
+            target.TagName.Should().Be("New Object");
+            target.Version.Should().Be(1);
+            target.Template.Should().Be(Template.Symbol);
+            target.IsTemplate.Should().BeFalse();
+            target.ModifiedOn.Should().BeWithin(TimeSpan.FromSeconds(1));
+            target.AddedOn.Should().BeWithin(TimeSpan.FromSeconds(1));
         }
 
         [Test]
-        public void UpsertObject_ExistingObjectAddEntry_ReturnsExpectedEntries()
+        public void UpsertObject_ExistingObjectWithAddedEntry_ShouldReturnExpectedEntry()
         {
             Seed();
             using var repo = new ArchiveRepository(_builder.ConnectionString);
@@ -234,38 +239,45 @@ namespace GCommon.Archiving.IntegrationTests
             repo.Save();
 
             var target = repo.GetObject(2);
-
-            Assert.That(target.Entries, Has.Count.EqualTo(1));
+            target.Entries.Should().HaveCount(1);
 
             var entry = target.Entries.First();
-            Assert.NotNull(entry);
+            entry.Should().NotBeNull();
+            entry.Version.Should().Be(2);
+            entry.ArchivedOn.Should().BeWithin(TimeSpan.FromSeconds(1));
+            entry.ObjectId.Should().Be(2);
 
             var data = Encoding.UTF8.GetString(entry.CompressedData.Decompress());
-            Assert.AreEqual("This is a new entry test", data);
+            data.Should().Be("This is a new entry test");
         }
         
          [Test]
-        public void UpsertObject_ExistingObjectAddLog_ReturnsExpectedLog()
+        public void UpsertObject_ExistingObjectWithAddedLog_ShouldReturnExpectedLog()
         {
             Seed();
             using var repo = new ArchiveRepository(_builder.ConnectionString);
             var archiveObject = new ArchiveObject(2, "Some Test Object", 2, Template.UserDefined);
+            archiveObject.Archive(Encoding.UTF8.GetBytes("We need to add an entry to add a log to"));
             archiveObject.GetLatestEntry().UpdateLog(213, DateTime.Now, Operation.Rename, "Comment", Environment.UserName);
 
             repo.UpsertObject(archiveObject);
             repo.Save();
 
             var target = repo.GetObject(2);
-
-            Assert.That(target.Logs, Has.Count.EqualTo(1));
+            target.Logs.Should().HaveCount(1);
 
             var log = target.Logs.First();
-            Assert.NotNull(log);
-            Assert.AreEqual(213, log.ChangeLogId);
+            
+            log.Should().NotBeNull();
+            log.ChangeLogId.Should().Be(213);
+            log.ChangedOn.Should().BeWithin(TimeSpan.FromSeconds(1));
+            log.Operation.Should().Be(Operation.Rename);
+            log.Comment.Should().Be("Comment");
+            log.UserName.Should().Be(Environment.UserName);
         }
 
         [Test]
-        public void UpsertObject_ExistingObjectWithEntryAddEntry_ReturnsExpectedEntries()
+        public void UpsertObject_ExistingObjectWithEntryAndAddedEntry_ShouldReturnExpectedEntries()
         {
             Seed();
             using var repo = new ArchiveRepository(_builder.ConnectionString);
@@ -276,35 +288,40 @@ namespace GCommon.Archiving.IntegrationTests
             repo.Save();
 
             var target = repo.GetObject(311);
-
-            Assert.That(target.Entries, Has.Count.EqualTo(2));
+            target.Entries.Should().HaveCount(2);
 
             var latest = target.GetLatestEntry();
-            Assert.NotNull(latest);
-            Assert.AreEqual("This is a new entry test", Encoding.UTF8.GetString(latest.CompressedData.Decompress()));
+            latest.Should().NotBeNull();
+            latest.Version.Should().Be(123);
+            latest.ArchivedOn.Should().BeWithin(TimeSpan.FromSeconds(1));
+            latest.ObjectId.Should().Be(311);
+
+            var data = Encoding.UTF8.GetString(latest.CompressedData.Decompress());
+            data.Should().Be("This is a new entry test");
         }
 
         [Test]
-        public void UpsertObject_ExistingObjectWithLogAddLog_ShouldHaveExpectedLogs()
+        public void UpsertObject_ExistingObjectWithLogAndAddedLog_ShouldReturnExpectedLogs()
         {
             Seed();
             using var repo = new ArchiveRepository(_builder.ConnectionString);
             var archiveObject = new ArchiveObject(311, "Upsert Tester", 123, Template.UserDefined);
+            archiveObject.Archive(Encoding.UTF8.GetBytes("We need to add a new  entry to add a new log to"));
             archiveObject.GetLatestEntry().UpdateLog(213, DateTime.Now, Operation.Rename, "Comment", Environment.UserName);
 
             repo.UpsertObject(archiveObject);
             repo.Save();
 
             var target = repo.GetObject(311);
-
-            Assert.That(target.Logs, Has.Count.EqualTo(2));
+            target.Logs.Should().HaveCount(2);
 
             var latest = target.GetLatestLog();
-            Assert.NotNull(latest);
-            Assert.AreEqual(213, latest.ChangeLogId);
-            Assert.AreEqual(Operation.Rename, latest.Operation);
-            Assert.AreEqual("Comment", latest.Comment);
-            Assert.AreEqual(Environment.UserName, latest.UserName);
+            latest.Should().NotBeNull();
+            latest.ChangeLogId.Should().Be(213);
+            latest.ChangedOn.Should().BeWithin(TimeSpan.FromSeconds(1));
+            latest.Operation.Should().Be(Operation.Rename);
+            latest.Comment.Should().Be("Comment");
+            latest.UserName.Should().Be(Environment.UserName);
         }
 
         [Test]
@@ -319,14 +336,16 @@ namespace GCommon.Archiving.IntegrationTests
             repo.Save();
 
             var target = repo.GetObject(12);
-
-            Assert.That(target.Entries, Has.Count.EqualTo(1));
+            target.Entries.Should().HaveCount(1);
 
             var entry = target.Entries.First();
-            Assert.NotNull(entry);
+            entry.Should().NotBeNull();
+            entry.Version.Should().Be(1);
+            entry.ArchivedOn.Should().BeWithin(TimeSpan.FromSeconds(1));
+            entry.ObjectId.Should().Be(12);
 
             var data = Encoding.UTF8.GetString(entry.CompressedData.Decompress());
-            Assert.AreEqual("This is a new entry test", data);
+            data.Should().Be("This is a new entry test");
         }
 
         [Test]
@@ -339,7 +358,7 @@ namespace GCommon.Archiving.IntegrationTests
             repo.Save();
 
             var result = repo.ObjectExists(2);
-            Assert.False(result);
+            result.Should().BeFalse();
         }
 
         [Test]
@@ -352,56 +371,56 @@ namespace GCommon.Archiving.IntegrationTests
             repo.Save();
 
             var result = repo.ObjectExists(6);
-            Assert.False(result);
+            result.Should().BeFalse();
         }
         
         [Test]
-        public void GetLog_ExistingLog_ReturnsExpectedEntity()
+        public void GetLog_ExistingLogShouldReturnExpectedProperties()
         {
             Seed();
             var repo = new ArchiveRepository(_builder.ConnectionString);
 
             var result = repo.GetLog(1);
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.ArchiveObject);
-            Assert.AreEqual(1, result.ChangeLogId);
-            Assert.AreEqual(DateTime.Today, result.ChangedOn);
-            Assert.AreEqual(Operation.CreateInstance, result.Operation);
-            Assert.AreEqual("Created new instance", result.Comment);
-            Assert.AreEqual(Environment.UserName, result.UserName);
+            result.Should().NotBeNull();
+            result.ArchiveObject.Should().NotBeNull();
+            result.ChangeLogId.Should().Be(1);
+            result.ChangedOn.Should().Be(DateTime.Today);
+            result.Operation.Should().Be(Operation.CreateInstance);
+            result.Comment.Should().Be("Created new instance");
+            result.UserName.Should().Be(Environment.UserName);
         }
 
         [Test]
-        public void GetLog_NonExistingLog_ReturnsReturnsNull()
+        public void GetLog_NonExistingLog_ShouldBeNull()
         {
             Seed();
             var repo = new ArchiveRepository(_builder.ConnectionString);
 
             var result = repo.GetLog(10);
 
-            Assert.Null(result);
+            result.Should().BeNull();
         }
 
         [Test]
-        public void GetLogs_WhenCalled_ReturnsExpectedCount()
+        public void GetLogs_WhenCalled_ShouldHaveExpectedCount()
         {
             Seed();
             var repo = new ArchiveRepository(_builder.ConnectionString);
 
             var results = repo.GetLogs().ToList();
 
-            Assert.That(results, Has.Count.EqualTo(5));
+            results.Should().HaveCount(5);
         }
 
         [Test]
-        public void GetLogs_EmptyDatabase_ReturnsIsEmpty()
+        public void GetLogs_EmptyDatabase_ShouldBeEmpty()
         {
             var repo = new ArchiveRepository(_builder.ConnectionString);
 
             var results = repo.GetLogs().ToList();
 
-            Assert.IsEmpty(results);
+            results.Should().BeEmpty();
         }
 
         [Test]
@@ -424,7 +443,7 @@ namespace GCommon.Archiving.IntegrationTests
 
             var results = repo.FindLogs(x => x.ChangedOn == DateTime.Today).ToList();
 
-            Assert.That(results, Has.Count.EqualTo(2));
+            results.Should().HaveCount(2);
         }
         
         [Test]
@@ -435,8 +454,8 @@ namespace GCommon.Archiving.IntegrationTests
 
             var result = repo.GetQueuedLog(2);
 
-            Assert.NotNull(result);
-            Assert.AreEqual(2, result.ChangeLogId);
+            result.Should().NotBeNull();
+            result.ChangeLogId.Should().Be(2);
         }
 
         [Test]
@@ -446,7 +465,7 @@ namespace GCommon.Archiving.IntegrationTests
 
             var result = repo.GetQueuedLog(2221);
 
-            Assert.Null(result);
+            result.Should().BeNull();
         }
 
         [Test]
@@ -460,12 +479,12 @@ namespace GCommon.Archiving.IntegrationTests
 
             var result = repo.GetQueuedLog(6);
 
-            Assert.NotNull(result);
-            Assert.AreEqual(6, result.ChangeLogId);
-            Assert.AreEqual(321, result.ObjectId);
-            Assert.AreEqual(Operation.CheckInSuccess, result.Operation);
-            Assert.AreEqual("Comment", result.Comment);
-            Assert.AreEqual("username", result.UserName);
+            result.Should().NotBeNull();
+            result.ChangeLogId.Should().Be(6);
+            result.ObjectId.Should().Be(321);
+            result.Operation.Should().Be(Operation.CheckInSuccess);
+            result.Comment.Should().Be("Comment");
+            result.UserName.Should().Be("username");
         }
 
         [Test]
@@ -479,8 +498,8 @@ namespace GCommon.Archiving.IntegrationTests
 
             var result = repo.GetQueuedLog(2);
 
-            Assert.NotNull(result);
-            Assert.AreEqual(2, result.ChangeLogId);
+            result.Should().NotBeNull();
+            result.ChangeLogId.Should().Be(2);
         }
 
         [Test]
@@ -493,7 +512,7 @@ namespace GCommon.Archiving.IntegrationTests
 
             var result = repo.GetQueuedLog(3);
 
-            Assert.Null(result);
+            result.Should().BeNull();
         }
 
         [Test]
@@ -506,7 +525,7 @@ namespace GCommon.Archiving.IntegrationTests
 
             var result = repo.GetQueuedLog(300);
 
-            Assert.Null(result);
+            result.Should().BeNull();
         }
         
         [Test]
@@ -515,13 +534,13 @@ namespace GCommon.Archiving.IntegrationTests
             Seed();
             var repo = new ArchiveRepository(_builder.ConnectionString);
             var target = repo.GetQueuedLog(2);
-            Assert.AreEqual(ArchiveState.New, target.State);
+            target.State.Should().Be(ArchiveState.New);
             
             target.State = ArchiveState.Processing;
             repo.Save();
             
             target = repo.GetQueuedLog(2);
-            Assert.AreEqual(ArchiveState.Processing, target.State);
+            target.State.Should().Be(ArchiveState.Processing);
         }
 
         private void Seed()

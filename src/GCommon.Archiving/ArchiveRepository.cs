@@ -71,13 +71,6 @@ namespace GCommon.Archiving
 
         public void UpsertObject(ArchiveObject archiveObject)
         {
-            /*foreach (var archiveLog in archiveObject.Logs)
-            {
-                if (_context.Logs.Any(x => x.ChangeLogId == archiveLog.ChangeLogId))
-                    _context.Entry(archiveLog).State = EntityState.Modified;
-                _context.Entry(archiveLog).State = EntityState.Added;
-            }*/
-            
             if (_context.Objects.All(x => x.ObjectId != archiveObject.ObjectId))
             {
                 _context.Entry(archiveObject).State = EntityState.Added;
