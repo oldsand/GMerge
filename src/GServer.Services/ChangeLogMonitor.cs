@@ -21,14 +21,11 @@ namespace GServer.Services
             if (galaxyRepository == null)
                 throw new ArgumentNullException(nameof(galaxyRepository), "galaxy repository can not be null");
 
-            var galaxyName = galaxyRepository.Name;
+            Logger.Trace("Initializing archive processors {Galaxy}",galaxyRepository.Name);
             
-            Logger.Trace("Initializing archive processors {Galaxy}",galaxyName);
-            
-            SetupServiceBroker(galaxyName);
-            InitializeDependency(galaxyName);
+            SetupServiceBroker(galaxyRepository.Name);
+            InitializeDependency(galaxyRepository.Name);
             InitializePipeline(galaxyRepository);
-            
         }
 
         private static void SetupServiceBroker(string databaseName)

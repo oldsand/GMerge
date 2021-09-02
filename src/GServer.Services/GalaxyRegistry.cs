@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
-using System.Threading;
 using System.Threading.Tasks;
 using GServer.Archestra;
 using GServer.Archestra.Abstractions;
@@ -15,19 +14,16 @@ namespace GServer.Services
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly IGalaxyRepositoryFactory _repositoryFactory;
-        private readonly IGalaxyFinder _galaxyFinder;
         private readonly List<IGalaxyRepository> _galaxies = new();
 
         public GalaxyRegistry()
         {
             _repositoryFactory = new GalaxyRepositoryFactory();
-            _galaxyFinder = new GalaxyAccess();
         }
 
-        internal GalaxyRegistry(IGalaxyRepositoryFactory galaxyRepositoryFactory, IGalaxyFinder galaxyFinder)
+        internal GalaxyRegistry(IGalaxyRepositoryFactory galaxyRepositoryFactory)
         {
             _repositoryFactory = galaxyRepositoryFactory;
-            _galaxyFinder = galaxyFinder;
         }
 
         public bool IsRegistered(string galaxyName, string userName)
@@ -108,39 +104,6 @@ namespace GServer.Services
                 Logger.Debug("Galaxy {Galaxy} successfully registered to {User}", galaxyRepository.Name, userName);
             });
         }
-
-        /*public async Task RegisterAllAsync(CancellationToken token)
-        {
-            var user = WindowsIdentity.GetCurrent();
-            var unregisteredGalaxies = (await _galaxyFinder.FindAllAsync(token))
-                .Where(g => !IsRegistered(g, user.Name)).ToList();
-            var creationTasks = unregisteredGalaxies.Select(g => _repositoryFactory.CreateAsync(g, token)).ToList();
-
-            while (creationTasks.Any())
-            {
-                var connection = await Task.WhenAny(creationTasks);
-                creationTasks.Remove(connection);
-                var galaxy = connection.Result;
-                await galaxy.LoginAsync(user.Name, token);
-                _galaxies.Add(galaxy);
-            }
-        }*/
-
-        /*public async Task RegisterAllAsync(string userName, CancellationToken token)
-        {
-            var galaxies = (await _galaxyFinder.FindAllAsync(token))
-                .Where(g => !IsRegistered(g, userName)).ToList();
-            var creationTasks = galaxies.Select(g => _repositoryFactory.CreateAsync(g, token)).ToList();
-
-            while (creationTasks.Any())
-            {
-                var connection = await Task.WhenAny(creationTasks);
-                creationTasks.Remove(connection);
-                var galaxy = connection.Result;
-                await galaxy.LoginAsync(userName, token);
-                _galaxies.Add(galaxy);
-            }
-        }*/
 
         public void Unregister(string galaxyName, string userName)
         {

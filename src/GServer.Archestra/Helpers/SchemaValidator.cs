@@ -7,7 +7,7 @@ using GCommon.Core.Utilities;
 
 namespace GServer.Archestra.Helpers
 {
-    internal static class SchemaValidator
+    internal class SchemaValidator
     {
         private const string SchemaNameSpace = "Schemas";
         private const string GraphicsSchemaFileName = "aaGraphics.xsd";
