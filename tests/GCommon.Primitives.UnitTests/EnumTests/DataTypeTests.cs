@@ -82,10 +82,10 @@ namespace GCommon.Primitives.UnitTests.EnumTests
         [Test]
         public void DataType_Reference_ShouldBeExpectedType()
         {
-            var dataType = DataType.Reference;
+            var dataType = DataType.ReferenceType;
 
             dataType.Should().NotBeNull();
-            dataType.Should().Be(DataType.Reference);
+            dataType.Should().Be(DataType.ReferenceType);
         }
         
         [Test]

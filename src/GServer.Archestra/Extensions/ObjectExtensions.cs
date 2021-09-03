@@ -45,7 +45,7 @@ namespace GServer.Archestra.Extensions
             if (gObject.EditStatus == EEditStatus.notBeingEdited)
                 gObject.UndoCheckOut();
             else
-                gObject.CheckIn("Close object without saving changes");
+                gObject.CheckIn("Closed object without saving changes");
             
             gObject.CommandResult.Process();
         }

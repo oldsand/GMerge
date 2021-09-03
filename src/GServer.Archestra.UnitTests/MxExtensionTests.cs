@@ -4,8 +4,8 @@ using System.Globalization;
 using System.Linq;
 using AutoFixture;
 using FluentAssertions;
-using GCommon.Primitives;
 using GCommon.Primitives.Enumerations;
+using GCommon.Primitives.Structs;
 using GServer.Archestra.Extensions;
 using GServer.Archestra.Helpers;
 using NUnit.Framework;
@@ -273,12 +273,7 @@ namespace GServer.Archestra.UnitTests
         [Test]
         public void GetSet_Reference_ShouldBeExpectedValue()
         {
-            var expected = new Reference
-            {
-                FullReference = "Some.Reference",
-                ObjectReference = "Some",
-                AttributeReference = "Reference"
-            };
+            var expected = Reference.FromName("Some.Reference");
             var mxValue = MxFactory.Create<Reference>();
 
             mxValue.SetValue(expected);
@@ -292,9 +287,9 @@ namespace GServer.Archestra.UnitTests
         {
             var expected = new List<Reference>
             {
-                new Reference {FullReference = "Some.Reference1"},
-                new Reference {FullReference = "Some.Reference2"},
-                new Reference {FullReference = "Some.Reference3"},
+                Reference.FromName("Some.Reference1"),
+                Reference.FromName("Some.Reference2"),
+                Reference.FromName("Some.Reference3")
             };
             var mxValue = MxFactory.Create<Reference[]>();
 

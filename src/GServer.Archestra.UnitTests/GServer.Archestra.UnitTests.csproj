@@ -80,6 +80,10 @@
         <Project>{dd496472-fb15-4ffc-86ca-2ac8f0e6cf3c}</Project>
         <Name>GCommon.Core</Name>
       </ProjectReference>
+      <ProjectReference Include="..\GCommon.Differencing\GCommon.Differencing.csproj">
+        <Project>{ae54813c-d492-49cf-99d8-42c22f7a6414}</Project>
+        <Name>GCommon.Differencing</Name>
+      </ProjectReference>
       <ProjectReference Include="..\GCommon.Primitives\GCommon.Primitives.csproj">
         <Project>{446fe87c-5122-4344-9df9-9f641e81a476}</Project>
         <Name>GCommon.Primitives</Name>

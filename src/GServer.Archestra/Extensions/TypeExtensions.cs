@@ -1,6 +1,6 @@
 using ArchestrA.GRAccess;
-using GCommon.Primitives;
 using GCommon.Primitives.Enumerations;
+using GCommon.Primitives.Structs;
 using GServer.Archestra.Helpers;
 
 namespace GServer.Archestra.Extensions
@@ -16,12 +16,7 @@ namespace GServer.Archestra.Extensions
         {
             return (EPACKAGESTATUS) validationStatus.Value;
         }
-
-        /// <summary>
-        /// Convert the GRAccess API ECATEGORY to the primitive library type
-        /// </summary>
-        /// <param name="category"></param>
-        /// <returns></returns>
+        
         public static ObjectCategory ToPrimitive(this ECATEGORY category)
         {
             return ObjectCategory.FromValue((int) category);
@@ -74,23 +69,12 @@ namespace GServer.Archestra.Extensions
 
         public static Reference ToPrimitive(this IMxReference mxReference)
         {
-            return new Reference
-            {
-                FullReference = mxReference.FullReferenceString,
-                ObjectReference = mxReference.AutomationObjectReferenceString,
-                AttributeReference = mxReference.AttributeReferenceString,
-            };
+            return Reference.FromName(mxReference.FullReferenceString);
         }
 
         public static IMxReference ToMx(this Reference reference)
         {
-            var mxValue = new MxValueClass();
-            mxValue.PutMxReference(new MxReference());
-            var value = mxValue.GetMxReference();
-            value.FullReferenceString = reference.FullReference ?? string.Empty;
-            value.AutomationObjectReferenceString = reference.ObjectReference ?? string.Empty;
-            value.AttributeReferenceString = reference.AttributeReference ?? string.Empty;
-            return value;
+            return MxReference.Create(reference);
         }
 
         public static StatusCategory ToPrimitive(this MxStatusCategory mxStatusCategory)

@@ -6,6 +6,8 @@ using ArchestrA.GRAccess;
 using GCommon.Core.Extensions;
 using GCommon.Primitives;
 using GCommon.Primitives.Enumerations;
+using GCommon.Primitives.Structs;
+using GServer.Archestra.Helpers;
 
 namespace GServer.Archestra.Extensions
 {
@@ -47,6 +49,12 @@ namespace GServer.Archestra.Extensions
                 {
                     mxValue.GetCustomEnum(out var value, out _, out _, out _);
                     return value;
+                }),
+                MxDataType.MxQualifiedStruct => mxValue.GetValue<T, Blob>(v =>
+                {
+                    var bytes = Array.Empty<byte>();
+                    v.GetCustomStructVB(out var id, ref bytes);
+                    return Blob.FromData(bytes, id);
                 }),
                 MxDataType.MxInternationalizedString => mxValue.GetValue<T, string>(v => v.GetInternationalString(0)),
                 MxDataType.MxBigString => mxValue.GetValue<T, string>(v => v.GetString()),
@@ -107,6 +115,14 @@ namespace GServer.Archestra.Extensions
                     mxValue.SetValue<T, string>(newValue, (v, x) => v.PutCustomEnum(x, 0, 0, 0));
                     break;
                 case MxDataType.MxQualifiedStruct:
+                    mxValue.SetValue<T, Blob>(newValue, (v, x) =>
+                    {
+                        var data = x.Data;
+                        byte[] pStruct = null;
+                        int pGuid;
+                        v.GetCustomStructVB(out pGuid, ref pStruct);
+                        v.PutCustomStructVB(pGuid, ref data);
+                    });
                     break;
                 case MxDataType.MxInternationalizedString:
                     mxValue.SetValue<T, string>(newValue, (v, x) => v.PutInternationalString(0, x));
@@ -186,46 +202,6 @@ namespace GServer.Archestra.Extensions
             mxValue.GetDimensionSize(out var count);
             if (count > length)
                 mxValue.Empty();
-        }
-
-        private struct CustomStruct
-        {
-            public byte[] Data { get; set; }
-            public int Guid { get; set; }
-        }
-
-        //TODO this doesn't work yet... I don't know how pointers work
-        private static object TryGetCustomStruct(this IMxValue mxValue)
-        {
-            try
-            {
-                var ptr = Marshal.AllocHGlobal(100);
-                mxValue.GetCustomStruct(out var guid, out var structSize, ptr);
-
-                var str = new CustomStruct();
-                Marshal.StructureToPtr(str, ptr, true);
-                Marshal.FreeHGlobal(ptr);
-                return str;
-
-                //var data = new List<byte>();
-                /*for (var i = 0; i < structSize; i++)
-                {
-                    var item =  Marshal.ReadByte(ptr, i);
-                    data.Add(item);
-                }*/
-
-                /*var buffer = new byte[255];
-                fixed (byte* p = buffer)
-                {
-                    var ptr = (IntPtr)p;
-                    mxValue.GetCustomStruct(out var guid, out var structSize, ptr);
-                }
-                return buffer;*/
-            }
-            catch (COMException)
-            {
-                return null;
-            }
         }
     }
 }

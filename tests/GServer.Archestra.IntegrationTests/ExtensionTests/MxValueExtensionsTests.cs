@@ -1,6 +1,6 @@
 using ArchestrA.GRAccess;
+using FluentAssertions;
 using GServer.Archestra.Extensions;
-using GServer.Archestra.IntegrationTests.Base;
 using NUnit.Framework;
 
 namespace GServer.Archestra.IntegrationTests.ExtensionTests
@@ -68,6 +68,18 @@ namespace GServer.Archestra.IntegrationTests.ExtensionTests
             var testStruct = knownObject.GetAttribute("DeployedNode._refAttrKey");
             var value = testStruct?.value;
             Assert.NotNull(value);
+        }
+
+        [Test]
+        public void GetValue_CustomStruct_ShouldReturnExpectedData()
+        {
+            var obj = _galaxy.GetObjectByName(Known.Templates.ReactorSet.TagName);
+
+            var knownStruct = obj.GetAttribute("Concentrate._VisualElementDefinition");
+
+            var data = knownStruct.GetValue<byte[]>();
+
+            data.Should().NotBeEmpty();
         }
     }
 }

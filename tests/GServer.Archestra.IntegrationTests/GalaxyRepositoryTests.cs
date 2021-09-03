@@ -4,7 +4,6 @@ using System.Security.Principal;
 using AutoFixture;
 using FluentAssertions;
 using GCommon.Primitives.Enumerations;
-using GServer.Archestra.IntegrationTests.Base;
 using NUnit.Framework;
 
 namespace GServer.Archestra.IntegrationTests

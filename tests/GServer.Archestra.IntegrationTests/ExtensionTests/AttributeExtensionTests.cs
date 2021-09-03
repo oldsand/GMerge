@@ -1,9 +1,10 @@
 using System.Linq;
 using ArchestrA.GRAccess;
+using FluentAssertions;
 using GCommon.Primitives;
 using GCommon.Primitives.Enumerations;
+using GCommon.Primitives.Structs;
 using GServer.Archestra.Extensions;
-using GServer.Archestra.IntegrationTests.Base;
 using NUnit.Framework;
 
 namespace GServer.Archestra.IntegrationTests.ExtensionTests
@@ -36,8 +37,43 @@ namespace GServer.Archestra.IntegrationTests.ExtensionTests
             var template = _galaxy.GetObjectByName(tagName);
 
             var result = template.Attributes["Auto"].GetValue<bool>();
-            
-            Assert.False(result);
+
+            result.Should().BeFalse();
+        }
+        
+        [Test]
+        public void GetValue_KnownInteger_ShouldReturnExpectedValue()
+        {
+            var tagName = Known.Templates.ReactorSet.TagName;
+            var template = _galaxy.GetObjectByName(tagName);
+
+            var result = template.GetAttribute("BatchNum").GetValue<int>();
+
+            result.Should().Be(0);
+        }
+        
+        [Test]
+        public void GetValue_KnownReference_ShouldReturnExpectedValue()
+        {
+            var expected = Reference.Empty();
+            var tagName = Known.Templates.ReactorSet.TagName;
+            var template = _galaxy.GetObjectByName(tagName);
+
+            var result = template.GetAttribute("BatchNum.InputSource").GetValue<Reference>();
+
+            result.Should().Be(expected);
+        }
+        
+        [Test]
+        public void GetValue_KnownCustomStruct_ShouldReturnExpectedValue()
+        {
+            var tagName = Known.Templates.ReactorSet.TagName;
+            var template = _galaxy.GetObjectByName(tagName);
+
+            var result = template.GetAttribute("Concentrate._VisualElementDefinition").GetValue<Blob>();
+
+            result.Should().NotBeNull();
+            result.Data.Should().NotBeEmpty();
         }
         
         [Test]
@@ -50,13 +86,37 @@ namespace GServer.Archestra.IntegrationTests.ExtensionTests
             template.Attributes["Auto"].SetValue(true);
 
             var result = template.Attributes["Auto"].GetValue<bool>();
-            Assert.True(result);
+            result.Should().BeTrue();
 
             template.ForceClose();
-            Assert.False(template.IsCheckedOut());
+            template.IsCheckedOut().Should().BeFalse();
 
             result = template.Attributes["Auto"].GetValue<bool>();
-            Assert.False(result);
+            result.Should().BeFalse();
+        }
+        
+        [Test]
+        public void SetValue_StructTesterVisualDefinition_ReturnsTrue()
+        {
+            var template = _galaxy.GetObjectByName("$StructTester");
+            template.CheckOut();
+
+            var attribute = template.GetAttribute("TestGraphic._VisualElementDefinition");
+            var primitive = attribute.Map();
+            attribute.SetLocked(MxPropertyLockedEnum.MxUnLocked);
+            template.Save();
+            
+            attribute.SetValue(Blob.Empty());
+            template.Save();
+
+            var changed = template.GetAttribute("TestGraphic._VisualElementDefinition").GetValue<Blob>();
+            //changed.Should().Be(Blob.Empty());
+
+            template.ForceClose();
+            template.IsCheckedOut().Should().BeFalse();
+
+            var result = template.GetAttribute("TestGraphic._VisualElementDefinition").GetValue<Blob>();
+            result.Data.Should().NotBeEmpty();
         }
         
         [Test]
@@ -66,9 +126,9 @@ namespace GServer.Archestra.IntegrationTests.ExtensionTests
             var template = _galaxy.GetObjectByName(tagName);
             
             var attributes = template.Attributes.ByDataType(DataType.Boolean).ToList();
-            
-            Assert.IsNotEmpty(attributes);
-            Assert.True(attributes.All(x => x.DataType == DataType.Boolean));
+
+            attributes.Should().NotBeEmpty();
+            attributes.All(x => x.DataType == DataType.Boolean).Should().BeTrue();
         }
 
         [Test]
@@ -79,8 +139,8 @@ namespace GServer.Archestra.IntegrationTests.ExtensionTests
             
             var attributes = template.Attributes.ByNameContains("Batch").ToList();
             
-            Assert.IsNotEmpty(attributes);
-            Assert.True(attributes.All(x => x.Name.Contains("Batch")));
+            attributes.Should().NotBeEmpty();
+            attributes.All(x => x.Name.Contains("Batch")).Should().BeTrue();
         }
     }
 }

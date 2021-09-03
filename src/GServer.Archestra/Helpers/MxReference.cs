@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.CompilerServices;
 using ArchestrA.GRAccess;
+using GCommon.Primitives.Structs;
 
 [assembly: InternalsVisibleTo("GServer.Archestra.UnitTests")]
 
@@ -14,6 +15,46 @@ namespace GServer.Archestra.Helpers
     /// </summary>
     internal class MxReference : IMxReference
     {
+        /// <summary>
+        /// Creates an instance of an IMxReference with the provided reference string
+        /// </summary>
+        /// <param name="fullReferenceString"></param>
+        /// <returns>IMxReference</returns>
+        public static IMxReference Create(string fullReferenceString)
+        {
+            //Seemingly the only way to get and instance created is via the MxValueClass.
+            //This is why this looks weird. I have to create and use PutMxReference with the concrete implementation,
+            //then get the value back out via GetMxReference in order to actually set the reference strings.
+            var mxValue = new MxValueClass();
+            mxValue.PutMxReference(new MxReference());
+            
+            var value = mxValue.GetMxReference();
+            value.FullReferenceString = fullReferenceString ?? string.Empty;
+
+            return value;
+        }
+        
+        /// <summary>
+        /// Creates an instance of an IMxReference with the provided Reference struct
+        /// </summary>
+        /// <param name="reference"></param>
+        /// <returns></returns>
+        public static IMxReference Create(Reference reference)
+        {
+            //Seemingly the only way to get and instance created is via the MxValueClass.
+            //This is why this looks weird. I have to create and use PutMxReference with the concrete implementation,
+            //then get the value back out viw GetMxReference in order to actually set the reference strings.
+            var mxValue = new MxValueClass();
+            mxValue.PutMxReference(new MxReference());
+            
+            var value = mxValue.GetMxReference();
+            value.FullReferenceString = reference.FullName ?? string.Empty;
+            value.AutomationObjectReferenceString = reference.ObjectName ?? string.Empty;
+            value.AttributeReferenceString = reference.AttributeName ?? string.Empty;
+
+            return value;
+        }
+        
         void IPersist.GetClassID(out Guid pClassID)
         {
             throw new NotImplementedException();
@@ -21,17 +62,14 @@ namespace GServer.Archestra.Helpers
 
         void IMxReference.IsDirty()
         {
-            throw new NotImplementedException();
         }
 
         void IMxReference.Load(IStream pstm)
         {
-            throw new NotImplementedException();
         }
 
         void IMxReference.Save(IStream pstm, int fClearDirty)
         {
-            throw new NotImplementedException();
         }
 
         void IMxReference.GetSizeMax(out _ULARGE_INTEGER pcbSize)

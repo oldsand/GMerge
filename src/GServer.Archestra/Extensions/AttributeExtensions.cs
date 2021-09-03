@@ -84,7 +84,8 @@ namespace GServer.Archestra.Extensions
         
         public static void SetValue<T>(this IAttribute attribute, T value)
         {
-            attribute.value.Clone(out var mxValue); 
+            attribute.value.Clone(out var mxValue);
+            //attribute.value.SetValue(value); todo why would i not just set the value on the existing attribute?
             mxValue.SetValue(value, attribute.DataType.ToPrimitive());
             attribute.SetValue(mxValue);
         }

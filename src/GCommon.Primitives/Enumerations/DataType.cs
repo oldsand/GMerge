@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Linq;
 using Ardalis.SmartEnum;
 using GCommon.Core.Extensions;
+using GCommon.Primitives.Structs;
 
 namespace GCommon.Primitives.Enumerations
 {
@@ -20,7 +20,7 @@ namespace GCommon.Primitives.Enumerations
         public static readonly DataType String = new StringInternal();
         public static readonly DataType Time = new TimeInternal();
         public static readonly DataType ElapsedTime = new ElapsedTimeInternal();
-        public static readonly DataType Reference = new ReferenceTypeInternal();
+        public static readonly DataType ReferenceType = new ReferenceTypeInternal();
         public static readonly DataType Status = new StatusTypeInternal();
         public static readonly DataType DataTypeEnum = new DataTypeEnumInternal();
         public static readonly DataType SecurityClassificationEnum = new SecurityClassificationEnumInternal();
@@ -249,7 +249,7 @@ namespace GCommon.Primitives.Enumerations
 
         private class ReferenceTypeInternal : DataType
         {
-            public ReferenceTypeInternal() : base("Reference", 8)
+            public ReferenceTypeInternal() : base("ReferenceType", 8)
             {
             }
 
@@ -260,7 +260,7 @@ namespace GCommon.Primitives.Enumerations
 
             public override object Parse(string value)
             {
-                return new Reference {FullReference = value};
+                return Reference.FromName(value);
             }
 
             public override object Parse(string[] value)

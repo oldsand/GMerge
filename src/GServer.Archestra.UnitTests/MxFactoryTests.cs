@@ -4,8 +4,8 @@ using System.Linq;
 using ArchestrA.GRAccess;
 using AutoFixture;
 using FluentAssertions;
-using GCommon.Primitives;
 using GCommon.Primitives.Enumerations;
+using GCommon.Primitives.Structs;
 using GServer.Archestra.Extensions;
 using GServer.Archestra.Helpers;
 using NUnit.Framework;
@@ -379,12 +379,7 @@ namespace GServer.Archestra.UnitTests
         [Test]
         public void CreateReference_ProvideValue_ReturnsExpectedDataType()
         {
-            var expected = new Reference
-            {
-                FullReference = "Me.TestReference",
-                ObjectReference = "Me",
-                AttributeReference = "TestReference"
-            };
+            var expected = Reference.FromName("Me.TestReference");
             
             var mxValue = MxFactory.Create(expected);
 
@@ -411,9 +406,9 @@ namespace GServer.Archestra.UnitTests
         {
             var expected = new List<Reference>
             {
-                new Reference {FullReference = "Me.Reference1"},
-                new Reference {FullReference = "Me.Reference2"},
-                new Reference {FullReference = "Me.Reference3"}
+                Reference.FromName("Me.Reference1"),
+                Reference.FromName("Me.Reference2"),
+                Reference.FromName("Me.Reference3")
             };
             
             var mxValue = MxFactory.Create(expected);
@@ -533,6 +528,58 @@ namespace GServer.Archestra.UnitTests
             mxValue.IsArray().Should().BeTrue();
             
             var value = mxValue.GetValue<SecurityClassification[]>();
+            value.Should().BeEquivalentTo(expected);
+        }
+        
+        [Test]
+        public void CreateBlob_SpecifiedType_ReturnsExpectedDataType()
+        {
+            var mxValue = MxFactory.Create<Blob>();
+
+            var type = mxValue.GetDataType();
+            
+            type.Should().Be(MxDataType.MxQualifiedStruct);
+        }
+        
+        [Test]
+        public void CreateBlob_ProvideValue_ReturnsExpectedDataType()
+        {
+            var expected = Blob.FromData(_fixture.Create<byte[]>(), _fixture.Create<int>());
+            
+            var mxValue = MxFactory.Create(expected);
+
+            var type = mxValue.GetDataType();
+            type.Should().Be(MxDataType.MxQualifiedStruct);
+        }
+        
+        [Test]
+        public void CreateBlobArray_SpecifiedType_ReturnsExpectedDataType()
+        {
+            var mxValue = MxFactory.Create<Blob[]>();
+
+            var type = mxValue.GetDataType();
+            
+            type.Should().Be(MxDataType.MxQualifiedStruct);
+            mxValue.IsArray().Should().BeTrue();
+        }
+        
+        [Test]
+        public void CreateBlobArray_ProvideValue_ReturnsExpectedDataType()
+        {
+            var expected = new List<Blob>
+            {
+                Blob.FromData(_fixture.Create<byte[]>(), _fixture.Create<int>()),
+                Blob.FromData(_fixture.Create<byte[]>(), _fixture.Create<int>()),
+                Blob.FromData(_fixture.Create<byte[]>(), _fixture.Create<int>()),
+            };
+            
+            var mxValue = MxFactory.Create(expected);
+
+            var type = mxValue.GetDataType();
+            type.Should().Be(MxDataType.MxQualifiedStruct);
+            mxValue.IsArray().Should().BeTrue();
+            
+            var value = mxValue.GetValue<Blob[]>();
             value.Should().BeEquivalentTo(expected);
         }
     }

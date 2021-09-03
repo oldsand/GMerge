@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using ArchestrA.GRAccess;
-using GCommon.Primitives;
 using GCommon.Primitives.Enumerations;
+using GCommon.Primitives.Structs;
 using GServer.Archestra.Extensions;
 
 [assembly: InternalsVisibleTo("GServer.Archestra.UnitTests")]
@@ -61,7 +61,7 @@ namespace GServer.Archestra.Helpers
             // We need to determine the generic type for IEnumerable<T> if provided. Otherwise just use type of T.
             // Since string implements IEnumerable<char>, we are ignoring  it (for lack of better way as of now).
             Type baseType;
-            if (type != typeof(string))
+            if (type != typeof(string) && type != typeof(byte[]))
                 baseType = GetGenericEnumerableType(typeof(T)) ?? typeof(T);
             else
                 baseType = type;
@@ -83,11 +83,13 @@ namespace GServer.Archestra.Helpers
             else if (baseType == typeof(TimeSpan))
                 value.PutElapsedTime(TimeSpan.MinValue.ToVbLargeInteger());
             else if (baseType == typeof(Reference))
-                value.PutMxReference(new MxReference());
+                value.PutMxReference(MxReference.Create(Reference.DefaultReference));
             else if (baseType == typeof(DataType))
                 value.PutMxDataType(MxDataType.MxNoData);
             else if (baseType == typeof(SecurityClassification))
                 value.PutMxSecurityClassification(MxSecurityClassification.MxSecurityUndefined);
+            else if (baseType == typeof(Blob))
+                value.PutCustomStructVB(0, Array.Empty<byte>());
             else
                 throw new NotSupportedException($"The specified type {baseType} is not supported for creation");
 

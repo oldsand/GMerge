@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using GCommon.Primitives;
 using GCommon.Primitives.Enumerations;
 
-namespace GServer.Archestra.IntegrationTests.Base
+namespace GServer.Archestra.IntegrationTests
 {
     public static class Known
     {
