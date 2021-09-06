@@ -97,7 +97,9 @@ namespace GServer.Archestra
         public IEnumerable<ArchestraObject> GetObjects(IEnumerable<string> tagNames)
         {
             Galaxy.SynchronizeClient();
+            
             var objects = Galaxy.GetObjectsByName(tagNames);
+            
             foreach (IgObject gObject in objects)
                 yield return gObject.Map();
         }
@@ -119,30 +121,8 @@ namespace GServer.Archestra
         public void CreateObject(ArchestraObject source)
         {
             Galaxy.SynchronizeClient();
-            var archestraObject = Galaxy.CreateObject(source.TagName, source.DerivedFromName);
-
-            try
-            {
-                archestraObject.CheckOut();
-
-                archestraObject.SetUserDefinedAttributes(source);
-                archestraObject.SetFieldAttributes(source);
-                archestraObject.Save();
-
-                archestraObject.ConfigureAttributes(source);
-                archestraObject.Save();
-
-                archestraObject.ConfigureExtensions(source);
-                archestraObject.Save();
-
-                archestraObject.CheckIn($"Galaxy Merge Service Created Object '{source.TagName}'");
-            }
-            catch (Exception)
-            {
-                archestraObject.CheckIn();
-                archestraObject.Delete();
-                throw;
-            }
+            
+            GalaxyBuilder.On(this).For(source).Build();
         }
 
         public void CreateGraphic(ArchestraGraphic archestraGraphic)

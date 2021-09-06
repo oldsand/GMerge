@@ -1,9 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using ArchestrA.GRAccess;
 using GCommon.Primitives;
-using GCommon.Primitives.Base;
 using GCommon.Primitives.Enumerations;
 
 // ReSharper disable SuspiciousTypeConversion.Global
@@ -55,7 +55,7 @@ namespace GServer.Archestra.Extensions
         /// </summary>
         /// <param name="gObject"></param>
         /// <param name="comment">Change comments to attach to check in</param>
-        public static void SaveChanges(this IgObject gObject, string comment)
+        public static void SaveAndClose(this IgObject gObject, string comment)
         {
             gObject.Save();
             gObject.CommandResult.Process();
@@ -92,16 +92,45 @@ namespace GServer.Archestra.Extensions
             return gObject.Attributes[name];
         }
         
-        public static IAttribute GetUdaConfig(this IgObject gObject)
+        public static IEnumerable<XElement> GetUdaConfig(this IgObject gObject)
         {
-            return gObject.Attributes["UDAs"];
+            var udaData = gObject.GetAttribute("UDAs").GetValue<string>();
+            
+            if (udaData == null)
+                throw new InvalidOperationException("Not able to fine attribute UDAs");
+
+            return XElement.Parse(udaData).Descendants("Attribute");
         }
         
+        public static IEnumerable<XElement> GetExtensionConfig(this IgObject gObject)
+        {
+            var extensions = gObject.GetAttribute("Extensions").GetValue<string>();
+            
+            if (extensions == null)
+                throw new InvalidOperationException("Not able to fine attribute UDAs");
+
+            return XElement.Parse(extensions).Descendants().Where(x => x.HasAttributes);
+        }
+
+        public static IEnumerable<string> GetUdaNames(this IgObject gObject)
+        {
+            var udaData = gObject.GetAttribute("UDAs").GetValue<string>();
+
+            if (udaData == null)
+                throw new InvalidOperationException("Not able to fine attribute UDAs");
+            
+            return XElement.Parse(udaData).Descendants("Attribute")
+                    .Select(uda => uda.Attribute("Name")?.Value);
+        }
+
         public static void SetUdaConfig(this IgObject gObject, string xml)
         {
-            //Validate xml
-            
             gObject.Attributes["UDAs"].SetValue(xml);
+        }
+        
+        public static void SetField(this IgObject gObject, string xml)
+        {
+            gObject.Attributes["UserAttrData"].SetValue(xml);
         }
 
         public static void SetUserDefinedAttributes(this IgObject gObject, ArchestraObject source)
@@ -116,20 +145,6 @@ namespace GServer.Archestra.Extensions
             var sourceField = source.Attributes.SingleOrDefault(a => a.Name == "UserAttrData")?.Value.ToString();
             var targetField = gObject.Attributes["UserAttrData"];
             targetField?.SetValue(sourceField);
-        }
-
-        public static void ConfigureAttribute(this IgObject gObject, ArchestraAttribute attribute, string description, string units)
-        {
-            var target = gObject.GetAttribute(attribute.Name);
-            target.SetValue(attribute.Value);
-            target.SetSecurityClassification(attribute.Security.ToMx());
-            target.SetLocked(attribute.Locked.ToMx());
-
-            if (!string.IsNullOrEmpty(description))
-                target.Description = description;
-
-            if (!string.IsNullOrEmpty(units))
-                target.EngUnits = units;
         }
 
         public static void ConfigureAttributes(this IgObject gObject, ArchestraObject source)
@@ -148,7 +163,9 @@ namespace GServer.Archestra.Extensions
                 var engUnits = source.Attributes
                     .SingleOrDefault(a => a.Name == $"{attributeName}.EngUnits")?.Value.ToString();
 
-                gObject.ConfigureAttribute(attribute, description, engUnits);
+                var target = gObject.GetAttribute(attributeName);
+                target.Configure(attribute, description, engUnits);
+                //gObject.ConfigureAttribute(attribute, description, engUnits);
             }
         }
 
@@ -164,9 +181,7 @@ namespace GServer.Archestra.Extensions
             foreach (var sourceAttribute in sourceAttributes)
             {
                 var targetAttribute = gObject.GetAttribute(sourceAttribute.Name);
-                targetAttribute.SetValue(sourceAttribute.ArrayCount > 0
-                    ? sourceAttribute.Value.ToString().Split(',')
-                    : sourceAttribute.Value);
+                targetAttribute.SetValue(sourceAttribute.Value);
                 targetAttribute.SetSecurityClassification(sourceAttribute.Security.ToMx());
                 targetAttribute.SetLocked(sourceAttribute.Locked.ToMx());
             }

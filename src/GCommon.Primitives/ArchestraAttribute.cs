@@ -46,6 +46,7 @@ namespace GCommon.Primitives
         public LockType Locked { get; set; }
         public object Value { get; set; }
         public int ArrayCount { get; set; }
+        public bool IsArray => ArrayCount > -1;
 
         public static ArchestraAttribute Materialize(XElement element)
         {

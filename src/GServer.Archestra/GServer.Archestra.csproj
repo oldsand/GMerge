@@ -88,6 +88,7 @@
         <Compile Include="Exceptions\RetryClientSyncException.cs" />
         <Compile Include="Exceptions\SyncSemaphoreException.cs" />
         <Compile Include="Exceptions\TemplateInUseException.cs" />
+        <Compile Include="Extensions\AttributeCollectionExtensions.cs" />
         <Compile Include="Extensions\CommandResultExtensions.cs" />
         <Compile Include="Extensions\AttributeExtensions.cs" />
         <Compile Include="Extensions\ObjectExtensions.cs" />
@@ -99,13 +100,19 @@
         <Compile Include="GalaxyAccess.cs" />
         <Compile Include="GalaxyRepository.cs" />
         <Compile Include="GalaxyRepositoryFactory.cs" />
+        <Compile Include="Helpers\GalaxyBuilder.cs" />
+        <Compile Include="Helpers\GraphicBuilder.cs" />
         <Compile Include="Helpers\MxFactory.cs" />
         <Compile Include="Helpers\MxReference.cs" />
-        <Compile Include="Helpers\ObjectEditor.cs" />
+        <Compile Include="Helpers\ObjectBuilder.cs" />
         <Compile Include="Helpers\SchemaValidator.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
     <ItemGroup>
+      <ProjectReference Include="..\GCommon.Differencing\GCommon.Differencing.csproj">
+        <Project>{ae54813c-d492-49cf-99d8-42c22f7a6414}</Project>
+        <Name>GCommon.Differencing</Name>
+      </ProjectReference>
       <ProjectReference Include="..\GCommon.Primitives\GCommon.Primitives.csproj">
         <Project>{446fe87c-5122-4344-9df9-9f641e81a476}</Project>
         <Name>GCommon.Primitives</Name>

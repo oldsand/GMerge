@@ -1,26 +1,24 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using ArchestrA.GRAccess;
 using GCommon.Core.Extensions;
-using GCommon.Primitives;
 using GCommon.Primitives.Enumerations;
 using GCommon.Primitives.Structs;
-using GServer.Archestra.Helpers;
 
 namespace GServer.Archestra.Extensions
 {
     public static class MxValueExtensions
     {
         /// <summary>
-        /// Generic method wraps all calls on MxValue to get value of specified type.
-        /// This method will attempt to determine the data type from MxValue class, but you can also provide the type
-        /// since MxValue data type property is not always set until a value is applied via a Put.
+        /// Gets the current underlying value of the MxValue as the specified type
         /// </summary>
         /// <param name="mxValue">The instance of MxValue</param>
         /// <typeparam name="T">The return type</typeparam>
         /// <returns>The value converted to the specified type</returns>
+        /// <remarks>
+        /// This method will determine the data type from MxValue class GetDataType method
+        /// </remarks>
         public static T GetValue<T>(this MxValue mxValue)
         {
             var mxDataType = mxValue.GetDataType();
@@ -44,11 +42,11 @@ namespace GServer.Archestra.Extensions
                 MxDataType.MxDataTypeEnum => mxValue.GetValue<T, DataType>(v => v.GetMxDataType().ToPrimitive()),
                 MxDataType.MxSecurityClassificationEnum => mxValue.GetValue<T, SecurityClassification>(v =>
                     v.GetMxSecurityClassification().ToPrimitive()),
-                MxDataType.MxDataQualityType => mxValue.GetValue<T, Quality>(v => (Quality) v.GetMxDataQuality()),
-                MxDataType.MxQualifiedEnum => mxValue.GetValue<T, string>(v =>
+                MxDataType.MxDataQualityType => mxValue.GetValue<T, Quality>(v => (Quality)v.GetMxDataQuality()),
+                MxDataType.MxQualifiedEnum => mxValue.GetValue<T, Enumeration>(v =>
                 {
-                    mxValue.GetCustomEnum(out var value, out _, out _, out _);
-                    return value;
+                    v.GetCustomEnum(out var value, out var ordinal, out var primitiveId, out var attributeId);
+                    return Enumeration.FromValue(value, ordinal, primitiveId, attributeId);
                 }),
                 MxDataType.MxQualifiedStruct => mxValue.GetValue<T, Blob>(v =>
                 {
@@ -61,96 +59,112 @@ namespace GServer.Archestra.Extensions
                 _ => default
             };
         }
-
-        public static void SetValue<T>(this MxValue mxValue, T newValue, DataType dataType = null)
+        
+        /// <summary>
+        /// Sets the underlying value of the MxValue based on the type of the proved new value. 
+        /// </summary>
+        /// <param name="mxValue">The current MxValue</param>
+        /// <param name="newValue">The value to set to MxValue</param>
+        /// <typeparam name="T"></typeparam>
+        /// <exception cref="NotSupportedException">Thrown is the type of T is not handled/supported</exception>
+        /// <remarks>
+        /// This method support all types of MxDataType except for MxStatus, MxQuality, and Internationalized string.
+        /// </remarks>
+        public static void SetValue<T>(this MxValue mxValue, T newValue)
         {
-            var mxDataType = mxValue.GetDataType();
-            var type = dataType == null ? mxDataType : dataType.ToMx();
-
-            switch (type)
+            switch (newValue)
             {
-                case MxDataType.MxDataTypeUnknown:
+                case bool value:
+                    mxValue.PutBoolean(value);
                     break;
-                case MxDataType.MxNoData:
-                    mxValue.Empty();
+                case IEnumerable<bool> value:
+                    mxValue.SetArray(value, (mx, val) => mx.PutBoolean(val));
                     break;
-                case MxDataType.MxBoolean:
-                    mxValue.SetValue<T, bool>(newValue, (v, x) => v.PutBoolean(x));
+                case int value:
+                    mxValue.PutInteger(value);
                     break;
-                case MxDataType.MxInteger:
-                    mxValue.SetValue<T, int>(newValue, (v, x) => v.PutInteger(x));
+                case IEnumerable<int> value:
+                    mxValue.SetArray(value, (mx, val) => mx.PutInteger(val));
                     break;
-                case MxDataType.MxFloat:
-                    mxValue.SetValue<T, float>(newValue, (v, x) => v.PutFloat(x));
+                case float value:
+                    mxValue.PutFloat(value);
                     break;
-                case MxDataType.MxDouble:
-                    mxValue.SetValue<T, double>(newValue, (v, x) => v.PutDouble(x));
+                case IEnumerable<float> value:
+                    mxValue.SetArray(value, (mx, val) => mx.PutFloat(val));
                     break;
-                case MxDataType.MxString:
-                    mxValue.SetValue<T, string>(newValue, (v, x) => v.PutString(x));
+                case double value:
+                    mxValue.PutDouble(value);
                     break;
-                case MxDataType.MxTime:
-                    mxValue.SetValue<T, DateTime>(newValue, (v, x) => v.PutTime(x.ToVbFileTime()));
+                case IEnumerable<double> value:
+                    mxValue.SetArray(value, (mx, val) => mx.PutDouble(val));
                     break;
-                case MxDataType.MxElapsedTime:
-                    mxValue.SetValue<T, TimeSpan>(newValue, (v, x) => v.PutElapsedTime(x.ToVbLargeInteger()));
+                case string value:
+                    mxValue.PutString(value);
                     break;
-                case MxDataType.MxReferenceType:
-                    mxValue.SetValue<T, Reference>(newValue, (v, x) => v.PutMxReference(x.ToMx()));
+                case IEnumerable<string> value:
+                    mxValue.SetArray(value, (mx, val) => mx.PutString(val));
                     break;
-                case MxDataType.MxStatusType:
-                    //Status is a runtime system writable attribute. It doesn't make sense to set this type.
+                case DateTime value:
+                    mxValue.PutTime(value.ToVbFileTime());
                     break;
-                case MxDataType.MxDataTypeEnum:
-                    mxValue.SetValue<T, DataType>(newValue, (v, x) => v.PutMxDataType(x.ToMx()));
+                case IEnumerable<DateTime> value:
+                    mxValue.SetArray(value, (mx, val) => mx.PutTime(val.ToVbFileTime()));
                     break;
-                case MxDataType.MxSecurityClassificationEnum:
-                    mxValue.SetValue<T, SecurityClassification>(newValue,
-                        (v, x) => v.PutMxSecurityClassification(x.ToMx()));
+                case TimeSpan value:
+                    mxValue.PutElapsedTime(value.ToVbLargeInteger());
                     break;
-                case MxDataType.MxDataQualityType:
-                    //Quality is a runtime system writable attribute. It doesn't make sense to set this type.
+                case IEnumerable<TimeSpan> value:
+                    mxValue.SetArray(value, (mx, val) => mx.PutElapsedTime(val.ToVbLargeInteger()));
                     break;
-                case MxDataType.MxQualifiedEnum:
-                    mxValue.SetValue<T, string>(newValue, (v, x) => v.PutCustomEnum(x, 0, 0, 0));
+                case Reference value:
+                    mxValue.PutMxReference(value.ToMx());
                     break;
-                case MxDataType.MxQualifiedStruct:
-                    mxValue.SetValue<T, Blob>(newValue, (v, x) =>
-                    {
-                        var data = x.Data;
-                        byte[] pStruct = null;
-                        int pGuid;
-                        v.GetCustomStructVB(out pGuid, ref pStruct);
-                        v.PutCustomStructVB(pGuid, ref data);
-                    });
+                case IEnumerable<Reference> value:
+                    mxValue.SetArray(value, (mx, val) => mx.PutMxReference(val.ToMx()));
                     break;
-                case MxDataType.MxInternationalizedString:
-                    mxValue.SetValue<T, string>(newValue, (v, x) => v.PutInternationalString(0, x));
+                case DataType value:
+                    mxValue.PutMxDataType(value.ToMx());
                     break;
-                case MxDataType.MxBigString:
-                    mxValue.SetValue<T, string>(newValue, (v, x) => v.PutString(x));
+                case IEnumerable<DataType> value:
+                    mxValue.SetArray(value, (mx, val) => mx.PutMxDataType(val.ToMx()));
                     break;
-                case MxDataType.MxDataTypeEND:
+                case SecurityClassification value:
+                    mxValue.PutMxSecurityClassification(value.ToMx());
+                    break;
+                case IEnumerable<SecurityClassification> value:
+                    mxValue.SetArray(value, (mx, val) => mx.PutMxSecurityClassification(val.ToMx()));
+                    break;
+                case Enumeration value:
+                    mxValue.PutCustomEnum(value.Value, value.Ordinal, value.PrimitiveId, value.AttributeId);
+                    break;
+                case IEnumerable<Enumeration> value:
+                    mxValue.SetArray(value,
+                        (mx, val) => mx.PutCustomEnum(val.Value, val.Ordinal, val.PrimitiveId, val.AttributeId));
+                    break;
+                case Blob value:
+                    mxValue.PutCustomStructVB(value.Guid, value.Data);
+                    break;
+                case IEnumerable<Blob> value:
+                    mxValue.SetArray(value, (mx, val) => mx.PutCustomStructVB(val.Guid, val.Data));
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(dataType),
-                        "The data type for this object is not defined");
+                    throw new NotSupportedException("The type of this object is not supported by SetValue");
             }
         }
 
+        /// <summary>
+        /// Determines whether the current MxValue underlying value is an array
+        /// </summary>
+        /// <param name="mxValue"></param>
+        /// <returns></returns>
         public static bool IsArray(this IMxValue mxValue)
         {
-            return mxValue.IsArrayInternal();
-        }
-
-        public static void Resize(this IMxValue mxValue, int length)
-        {
-            mxValue.ResizeInternal(length);
+            return mxValue.IsArrayValue();
         }
 
         private static TReturn GetValue<TReturn, TGetter>(this IMxValue mxValue, Func<IMxValue, TGetter> getter)
         {
-            if (!mxValue.IsArrayInternal())
+            if (!mxValue.IsArrayValue())
                 return getter(mxValue).ConvertTo<TReturn>();
 
             var results = new List<TGetter>();
@@ -166,22 +180,12 @@ namespace GServer.Archestra.Extensions
             return results.ToArray().ConvertTo<TReturn>();
         }
 
-        private static void SetValue<TValue, TSetter>(this IMxValue mxValue, TValue newValue,
-            Action<IMxValue, TSetter> setter)
+        private static void SetArray<TValue>(this IMxValue mxValue, IEnumerable<TValue> newValue,
+            Action<IMxValue, TValue> setter)
         {
-            if (!mxValue.IsArrayInternal())
-            {
-                var value = newValue.ConvertTo<TSetter>();
-                if (value == null) throw new InvalidOperationException("Could not convert type to TSetter");
-                setter(mxValue, value);
-                return;
-            }
+            var array = newValue.ToArray();
 
-            var array = newValue.ConvertTo<IEnumerable<TSetter>>().ToArray();
-            if (array == null)
-                throw new InvalidOperationException("Could not convert type to IEnumerable<TSetter>");
-
-            mxValue.ResizeInternal(array.Length);
+            mxValue.Empty();
 
             for (var i = 0; i < array.Length; i++)
             {
@@ -191,17 +195,10 @@ namespace GServer.Archestra.Extensions
             }
         }
 
-        private static bool IsArrayInternal(this IMxValue mxValue)
+        private static bool IsArrayValue(this IMxValue mxValue)
         {
             mxValue.GetDimensionCount(out var dimensions);
             return dimensions > 0;
-        }
-
-        private static void ResizeInternal(this IMxValue mxValue, int length)
-        {
-            mxValue.GetDimensionSize(out var count);
-            if (count > length)
-                mxValue.Empty();
         }
     }
 }

@@ -14,4 +14,10 @@
       <ProjectReference Include="..\GCommon.Differencing\GCommon.Differencing.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="Resources\UserDefinedPrimitives.xml" />
+      <None Remove="Resources\TemplatePrimitives.xml" />
+      <EmbeddedResource Include="Resources\TemplatePrimitives.xml" />
+    </ItemGroup>
+
 </Project>

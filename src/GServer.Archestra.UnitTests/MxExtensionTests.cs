@@ -315,7 +315,7 @@ namespace GServer.Archestra.UnitTests
         [Test]
         public void GetSet_DataTypeArray_ShouldBeEqualToExpected()
         {
-            var expected = new List<DataType>()
+            var expected = new List<DataType>
             {
                 DataType.Boolean,
                 DataType.Integer,

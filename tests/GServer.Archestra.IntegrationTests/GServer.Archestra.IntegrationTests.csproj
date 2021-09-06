@@ -60,6 +60,7 @@
         <Compile Include="GalaxyAccessTests.cs" />
         <Compile Include="GalaxyRepositoryTests.cs" />
         <Compile Include="Known.cs" />
+        <Compile Include="ObjectBuilderTests.cs" />
         <Compile Include="ObjectTests\CreateObjectTests.cs" />
         <Compile Include="ObjectTests\ObjectQueryTests.cs" />
         <Compile Include="ObjectTests\ObjectSerializationTests.cs" />

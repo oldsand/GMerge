@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using Ardalis.SmartEnum;
-using GCommon.Core.Extensions;
+using GCommon.Primitives.Helpers;
 using GCommon.Primitives.Structs;
 
 namespace GCommon.Primitives.Enumerations
@@ -31,9 +34,37 @@ namespace GCommon.Primitives.Enumerations
         public static readonly DataType BigString = new BigStringInternal();
 
         public virtual object DefaultValue => default;
-        public abstract Type GetClrType();
-        public abstract object Parse(string value);
-        public abstract object Parse(string[] value);
+        
+        public virtual object Parse(string value)
+        {
+            return null;
+        }
+
+        public virtual object Parse(string[] value)
+        {
+            return default;
+        }
+        
+        public object ParseHex(string value)
+        {
+            var reader = new HexReader(value);
+
+            return reader.IsArray
+                ? Parse(reader.Data.ToEnumerable(reader.ElementSize))
+                : Parse(reader.Data);
+        }
+
+        protected virtual object Parse(Hex hex)
+        {
+            return hex.Reverse().Value;
+        }
+
+        protected virtual object Parse(IEnumerable<Hex> hexes)
+        {
+            return hexes.Select(Parse).ToArray();
+        }
+
+        #region InternalClasses
 
         private class UnknownInternal : DataType
         {
@@ -41,17 +72,7 @@ namespace GCommon.Primitives.Enumerations
             {
             }
 
-            public override Type GetClrType()
-            {
-                return null;
-            }
-
-            public override object Parse(string value)
-            {
-                return null;
-            }
-
-            public override object Parse(string[] value)
+            protected override object Parse(Hex hex)
             {
                 return null;
             }
@@ -62,18 +83,8 @@ namespace GCommon.Primitives.Enumerations
             public NoDataInternal() : base("No Data", 0)
             {
             }
-
-            public override Type GetClrType()
-            {
-                return null;
-            }
-
-            public override object Parse(string value)
-            {
-                return null;
-            }
-
-            public override object Parse(string[] value)
+            
+            protected override object Parse(Hex hex)
             {
                 return null;
             }
@@ -87,19 +98,9 @@ namespace GCommon.Primitives.Enumerations
             
             public override object DefaultValue => default(bool);
 
-            public override Type GetClrType()
+            protected override object Parse(Hex hex)
             {
-                return typeof(bool);
-            }
-
-            public override object Parse(string value)
-            {
-                return value.ConvertTo<bool>();
-            }
-
-            public override object Parse(string[] value)
-            {
-                return value.ConvertTo<bool[]>();
+                return hex.Reverse().ToBool();
             }
         }
 
@@ -111,19 +112,9 @@ namespace GCommon.Primitives.Enumerations
             
             public override object DefaultValue => default(int);
 
-            public override Type GetClrType()
+            protected override object Parse(Hex hex)
             {
-                return typeof(int);
-            }
-
-            public override object Parse(string value)
-            {
-                return value.ConvertTo<int>();
-            }
-
-            public override object Parse(string[] value)
-            {
-                return value.ConvertTo<int[]>();
+                return hex.Reverse().ToInt();
             }
         }
 
@@ -135,19 +126,9 @@ namespace GCommon.Primitives.Enumerations
 
             public override object DefaultValue => default(float);
             
-            public override Type GetClrType()
+            protected override object Parse(Hex hex)
             {
-                return typeof(float);
-            }
-
-            public override object Parse(string value)
-            {
-                return value.ConvertTo<float>();
-            }
-
-            public override object Parse(string[] value)
-            {
-                return value.ConvertTo<float[]>();
+                return hex.Reverse().ToFloat();
             }
         }
 
@@ -159,19 +140,9 @@ namespace GCommon.Primitives.Enumerations
 
             public override object DefaultValue => default(double);
             
-            public override Type GetClrType()
+            protected override object Parse(Hex hex)
             {
-                return typeof(double);
-            }
-            
-            public override object Parse(string value)
-            {
-                return value.ConvertTo<double>();
-            }
-
-            public override object Parse(string[] value)
-            {
-                return value.ConvertTo<double[]>();
+                return hex.Reverse().ToDouble();
             }
         }
 
@@ -181,21 +152,21 @@ namespace GCommon.Primitives.Enumerations
             {
             }
             
-            public override object DefaultValue => default(string);
+            public override object DefaultValue => string.Empty;
             
-            public override Type GetClrType()
+            protected override object Parse(Hex hex)
             {
-                return typeof(string);
-            }
-            
-            public override object Parse(string value)
-            {
-                return value;
-            }
+                var builder = new StringBuilder();
+                
+                //the data we will get is expected to have a 16 bit header so we need to strip it
+                var chars = hex.DropHead(16).ToEnumerable(4);
+                
+                foreach (var c in chars)
+                {
+                    builder.Append(c.Reverse().ToChar());
+                }
 
-            public override object Parse(string[] value)
-            {
-                return value;
+                return builder.ToString();
             }
         }
 
@@ -205,21 +176,11 @@ namespace GCommon.Primitives.Enumerations
             {
             }
             
-            public override object DefaultValue => default(DateTime);
+            public override object DefaultValue => DateTime.MinValue;
             
-            public override Type GetClrType()
+            protected override object Parse(Hex hex)
             {
-                return typeof(DateTime);
-            }
-            
-            public override object Parse(string value)
-            {
-                return value.ConvertTo<DateTime>();
-            }
-
-            public override object Parse(string[] value)
-            {
-                return value.ConvertTo<DateTime[]>();
+                return hex.Reverse().ToDateTime();
             }
         }
 
@@ -229,21 +190,11 @@ namespace GCommon.Primitives.Enumerations
             {
             }
             
-            public override object DefaultValue => default(TimeSpan);
+            public override object DefaultValue => TimeSpan.MinValue;
             
-            public override Type GetClrType()
+            protected override object Parse(Hex hex)
             {
-                return typeof(TimeSpan);
-            }
-            
-            public override object Parse(string value)
-            {
-                return value.ConvertTo<TimeSpan>();
-            }
-
-            public override object Parse(string[] value)
-            {
-                return value.ConvertTo<TimeSpan[]>();
+                return hex.Reverse().ToTimeSpan();
             }
         }
 
@@ -252,21 +203,8 @@ namespace GCommon.Primitives.Enumerations
             public ReferenceTypeInternal() : base("ReferenceType", 8)
             {
             }
-
-            public override Type GetClrType()
-            {
-                return typeof(Reference);
-            }
-
-            public override object Parse(string value)
-            {
-                return Reference.FromName(value);
-            }
-
-            public override object Parse(string[] value)
-            {
-                return null;
-            }
+            
+            public override object DefaultValue => Reference.Empty();
         }
         
         private class StatusTypeInternal : DataType
@@ -275,20 +213,7 @@ namespace GCommon.Primitives.Enumerations
             {
             }
             
-            public override Type GetClrType()
-            {
-                return typeof(StatusCategory);
-            }
-
-            public override object Parse(string value)
-            {
-                return StatusCategory.FromName(value);
-            }
-
-            public override object Parse(string[] value)
-            {
-                return null;
-            }
+            public override object DefaultValue => StatusCategory.Unknown;
         }
 
         private class DataTypeEnumInternal : DataType
@@ -297,20 +222,7 @@ namespace GCommon.Primitives.Enumerations
             {
             }
             
-            public override Type GetClrType()
-            {
-                return typeof(DataType);
-            }
-
-            public override object Parse(string value)
-            {
-                return FromName(value);
-            }
-
-            public override object Parse(string[] value)
-            {
-                return null;
-            }
+            public override object DefaultValue => NoData;
         }
         
         private class SecurityClassificationEnumInternal : DataType
@@ -319,20 +231,7 @@ namespace GCommon.Primitives.Enumerations
             {
             }
             
-            public override Type GetClrType()
-            {
-                return typeof(SecurityClassification);
-            }
-
-            public override object Parse(string value)
-            {
-                return SecurityClassification.FromName(value);
-            }
-
-            public override object Parse(string[] value)
-            {
-                return null;
-            }
+            public override object DefaultValue => SecurityClassification.Undefined;
         }
         
         private class DataQualityInternal : DataType
@@ -341,20 +240,7 @@ namespace GCommon.Primitives.Enumerations
             {
             }
             
-            public override Type GetClrType()
-            {
-                return typeof(Quality);
-            }
-
-            public override object Parse(string value)
-            {
-                return Quality.FromName(value);
-            }
-
-            public override object Parse(string[] value)
-            {
-                return null;
-            }
+            public override object DefaultValue => Quality.Unknown;
         }
 
         private class QualifiedEnumInternal : DataType
@@ -363,20 +249,7 @@ namespace GCommon.Primitives.Enumerations
             {
             }
             
-            public override Type GetClrType()
-            {
-                return typeof(string);
-            }
-            
-            public override object Parse(string value)
-            {
-                return value;
-            }
-
-            public override object Parse(string[] value)
-            {
-                return null;
-            }
+            public override object DefaultValue => default(Enumeration);
         }
         
         private class QualifiedStructInternal : DataType
@@ -385,20 +258,7 @@ namespace GCommon.Primitives.Enumerations
             {
             }
             
-            public override Type GetClrType()
-            {
-                return typeof(byte[]);
-            }
-            
-            public override object Parse(string value)
-            {
-                return value;
-            }
-
-            public override object Parse(string[] value)
-            {
-                return null;
-            }
+            public override object DefaultValue => Blob.Empty();
         }
 
         private class InternationalizedStringInternal : DataType
@@ -408,21 +268,6 @@ namespace GCommon.Primitives.Enumerations
             }
             
             public override object DefaultValue => default(string);
-            
-            public override Type GetClrType()
-            {
-                return typeof(string);
-            }
-            
-            public override object Parse(string value)
-            {
-                return value;
-            }
-
-            public override object Parse(string[] value)
-            {
-                return value;
-            }
         }
 
         private class BigStringInternal : DataType
@@ -432,21 +277,9 @@ namespace GCommon.Primitives.Enumerations
             }
             
             public override object DefaultValue => default(string);
-            
-            public override Type GetClrType()
-            {
-                return typeof(string);
-            }
-
-            public override object Parse(string value)
-            {
-                return value;
-            }
-
-            public override object Parse(string[] value)
-            {
-                return value;
-            }
         }
+
+        #endregion
+        
     }
 }

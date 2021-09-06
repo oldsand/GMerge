@@ -76,6 +76,11 @@ namespace GServer.Archestra.Extensions
                 return false;
             }
         }
+        
+        public static object GetValue(this IAttribute attribute)
+        {
+            return attribute.value.GetValue<object>();
+        }
 
         public static T GetValue<T>(this IAttribute attribute)
         {
@@ -85,37 +90,25 @@ namespace GServer.Archestra.Extensions
         public static void SetValue<T>(this IAttribute attribute, T value)
         {
             attribute.value.Clone(out var mxValue);
-            //attribute.value.SetValue(value); todo why would i not just set the value on the existing attribute?
-            mxValue.SetValue(value, attribute.DataType.ToPrimitive());
+            mxValue.SetValue(value);
             attribute.SetValue(mxValue);
         }
 
+        public static void Configure(this IAttribute attribute, ArchestraAttribute source, 
+            string description = null, string units = null)
+        {
+            attribute.SetValue(source.Value);
+            attribute.SetSecurityClassification(source.Security.ToMx());
+            attribute.SetLocked(source.Locked.ToMx());
+            
+            if (!string.IsNullOrEmpty(description))
+                attribute.Description = description;
+
+            if (!string.IsNullOrEmpty(units))
+                attribute.EngUnits = units;
+        }
+
         public static ArchestraAttribute Map(this IAttribute attribute)
-        {
-            return attribute.MapInternal();
-        }
-
-        public static IEnumerable<ArchestraAttribute> Map(this IAttributes attributes)
-        {
-            foreach (IAttribute attribute in attributes)
-                yield return attribute.MapInternal();
-        }
-        
-        public static IEnumerable<ArchestraAttribute> ByDataType(this IAttributes attributes, DataType dataType)
-        {
-            foreach (IAttribute attribute in attributes)
-                if (attribute.DataType == dataType.ToMx())
-                    yield return attribute.MapInternal();
-        }
-        
-        public static IEnumerable<ArchestraAttribute> ByNameContains(this IAttributes attributes, string name)
-        {
-            foreach (IAttribute attribute in attributes)
-                if (attribute.Name.Contains(name))
-                    yield return attribute.MapInternal();
-        }
-
-        private static ArchestraAttribute MapInternal(this IAttribute attribute)
         {
             return new ArchestraAttribute(attribute.Name, 
                 attribute.DataType.ToPrimitive(),

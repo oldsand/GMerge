@@ -22,7 +22,7 @@ namespace GServer.Archestra.UnitTests
         {
             _fixture = new Fixture();
         }
-        
+
         [Test]
         public void CreateBoolean_SpecifiedType_ReturnsExpectedDataType()
         {

@@ -14,6 +14,21 @@ namespace GCommon.Primitives
         public ArchestraObject()
         {
         }
+        
+        public ArchestraObject(string tagName, Template basedOn, string derivedFrom = null)
+        {
+            TagName = tagName;
+            BasedOnName = basedOn.Name;
+            DerivedFromName = derivedFrom ?? basedOn.Name;
+            HierarchicalName = tagName;
+            ConfigVersion = 1;
+            //todo use template to determine category
+            ContainedName = string.Empty;
+            HostName = string.Empty;
+            AreaName = string.Empty;
+            ContainerName = string.Empty;
+            Attributes = Template.GetAttributes();
+        }
 
         private ArchestraObject(XElement element)
         {
@@ -37,10 +52,21 @@ namespace GCommon.Primitives
         public int ConfigVersion { get; set; }
         public string DerivedFromName { get; set; }
         public string BasedOnName { get; set; }
+        public Template Template => Template.FromName(BasedOnName);
         public string HostName { get; set; }
         public string AreaName { get; set; }
         public string ContainerName { get; set; }
         public IEnumerable<ArchestraAttribute> Attributes { get; set; }
+
+        public void AddAttribute(ArchestraAttribute attribute)
+        {
+            //todo need to implement this?
+        }
+
+        public string GetUda()
+        {
+            return Attributes.SingleOrDefault(a => a.Name == "UDAs")?.Value.ToString();
+        }
 
         public static ArchestraObject Materialize(XElement element)
         {

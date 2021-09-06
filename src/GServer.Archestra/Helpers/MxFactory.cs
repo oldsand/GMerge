@@ -14,54 +14,24 @@ namespace GServer.Archestra.Helpers
     internal static class MxFactory
     {
         /// <summary>
-        /// Constructs a <c>MxValue</c> class with the specified type. Archestra requires calling Put value to initialize the
-        /// MxValueClass. This method makes creating a class with the correct type much easier.
-        /// 
-        /// Supported types are:
-        /// <list type="bullet">
-        /// <item>
-        /// <description>bool</description>
-        /// </item>
-        /// <item>
-        /// <description>int</description>
-        /// </item>
-        /// /// <item>
-        /// <description>double</description>
-        /// </item>
-        /// /// <item>
-        /// <description>float</description>
-        /// </item>
-        /// /// <item>
-        /// <description>string</description>
-        /// </item>
-        /// /// <item>
-        /// <description>DateTime</description>
-        /// </item>
-        /// /// <item>
-        /// <description>TimeSpan</description>
-        /// </item>
-        /// /// <item>
-        /// <description>Reference</description>
-        /// </item>
-        /// <item>
-        /// <description>DataType</description>
-        /// </item>
-        /// <item>
-        /// <description>SecurityClassification</description>
-        /// </item>
-        /// </list>
+        /// Constructs a <c>MxValue</c> class for the specified type.
         /// </summary>
         /// <typeparam name="T">The type to create</typeparam>
         /// <returns></returns>
-        /// <exception cref="NotSupportedException">When the specified type is not supported</exception>
+        /// <exception cref="NotSupportedException">Thrown if the specified type is not one of DataType enums</exception>
+        /// <remarks>Archestra requires calling Put{Type} method  to initialize the MxValueClass.
+        /// This method simplifies creating an MxValue with the desired type.
+        /// IEnumerable types will handle creation of arrays on the MxValue.
+        /// Strings are treated as a string and not as an enumeration of characters.
+        /// </remarks>
         public static MxValue Create<T>()
         {
             var type = typeof(T);
-            
+
             // We need to determine the generic type for IEnumerable<T> if provided. Otherwise just use type of T.
-            // Since string implements IEnumerable<char>, we are ignoring  it (for lack of better way as of now).
+            // Since string implements IEnumerable<char>, we are ignoring it.
             Type baseType;
-            if (type != typeof(string) && type != typeof(byte[]))
+            if (type != typeof(string))
                 baseType = GetGenericEnumerableType(typeof(T)) ?? typeof(T);
             else
                 baseType = type;
@@ -88,6 +58,8 @@ namespace GServer.Archestra.Helpers
                 value.PutMxDataType(MxDataType.MxNoData);
             else if (baseType == typeof(SecurityClassification))
                 value.PutMxSecurityClassification(MxSecurityClassification.MxSecurityUndefined);
+            else if (baseType == typeof(Enumeration))
+                value.PutCustomEnum(string.Empty, 0, 0, 0);
             else if (baseType == typeof(Blob))
                 value.PutCustomStructVB(0, Array.Empty<byte>());
             else
