@@ -6,14 +6,14 @@ using NUnit.Framework;
 namespace GCommon.Primitives.UnitTests.HelperTests
 {
     [TestFixture]
-    public class HexReaderTests
+    public class HexParserTests
     {
         [Test]
         public void Construction_0x01FF_ShouldHaveExpectedProperties()
         {
             const string hex = "0x01FF";
 
-            var reader = new HexReader(hex);
+            var reader = new HexParser(hex);
 
             reader.IsArray.Should().BeFalse();
             reader.TypeId.Should().Be(1);
@@ -29,7 +29,7 @@ namespace GCommon.Primitives.UnitTests.HelperTests
         {
             const string hex = "0x03FF00ABCDE";
 
-            var reader = new HexReader(hex);
+            var reader = new HexParser(hex);
 
             reader.IsArray.Should().BeFalse();
             reader.TypeId.Should().Be(3);

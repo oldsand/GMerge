@@ -44,24 +44,22 @@ namespace GCommon.Primitives.Enumerations
         {
             return default;
         }
-        
-        public object ParseHex(string value)
-        {
-            var reader = new HexReader(value);
 
-            return reader.IsArray
-                ? Parse(reader.Data.ToEnumerable(reader.ElementSize))
-                : Parse(reader.Data);
+        public object Parse(Hex hex)
+        {
+            var parser = new HexParser(hex);
+
+            return parser.IsArray ? ParseArray(parser.ParseDataArray()) : ParseSingle(parser.Data);
         }
 
-        protected virtual object Parse(Hex hex)
+        protected virtual object ParseSingle(Hex hex)
         {
             return hex.Reverse().Value;
         }
 
-        protected virtual object Parse(IEnumerable<Hex> hexes)
+        protected virtual object ParseArray(IEnumerable<Hex> hexes)
         {
-            return hexes.Select(Parse).ToArray();
+            return hexes.Select(Parse);
         }
 
         #region InternalClasses
@@ -72,7 +70,7 @@ namespace GCommon.Primitives.Enumerations
             {
             }
 
-            protected override object Parse(Hex hex)
+            protected override object ParseSingle(Hex hex)
             {
                 return null;
             }
@@ -84,7 +82,7 @@ namespace GCommon.Primitives.Enumerations
             {
             }
             
-            protected override object Parse(Hex hex)
+            protected override object ParseSingle(Hex hex)
             {
                 return null;
             }
@@ -98,7 +96,7 @@ namespace GCommon.Primitives.Enumerations
             
             public override object DefaultValue => default(bool);
 
-            protected override object Parse(Hex hex)
+            protected override object ParseSingle(Hex hex)
             {
                 return hex.Reverse().ToBool();
             }
@@ -112,7 +110,7 @@ namespace GCommon.Primitives.Enumerations
             
             public override object DefaultValue => default(int);
 
-            protected override object Parse(Hex hex)
+            protected override object ParseSingle(Hex hex)
             {
                 return hex.Reverse().ToInt();
             }
@@ -126,7 +124,7 @@ namespace GCommon.Primitives.Enumerations
 
             public override object DefaultValue => default(float);
             
-            protected override object Parse(Hex hex)
+            protected override object ParseSingle(Hex hex)
             {
                 return hex.Reverse().ToFloat();
             }
@@ -140,7 +138,7 @@ namespace GCommon.Primitives.Enumerations
 
             public override object DefaultValue => default(double);
             
-            protected override object Parse(Hex hex)
+            protected override object ParseSingle(Hex hex)
             {
                 return hex.Reverse().ToDouble();
             }
@@ -154,7 +152,7 @@ namespace GCommon.Primitives.Enumerations
             
             public override object DefaultValue => string.Empty;
             
-            protected override object Parse(Hex hex)
+            protected override object ParseSingle(Hex hex)
             {
                 var builder = new StringBuilder();
                 
@@ -162,9 +160,7 @@ namespace GCommon.Primitives.Enumerations
                 var chars = hex.DropHead(16).ToEnumerable(4);
                 
                 foreach (var c in chars)
-                {
                     builder.Append(c.Reverse().ToChar());
-                }
 
                 return builder.ToString();
             }
@@ -178,9 +174,15 @@ namespace GCommon.Primitives.Enumerations
             
             public override object DefaultValue => DateTime.MinValue;
             
-            protected override object Parse(Hex hex)
+            protected override object ParseSingle(Hex hex)
             {
                 return hex.Reverse().ToDateTime();
+            }
+
+            protected override object ParseArray(IEnumerable<Hex> hexes)
+            {
+                //For some reason date time arrays have extra 4 bits unknown data, so we need to trim it.
+                return hexes.Select(h => Parse(h.DropTail(4)));
             }
         }
 
@@ -192,7 +194,7 @@ namespace GCommon.Primitives.Enumerations
             
             public override object DefaultValue => TimeSpan.MinValue;
             
-            protected override object Parse(Hex hex)
+            protected override object ParseSingle(Hex hex)
             {
                 return hex.Reverse().ToTimeSpan();
             }
@@ -205,6 +207,34 @@ namespace GCommon.Primitives.Enumerations
             }
             
             public override object DefaultValue => Reference.Empty();
+
+            protected override object ParseSingle(Hex hex)
+            {
+                var builder = new StringBuilder();
+                
+                //The first 8 are the entire length which we don't need. The last 40 are always nothing.
+                hex = hex.DropHead(8).DropTail(40);
+
+                var refLength = hex.Consume(8).DropTail(4).Reverse().ToInt();
+                var refChars = hex.Consume(refLength).ToEnumerable(4);
+
+                foreach (var c in refChars)
+                    builder.Append(c.Reverse().ToChar());
+
+                var fullReference = builder.ToString();
+
+                builder.Clear();
+                
+                var objLength = hex.Consume(8).DropTail(4).Reverse().ToInt();
+                var objChars = hex.Consume(objLength).ToEnumerable(4);
+                
+                foreach (var c in objChars)
+                    builder.Append(c.Reverse().ToChar());
+
+                var objReference = builder.ToString();
+
+                return Reference.FromName(fullReference);
+            }
         }
         
         private class StatusTypeInternal : DataType
@@ -223,6 +253,11 @@ namespace GCommon.Primitives.Enumerations
             }
             
             public override object DefaultValue => NoData;
+
+            protected override object ParseSingle(Hex hex)
+            {
+                return FromValue(hex.Reverse().ToInt());
+            }
         }
         
         private class SecurityClassificationEnumInternal : DataType

@@ -92,7 +92,7 @@ namespace GCommon.Primitives.UnitTests.HelperTests
         {
             var hex = new Hex("1234ABCD");
 
-            FluentActions.Invoking(() => hex.Head(0)).Should().Throw<ArgumentException>()
+            FluentActions.Invoking(() => hex.Head(0)).Should().Throw<ArgumentOutOfRangeException>()
                 .WithMessage("Length must be greater than zero and less than the length of the hex value");
         }
         
@@ -101,7 +101,7 @@ namespace GCommon.Primitives.UnitTests.HelperTests
         {
             var hex = new Hex("1234ABCD");
 
-            FluentActions.Invoking(() => hex.Head(12)).Should().Throw<ArgumentException>()
+            FluentActions.Invoking(() => hex.Head(12)).Should().Throw<ArgumentOutOfRangeException>()
                 .WithMessage("Length must be greater than zero and less than the length of the hex value");
         }
         
@@ -120,7 +120,7 @@ namespace GCommon.Primitives.UnitTests.HelperTests
         {
             var hex = new Hex("1234ABCD");
 
-            FluentActions.Invoking(() => hex.Tail(0)).Should().Throw<ArgumentException>()
+            FluentActions.Invoking(() => hex.Tail(0)).Should().Throw<ArgumentOutOfRangeException>()
                 .WithMessage("Length must be greater than zero and less than the length of the hex value");
         }
         
@@ -129,7 +129,7 @@ namespace GCommon.Primitives.UnitTests.HelperTests
         {
             var hex = new Hex("1234ABCD");
 
-            FluentActions.Invoking(() => hex.Tail(12)).Should().Throw<ArgumentException>()
+            FluentActions.Invoking(() => hex.Tail(12)).Should().Throw<ArgumentOutOfRangeException>()
                 .WithMessage("Length must be greater than zero and less than the length of the hex value");
         }
         
@@ -148,7 +148,7 @@ namespace GCommon.Primitives.UnitTests.HelperTests
         {
             var hex = new Hex("1234ABCD");
 
-            FluentActions.Invoking(() => hex.DropHead(8)).Should().Throw<ArgumentException>()
+            FluentActions.Invoking(() => hex.DropHead(8)).Should().Throw<ArgumentOutOfRangeException>()
                 .WithMessage("Length must be less than the length of the hex value");
         }
         
@@ -157,7 +157,7 @@ namespace GCommon.Primitives.UnitTests.HelperTests
         {
             var hex = new Hex("1234ABCD");
 
-            FluentActions.Invoking(() => hex.DropHead(12)).Should().Throw<ArgumentException>()
+            FluentActions.Invoking(() => hex.DropHead(12)).Should().Throw<ArgumentOutOfRangeException>()
                 .WithMessage("Length must be less than the length of the hex value");
         }
         
@@ -176,7 +176,7 @@ namespace GCommon.Primitives.UnitTests.HelperTests
         {
             var hex = new Hex("1234ABCD");
 
-            FluentActions.Invoking(() => hex.DropTail(8)).Should().Throw<ArgumentException>()
+            FluentActions.Invoking(() => hex.DropTail(8)).Should().Throw<ArgumentOutOfRangeException>()
                 .WithMessage("Length must be less than the length of the hex value");
         }
         
@@ -185,7 +185,7 @@ namespace GCommon.Primitives.UnitTests.HelperTests
         {
             var hex = new Hex("1234ABCD");
 
-            FluentActions.Invoking(() => hex.DropTail(12)).Should().Throw<ArgumentException>()
+            FluentActions.Invoking(() => hex.DropTail(12)).Should().Throw<ArgumentOutOfRangeException>()
                 .WithMessage("Length must be less than the length of the hex value");
         }
 
@@ -201,6 +201,28 @@ namespace GCommon.Primitives.UnitTests.HelperTests
             results[1].Value.Should().Be("0015");
             results[2].Value.Should().Be("00F4");
             results[3].Value.Should().Be("009C");
+        }
+
+        [Test]
+        public void Consume_ValidLengthDefaultStart_ShouldHaveExpectedResult()
+        {
+            var hex = new Hex("0034001500F4009C");
+
+            var result = hex.Consume(8);
+
+            result.Value.Should().Be("00340015");
+        }
+        
+        [Test]
+        public void Consume_ValidLengthDefaultStart_OriginalShouldHaveRemovedData()
+        {
+            var hex = new Hex("0034001500F4009C");
+
+            var result = hex.Consume(8);
+
+            result.Should().NotBeNull();
+            hex.Length.Should().Be(8);
+            hex.Value.Should().Be("00F4009C");
         }
         
         [Test]

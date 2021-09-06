@@ -18,7 +18,9 @@ namespace GCommon.Primitives.Helpers
             Value = value;
         }
         
-        public string Value { get; set; }
+        public string Value { get; private set; }
+
+        public int Length => Value.Length;
         
         public static Hex Empty => new Hex("00");
 
@@ -132,7 +134,8 @@ namespace GCommon.Primitives.Helpers
         public Hex Head(int length)
         {
             if (length > Value.Length || length == 0)
-                throw new ArgumentException("Length must be greater than zero and less than the length of the hex value");
+                throw new ArgumentOutOfRangeException(nameof(length),
+                    "Length must be greater than zero and less than the length of the hex value");
             
             var result = Value.Substring(0, length);
             
@@ -142,7 +145,8 @@ namespace GCommon.Primitives.Helpers
         public Hex Tail(int length)
         {
             if (length > Value.Length || length == 0)
-                throw new ArgumentException("Length must be greater than zero and less than the length of the hex value");
+                throw new ArgumentOutOfRangeException(nameof(length),
+                    "Length must be greater than zero and less than the length of the hex value");
             
             var result = Value.Substring(Value.Length - length, length);
             
@@ -152,7 +156,8 @@ namespace GCommon.Primitives.Helpers
         public Hex DropHead(int length)
         {
             if (length >= Value.Length)
-                throw new ArgumentException("Length must be less than the length of the hex value");
+                throw new ArgumentOutOfRangeException(nameof(length),
+                    "Length must be less than the length of the hex value");
             
             var result = Value.Remove(0, length);
             
@@ -162,17 +167,35 @@ namespace GCommon.Primitives.Helpers
         public Hex DropTail(int length)
         {
             if (length >= Value.Length)
-                throw new ArgumentException("Length must be less than the length of the hex value");
+                throw new ArgumentOutOfRangeException(nameof(length),
+                    "Length must be less than the length of the hex value");
                     
             var result = Value.Remove(Value.Length - length, length);
             
             return new Hex(result);
         }
+
+        public Hex Consume(int length, int start = 0)
+        {
+            if (start + length > Length || start + length == 0)
+                throw new ArgumentOutOfRangeException(nameof(length),
+                    "Length plus start must be greater than 0 and less than the length of the hex value");
+            
+            var consumed = Value.Substring(start, length);
+            
+            Value = Value.Remove(start, length);
+            
+            return new Hex(consumed);
+        }
         
         public Hex Take(int start, int length)
         {
-            var stripped = Value.Substring(start, length);
-            return new Hex(stripped);
+            if (start + length > Length || start + length < 0)
+                throw new ArgumentOutOfRangeException(nameof(length),
+                    "Length plus start must be greater than 0 and less than the length of the hex value");
+            
+            var segment = Value.Substring(start, length);
+            return new Hex(segment);
         }
         
         public bool Equals(Hex other)

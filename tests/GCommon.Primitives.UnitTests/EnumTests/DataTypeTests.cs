@@ -1,6 +1,7 @@
 using System;
 using FluentAssertions;
 using GCommon.Primitives.Enumerations;
+using GCommon.Primitives.Helpers;
 using NUnit.Framework;
 
 namespace GCommon.Primitives.UnitTests.EnumTests
@@ -30,7 +31,7 @@ namespace GCommon.Primitives.UnitTests.EnumTests
         [TestCase("0x01FF")]
         public void ParseHex_BooleanSingleValue_ShouldBeTrue(string input)
         {
-            var actual = Convert.ToBoolean(DataType.Boolean.ParseHex(input));
+            var actual = Convert.ToBoolean(DataType.Boolean.Parse((Hex)input));
             actual.Should().BeTrue();
         }
 
@@ -38,7 +39,7 @@ namespace GCommon.Primitives.UnitTests.EnumTests
         [TestCase("0x0100")]
         public void ParseHex_BooleanSingleValue_ShouldBeFalse(string input)
         {
-            var actual = Convert.ToBoolean(DataType.Boolean.ParseHex(input));
+            var actual = Convert.ToBoolean(DataType.Boolean.Parse((Hex)input));
 
             actual.Should().BeFalse();
         }
@@ -47,7 +48,7 @@ namespace GCommon.Primitives.UnitTests.EnumTests
         [TestCase("0x41000000000500020000000000FFFF0000FFFFFFFF", new[] {false, true, false, true, true})]
         public void ParseHex_BooleanArray_ShouldBeEquivalentToExpected(string input, bool[] expected)
         {
-            var actual = DataType.Boolean.ParseHex(input);
+            var actual = DataType.Boolean.Parse((Hex)input);
             
             actual.Should().BeEquivalentTo(expected);
         }
@@ -72,7 +73,7 @@ namespace GCommon.Primitives.UnitTests.EnumTests
         [TestCase("0x02FFFFFFFF", -1)]
         public void ParseHex_IntegerSingleValue_ShouldBeEquivalentToExpected(string input, int expected)
         {
-            var actual = DataType.Integer.ParseHex(input);
+            var actual = DataType.Integer.Parse((Hex)input);
             
             actual.Should().Be(expected);
         }
@@ -81,7 +82,7 @@ namespace GCommon.Primitives.UnitTests.EnumTests
         [TestCase("0x42000000000500040000000C0000003200000000000000F6FFFFFF6CD60000", new[] {12, 50, 0, -10, 54892})]
         public void ParseHex_IntegerArrayValue_ShouldBeEquivalentToExpected(string input, int[] expected)
         {
-            var actual = DataType.Integer.ParseHex(input);
+            var actual = DataType.Integer.Parse((Hex)input);
 
             actual.Should().BeEquivalentTo(expected);
         }
@@ -103,7 +104,7 @@ namespace GCommon.Primitives.UnitTests.EnumTests
         [TestCase("0x030800803F", 1.000001f)]
         public void ParseHex_FloatSingleValue_ReturnsExpectedValue(string input, float expected)
         {
-            var actual = DataType.Float.ParseHex(input);
+            var actual = DataType.Float.Parse((Hex)input);
             
             actual.Should().Be(expected);
         }
@@ -112,7 +113,7 @@ namespace GCommon.Primitives.UnitTests.EnumTests
         [TestCase("0x4300000000050004000000D26F9F3FE17A42C2000028411F05C84200000000", new[] {1.2456f, -48.62f, 10.5f, 100.01f, 0.0f})]
         public void ParseHex_FloatArrayValue_ShouldBeEquivalentToExpected(string input, float[] expected)
         {
-            var actual = DataType.Float.ParseHex(input);
+            var actual = DataType.Float.Parse((Hex)input);
             
             actual.Should().BeEquivalentTo(expected);
         }
@@ -133,7 +134,7 @@ namespace GCommon.Primitives.UnitTests.EnumTests
         [TestCase("0x040000000000000000", 0.0)]
         public void ParseHex_DoubleSingleValue_ReturnsExpectedValue(string input, double expected)
         {
-            var actual = DataType.Double.ParseHex(input);
+            var actual = DataType.Double.Parse((Hex)input);
             
             actual.Should().Be(expected);
         }
@@ -143,7 +144,7 @@ namespace GCommon.Primitives.UnitTests.EnumTests
             new[] {0.9658, -74.123, 100.011, 0.0, 1.2})]
         public void ParseHex_DoubleArrayValue_ShouldBeEquivalentToExpected(string input, double[] expected)
         {
-            var actual = DataType.Double.ParseHex(input);
+            var actual = DataType.Double.Parse((Hex)input);
             
             actual.Should().BeEquivalentTo(expected);
         }

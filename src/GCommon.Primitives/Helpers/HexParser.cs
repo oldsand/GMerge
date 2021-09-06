@@ -1,17 +1,19 @@
 using System;
+using System.Collections.Generic;
 
 namespace GCommon.Primitives.Helpers
 {
-    public class HexReader
+    public class HexParser
     {
         private const int HeaderLength = 4;
         private const int ArrayHeaderLength = 20;
         private const int ArrayPaddingLength = 8;
         private const int ArraySizeLength = 4;
         private const int ElementSizeLength = 8;
+        private const int ArrayIndexSizeLength = 8;
         private readonly Hex _input;
 
-        public HexReader(string input)
+        public HexParser(string input)
         {
             if (!input.StartsWith("0x"))
                 throw new ArgumentException();
@@ -34,5 +36,32 @@ namespace GCommon.Primitives.Helpers
         public int ElementSize => IsArray
                 ? ArrayHeader.Take(ArrayPaddingLength + ArraySizeLength, ElementSizeLength).Reverse().ToInt() * 2
                 : -1;
+
+        public IEnumerable<Hex> ParseDataArray()
+        {
+            if (!IsArray)
+                throw new InvalidOperationException("The provided hex data is not an array");
+
+            return HasDivisibleArrayLength() ? Data.ToEnumerable(ElementSize) : TraverseData(Data);
+        }
+
+        private static IEnumerable<Hex> TraverseData(Hex data)
+        {
+            var items = new List<Hex>(); 
+            
+            var indexByteSize = data.Consume(ArrayIndexSizeLength).Reverse().ToInt();
+            var item = data.Consume(indexByteSize * 2).DropHead(2);
+            items.Add(item);
+
+            if (data.Length > 0)
+                items.AddRange(TraverseData(data));
+
+            return items;
+        }
+
+        private bool HasDivisibleArrayLength()
+        {
+            return Data.Length / ElementSize == ArrayLength;
+        }
     }
 }
