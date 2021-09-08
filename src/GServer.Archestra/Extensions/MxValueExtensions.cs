@@ -46,7 +46,7 @@ namespace GServer.Archestra.Extensions
                 MxDataType.MxQualifiedEnum => mxValue.GetValue<T, Enumeration>(v =>
                 {
                     v.GetCustomEnum(out var value, out var ordinal, out var primitiveId, out var attributeId);
-                    return Enumeration.FromValue(value, ordinal, primitiveId, attributeId);
+                    return new Enumeration(value, ordinal, primitiveId, attributeId);
                 }),
                 MxDataType.MxQualifiedStruct => mxValue.GetValue<T, Blob>(v =>
                 {

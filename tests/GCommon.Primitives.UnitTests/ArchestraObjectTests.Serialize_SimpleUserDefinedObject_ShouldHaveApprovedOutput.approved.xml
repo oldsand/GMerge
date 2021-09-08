@@ -1,0 +1,243 @@
+﻿<Object TagName="TagName" HierarchicalName="TagName" ContainedName="" ConfigVersion="1" Category="ApplicationObject" DerivedFromName="$UserDefined" BasedOnName="$UserDefined" HostName="" AreaName="" ContainerName="">
+  <Attributes>
+    <Attribute Name="_AdviseOnlyActiveEnabled" DataType="Boolean" Category="Writeable_C_Lockable" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[True]]></Value>
+    </Attribute>
+    <Attribute Name="_AggAlarmUpdate" DataType="QualifiedStruct" Category="SystemSetsOnly" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[GCommon.Primitives.Structs.Blob]]></Value>
+    </Attribute>
+    <Attribute Name="_AlarmModeEnum" DataType="String" Category="Constant" Security="Undefined" Locked="Unlocked" ArrayCount="3">
+      <Value>
+        <Element><![CDATA[Enable]]></Element>
+        <Element><![CDATA[Disable]]></Element>
+        <Element><![CDATA[Silence]]></Element>
+      </Value>
+    </Attribute>
+    <Attribute Name="_AlarmMostUrgentInit" DataType="Boolean" Category="Calculated" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[False]]></Value>
+    </Attribute>
+    <Attribute Name="_Attributes" DataType="String" Category="SystemWriteable" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[]]></Value>
+    </Attribute>
+    <Attribute Name="_BasedOn" DataType="String" Category="PackageOnlyLockable" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[]]></Value>
+    </Attribute>
+    <Attribute Name="_Category" DataType="QualifiedEnum" Category="Writeable_C_Lockable" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[GCommon.Primitives.Structs.Enumeration]]></Value>
+    </Attribute>
+    <Attribute Name="_CategoryEnum" DataType="String" Category="Constant" Security="Undefined" Locked="Unlocked" ArrayCount="26">
+      <Value>
+        <Element><![CDATA[EnginePlatform]]></Element>
+        <Element><![CDATA[EngineGalaxy]]></Element>
+        <Element><![CDATA[EngineApplication]]></Element>
+        <Element><![CDATA[EngineView]]></Element>
+        <Element><![CDATA[EngineProduct]]></Element>
+        <Element><![CDATA[EngineHistory]]></Element>
+        <Element><![CDATA[EnginePrint]]></Element>
+        <Element><![CDATA[Outpost]]></Element>
+        <Element><![CDATA[EngineQuery]]></Element>
+        <Element><![CDATA[ObjectApplication]]></Element>
+        <Element><![CDATA[IONetwork]]></Element>
+        <Element><![CDATA[IODevice]]></Element>
+        <Element><![CDATA[Area]]></Element>
+        <Element><![CDATA[UserProfile]]></Element>
+        <Element><![CDATA[Display]]></Element>
+        <Element><![CDATA[Symbol]]></Element>
+        <Element><![CDATA[ViewApp]]></Element>
+        <Element><![CDATA[ObjectProduction]]></Element>
+        <Element><![CDATA[Report]]></Element>
+        <Element><![CDATA[SharedProcedure]]></Element>
+        <Element><![CDATA[InsertablePrimitive]]></Element>
+        <Element><![CDATA[IDEMacro]]></Element>
+        <Element><![CDATA[Galaxy]]></Element>
+        <Element><![CDATA[PostIO]]></Element>
+        <Element><![CDATA[Custom]]></Element>
+        <Element><![CDATA[InTouchViewApp]]></Element>
+      </Value>
+    </Attribute>
+    <Attribute Name="_CmdAdd" DataType="String" Category="PackageOnly" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[]]></Value>
+    </Attribute>
+    <Attribute Name="_CmdRemove" DataType="String" Category="PackageOnly" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[]]></Value>
+    </Attribute>
+    <Attribute Name="_Command" DataType="String" Category="PackageOnly" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[
+				]]></Value>
+    </Attribute>
+    <Attribute Name="_ExecutionRelativeOrderEnum" DataType="String" Category="Constant" Security="Undefined" Locked="Unlocked" ArrayCount="3">
+      <Value>
+        <Element><![CDATA[None]]></Element>
+        <Element><![CDATA[Before]]></Element>
+        <Element><![CDATA[After]]></Element>
+      </Value>
+    </Attribute>
+    <Attribute Name="_ExternalName" DataType="String" Category="SystemInternal" Security="ViewOnly" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[]]></Value>
+    </Attribute>
+    <Attribute Name="_InheritedAttrListNameID" DataType="Integer" Category="PackageOnly" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[0]]></Value>
+    </Attribute>
+    <Attribute Name="_InheritedAttrListNames" DataType="String" Category="Writeable_C_Lockable" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[]]></Value>
+    </Attribute>
+    <Attribute Name="_InheritedCmdData" DataType="BigString" Category="PackageOnly" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value />
+    </Attribute>
+    <Attribute Name="_InheritedExtensions" DataType="BigString" Category="PackageOnly" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value />
+    </Attribute>
+    <Attribute Name="_InheritedUDAs" DataType="BigString" Category="PackageOnly" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value />
+    </Attribute>
+    <Attribute Name="_InheritedUserAttrData" DataType="BigString" Category="PackageOnly" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value />
+    </Attribute>
+    <Attribute Name="_InternalName" DataType="String" Category="SystemInternal" Security="ViewOnly" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[UserDefined]]></Value>
+    </Attribute>
+    <Attribute Name="_IsTemplate" DataType="Boolean" Category="PackageOnlyLockable" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[False]]></Value>
+    </Attribute>
+    <Attribute Name="_TempCntsBySeverity" DataType="Integer" Category="Calculated" Security="Undefined" Locked="Unlocked" ArrayCount="4">
+      <Value>
+        <Element><![CDATA[0]]></Element>
+        <Element><![CDATA[0]]></Element>
+        <Element><![CDATA[0]]></Element>
+        <Element><![CDATA[0]]></Element>
+      </Value>
+    </Attribute>
+    <Attribute Name="_TempCntsBySeverityEnableShelved" DataType="Integer" Category="Calculated" Security="Undefined" Locked="Unlocked" ArrayCount="4">
+      <Value>
+        <Element><![CDATA[0]]></Element>
+        <Element><![CDATA[0]]></Element>
+        <Element><![CDATA[0]]></Element>
+        <Element><![CDATA[0]]></Element>
+      </Value>
+    </Attribute>
+    <Attribute Name="_TempMostUrgentAcked" DataType="Boolean" Category="Calculated" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[False]]></Value>
+    </Attribute>
+    <Attribute Name="_TempMostUrgentInAlarm" DataType="Boolean" Category="Calculated" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[False]]></Value>
+    </Attribute>
+    <Attribute Name="_TempMostUrgentInit" DataType="Boolean" Category="Calculated" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[False]]></Value>
+    </Attribute>
+    <Attribute Name="_TempMostUrgentMode" DataType="QualifiedEnum" Category="Calculated" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[GCommon.Primitives.Structs.Enumeration]]></Value>
+    </Attribute>
+    <Attribute Name="_TempMostUrgentSeverity" DataType="Integer" Category="Calculated" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[0]]></Value>
+    </Attribute>
+    <Attribute Name="_TempMostUrgentShelved" DataType="Boolean" Category="Calculated" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[False]]></Value>
+    </Attribute>
+    <Attribute Name="_Warnings" DataType="String" Category="Writeable_USC" Security="FreeAccess" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[]]></Value>
+    </Attribute>
+    <Attribute Name="AlarmCntsBySeverity" DataType="Integer" Category="Calculated" Security="Undefined" Locked="Unlocked" ArrayCount="4">
+      <Value>
+        <Element><![CDATA[0]]></Element>
+        <Element><![CDATA[0]]></Element>
+        <Element><![CDATA[0]]></Element>
+        <Element><![CDATA[0]]></Element>
+      </Value>
+    </Attribute>
+    <Attribute Name="AlarmCntsBySeverityEnableShelved" DataType="Integer" Category="Calculated" Security="Undefined" Locked="Unlocked" ArrayCount="4">
+      <Value>
+        <Element><![CDATA[0]]></Element>
+        <Element><![CDATA[0]]></Element>
+        <Element><![CDATA[0]]></Element>
+        <Element><![CDATA[0]]></Element>
+      </Value>
+    </Attribute>
+    <Attribute Name="AlarmInhibit" DataType="Boolean" Category="Writeable_US" Security="FreeAccess" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[False]]></Value>
+    </Attribute>
+    <Attribute Name="AlarmMode" DataType="QualifiedEnum" Category="CalculatedRetentive" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[GCommon.Primitives.Structs.Enumeration]]></Value>
+    </Attribute>
+    <Attribute Name="AlarmModeCmd" DataType="QualifiedEnum" Category="Writeable_US" Security="FreeAccess" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[GCommon.Primitives.Structs.Enumeration]]></Value>
+    </Attribute>
+    <Attribute Name="AlarmMostUrgentAcked" DataType="Boolean" Category="Calculated" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[False]]></Value>
+    </Attribute>
+    <Attribute Name="AlarmMostUrgentInAlarm" DataType="Boolean" Category="Calculated" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[False]]></Value>
+    </Attribute>
+    <Attribute Name="AlarmMostUrgentMode" DataType="QualifiedEnum" Category="Calculated" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[GCommon.Primitives.Structs.Enumeration]]></Value>
+    </Attribute>
+    <Attribute Name="AlarmMostUrgentSeverity" DataType="Integer" Category="Calculated" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[0]]></Value>
+    </Attribute>
+    <Attribute Name="AlarmMostUrgentShelved" DataType="Boolean" Category="Calculated" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[False]]></Value>
+    </Attribute>
+    <Attribute Name="Area" DataType="ReferenceType" Category="SystemWriteable" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[]]></Value>
+    </Attribute>
+    <Attribute Name="CmdData" DataType="BigString" Category="PackageOnly" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value />
+    </Attribute>
+    <Attribute Name="CodeBase" DataType="String" Category="PackageOnly" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[]]></Value>
+    </Attribute>
+    <Attribute Name="ConfigVersion" DataType="Integer" Category="Writeable_S" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[0]]></Value>
+    </Attribute>
+    <Attribute Name="ContainedName" DataType="String" Category="SystemWriteable" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[]]></Value>
+    </Attribute>
+    <Attribute Name="Container" DataType="ReferenceType" Category="SystemWriteable" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[]]></Value>
+    </Attribute>
+    <Attribute Name="Errors" DataType="String" Category="PackageOnly" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[]]></Value>
+    </Attribute>
+    <Attribute Name="ExecutionRelatedObject" DataType="ReferenceType" Category="Writeable_C_Lockable" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[]]></Value>
+    </Attribute>
+    <Attribute Name="ExecutionRelativeOrder" DataType="QualifiedEnum" Category="Writeable_C_Lockable" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[GCommon.Primitives.Structs.Enumeration]]></Value>
+    </Attribute>
+    <Attribute Name="Extensions" DataType="BigString" Category="PackageOnly" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value />
+    </Attribute>
+    <Attribute Name="HierarchicalName" DataType="String" Category="SystemWriteable" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[]]></Value>
+    </Attribute>
+    <Attribute Name="Host" DataType="ReferenceType" Category="SystemWriteable" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[]]></Value>
+    </Attribute>
+    <Attribute Name="InAlarm" DataType="Boolean" Category="Calculated" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[False]]></Value>
+    </Attribute>
+    <Attribute Name="MinorVersion" DataType="Integer" Category="PackageOnly" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[0]]></Value>
+    </Attribute>
+    <Attribute Name="ScanState" DataType="Boolean" Category="Calculated" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[False]]></Value>
+    </Attribute>
+    <Attribute Name="ScanStateCmd" DataType="Boolean" Category="Writeable_US" Security="Operate" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[False]]></Value>
+    </Attribute>
+    <Attribute Name="SecurityGroup" DataType="String" Category="Writeable_C_Lockable" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[Default]]></Value>
+    </Attribute>
+    <Attribute Name="ShortDesc" DataType="InternationalizedStruct" Category="Writeable_C_Lockable" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value />
+    </Attribute>
+    <Attribute Name="Tagname" DataType="String" Category="SystemWriteable" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[]]></Value>
+    </Attribute>
+    <Attribute Name="UDAs" DataType="BigString" Category="PackageOnly" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value />
+    </Attribute>
+    <Attribute Name="UserAttrData" DataType="BigString" Category="PackageOnly" Security="Undefined" Locked="Unlocked" ArrayCount="-1">
+      <Value />
+    </Attribute>
+  </Attributes>
+</Object>

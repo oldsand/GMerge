@@ -11,23 +11,39 @@ namespace GCommon.Primitives
 {
     public class ArchestraObject : IXSerializable, IDifferentiable<ArchestraObject>
     {
-        public ArchestraObject()
+        public ArchestraObject(string tagName, Template basedOn, string derivedFrom = null, int configVersion = 1,
+            IEnumerable<ArchestraAttribute> attributes = null)
         {
-        }
-        
-        public ArchestraObject(string tagName, Template basedOn, string derivedFrom = null)
-        {
-            TagName = tagName;
+            if (basedOn == null) throw new ArgumentNullException(nameof(basedOn));
+            
+            TagName = tagName ?? throw new ArgumentNullException(nameof(tagName));
             BasedOnName = basedOn.Name;
             DerivedFromName = derivedFrom ?? basedOn.Name;
             HierarchicalName = tagName;
-            ConfigVersion = 1;
-            //todo use template to determine category
+            ConfigVersion = configVersion;
+            Category = basedOn.Category;
             ContainedName = string.Empty;
             HostName = string.Empty;
             AreaName = string.Empty;
             ContainerName = string.Empty;
-            Attributes = Template.GetAttributes();
+            InitializeAttributes(attributes);
+        }
+
+        public ArchestraObject(string tagName, string containedName, string hierarchicalName, ObjectCategory category,
+            int configVersion, string derivedFromName, string basedOnName, string hostName, string areaName,
+            string containerName, IEnumerable<ArchestraAttribute> attributes)
+        {
+            TagName = tagName ?? throw new ArgumentNullException(nameof(tagName));
+            ContainedName = containedName ?? throw new ArgumentNullException(nameof(containedName));
+            HierarchicalName = hierarchicalName ?? throw new ArgumentNullException(nameof(hierarchicalName));
+            Category = category ?? throw new ArgumentNullException(nameof(category));
+            ConfigVersion = configVersion;
+            DerivedFromName = derivedFromName ?? throw new ArgumentNullException(nameof(derivedFromName));
+            BasedOnName = basedOnName ?? throw new ArgumentNullException(nameof(basedOnName));
+            HostName = hostName ?? throw new ArgumentNullException(nameof(hostName));
+            AreaName = areaName ?? throw new ArgumentNullException(nameof(areaName));
+            ContainerName = containerName ?? throw new ArgumentNullException(nameof(containerName));
+            Attributes = attributes ?? throw new ArgumentNullException(nameof(attributes));
         }
 
         private ArchestraObject(XElement element)
@@ -103,7 +119,7 @@ namespace GCommon.Primitives
                    BasedOnName == other.BasedOnName && HostName == other.HostName && AreaName == other.AreaName &&
                    ContainerName == other.ContainerName && Equals(Attributes, other.Attributes);
         }
-        
+
         public IEnumerable<Difference> DiffersFrom(ArchestraObject other)
         {
             var differences = new List<Difference>();
@@ -127,7 +143,7 @@ namespace GCommon.Primitives
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == GetType() && Equals((ArchestraObject) obj);
+            return obj.GetType() == GetType() && Equals((ArchestraObject)obj);
         }
 
         public override int GetHashCode()
@@ -157,6 +173,16 @@ namespace GCommon.Primitives
         public static bool operator !=(ArchestraObject left, ArchestraObject right)
         {
             return !Equals(left, right);
+        }
+
+        private void InitializeAttributes(IEnumerable<ArchestraAttribute> attributes)
+        {
+            var archestraAttributes = Template.GetAttributes().ToList();
+
+            if (attributes != null)
+                archestraAttributes.AddRange(attributes);
+            
+            Attributes = archestraAttributes;
         }
     }
 }

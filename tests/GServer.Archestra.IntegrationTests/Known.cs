@@ -8,15 +8,11 @@ namespace GServer.Archestra.IntegrationTests
     {
         public static class Templates
         {
-            public static ArchestraObject DrumConveyor => new()
-            {
-                TagName = "$Drum_Conveyor",
-                ConfigVersion = 86,
-                Category = ObjectCategory.ApplicationObject,
-                HierarchicalName = "$Drum_Conveyor",
-                BasedOnName = Template.UserDefined.Name,
-                DerivedFromName = Template.UserDefined.Name,
-                Attributes = new List<ArchestraAttribute>
+            public static ArchestraObject DrumConveyor => new(
+                "$Drum_Conveyor",
+                Template.UserDefined,
+                configVersion: 86,
+                attributes: new List<ArchestraAttribute>
                 {
                     new("Auto", DataType.Boolean),
                     new("Cycle", DataType.Integer),
@@ -30,17 +26,13 @@ namespace GServer.Archestra.IntegrationTests
                     new("Speed", DataType.Double, security: SecurityClassification.FreeAccess),
                     new("VerticalMovement", DataType.Double),
                 }
-            };
-
-            public static ArchestraObject ReactorSet => new()
-            {
-                TagName = "$ReactorSet",
-                ConfigVersion = 94,
-                Category = ObjectCategory.ApplicationObject,
-                HierarchicalName = "$ReactorSet",
-                BasedOnName = Template.UserDefined.Name,
-                DerivedFromName = Template.UserDefined.Name,
-                Attributes = new List<ArchestraAttribute>
+            );
+            
+            public static ArchestraObject ReactorSet => new(
+                "$ReactorSet",
+                Template.UserDefined,
+                configVersion: 94,
+                attributes: new List<ArchestraAttribute>
                 {
                     new("Auto", DataType.Boolean, security: SecurityClassification.Tune),
                     new("BatchNum", DataType.Integer),
@@ -49,7 +41,7 @@ namespace GServer.Archestra.IntegrationTests
                     new("Ref_Done", DataType.Boolean),
                     new("SimID", DataType.String)
                 }
-            };
+            );
         }
 
         public static class Instances

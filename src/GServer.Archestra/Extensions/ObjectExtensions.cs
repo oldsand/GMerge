@@ -206,26 +206,23 @@ namespace GServer.Archestra.Extensions
         }
 
         /// <summary>
-        /// Transforms the object to a ArchestraObject entity
+        /// Transforms the object to a ArchestraObject type
         /// </summary>
-        /// <param name="gObject"></param>
+        /// <param name="obj"></param>
         /// <returns></returns>
-        public static ArchestraObject Map(this IgObject gObject)
+        public static ArchestraObject Map(this IgObject obj)
         {
-            return new ArchestraObject
-            {
-                TagName = gObject.Tagname,
-                HierarchicalName = gObject.HierarchicalName,
-                ContainedName = gObject.ContainedName,
-                ConfigVersion = gObject.ConfigVersion,
-                DerivedFromName = gObject.DerivedFrom,
-                BasedOnName = gObject.basedOn,
-                Category = gObject.category.ToPrimitive(),
-                HostName = gObject.Host,
-                AreaName = gObject.Area,
-                ContainerName = gObject.Container,
-                Attributes = gObject.Attributes.Map()
-            };
+            return new ArchestraObject(obj.Tagname,
+                obj.ContainedName,
+                obj.HierarchicalName,
+                obj.category.ToPrimitive(),
+                obj.ConfigVersion,
+                obj.DerivedFrom,
+                obj.basedOn,
+                obj.Host,
+                obj.Area,
+                obj.Container,
+                obj.Attributes.Map());
         }
 
         /// <summary>

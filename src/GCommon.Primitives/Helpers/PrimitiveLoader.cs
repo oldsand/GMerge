@@ -21,7 +21,6 @@ namespace GCommon.Primitives.Helpers
         private const string SecurityElement = "Security";
         private const string LockedElement = "Locked";
         private const string ValueElement = "Value";
-        private const string IsArrayElement = "IsArray";
         private static readonly EmbeddedResources Resources = new EmbeddedResources(typeof(PrimitiveLoader));
 
         public static IEnumerable<ArchestraAttribute> Load(Template template)
@@ -38,9 +37,10 @@ namespace GCommon.Primitives.Helpers
                 let category = AttributeCategory.FromValue(Convert.ToInt32(row.Element(CategoryElement)?.Value))
                 let security = SecurityClassification.FromValue(Convert.ToInt32(row.Element(SecurityElement)?.Value))
                 let locked = Convert.ToBoolean(row.Element(LockedElement)?.Value) ? LockType.InMe : LockType.Unlocked
-                let value = row.Element(ValueElement)?.Value
-                let arrayCount = row.Element(IsArrayElement)?.Value
-                select new ArchestraAttribute(name, dataType, category, security, locked)).ToList();
+                let parser = new HexParser(row.Element(ValueElement)?.Value)
+                let value = dataType.Parse((Hex)row.Element(ValueElement)?.Value)
+                let arrayCount = parser.ArrayLength
+                select new ArchestraAttribute(name, dataType, category, security, locked, value, arrayCount)).ToList();
         }
     }
 }

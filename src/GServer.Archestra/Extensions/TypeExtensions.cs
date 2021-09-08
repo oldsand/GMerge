@@ -69,7 +69,7 @@ namespace GServer.Archestra.Extensions
 
         public static Reference ToPrimitive(this IMxReference mxReference)
         {
-            return Reference.FromName(mxReference.FullReferenceString);
+            return new Reference(mxReference.FullReferenceString);
         }
 
         public static IMxReference ToMx(this Reference reference)

@@ -273,7 +273,7 @@ namespace GServer.Archestra.UnitTests
         [Test]
         public void GetSet_Reference_ShouldBeExpectedValue()
         {
-            var expected = Reference.FromName("Some.Reference");
+            var expected = new Reference("Some.Reference");
             var mxValue = MxFactory.Create<Reference>();
 
             mxValue.SetValue(expected);
@@ -287,9 +287,9 @@ namespace GServer.Archestra.UnitTests
         {
             var expected = new List<Reference>
             {
-                Reference.FromName("Some.Reference1"),
-                Reference.FromName("Some.Reference2"),
-                Reference.FromName("Some.Reference3")
+                new Reference("Some.Reference1"),
+                new Reference("Some.Reference2"),
+                new Reference("Some.Reference3")
             };
             var mxValue = MxFactory.Create<Reference[]>();
 

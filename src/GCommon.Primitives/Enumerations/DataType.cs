@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Ardalis.SmartEnum;
 using GCommon.Primitives.Helpers;
 using GCommon.Primitives.Structs;
@@ -37,12 +36,12 @@ namespace GCommon.Primitives.Enumerations
         
         public virtual object Parse(string value)
         {
-            return null;
+            return DefaultValue;
         }
 
-        public virtual object Parse(string[] value)
+        public virtual object Parse(IEnumerable<string> values)
         {
-            return default;
+            return values.Select(Parse);
         }
 
         public object Parse(Hex hex)
@@ -54,12 +53,12 @@ namespace GCommon.Primitives.Enumerations
 
         protected virtual object ParseSingle(Hex hex)
         {
-            return hex.Reverse().Value;
+            return hex.Head(4) == "0x00" ? Hex.Empty : DefaultValue;
         }
 
         protected virtual object ParseArray(IEnumerable<Hex> hexes)
         {
-            return hexes.Select(Parse);
+            return hexes.Select(ParseSingle).ToArray();
         }
 
         #region InternalClasses
@@ -96,6 +95,12 @@ namespace GCommon.Primitives.Enumerations
             
             public override object DefaultValue => default(bool);
 
+            public override object Parse(string value)
+            {
+                bool.TryParse(value, out var result);
+                return result;
+            }
+
             protected override object ParseSingle(Hex hex)
             {
                 return hex.Reverse().ToBool();
@@ -109,6 +114,12 @@ namespace GCommon.Primitives.Enumerations
             }
             
             public override object DefaultValue => default(int);
+            
+            public override object Parse(string value)
+            {
+                int.TryParse(value, out var result);
+                return result;
+            }
 
             protected override object ParseSingle(Hex hex)
             {
@@ -124,6 +135,12 @@ namespace GCommon.Primitives.Enumerations
 
             public override object DefaultValue => default(float);
             
+            public override object Parse(string value)
+            {
+                float.TryParse(value, out var result);
+                return result;
+            }
+            
             protected override object ParseSingle(Hex hex)
             {
                 return hex.Reverse().ToFloat();
@@ -137,6 +154,12 @@ namespace GCommon.Primitives.Enumerations
             }
 
             public override object DefaultValue => default(double);
+            
+            public override object Parse(string value)
+            {
+                double.TryParse(value, out var result);
+                return result;
+            }
             
             protected override object ParseSingle(Hex hex)
             {
@@ -152,17 +175,20 @@ namespace GCommon.Primitives.Enumerations
             
             public override object DefaultValue => string.Empty;
             
+            public override object Parse(string value)
+            {
+                return value;
+            }
+            
             protected override object ParseSingle(Hex hex)
             {
-                var builder = new StringBuilder();
+                if (hex.Length == 0)
+                    return string.Empty;
                 
                 //the data we will get is expected to have a 16 bit header so we need to strip it
-                var chars = hex.DropHead(16).ToEnumerable(4);
-                
-                foreach (var c in chars)
-                    builder.Append(c.Reverse().ToChar());
+                var chars = hex.DropHead(16).DropTail(4).ToEnumerable(4);
 
-                return builder.ToString();
+                return chars.FormString();
             }
         }
 
@@ -172,17 +198,26 @@ namespace GCommon.Primitives.Enumerations
             {
             }
             
-            public override object DefaultValue => DateTime.MinValue;
+            public override object DefaultValue => DateTime.Now;
+            
+            public override object Parse(string value)
+            {
+                DateTime.TryParse(value, out var result);
+                return result;
+            }
             
             protected override object ParseSingle(Hex hex)
             {
-                return hex.Reverse().ToDateTime();
+                //for single values there are 8 bits of unknown data at the beginning,
+                //but not when it is an element of an array. So taking the last 20 should work
+                //since we know that the element size is 20
+                return hex.Tail(20).Reverse().ToDateTime();
             }
 
             protected override object ParseArray(IEnumerable<Hex> hexes)
             {
                 //For some reason date time arrays have extra 4 bits unknown data, so we need to trim it.
-                return hexes.Select(h => Parse(h.DropTail(4)));
+                return hexes.Select(h => ParseSingle(h.DropTail(4)));
             }
         }
 
@@ -192,7 +227,13 @@ namespace GCommon.Primitives.Enumerations
             {
             }
             
-            public override object DefaultValue => TimeSpan.MinValue;
+            public override object DefaultValue => TimeSpan.Zero;
+            
+            public override object Parse(string value)
+            {
+                TimeSpan.TryParse(value, out var result);
+                return result;
+            }
             
             protected override object ParseSingle(Hex hex)
             {
@@ -206,34 +247,42 @@ namespace GCommon.Primitives.Enumerations
             {
             }
             
-            public override object DefaultValue => Reference.Empty();
+            public override object DefaultValue => Reference.Empty;
+            
+            public override object Parse(string value)
+            {
+                return new Reference(value);
+            }
 
             protected override object ParseSingle(Hex hex)
             {
-                var builder = new StringBuilder();
-                
+                if (hex.Length == 0)
+                    return string.Empty;
+
                 //The first 8 are the entire length which we don't need. The last 40 are always nothing.
                 hex = hex.DropHead(8).DropTail(40);
 
-                var refLength = hex.Consume(8).DropTail(4).Reverse().ToInt();
-                var refChars = hex.Consume(refLength).ToEnumerable(4);
-
-                foreach (var c in refChars)
-                    builder.Append(c.Reverse().ToChar());
-
-                var fullReference = builder.ToString();
-
-                builder.Clear();
+                var refLength = hex.Consume(8).DropTail(4).Reverse().ToInt() * 2;
+                if (refLength == 0)
+                    return Reference.Empty;
                 
-                var objLength = hex.Consume(8).DropTail(4).Reverse().ToInt();
-                var objChars = hex.Consume(objLength).ToEnumerable(4);
+                var refChars = hex.Consume(refLength).DropTail(4).ToEnumerable(4);
+                var fullReference = refChars.FormString();
+
+                if (hex.Length == 0)
+                    return new Reference(fullReference);
                 
-                foreach (var c in objChars)
-                    builder.Append(c.Reverse().ToChar());
-
-                var objReference = builder.ToString();
-
-                return Reference.FromName(fullReference);
+                //Then there should be 16 bits of padding before the object name.
+                hex = hex.DropHead(16);
+                
+                var objLength = hex.Consume(8).DropTail(4).Reverse().ToInt() * 2;
+                if (objLength == 0)
+                    return new Reference(fullReference);
+                
+                var objChars = hex.Consume(objLength).DropTail(4).ToEnumerable(4);
+                var objReference = objChars.FormString();
+                    
+                return new Reference(fullReference, objReference);
             }
         }
         
@@ -241,6 +290,11 @@ namespace GCommon.Primitives.Enumerations
         {
             public StatusTypeInternal() : base("Status", 9)
             {
+            }
+            
+            public override object Parse(string value)
+            {
+                return StatusCategory.FromName(value);
             }
             
             public override object DefaultValue => StatusCategory.Unknown;
@@ -253,6 +307,11 @@ namespace GCommon.Primitives.Enumerations
             }
             
             public override object DefaultValue => NoData;
+
+            public override object Parse(string value)
+            {
+                return FromName(value);
+            }
 
             protected override object ParseSingle(Hex hex)
             {
@@ -267,6 +326,11 @@ namespace GCommon.Primitives.Enumerations
             }
             
             public override object DefaultValue => SecurityClassification.Undefined;
+            
+            public override object Parse(string value)
+            {
+                return SecurityClassification.FromName(value);
+            }
         }
         
         private class DataQualityInternal : DataType
@@ -276,6 +340,11 @@ namespace GCommon.Primitives.Enumerations
             }
             
             public override object DefaultValue => Quality.Unknown;
+            
+            public override object Parse(string value)
+            {
+                return Quality.FromName(value);
+            }
         }
 
         private class QualifiedEnumInternal : DataType
@@ -285,6 +354,11 @@ namespace GCommon.Primitives.Enumerations
             }
             
             public override object DefaultValue => default(Enumeration);
+            
+            public override object Parse(string value)
+            {
+                return new Enumeration(value);
+            }
         }
         
         private class QualifiedStructInternal : DataType
@@ -294,6 +368,11 @@ namespace GCommon.Primitives.Enumerations
             }
             
             public override object DefaultValue => Blob.Empty();
+            
+            public override object Parse(string value)
+            {
+                return new Blob();
+            }
         }
 
         private class InternationalizedStringInternal : DataType
@@ -303,6 +382,11 @@ namespace GCommon.Primitives.Enumerations
             }
             
             public override object DefaultValue => default(string);
+            
+            public override object Parse(string value)
+            {
+                return value;
+            }
         }
 
         private class BigStringInternal : DataType
@@ -312,6 +396,11 @@ namespace GCommon.Primitives.Enumerations
             }
             
             public override object DefaultValue => default(string);
+            
+            public override object Parse(string value)
+            {
+                return value;
+            }
         }
 
         #endregion

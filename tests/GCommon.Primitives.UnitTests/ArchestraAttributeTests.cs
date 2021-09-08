@@ -103,19 +103,5 @@ namespace GCommon.Primitives.UnitTests
             differences.First().ObjectType.Should().Be(typeof(ArchestraAttribute));
             differences.First().DifferenceType.Should().Be(DifferenceType.Changed);
         }
-        
-        [Test]
-        public void DiffersFrom_EverythingDifferent_ShouldReturnSevenDifferences()
-        {
-            var fixture = new Fixture()
-                .Customize(new SmartEnumCustomization());
-            
-            var first = fixture.Create<ArchestraAttribute>();
-            var second = fixture.Create<ArchestraAttribute>();
-
-            var differences = first.DiffersFrom(second).ToList(); 
-
-            differences.Should().HaveCount(7);
-        }
     }
 }

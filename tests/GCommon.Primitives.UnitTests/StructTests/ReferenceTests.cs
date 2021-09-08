@@ -10,7 +10,7 @@ namespace GCommon.Primitives.UnitTests.StructTests
         [Test]
         public void Default_WhenCalled_ShouldHaveExpectedProperties()
         {
-            var reference = Reference.Empty();
+            var reference = Reference.Empty;
 
             reference.Should().NotBeNull();
             reference.FullName.Should().Be(Reference.DefaultReference);
@@ -19,13 +19,13 @@ namespace GCommon.Primitives.UnitTests.StructTests
         }
         
         [Test]
-        public void FromName_FullReferenceName_ShouldHaveExpectedProperties()
+        public void New_FullReferenceName_ShouldHaveExpectedProperties()
         {
             const string fullName = "Object_Name.Attribute_Name";
             const string objectName = "Object_Name";
             const string attributeName = "Attribute_Name";
             
-            var reference = Reference.FromName(fullName);
+            var reference = new Reference(fullName);
 
             reference.Should().NotBeNull();
             reference.FullName.Should().Be(fullName);
@@ -34,13 +34,13 @@ namespace GCommon.Primitives.UnitTests.StructTests
         }
         
         [Test]
-        public void FromName_FullReferenceNameWithSubProperty_ShouldHaveExpectedProperties()
+        public void New_FullReferenceNameWithSubProperty_ShouldHaveExpectedProperties()
         {
             const string fullName = "Object_Name.Attribute_Name.Property_Name";
             const string objectName = "Object_Name";
             const string attributeName = "Attribute_Name.Property_Name";
             
-            var reference = Reference.FromName(fullName);
+            var reference = new Reference(fullName);
 
             reference.Should().NotBeNull();
             reference.FullName.Should().Be(fullName);
@@ -49,13 +49,13 @@ namespace GCommon.Primitives.UnitTests.StructTests
         }
         
         [Test]
-        public void FromName_RelativeReference_ShouldHaveExpectedProperties()
+        public void New_RelativeReference_ShouldHaveExpectedProperties()
         {
             const string fullName = "Me.Attribute_Name.Property_Name";
             const string objectName = "Me";
             const string attributeName = "Attribute_Name.Property_Name";
             
-            var reference = Reference.FromName(fullName);
+            var reference = new Reference(fullName);
 
             reference.Should().NotBeNull();
             reference.FullName.Should().Be(fullName);
@@ -64,11 +64,11 @@ namespace GCommon.Primitives.UnitTests.StructTests
         }
         
         [Test]
-        public void FromName_OnlyObjectName_ShouldHaveExpectedProperties()
+        public void New_OnlyObjectName_ShouldHaveExpectedProperties()
         {
             const string fullName = "ObjectName";
 
-            var reference = Reference.FromName(fullName);
+            var reference = new Reference(fullName);
 
             reference.Should().NotBeNull();
             reference.FullName.Should().Be(fullName);

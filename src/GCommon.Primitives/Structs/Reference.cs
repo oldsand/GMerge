@@ -7,42 +7,36 @@ namespace GCommon.Primitives.Structs
 {
     public struct Reference : IDifferentiable<Reference>
     {
+        public Reference(string reference, string objectName = null) 
+        {
+            if (reference == null)
+                throw new ArgumentNullException(nameof(reference));
+
+            var dotIndex = reference.IndexOf(".");
+            
+            objectName ??= dotIndex > 0 
+                ? reference.Substring(0, dotIndex) 
+                : string.Empty;
+            
+            var attributeName = dotIndex > 0
+                ? reference.Substring(dotIndex + 1, reference.Length - (dotIndex + 1))
+                : string.Empty;
+
+            FullName = reference;
+            ObjectName = objectName;
+            AttributeName = attributeName;
+        }
+        
         public const string DefaultReference = "---";
         public string FullName { get; private set; }
         public string ObjectName { get; set; }
         public string AttributeName { get; set; }
-        
+        public static Reference Empty => new Reference(DefaultReference);
+        public static Reference Auto => new Reference("---Auto---");
+
         public override string ToString()
         {
             return FullName;
-        }
-        
-        public static Reference Empty()
-        {
-            return Reference.FromName(DefaultReference);
-        }
-
-        public static Reference FromName(string fullName)
-        {
-            if (fullName == null)
-                throw new ArgumentNullException(nameof(fullName));
-
-            var dotIndex = fullName.IndexOf(".");
-            
-            var objectName = dotIndex > 0 
-                ? fullName.Substring(0, dotIndex) 
-                : string.Empty;
-            
-            var attributeName = dotIndex > 0
-                ? fullName.Substring(dotIndex + 1, fullName.Length - (dotIndex + 1))
-                : string.Empty;
-            
-            return new Reference()
-            {
-                FullName = fullName,
-                ObjectName = objectName,
-                AttributeName = attributeName
-            };
         }
 
         public bool Equals(Reference other)

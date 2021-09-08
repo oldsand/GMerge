@@ -379,7 +379,7 @@ namespace GServer.Archestra.UnitTests
         [Test]
         public void CreateReference_ProvideValue_ReturnsExpectedDataType()
         {
-            var expected = Reference.FromName("Me.TestReference");
+            var expected = new Reference("Me.TestReference");
             
             var mxValue = MxFactory.Create(expected);
 
@@ -406,9 +406,9 @@ namespace GServer.Archestra.UnitTests
         {
             var expected = new List<Reference>
             {
-                Reference.FromName("Me.Reference1"),
-                Reference.FromName("Me.Reference2"),
-                Reference.FromName("Me.Reference3")
+                new Reference("Me.Reference1"),
+                new Reference("Me.Reference2"),
+                new Reference("Me.Reference3")
             };
             
             var mxValue = MxFactory.Create(expected);

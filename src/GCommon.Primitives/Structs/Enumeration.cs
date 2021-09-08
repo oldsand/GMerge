@@ -4,9 +4,9 @@ using GCommon.Differencing.Abstractions;
 
 namespace GCommon.Primitives.Structs
 {
-    public struct Enumeration : IDifferentiable<Enumeration>
+    public readonly struct Enumeration : IDifferentiable<Enumeration>
     {
-        private Enumeration(string value, short ordinal, short primitiveId, short attributeId)
+        public Enumeration(string value, short ordinal = 0, short primitiveId = 0, short attributeId = 0)
         {
             Value = value;
             Ordinal = ordinal;
@@ -18,12 +18,6 @@ namespace GCommon.Primitives.Structs
         public short Ordinal { get; }
         public short PrimitiveId { get; }
         public short AttributeId { get; }
-
-        public static Enumeration FromValue(string value,
-            short ordinal = 0, short primitiveId = 0, short attributeId = 0)
-        {
-            return new Enumeration(value, ordinal, primitiveId, attributeId);
-        }
 
         public bool Equals(Enumeration other)
         {

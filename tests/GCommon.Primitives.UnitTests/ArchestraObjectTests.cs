@@ -11,27 +11,28 @@ namespace GCommon.Primitives.UnitTests
     public class ArchestraObjectTests
     {
         [Test]
-        public void Construction_WhenCalled_ShouldNotBeNull()
+        public void New_TagNameAndTemplate_ShouldNotBeNull()
         {
-            var result = new ArchestraObject();
+            var result = new ArchestraObject("TagName", Template.UserDefined);
 
             result.Should().NotBeNull();
         }
 
         [Test]
-        public void Construction_WithParameters_PropertiesShouldBeExpected()
+        public void New_TagNameAndTemplate_ShouldExpectedProperties()
         {
-            var result = new ArchestraObject
-            {
-                TagName = "Test",
-                ContainedName = "Contained",
-                HierarchicalName = "Test.Contained",
-                Category = ObjectCategory.Galaxy,
-                ConfigVersion = 100,
-                DerivedFromName = "Derived",
-                BasedOnName = "BasedOn"
-                
-            };
+            var result = new ArchestraObject("TagName", Template.UserDefined);
+
+            result.TagName.Should().Be("TagName");
+            result.BasedOnName.Should().Be(Template.UserDefined.Name);
+            result.DerivedFromName.Should().Be(Template.UserDefined.Name);
+        }
+
+        [Test]
+        public void New_FullProperties_ShouldHaveExpectedProperties()
+        {
+            var result = new ArchestraObject("Test", "Contained", "Test.Contained", ObjectCategory.Galaxy, 100,
+                "Derived", "BasedOn", "Host", "Area", "Contained", Template.Galaxy.GetAttributes());
 
             result.TagName.Should().Be("Test");
             result.ContainedName.Should().Be("Contained");
@@ -40,12 +41,16 @@ namespace GCommon.Primitives.UnitTests
             result.ConfigVersion.Should().Be(100);
             result.DerivedFromName.Should().Be("Derived");
             result.BasedOnName.Should().Be("BasedOn");
+            result.HostName.Should().Be("Host");
+            result.AreaName.Should().Be("Area");
+            result.ContainerName.Should().Be("Contained");
+            result.Attributes.Should().BeEquivalentTo(Template.Galaxy.GetAttributes());
         }
-        
+
         [Test]
-        public void Serialize_WhenCalled_ShouldNotBeNull()
+        public void Serialize_SimpleUserDefinedObject_ShouldNotBeNull()
         {
-            var obj = new ArchestraObject();
+            var obj = new ArchestraObject("TagName", Template.UserDefined);
 
             var result = obj.Serialize();
 
@@ -53,27 +58,16 @@ namespace GCommon.Primitives.UnitTests
         }
 
         [Test]
-        public void Serialize_WhenCalled_ShouldHaveExpectedAttributes()
+        public void Serialize_SimpleFakeObject_ShouldHaveExpectedAttributes()
         {
-            var obj = new ArchestraObject
-            {
-                TagName = "Test",
-                ContainedName = "Contained",
-                HierarchicalName = "Test.Contained",
-                Category = ObjectCategory.Galaxy,
-                ConfigVersion = 100,
-                DerivedFromName = "Derived",
-                BasedOnName = "BasedOn",
-                HostName = "Host",
-                AreaName = "Area",
-                ContainerName = "Container",
-                Attributes = new List<ArchestraAttribute>
+            var obj = new ArchestraObject("Test", "Contained", "Test.Contained", ObjectCategory.Galaxy, 100,
+                "Derived", "BasedOn", "Host", "Area", "Contained",
+                new List<ArchestraAttribute>
                 {
                     new ArchestraAttribute("Attribute1", DataType.Boolean),
                     new ArchestraAttribute("Attribute2", DataType.Integer),
                     new ArchestraAttribute("Attribute3", DataType.String)
-                }
-            };
+                });
 
             var result = obj.Serialize();
 
@@ -88,30 +82,30 @@ namespace GCommon.Primitives.UnitTests
             result.Should().HaveAttribute(nameof(obj.AreaName), obj.AreaName);
             result.Should().HaveAttribute(nameof(obj.ContainerName), obj.ContainerName);
         }
-        
+
         [Test]
         [UseReporter(typeof(DiffReporter))]
-        public void Serialize_WhenCalled_ShouldHaveApprovedOutput()
+        public void Serialize_SimpleFakeObject_ShouldHaveApprovedOutput()
         {
-            var obj = new ArchestraObject
-            {
-                TagName = "Test",
-                ContainedName = "Contained",
-                HierarchicalName = "Test.Contained",
-                Category = ObjectCategory.Galaxy,
-                ConfigVersion = 100,
-                DerivedFromName = "Derived",
-                BasedOnName = "BasedOn",
-                HostName = "Host",
-                AreaName = "Area",
-                ContainerName = "Container",
-                Attributes = new List<ArchestraAttribute>
+            var obj = new ArchestraObject("Test", "Contained", "Test.Contained", ObjectCategory.Galaxy, 100,
+                "Derived", "BasedOn", "Host", "Area", "Contained",
+                new List<ArchestraAttribute>
                 {
                     new ArchestraAttribute("Attribute1", DataType.Boolean),
                     new ArchestraAttribute("Attribute2", DataType.Integer),
                     new ArchestraAttribute("Attribute3", DataType.String)
-                }
-            };
+                });
+
+            var result = obj.Serialize();
+
+            Approvals.VerifyXml(result.ToString());
+        }
+        
+        [Test]
+        [UseReporter(typeof(DiffReporter))]
+        public void Serialize_SimpleUserDefinedObject_ShouldHaveApprovedOutput()
+        {
+            var obj = new ArchestraObject("TagName", Template.UserDefined);
 
             var result = obj.Serialize();
 

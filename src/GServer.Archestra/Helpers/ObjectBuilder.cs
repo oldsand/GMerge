@@ -56,9 +56,9 @@ namespace GServer.Archestra.Helpers
         private void UpdateUda()
         {
             var source = _source.GetUda();
-            if (source == null) return;
-                // todo should I do this: throw new InvalidOperationException("Could not find attribute UDAs on source object");
-            
+            if (source == null)
+                throw new InvalidOperationException("Could not find attribute UDAs on target object");
+
             var target = _target.GetAttribute("UDAs");
             if (target == null)
                 throw new InvalidOperationException("Could not find attribute UDAs on target object");
@@ -70,8 +70,8 @@ namespace GServer.Archestra.Helpers
         private void UpdateField()
         {
             var source = _source.Attributes.SingleOrDefault(a => a.Name == "UserAttrData")?.Value.ToString();
-            if (source == null) return;
-            // todo should I do this: throw new InvalidOperationException("Could not find attribute UserAttrData on source object");
+            if (source == null)
+                throw new InvalidOperationException("Could not find attribute UserAttrData on source object");
             
             var target = _target.GetAttribute("UserAttrData");
             if (target == null)

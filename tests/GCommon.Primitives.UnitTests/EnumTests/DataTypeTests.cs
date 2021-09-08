@@ -2,6 +2,7 @@ using System;
 using FluentAssertions;
 using GCommon.Primitives.Enumerations;
 using GCommon.Primitives.Helpers;
+using GCommon.Primitives.Structs;
 using NUnit.Framework;
 
 namespace GCommon.Primitives.UnitTests.EnumTests
@@ -48,7 +49,9 @@ namespace GCommon.Primitives.UnitTests.EnumTests
         [TestCase("0x41000000000500020000000000FFFF0000FFFFFFFF", new[] {false, true, false, true, true})]
         public void ParseHex_BooleanArray_ShouldBeEquivalentToExpected(string input, bool[] expected)
         {
-            var actual = DataType.Boolean.Parse((Hex)input);
+            var hex = new Hex(input);
+            
+            var actual = DataType.Boolean.Parse(hex);
             
             actual.Should().BeEquivalentTo(expected);
         }
@@ -159,12 +162,66 @@ namespace GCommon.Primitives.UnitTests.EnumTests
         }
         
         [Test]
+        [TestCase("0x05220000001E000000540068006900730020004900730020004100200054006500730074000000", "This Is A Test")]
+        [TestCase("0x052400000020000000240054006500730074005F00540065006D0070006C0061007400650021000000",
+            "$Test_Template!")]
+        [TestCase(
+            "0x0554000000500000005400680069007300200069007300200061006E006F00740068006500720020002E002E002E002E00200020002000740065007300740020007B0043006F006E006600690067007500720065007D000000",
+            "This is another ....   test {Configure}")]
+        public void StringParse_SingleValue_ReturnsExpectedValue(string input, string expected)
+        {
+            var actual = DataType.String.Parse((Hex)input);
+            
+            actual.Should().Be(expected);
+        }
+        
+        [Test]
+        [TestCase(
+            "0x450000000005000400000013000000050E0000000A000000540068006900730000000F000000050A000000060000004900730000000D0000000508000000040000004100000013000000050E0000000A000000540065007300740000001500000005100000000C000000410072007200610079000000",
+            new[] {"This", "Is", "A", "Test", "Array"})]
+        public void StringParse_ArrayValue_ReturnsExpectedValue(string input, string[] expected)
+        {
+            var actual = DataType.String.Parse((Hex)input);
+            
+            actual.Should().BeEquivalentTo(expected);
+        }
+        
+        [Test]
         public void DataType_Time_ShouldBeExpectedType()
         {
             var dataType = DataType.Time;
 
             dataType.Should().NotBeNull();
             dataType.Should().Be(DataType.Time);
+        }
+        
+        [Test]
+        [TestCase("0x060A0000008076898BA8A0D6010000", "10/12/2020 10:01:21 AM")]
+        [TestCase("0x060A00000080C4E32092B0D6010000", "11/1/2020 3:01:11.752 PM")]
+        [TestCase("0x060A00000000F05094AF02B3010000", "1/5/1989 12:00:00 AM")]
+        public void TimeParse_SingleValue_ReturnsExpectedValue(string input, DateTime expected)
+        {
+            var actual = DataType.Time.Parse((Hex)input);
+            
+            actual.Should().Be(expected);
+        }
+        
+        [Test]
+        [TestCase("0x460000000005000C0000008072366BBB2DB30100000000601CB2BC44DED6010000000080421B6CD396D6010000000080F2FEE905CCD5010000000080329B268154500100000000")]
+        public void TimeParse_ArrayValue_ReturnsExpectedValue(string input)
+        {
+            var expected = new[]
+            {
+                new DateTime(1989, 2, 28, 18, 43, 05),
+                new DateTime(2020, 12, 29, 18, 43, 05, 894),
+                new DateTime(2020, 9, 29, 21, 43, 05),
+                new DateTime(2020, 1, 15, 18, 43, 05),
+                new DateTime(1900, 12, 29, 18, 43, 05)
+            };
+            
+            var actual = DataType.Time.Parse((Hex)input);
+            
+            actual.Should().BeEquivalentTo(expected);
         }
         
         [Test]
@@ -177,12 +234,49 @@ namespace GCommon.Primitives.UnitTests.EnumTests
         }
         
         [Test]
+        [TestCase("0x078044208608000000", "01:01:01.0000000")]
+        [TestCase("0x073051F35BC5000000", "23:32:45.1230000")]
+        public void ElapsedTimeParse_SingleValue_ReturnsExpectedValue(string input, TimeSpan expected)
+        {
+            var actual = DataType.ElapsedTime.Parse((Hex)input);
+            
+            actual.Should().Be(expected);
+        }
+        
+        [Test]
+        [TestCase("0x470000000005000800000020CB218608000000800D5F0C1100000080CD60921900000000128118220000008056A19E2A000000")]
+        public void ElapsedTimeParse_ArrayValue_ReturnsExpectedValue(string input)
+        {
+            var expected = new[]
+            {
+                new TimeSpan(00,01, 01, 01, 10),
+                new TimeSpan(00,02, 02, 02, 200),
+                new TimeSpan(00,03, 03, 03),
+                new TimeSpan(00,04, 04, 04),
+                new TimeSpan(00,05, 05, 05)
+            };
+            
+            var actual = DataType.ElapsedTime.Parse((Hex)input);
+            
+            actual.Should().BeEquivalentTo(expected);
+        }
+        
+        [Test]
         public void DataType_Reference_ShouldBeExpectedType()
         {
             var dataType = DataType.ReferenceType;
 
             dataType.Should().NotBeNull();
             dataType.Should().Be(DataType.ReferenceType);
+        }
+        
+        [Test]
+        [TestCase("0x0858000000160000814D0065002E0049006E0074005400650073007400000000000000000000001E000000240054006500730074005F00540065006D0070006C0061007400650000000000000000000000000000000000000000000001", "Me.IntTest")]
+        public void ReferenceParse_SingleValue_ReturnsExpectedValue(string input, string expected)
+        {
+            var actual = (Reference) DataType.ReferenceType.Parse((Hex)input);
+            
+            actual.FullName.Should().Be(expected);
         }
         
         [Test]

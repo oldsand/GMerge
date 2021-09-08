@@ -55,7 +55,7 @@ namespace GServer.Archestra.IntegrationTests.ExtensionTests
         [Test]
         public void GetValue_KnownReference_ShouldReturnExpectedValue()
         {
-            var expected = Reference.Empty();
+            var expected = Reference.Empty;
             var tagName = Known.Templates.ReactorSet.TagName;
             var template = _galaxy.GetObjectByName(tagName);
 

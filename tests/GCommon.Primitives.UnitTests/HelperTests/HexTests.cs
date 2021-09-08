@@ -44,7 +44,7 @@ namespace GCommon.Primitives.UnitTests.HelperTests
             var hex = Hex.Empty;
 
             hex.Should().NotBeNull();
-            hex.Value.Should().Be("00");
+            hex.Value.Should().Be(string.Empty);
         }
         
         [Test]
@@ -78,115 +78,187 @@ namespace GCommon.Primitives.UnitTests.HelperTests
         }
 
         [Test]
-        public void Head_ValidLength_ReturnsExpectedValue()
+        public void Head_ValidLength_ShouldBeExpectedValue()
         {
             var hex = new Hex("1234ABCD");
 
-            var head = hex.Head(2);
+            var result = hex.Head(2);
 
-            head.Value.Should().Be("12");
+            result.Value.Should().Be("12");
         }
         
         [Test]
-        public void Head_ZeroLength_ReturnsExpectedValue()
+        public void Head_ZeroLength_ShouldBeEqualToEmpty()
         {
             var hex = new Hex("1234ABCD");
 
-            FluentActions.Invoking(() => hex.Head(0)).Should().Throw<ArgumentOutOfRangeException>()
-                .WithMessage("Length must be greater than zero and less than the length of the hex value");
+            var result = hex.Head(0);
+            
+            result.Should().Be(Hex.Empty);
         }
         
         [Test]
-        public void Head_InvalidLength_ReturnsExpectedValue()
+        public void Head_EqualLengthValue_ShouldBeEqualToOriginal()
         {
             var hex = new Hex("1234ABCD");
 
-            FluentActions.Invoking(() => hex.Head(12)).Should().Throw<ArgumentOutOfRangeException>()
-                .WithMessage("Length must be greater than zero and less than the length of the hex value");
+            var result = hex.Head(8);
+            
+            result.Should().Be(hex);
         }
         
         [Test]
-        public void Tail_ValidLength_ReturnsExpectedValue()
+        public void Head_LargerLength_ThrowsArgumentOutOfRangeException()
         {
             var hex = new Hex("1234ABCD");
 
-            var head = hex.Tail(2);
-
-            head.Value.Should().Be("CD");
+            FluentActions.Invoking(() => hex.Head(12)).Should().Throw<ArgumentOutOfRangeException>();
         }
         
         [Test]
-        public void Tail_ZeroLength_ReturnsExpectedValue()
+        public void Head_NegativeLength_ThrowsArgumentOutOfRangeException()
         {
             var hex = new Hex("1234ABCD");
 
-            FluentActions.Invoking(() => hex.Tail(0)).Should().Throw<ArgumentOutOfRangeException>()
-                .WithMessage("Length must be greater than zero and less than the length of the hex value");
+            FluentActions.Invoking(() => hex.Head(-1)).Should().Throw<ArgumentOutOfRangeException>();
         }
         
         [Test]
-        public void Tail_InvalidLength_ReturnsExpectedValue()
+        public void Tail_ValidLength_ShouldBeExpectedValue()
         {
             var hex = new Hex("1234ABCD");
 
-            FluentActions.Invoking(() => hex.Tail(12)).Should().Throw<ArgumentOutOfRangeException>()
-                .WithMessage("Length must be greater than zero and less than the length of the hex value");
+            var result = hex.Tail(2);
+
+            result.Value.Should().Be("CD");
         }
         
         [Test]
-        public void DropHead_ValidLength_ReturnsExpectedValue()
+        public void Tail_ZeroLength_ShouldBeEqualToEmpty()
         {
             var hex = new Hex("1234ABCD");
 
-            var head = hex.DropHead(2);
-
-            head.Value.Should().Be("34ABCD");
+            var result = hex.Tail(0);
+            
+            result.Should().Be(Hex.Empty);
         }
         
         [Test]
-        public void DropHead_LengthOfValue_ReturnsExpectedValue()
+        public void Tail_EqualLengthValue_ShouldBeEqualToOriginal()
         {
             var hex = new Hex("1234ABCD");
 
-            FluentActions.Invoking(() => hex.DropHead(8)).Should().Throw<ArgumentOutOfRangeException>()
-                .WithMessage("Length must be less than the length of the hex value");
+            var result = hex.Tail(8);
+            
+            result.Should().Be(hex);
         }
         
         [Test]
-        public void DropHead_InvalidLength_ReturnsExpectedValue()
+        public void Tail_LargerLength_ThrowsArgumentOutOfRangeException()
         {
             var hex = new Hex("1234ABCD");
 
-            FluentActions.Invoking(() => hex.DropHead(12)).Should().Throw<ArgumentOutOfRangeException>()
-                .WithMessage("Length must be less than the length of the hex value");
+            FluentActions.Invoking(() => hex.Tail(12)).Should().Throw<ArgumentOutOfRangeException>();
         }
         
         [Test]
-        public void DropTail_ValidLength_ReturnsExpectedValue()
+        public void Tail_NegativeLength_ThrowsArgumentOutOfRangeException()
         {
             var hex = new Hex("1234ABCD");
 
-            var head = hex.DropTail(2);
-
-            head.Value.Should().Be("1234AB");
+            FluentActions.Invoking(() => hex.Tail(-1)).Should().Throw<ArgumentOutOfRangeException>();
         }
         
         [Test]
-        public void DropTail_LengthOfValue_ReturnsExpectedValue()
+        public void DropHead_ValidLength_ShouldBeExpectedValue()
         {
             var hex = new Hex("1234ABCD");
 
-            FluentActions.Invoking(() => hex.DropTail(8)).Should().Throw<ArgumentOutOfRangeException>()
-                .WithMessage("Length must be less than the length of the hex value");
+            var result = hex.DropHead(2);
+
+            result.Value.Should().Be("34ABCD");
         }
         
         [Test]
-        public void DropTail_InvalidLength_ReturnsExpectedValue()
+        public void DropHead_ZeroLength_ShouldBeEqualToOriginal()
         {
             var hex = new Hex("1234ABCD");
 
-            FluentActions.Invoking(() => hex.DropTail(12)).Should().Throw<ArgumentOutOfRangeException>()
-                .WithMessage("Length must be less than the length of the hex value");
+            var result = hex.DropHead(0);
+            
+            result.Should().Be(hex);
+        }
+        
+        [Test]
+        public void DropHead_EqualLengthValue_ShouldBeEqualToEmpty()
+        {
+            var hex = new Hex("1234ABCD");
+
+            var result = hex.DropHead(8);
+            
+            result.Should().Be(Hex.Empty);
+        }
+        
+        [Test]
+        public void DropHead_LargerLength_ThrowsArgumentOutOfRangeException()
+        {
+            var hex = new Hex("1234ABCD");
+
+            FluentActions.Invoking(() => hex.DropHead(12)).Should().Throw<ArgumentOutOfRangeException>();
+        }
+        
+        [Test]
+        public void DropHead_NegativeLength_ThrowsArgumentOutOfRangeException()
+        {
+            var hex = new Hex("1234ABCD");
+
+            FluentActions.Invoking(() => hex.DropHead(-1)).Should().Throw<ArgumentOutOfRangeException>();
+        }
+        
+        [Test]
+        public void DropTail_ValidLength_ShouldBeExpectedValue()
+        {
+            var hex = new Hex("1234ABCD");
+
+            var result = hex.DropTail(2);
+
+            result.Value.Should().Be("1234AB");
+        }
+        
+        [Test]
+        public void DropTail_ZeroLength_ShouldBeEqualToOriginal()
+        {
+            var hex = new Hex("1234ABCD");
+
+            var result = hex.DropTail(0);
+            
+            result.Should().Be(hex);
+        }
+        
+        [Test]
+        public void DropTail_EqualLengthValue_ShouldBeEqualToEmpty()
+        {
+            var hex = new Hex("1234ABCD");
+
+            var result = hex.DropTail(8);
+            
+            result.Should().Be(Hex.Empty);
+        }
+        
+        [Test]
+        public void DropTail_LargerLength_ThrowsArgumentOutOfRangeException()
+        {
+            var hex = new Hex("1234ABCD");
+
+            FluentActions.Invoking(() => hex.DropTail(12)).Should().Throw<ArgumentOutOfRangeException>();
+        }
+        
+        [Test]
+        public void DropTail_NegativeLength_ThrowsArgumentOutOfRangeException()
+        {
+            var hex = new Hex("1234ABCD");
+
+            FluentActions.Invoking(() => hex.DropTail(-1)).Should().Throw<ArgumentOutOfRangeException>();
         }
 
         [Test]
@@ -204,7 +276,7 @@ namespace GCommon.Primitives.UnitTests.HelperTests
         }
 
         [Test]
-        public void Consume_ValidLengthDefaultStart_ShouldHaveExpectedResult()
+        public void Consume_ValidLength_ShouldHaveExpectedResult()
         {
             var hex = new Hex("0034001500F4009C");
 
@@ -214,7 +286,7 @@ namespace GCommon.Primitives.UnitTests.HelperTests
         }
         
         [Test]
-        public void Consume_ValidLengthDefaultStart_OriginalShouldHaveRemovedData()
+        public void Consume_ValidLength_OriginalShouldHaveRemovedData()
         {
             var hex = new Hex("0034001500F4009C");
 
@@ -224,7 +296,45 @@ namespace GCommon.Primitives.UnitTests.HelperTests
             hex.Length.Should().Be(8);
             hex.Value.Should().Be("00F4009C");
         }
+
+        [Test]
+        public void Consume_ZeroLength_ThrowsArgumentOutOfRangeException()
+        {
+            var hex = new Hex("1234ABCD");
+
+            var result = hex.Consume(0);
+
+            result.Should().NotBeNull();
+            result.Value.Should().Be(string.Empty);
+            result.Length.Should().Be(0);
+        }
         
+        [Test]
+        public void Consume_LargerLength_ThrowsArgumentOutOfRangeException()
+        {
+            var hex = new Hex("1234ABCD");
+
+            FluentActions.Invoking(() => hex.Consume(12)).Should().Throw<ArgumentOutOfRangeException>();
+        }
+        
+        [Test]
+        public void Consume_NegativeLength_ThrowsArgumentOutOfRangeException()
+        {
+            var hex = new Hex("1234ABCD");
+
+            FluentActions.Invoking(() => hex.Consume(-1)).Should().Throw<ArgumentOutOfRangeException>();
+        }
+
+        [Test]
+        public void ImplicitEquals_WithString_ShouldBeTrue()
+        {
+            var hex = new Hex("AB");
+
+            var result = hex == "AB";
+
+            result.Should().BeTrue();
+        }
+
         [Test]
         public void ToBool_FF_ShouldBeTrue()
         {
@@ -253,6 +363,14 @@ namespace GCommon.Primitives.UnitTests.HelperTests
             var result = hex.ToInt();
 
             result.Should().Be(255);
+        }
+
+        [Test]
+        public void ToTimeSpan_SomeData_ShouldBeExpectedTimeSpan()
+        {
+            var hex = new Hex("FF");
+
+            var result = hex.ToTimeSpan();
         }
     }
 }
