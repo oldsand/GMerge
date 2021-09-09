@@ -33,7 +33,7 @@ namespace GCommon.Primitives.Enumerations
         public abstract ObjectCategory Category { get; }
         public IEnumerable<ArchestraAttribute> GetAttributes()
         {
-            return PrimitiveLoader.Load(this);
+            return PrimitiveAttributes.ForTemplate(this);
         }
 
         #region InternalClasses

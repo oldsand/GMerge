@@ -28,12 +28,13 @@ namespace GServer.Archestra.Helpers
                 _target.CheckOut();
 
                 //Step1: Configure the user defined and field attributes for the objects and save before going further.
-                UpdateUda();
-                UpdateField();
+                UpdateUserAttributes();
+                UpdateFieldAttributes();
                 _target.Save();
 
                 //Step2: Configure each user defined attribute 
-                ConfigureAttributes();
+                ConfigureUserAttributes();
+                //todo add configure field attributes
                 _target.Save();
 
                 //Step3: Configure each attribute and object extension
@@ -53,11 +54,12 @@ namespace GServer.Archestra.Helpers
             }
         }
         
-        private void UpdateUda()
+        private void UpdateUserAttributes()
         {
-            var source = _source.GetUda();
+            var source = _source.UserAttributeConfig;
             if (source == null)
-                throw new InvalidOperationException("Could not find attribute UDAs on target object");
+                throw new InvalidOperationException(
+                    $"Could not obtain user attribute config on source object '{_source.TagName}'");
 
             var target = _target.GetAttribute("UDAs");
             if (target == null)
@@ -67,11 +69,12 @@ namespace GServer.Archestra.Helpers
             target.CommandResult.Process();
         }
 
-        private void UpdateField()
+        private void UpdateFieldAttributes()
         {
-            var source = _source.Attributes.SingleOrDefault(a => a.Name == "UserAttrData")?.Value.ToString();
+            var source = _source.FieldAttributeConfig;
             if (source == null)
-                throw new InvalidOperationException("Could not find attribute UserAttrData on source object");
+                throw new InvalidOperationException(
+                    $"Could not obtain user attribute config on source object '{_source.TagName}'");
             
             var target = _target.GetAttribute("UserAttrData");
             if (target == null)
@@ -81,7 +84,7 @@ namespace GServer.Archestra.Helpers
             target.CommandResult.Process();
         }
         
-        private void ConfigureAttributes()
+        private void ConfigureUserAttributes()
         {
             var attributeNames = _target.GetUdaNames();
 

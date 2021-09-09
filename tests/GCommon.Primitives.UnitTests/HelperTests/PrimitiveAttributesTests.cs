@@ -6,12 +6,12 @@ using NUnit.Framework;
 namespace GCommon.Primitives.UnitTests.HelperTests
 {
     [TestFixture]
-    public class PrimitiveLoaderTests
+    public class PrimitiveAttributesTests
     {
         [Test]
         public void Load_AreaTemplate_ShouldNotBeEmpty()
         {
-            var attributes = PrimitiveLoader.Load(Template.Area);
+            var attributes = PrimitiveAttributes.ForTemplate(Template.Area);
             
             attributes.Should().NotBeEmpty();
         }
@@ -19,7 +19,7 @@ namespace GCommon.Primitives.UnitTests.HelperTests
         [Test]
         public void Load_GalaxyTemplate_ShouldNotBeEmpty()
         {
-            var attributes = PrimitiveLoader.Load(Template.Galaxy);
+            var attributes = PrimitiveAttributes.ForTemplate(Template.Galaxy);
             
             attributes.Should().NotBeEmpty();
         }
@@ -27,7 +27,7 @@ namespace GCommon.Primitives.UnitTests.HelperTests
         [Test]
         public void Load_SequencerTemplate_ShouldNotBeEmpty()
         {
-            var attributes = PrimitiveLoader.Load(Template.Sequencer);
+            var attributes = PrimitiveAttributes.ForTemplate(Template.Sequencer);
             
             attributes.Should().NotBeEmpty();
         }
@@ -35,7 +35,7 @@ namespace GCommon.Primitives.UnitTests.HelperTests
         [Test]
         public void Load_SymbolTemplate_ShouldNotBeEmpty()
         {
-            var attributes = PrimitiveLoader.Load(Template.Symbol);
+            var attributes = PrimitiveAttributes.ForTemplate(Template.Symbol);
             
             attributes.Should().NotBeEmpty();
         }
@@ -43,7 +43,7 @@ namespace GCommon.Primitives.UnitTests.HelperTests
         [Test]
         public void Load_AnalogDeviceTemplate_ShouldNotBeEmpty()
         {
-            var attributes = PrimitiveLoader.Load(Template.AnalogDevice);
+            var attributes = PrimitiveAttributes.ForTemplate(Template.AnalogDevice);
             
             attributes.Should().NotBeEmpty();
         }
@@ -51,7 +51,7 @@ namespace GCommon.Primitives.UnitTests.HelperTests
         [Test]
         public void Load_AppEngineTemplate_ShouldNotBeEmpty()
         {
-            var attributes = PrimitiveLoader.Load(Template.AppEngine);
+            var attributes = PrimitiveAttributes.ForTemplate(Template.AppEngine);
             
             attributes.Should().NotBeEmpty();
         }
@@ -59,7 +59,7 @@ namespace GCommon.Primitives.UnitTests.HelperTests
         [Test]
         public void Load_AutoImportTemplate_ShouldNotBeEmpty()
         {
-            var attributes = PrimitiveLoader.Load(Template.AutoImport);
+            var attributes = PrimitiveAttributes.ForTemplate(Template.AutoImport);
             
             attributes.Should().NotBeEmpty();
         }
@@ -67,7 +67,7 @@ namespace GCommon.Primitives.UnitTests.HelperTests
         [Test]
         public void Load_ClientControlTemplate_ShouldNotBeEmpty()
         {
-            var attributes = PrimitiveLoader.Load(Template.ClientControl);
+            var attributes = PrimitiveAttributes.ForTemplate(Template.ClientControl);
             
             attributes.Should().NotBeEmpty();
         }
@@ -75,7 +75,7 @@ namespace GCommon.Primitives.UnitTests.HelperTests
         [Test]
         public void Load_DiCommonTemplate_ShouldNotBeEmpty()
         {
-            var attributes = PrimitiveLoader.Load(Template.DiCommon);
+            var attributes = PrimitiveAttributes.ForTemplate(Template.DiCommon);
             
             attributes.Should().NotBeEmpty();
         }
@@ -83,7 +83,7 @@ namespace GCommon.Primitives.UnitTests.HelperTests
         [Test]
         public void Load_DiscreteDeviceTemplate_ShouldNotBeEmpty()
         {
-            var attributes = PrimitiveLoader.Load(Template.DiscreteDevice);
+            var attributes = PrimitiveAttributes.ForTemplate(Template.DiscreteDevice);
             
             attributes.Should().NotBeEmpty();
         }
@@ -91,7 +91,7 @@ namespace GCommon.Primitives.UnitTests.HelperTests
         [Test]
         public void Load_OpcClientTemplate_ShouldNotBeEmpty()
         {
-            var attributes = PrimitiveLoader.Load(Template.OpcClient);
+            var attributes = PrimitiveAttributes.ForTemplate(Template.OpcClient);
             
             attributes.Should().NotBeEmpty();
         }
@@ -99,7 +99,7 @@ namespace GCommon.Primitives.UnitTests.HelperTests
         [Test]
         public void Load_SqlDataTemplate_ShouldNotBeEmpty()
         {
-            var attributes = PrimitiveLoader.Load(Template.SqlData);
+            var attributes = PrimitiveAttributes.ForTemplate(Template.SqlData);
             
             attributes.Should().NotBeEmpty();
         }
@@ -107,7 +107,7 @@ namespace GCommon.Primitives.UnitTests.HelperTests
         [Test]
         public void Load_UserDefinedTemplate_ShouldNotBeEmpty()
         {
-            var attributes = PrimitiveLoader.Load(Template.UserDefined);
+            var attributes = PrimitiveAttributes.ForTemplate(Template.UserDefined);
             
             attributes.Should().NotBeEmpty();
         }
@@ -115,7 +115,7 @@ namespace GCommon.Primitives.UnitTests.HelperTests
         [Test]
         public void Load_ViewEngineTemplate_ShouldNotBeEmpty()
         {
-            var attributes = PrimitiveLoader.Load(Template.ViewEngine);
+            var attributes = PrimitiveAttributes.ForTemplate(Template.ViewEngine);
             
             attributes.Should().NotBeEmpty();
         }
@@ -123,7 +123,7 @@ namespace GCommon.Primitives.UnitTests.HelperTests
         [Test]
         public void Load_WinPlatformTemplate_ShouldNotBeEmpty()
         {
-            var attributes = PrimitiveLoader.Load(Template.WinPlatform);
+            var attributes = PrimitiveAttributes.ForTemplate(Template.WinPlatform);
             
             attributes.Should().NotBeEmpty();
         }
@@ -131,7 +131,7 @@ namespace GCommon.Primitives.UnitTests.HelperTests
         [Test]
         public void Load_InTouchProxyTemplate_ShouldNotBeEmpty()
         {
-            var attributes = PrimitiveLoader.Load(Template.InTouchProxy);
+            var attributes = PrimitiveAttributes.ForTemplate(Template.InTouchProxy);
             
             attributes.Should().NotBeEmpty();
         }
@@ -139,7 +139,7 @@ namespace GCommon.Primitives.UnitTests.HelperTests
         [Test]
         public void Load_RedundantDiObjectTemplate_ShouldNotBeEmpty()
         {
-            var attributes = PrimitiveLoader.Load(Template.RedundantDiObject);
+            var attributes = PrimitiveAttributes.ForTemplate(Template.RedundantDiObject);
             
             attributes.Should().NotBeEmpty();
         }
@@ -147,7 +147,7 @@ namespace GCommon.Primitives.UnitTests.HelperTests
         [Test]
         public void Load_DdeSuiteLinkClientTemplate_ShouldNotBeEmpty()
         {
-            var attributes = PrimitiveLoader.Load(Template.DdeSuiteLinkClient);
+            var attributes = PrimitiveAttributes.ForTemplate(Template.DdeSuiteLinkClient);
             
             attributes.Should().NotBeEmpty();
         }
@@ -155,7 +155,7 @@ namespace GCommon.Primitives.UnitTests.HelperTests
         [Test]
         public void Load_InTouchViewAppTemplate_ShouldNotBeEmpty()
         {
-            var attributes = PrimitiveLoader.Load(Template.InTouchViewApp);
+            var attributes = PrimitiveAttributes.ForTemplate(Template.InTouchViewApp);
             
             attributes.Should().NotBeEmpty();
         }

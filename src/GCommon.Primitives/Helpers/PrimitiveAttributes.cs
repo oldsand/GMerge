@@ -10,7 +10,7 @@ using GCommon.Primitives.Enumerations;
 
 namespace GCommon.Primitives.Helpers
 {
-    internal static class PrimitiveLoader
+    internal static class PrimitiveAttributes
     {
         private const string NameSpace = "Resources";
         private const string FileName = "TemplatePrimitives.xml";
@@ -21,9 +21,9 @@ namespace GCommon.Primitives.Helpers
         private const string SecurityElement = "Security";
         private const string LockedElement = "Locked";
         private const string ValueElement = "Value";
-        private static readonly EmbeddedResources Resources = new EmbeddedResources(typeof(PrimitiveLoader));
+        private static readonly EmbeddedResources Resources = new EmbeddedResources(typeof(PrimitiveAttributes));
 
-        public static IEnumerable<ArchestraAttribute> Load(Template template)
+        public static IEnumerable<ArchestraAttribute> ForTemplate(Template template)
         {
             using var stream = Resources.GetStream(FileName, NameSpace);
             if (stream == null) return Enumerable.Empty<ArchestraAttribute>(); //todo or throw exception?

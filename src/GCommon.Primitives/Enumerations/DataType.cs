@@ -103,7 +103,7 @@ namespace GCommon.Primitives.Enumerations
 
             protected override object ParseSingle(Hex hex)
             {
-                return hex.Reverse().ToBool();
+                return hex.Length == 0 ? DefaultValue : hex.Reverse().ToBool();
             }
         }
 
@@ -377,11 +377,11 @@ namespace GCommon.Primitives.Enumerations
 
         private class InternationalizedStringInternal : DataType
         {
-            public InternationalizedStringInternal() : base( "InternationalizedStruct", 15)
+            public InternationalizedStringInternal() : base( "InternationalizedString", 15)
             {
             }
             
-            public override object DefaultValue => default(string);
+            public override object DefaultValue => string.Empty;
             
             public override object Parse(string value)
             {
@@ -395,11 +395,28 @@ namespace GCommon.Primitives.Enumerations
             {
             }
             
-            public override object DefaultValue => default(string);
+            public override object DefaultValue => string.Empty;
             
             public override object Parse(string value)
             {
                 return value;
+            }
+            
+            protected override object ParseSingle(Hex hex)
+            {
+                if (hex.Length == 0)
+                    return DefaultValue;
+                
+                //Data Format
+                //8 bit header length + string length - Remove
+                //8 bit string length - Remove
+                //4 bit char
+                //4 bit char
+                //...
+                //4 bit null terminator - Remove
+                var chars = hex.DropHead(16).DropTail(4).ToEnumerable(4);
+
+                return chars.FormString();
             }
         }
 

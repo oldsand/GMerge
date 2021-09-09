@@ -11,6 +11,9 @@ namespace GCommon.Primitives
 {
     public class ArchestraObject : IXSerializable, IDifferentiable<ArchestraObject>
     {
+        private const string DefaultUdaString = "";
+        private const string DefaultUserAttrDataString = "";
+        
         public ArchestraObject(string tagName, Template basedOn, string derivedFrom = null, int configVersion = 1,
             IEnumerable<ArchestraAttribute> attributes = null)
         {
@@ -72,16 +75,18 @@ namespace GCommon.Primitives
         public string HostName { get; set; }
         public string AreaName { get; set; }
         public string ContainerName { get; set; }
-        public IEnumerable<ArchestraAttribute> Attributes { get; set; }
-
+        public IEnumerable<ArchestraAttribute> Attributes { get; private set; }
+        public string UserAttributeConfig => GetUserAttributesConfig();
+        public string FieldAttributeConfig => GetFieldAttributesConfig();
+        
+        public ArchestraAttribute GetAttribute(string name)
+        {
+            return Attributes.SingleOrDefault(a => a.Name == name);
+        }
+        
         public void AddAttribute(ArchestraAttribute attribute)
         {
             //todo need to implement this?
-        }
-
-        public string GetUda()
-        {
-            return Attributes.SingleOrDefault(a => a.Name == "UDAs")?.Value.ToString();
         }
 
         public static ArchestraObject Materialize(XElement element)
@@ -183,6 +188,20 @@ namespace GCommon.Primitives
                 archestraAttributes.AddRange(attributes);
             
             Attributes = archestraAttributes;
+        }
+        
+        private string GetUserAttributesConfig()
+        {
+            var target = Attributes.SingleOrDefault(a => a.Name == "UDAs")?.Value.ToString();
+
+            return string.IsNullOrEmpty(target) ? DefaultUdaString : target;
+        }
+        
+        private string GetFieldAttributesConfig()
+        {
+            var target = Attributes.SingleOrDefault(a => a.Name == "UserAttrData")?.Value.ToString();
+
+            return string.IsNullOrEmpty(target) ? DefaultUserAttrDataString : target;
         }
     }
 }
