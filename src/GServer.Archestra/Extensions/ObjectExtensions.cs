@@ -1,12 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 using ArchestrA.GRAccess;
 using GCommon.Primitives;
 using GCommon.Primitives.Enumerations;
+using GCommon.Primitives.Structs;
+using GServer.Archestra.Helpers;
 
 // ReSharper disable SuspiciousTypeConversion.Global
+[assembly: InternalsVisibleTo("GServer.Archestra.IntegrationTests")]
 
 namespace GServer.Archestra.Extensions
 {
@@ -122,6 +126,17 @@ namespace GServer.Archestra.Extensions
             return XElement.Parse(udaData).Descendants("Attribute")
                     .Select(uda => uda.Attribute("Name")?.Value);
         }
+        
+        public static Blob GetVisualDefinition(this IgObject gObject, string symbolName = null)
+        {
+            var name = string.IsNullOrEmpty(symbolName)
+                ? "_VisualElementDefinition"
+                : $"{symbolName}._VisualElementDefinition";
+            
+            var attribute = gObject.Attributes[name];
+            
+            return attribute.GetValue<Blob>();
+        }
 
         public static void SetUdaConfig(this IgObject gObject, string xml)
         {
@@ -210,7 +225,7 @@ namespace GServer.Archestra.Extensions
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public static ArchestraObject Map(this IgObject obj)
+        public static ArchestraObject MapObject(this IgObject obj)
         {
             return new ArchestraObject(obj.Tagname,
                 obj.ContainedName,
@@ -230,9 +245,9 @@ namespace GServer.Archestra.Extensions
         /// </summary>
         /// <param name="template"></param>
         /// <returns></returns>
-        public static ArchestraObject Map(this ITemplate template)
+        public static ArchestraObject MapObject(this ITemplate template)
         {
-            return template.AsObject().Map();
+            return template.AsObject().MapObject();
         }
 
         /// <summary>
@@ -240,9 +255,26 @@ namespace GServer.Archestra.Extensions
         /// </summary>
         /// <param name="instance"></param>
         /// <returns></returns>
-        public static ArchestraObject Map(this IInstance instance)
+        public static ArchestraObject MapObject(this IInstance instance)
         {
-            return instance.AsObject().Map();
+            return instance.AsObject().MapObject();
+        }
+        
+        /// <summary>
+        /// Transforms the object to a ArchestraObject type
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static ArchestraGraphic MapGraphic(this IgObject obj)
+        {
+            var definition = obj.GetVisualDefinition();
+            var xml = VisualElementConverter.Convert(definition);
+            return ArchestraGraphic.Materialize(xml.Root);
+        }
+        
+        public static ArchestraGraphic MapGraphic(this IInstance instance)
+        {
+            return instance.AsObject().MapGraphic();
         }
 
         /// <summary>

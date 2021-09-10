@@ -7,10 +7,9 @@ namespace GCommon.Primitives.Structs
 {
     public struct Reference : IDifferentiable<Reference>
     {
-        public Reference(string reference, string objectName = null) 
+        public Reference(string reference, string objectName = null)
         {
-            if (reference == null)
-                throw new ArgumentNullException(nameof(reference));
+            reference ??= string.Empty;  
 
             var dotIndex = reference.IndexOf(".");
             

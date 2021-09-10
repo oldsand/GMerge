@@ -1,6 +1,7 @@
+using ArchestrA.Configuration.Internal;
 using ArchestrA.GRAccess;
 
-namespace GServer.Archestra
+namespace GServer.Archestra.Helpers
 {
     public class GraphicBuilder
     {
@@ -10,5 +11,11 @@ namespace GServer.Archestra
         {
             _target = target;
         }
+
+        private void CreateInFolder()
+        {
+            
+        }
+        
     }
 }

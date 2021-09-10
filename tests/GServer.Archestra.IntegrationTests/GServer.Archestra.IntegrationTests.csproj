@@ -34,11 +34,20 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
+        <Reference Include="ArchestrA.Configuration, Version=1.0.0.0, Culture=neutral, PublicKeyToken=23106a86e706d0ae">
+          <HintPath>..\..\src\Lib\ArchestrA.Configuration.dll</HintPath>
+        </Reference>
+        <Reference Include="ArchestrA.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=23106a86e706d0ae">
+          <HintPath>..\..\src\Lib\ArchestrA.Core.dll</HintPath>
+        </Reference>
         <Reference Include="ArchestrA.GRAccess, Version=1.8.0.0, Culture=neutral, PublicKeyToken=23106a86e706d0ae">
           <HintPath>..\Lib\ArchestrA.GRAccess.dll</HintPath>
         </Reference>
-        <Reference Include="ArchestrA.Visualization.GraphicAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=23106a86e706d0ae">
-          <HintPath>..\Lib\ArchestrA.Visualization.GraphicAccess.dll</HintPath>
+        <Reference Include="ArchestrA.PFServerPublic, Version=1.0.0.0, Culture=neutral, PublicKeyToken=23106a86e706d0ae">
+          <HintPath>..\..\..\..\..\..\Windows\assembly\GAC\ArchestrA.PFServerPublic\1.0.0.0__23106a86e706d0ae\ArchestrA.PFServerPublic.dll</HintPath>
+        </Reference>
+        <Reference Include="ArchestrA.Visualization.GraphicLibrary, Version=4.0.0.0, Culture=neutral, PublicKeyToken=23106a86e706d0ae">
+          <HintPath>..\..\src\Lib\ArchestrA.Visualization.GraphicLibrary.dll</HintPath>
         </Reference>
         <Reference Include="mscorlib" />
         <Reference Include="System" />
@@ -52,7 +61,6 @@
     <ItemGroup>
         <Compile Include="ExtensionTests\AttributeExtensionTests.cs" />
         <Compile Include="ExtensionTests\GalaxyExtensionTests.cs" />
-        <Compile Include="ExtensionTests\GrAccessTests.cs" />
         <Compile Include="ExtensionTests\MxValueExtensionsTests.cs" />
         <Compile Include="ExtensionTests\ObjectCollectionExtensionTests.cs" />
         <Compile Include="ExtensionTests\ObjectExtensionTests.cs" />

@@ -43,9 +43,9 @@ namespace GCommon.Primitives
             ConfigVersion = configVersion;
             DerivedFromName = derivedFromName ?? throw new ArgumentNullException(nameof(derivedFromName));
             BasedOnName = basedOnName ?? throw new ArgumentNullException(nameof(basedOnName));
-            HostName = hostName ?? throw new ArgumentNullException(nameof(hostName));
-            AreaName = areaName ?? throw new ArgumentNullException(nameof(areaName));
-            ContainerName = containerName ?? throw new ArgumentNullException(nameof(containerName));
+            HostName = hostName;
+            AreaName = areaName;
+            ContainerName = containerName;
             Attributes = attributes ?? throw new ArgumentNullException(nameof(attributes));
         }
 

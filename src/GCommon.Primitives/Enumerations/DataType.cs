@@ -367,7 +367,7 @@ namespace GCommon.Primitives.Enumerations
             {
             }
             
-            public override object DefaultValue => Blob.Empty();
+            public override object DefaultValue => Blob.Empty;
             
             public override object Parse(string value)
             {

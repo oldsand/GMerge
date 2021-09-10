@@ -108,26 +108,7 @@ namespace GServer.Archestra.IntegrationTests
 
             result.Should().NotBeNull();
         }
-
-        [Test]
-        public void GetObjects_ValidTagName_ReturnsCorrectTemplates()
-        {
-            var tagList = new List<string>
-            {
-                Known.Templates.ReactorSet.TagName,
-                Known.Instances.R31,
-                Template.UserDefined.Name
-            };
-            
-            var results = _galaxy.GetObjects(tagList).ToList();
-
-            Assert.IsNotEmpty(results);
-            Assert.That(results, Has.Count.EqualTo(3));
-            Assert.IsTrue(results.Any(t => t.TagName == Known.Templates.ReactorSet.TagName));
-            Assert.IsTrue(results.Any(t => t.TagName == Known.Instances.R31));
-            Assert.IsTrue(results.Any(t => t.TagName == Template.UserDefined.Name));
-        }
-
+        
         [Test]
         [TestCase("FileCopy")]
         [TestCase("FormatString")]

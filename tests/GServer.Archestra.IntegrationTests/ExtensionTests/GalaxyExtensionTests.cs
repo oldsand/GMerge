@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using ArchestrA.GRAccess;
 using AutoFixture;
 using FluentAssertions;
 using GCommon.Core.Utilities;
 using GCommon.Primitives;
 using GCommon.Primitives.Enumerations;
+using GCommon.Primitives.Structs;
 using GServer.Archestra.Extensions;
 using NUnit.Framework;
 
@@ -275,6 +277,34 @@ namespace GServer.Archestra.IntegrationTests.ExtensionTests
         }
 
         [Test]
+        public void GetBaseTemplates_WhenCalled_ReturnsExpectedCount()
+        {
+            var templates = _galaxy.GetBaseTemplates();
+
+            //can get all but one _AutoImport...
+            templates.count.Should().Be(Template.List.Count - 1);
+        }
+
+        [Test]
+        public void GetBaseTemplate_SymbolTemplate_ShouldHaveTemplateName()
+        {
+            var template = _galaxy.GetBaseTemplate(Template.Symbol);
+
+            template.Tagname.Should().Be(Template.Symbol.Name);
+        }
+
+        [Test]
+        public void GetSymbolByName_KnownSymbolName_ShouldNotBeNull()
+        {
+            const string tagName = Known.Symbols.ProportionalValve;
+
+            var result = _galaxy.GetSymbolByName(tagName);
+
+            result.Should().NotBeNull();
+            result.Tagname.Should().Be(tagName);
+        }
+
+        [Test]
         public void GetDerivedTemplates_WhenCalled_ReturnsKnownTemplates()
         {
             var templates = _galaxy.GetDerivedTemplates(Template.UserDefined.Name);
@@ -342,6 +372,14 @@ namespace GServer.Archestra.IntegrationTests.ExtensionTests
 
             Assert.NotNull(derived);
             Assert.AreEqual("$Test_Template", derived.Tagname);
+        }
+
+        [Test]
+        public void CreateSymbol_ValidTagName_ShouldReturnNewInstance()
+        {
+            var created = _galaxy.CreateSymbol("SomeSymbol");
+
+            created.Tagname.Should().Be("SomeSymbol");
         }
 
         [Test]

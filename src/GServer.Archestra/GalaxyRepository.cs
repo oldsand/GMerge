@@ -91,31 +91,18 @@ namespace GServer.Archestra
 
             var gObject = Galaxy.GetObjectByName(tagName);
 
-            return gObject?.Map();
+            return gObject?.MapObject();
         }
 
-        public IEnumerable<ArchestraObject> GetObjects(IEnumerable<string> tagNames)
-        {
-            Galaxy.SynchronizeClient();
-            
-            var objects = Galaxy.GetObjectsByName(tagNames);
-            
-            foreach (IgObject gObject in objects)
-                yield return gObject.Map();
-        }
+        
 
         public ArchestraGraphic GetGraphic(string tagName)
         {
             Galaxy.SynchronizeClient();
 
-            using var tempDirectory = new TempDirectory(ApplicationPath.TempSymbolSubPath);
-            var fileName = Path.Combine(tempDirectory.FullName, $@"{tagName}.xml");
+            var symbol = Galaxy.GetSymbolByName(tagName).AsObject();
 
-            Galaxy.ExportGraphic(tagName, fileName);
-
-            var symbol = XElement.Load(fileName);
-
-            return new ArchestraGraphic(tagName).Materialize(symbol);
+            return symbol.MapGraphic();
         }
 
         public void CreateObject(ArchestraObject source)
@@ -155,15 +142,13 @@ namespace GServer.Archestra
             var gObject = Galaxy.GetObjectByName(tagName);
             gObject?.Delete();
         }
-
-        public void DeleteObjects(IEnumerable<string> tagNames, bool recursive)
+        
+        public void DeleteGraphic(string tagName)
         {
-            var objects = Galaxy.GetTemplatesByName(tagNames);
-
-            foreach (IgObject gObject in objects)
-                DeleteObject(gObject.Tagname, recursive);
-
-            objects.CommandResults.Process();
+            Galaxy.SynchronizeClient();
+            
+            var gObject = Galaxy.GetSymbolByName(tagName);
+            gObject?.DeleteInstance();
         }
 
         public void UpdateObject(ArchestraObject archestraObject)
@@ -171,7 +156,7 @@ namespace GServer.Archestra
             Galaxy.SynchronizeClient();
 
             var repositoryObject = Galaxy.GetObjectByName(archestraObject.TagName);
-            var original = repositoryObject.Map();
+            var original = repositoryObject.MapObject();
 
             try
             {

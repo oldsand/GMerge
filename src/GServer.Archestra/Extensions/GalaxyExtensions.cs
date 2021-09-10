@@ -1,15 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security;
 using System.ServiceModel.Security;
 using ArchestrA.GRAccess;
 using ArchestrA.Visualization.GraphicAccess;
+using GCommon.Primitives.Enumerations;
 using GServer.Archestra.Exceptions;
+
+[assembly: InternalsVisibleTo("GServer.Archestra.IntegrationTests")]
 
 namespace GServer.Archestra.Extensions
 {
-    public static class GalaxyExtensions
+    internal static class GalaxyExtensions
     {
         /// <summary>
         /// Logs into the galaxy with the given credentials and validates the user.
@@ -160,6 +164,37 @@ namespace GServer.Archestra.Extensions
         }
 
         /// <summary>
+        /// Gets the specified base template object from the galaxy repository
+        /// </summary>
+        /// <param name="galaxy">The current galaxy object</param>
+        /// <param name="template">The template to query</param>
+        /// <returns></returns>
+        public static ITemplate GetBaseTemplate(this IGalaxy galaxy, Template template)
+        {
+            var baseTemplate =
+                galaxy.QueryObjectsByName(EgObjectIsTemplateOrInstance.gObjectIsTemplate,
+                    new[] { template.Name })[template.Name];
+            galaxy.CommandResult.Process();
+
+            return baseTemplate.As<ITemplate>();
+        }
+
+        /// <summary>
+        /// Gets all base template objects from the galaxy repository
+        /// </summary>
+        /// <param name="galaxy"></param>
+        /// <returns></returns>
+        public static IgObjects GetBaseTemplates(this IGalaxy galaxy)
+        {
+            var templateNames = Template.List.Select(t => t.Name).ToArray();
+
+            var templates = galaxy.QueryObjectsByName(EgObjectIsTemplateOrInstance.gObjectIsTemplate, templateNames);
+            galaxy.CommandResult.Process();
+
+            return templates;
+        }
+
+        /// <summary>
         /// Gets the specified templates from the galaxy repository.
         /// This extension wraps the base QueryObjectsByName method of IGalaxy using gObjectIsTemplate to clean up the call.
         /// This method will also throw an custom GalaxyException when the command result is unsuccessful.
@@ -177,6 +212,29 @@ namespace GServer.Archestra.Extensions
                 galaxy.QueryObjectsByName(EgObjectIsTemplateOrInstance.gObjectIsTemplate, tagNames.ToArray());
             galaxy.CommandResult.Process();
             return templates;
+        }
+
+        /// <summary>
+        /// Gets the specified symbol instance from the galaxy repository
+        /// </summary>
+        /// <param name="galaxy">The current galaxy object</param>
+        /// <param name="tagName">The tag name of the symbol to retrieve</param>
+        /// <returns>IInstance when the symbol is found. Null with it is not</returns>
+        /// <exception cref="ArgumentNullException">Thrown when tagName is null</exception>
+        /// <remarks>Symbol instances must be queried using valid namespace id (3)</remarks>
+        public static IInstance GetSymbolByName(this IGalaxy galaxy, string tagName)
+        {
+            if (tagName == null) throw new ArgumentNullException(nameof(tagName), "Value cannot be null");
+
+            var conditions = galaxy.CreateConditionsObject();
+            conditions.Add(EConditionType.NameSpaceIdIs, 3);
+            conditions.Add(EConditionType.NameEquals, tagName);
+            
+            var symbol = galaxy.QueryObjectsMultiCondition(EgObjectIsTemplateOrInstance.gObjectIsInstance,
+                conditions)[tagName];
+            galaxy.CommandResult.Process();
+
+            return symbol.As<IInstance>();
         }
 
         /// <summary>
@@ -407,6 +465,20 @@ namespace GServer.Archestra.Extensions
             return derived;
         }
 
+        public static IInstance CreateSymbol(this IGalaxy galaxy, string tagName)
+        {
+            if (tagName == null) throw new ArgumentNullException(nameof(tagName), "tagName cannot be null");
+
+            var parent = galaxy.GetBaseTemplate(Template.Symbol);
+            if (parent == null)
+                throw new InvalidOperationException($"Could not find template object with name '{Template.Symbol.Name}'");
+
+            var derived = parent.CreateInstance(tagName);
+            parent.CommandResult.Process();
+
+            return derived;
+        }
+
         /// <summary>
         /// Depth first recursive delete of all object instances and templates that are descendents of the specified tag name.
         /// This extension provides a simple API for deleting objects without having to worry about descendents,
@@ -482,11 +554,11 @@ namespace GServer.Archestra.Extensions
         /// limitation of the GRAccess SDK. Make sure to append fileName with .aaPKG</remarks>
         public static void ExportObjects(this IGalaxy galaxy, IEnumerable<string> tagNames, string fileName) =>
             ExportObjectsInternal(galaxy, tagNames, fileName);
-        
+
         public static void ImportObjects(this IGalaxy galaxy, string fileName, bool overwrite)
         {
             if (fileName == null) throw new ArgumentNullException(nameof(fileName));
-            
+
             galaxy.ImportObjects(fileName, overwrite);
             galaxy.CommandResults.Process();
         }
@@ -510,10 +582,10 @@ namespace GServer.Archestra.Extensions
 
         public static void Dump(this IGalaxy galaxy, IEnumerable<string> tagNames, string fileName) =>
             DumpInternal(galaxy, tagNames, fileName);
-        
+
         public static void Load(this IGalaxy galaxy, string fileName, bool overwrite)
         {
-            var mode = overwrite ? GRLoadMode.GRLoadModeUpdate : GRLoadMode.GRLoadModeIgnore; 
+            var mode = overwrite ? GRLoadMode.GRLoadModeUpdate : GRLoadMode.GRLoadModeIgnore;
             galaxy.GRLoad(fileName, mode);
             galaxy.CommandResults.Process();
         }

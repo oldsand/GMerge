@@ -1,5 +1,6 @@
 using System.Linq;
 using ArchestrA.GRAccess;
+using FluentAssertions;
 using GServer.Archestra.Extensions;
 using NUnit.Framework;
 
@@ -84,5 +85,24 @@ namespace GServer.Archestra.IntegrationTests.ExtensionTests
             Assert.AreEqual(0, target.Attributes["BatchNum"].GetValue<int>());
         }
 
+        [Test]
+        public void GetVisualElementDefinition_KnownSymbol_ShouldNotBeNull()
+        {
+            var target = _galaxy.GetSymbolByName(Known.Symbols.ProportionalValve).AsObject();
+
+            var definition = target.GetVisualDefinition();
+
+            definition.Should().NotBeNull();
+        }
+
+        [Test]
+        public void MapGraphic_KnownGraphic_ShouldNotBeNull()
+        {
+            var target = _galaxy.GetSymbolByName(Known.Symbols.ProportionalValve);
+
+            var graphic = target.MapGraphic();
+
+            graphic.Should().NotBeNull();
+        }
     }
 }

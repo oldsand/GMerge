@@ -14,7 +14,7 @@ namespace GServer.Archestra.IntegrationTests
         private static readonly bool RunSetup = false;
         private const string BaseGalaxyTemplate = "Base_Application_Server.cab";
         private const string ReactorGalaxyTemplate = "Reactor_Demo_Application_Server.cab";
-        private const string KnownGalaxyName = "TestReactor";
+        private const string KnownGalaxyName = "Test";
         private const string TestGalaxyName = "GMergeTestGalaxy";
 
         public static string GalaxyName { get; private set; }

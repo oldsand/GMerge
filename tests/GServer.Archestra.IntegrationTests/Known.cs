@@ -52,6 +52,7 @@ namespace GServer.Archestra.IntegrationTests
         
         public static class Symbols
         {
+            public const string ProportionalValve = nameof(ProportionalValve);
             public static ArchestraGraphic React => new("React");
             public const string ReactorDisplay = nameof(ReactorDisplay);
         }

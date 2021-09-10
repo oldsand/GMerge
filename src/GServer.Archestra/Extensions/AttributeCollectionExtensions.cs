@@ -11,7 +11,7 @@ namespace GServer.Archestra.Extensions
         public static IEnumerable<ArchestraAttribute> Map(this IAttributes attributes)
         {
             foreach (IAttribute attribute in attributes)
-                yield return attribute.Map();
+                yield return attribute.MapAttribute();
         }
         
         public static IEnumerable<IAttribute> Where(this IAttributes attributes, Predicate<IAttribute> predicate)
@@ -25,14 +25,14 @@ namespace GServer.Archestra.Extensions
         {
             foreach (IAttribute attribute in attributes)
                 if (attribute.DataType == dataType.ToMx())
-                    yield return attribute.Map();
+                    yield return attribute.MapAttribute();
         }
         
         public static IEnumerable<ArchestraAttribute> ByNameContains(this IAttributes attributes, string name)
         {
             foreach (IAttribute attribute in attributes)
                 if (attribute.Name.Contains(name))
-                    yield return attribute.Map();
+                    yield return attribute.MapAttribute();
         }
     }
 }

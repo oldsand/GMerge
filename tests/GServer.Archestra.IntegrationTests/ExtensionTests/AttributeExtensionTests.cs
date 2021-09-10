@@ -102,11 +102,11 @@ namespace GServer.Archestra.IntegrationTests.ExtensionTests
             template.CheckOut();
 
             var attribute = template.GetAttribute("TestGraphic._VisualElementDefinition");
-            var primitive = attribute.Map();
+            var primitive = attribute.MapAttribute();
             attribute.SetLocked(MxPropertyLockedEnum.MxUnLocked);
             template.Save();
             
-            attribute.SetValue(Blob.Empty());
+            attribute.SetValue(Blob.Empty);
             template.Save();
 
             var changed = template.GetAttribute("TestGraphic._VisualElementDefinition").GetValue<Blob>();

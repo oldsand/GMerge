@@ -35,11 +35,20 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
+        <Reference Include="ArchestrA.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=23106a86e706d0ae">
+          <HintPath>..\Lib\ArchestrA.Core.dll</HintPath>
+        </Reference>
         <Reference Include="ArchestrA.GRAccess, Version=1.8.0.0, Culture=neutral, PublicKeyToken=23106a86e706d0ae">
           <HintPath>..\Lib\ArchestrA.GRAccess.dll</HintPath>
         </Reference>
+        <Reference Include="ArchestrA.PFServerPublic, Version=1.0.0.0, Culture=neutral, PublicKeyToken=23106a86e706d0ae">
+          <HintPath>..\..\..\..\..\..\Windows\assembly\GAC\ArchestrA.PFServerPublic\1.0.0.0__23106a86e706d0ae\ArchestrA.PFServerPublic.dll</HintPath>
+        </Reference>
         <Reference Include="ArchestrA.Visualization.GraphicAccess, Version=1.0.0.0, Culture=neutral, PublicKeyToken=23106a86e706d0ae">
           <HintPath>..\Lib\ArchestrA.Visualization.GraphicAccess.dll</HintPath>
+        </Reference>
+        <Reference Include="ArchestrA.Visualization.GraphicLibrary, Version=4.0.0.0, Culture=neutral, PublicKeyToken=23106a86e706d0ae">
+          <HintPath>..\Lib\ArchestrA.Visualization.GraphicLibrary.dll</HintPath>
         </Reference>
         <Reference Include="Microsoft.CSharp" />
         <Reference Include="System" />
@@ -94,6 +103,7 @@
         <Compile Include="Extensions\ObjectExtensions.cs" />
         <Compile Include="Extensions\GalaxyExtensions.cs" />
         <Compile Include="Extensions\ObjectCollectionExtensions.cs" />
+        <Compile Include="Extensions\SymbolExtensions.cs" />
         <Compile Include="Extensions\TimeExtensions.cs" />
         <Compile Include="Extensions\TypeExtensions.cs" />
         <Compile Include="Extensions\MxValueExtensions.cs" />
@@ -101,6 +111,7 @@
         <Compile Include="GalaxyRepository.cs" />
         <Compile Include="GalaxyRepositoryFactory.cs" />
         <Compile Include="Helpers\GalaxyBuilder.cs" />
+        <Compile Include="Helpers\VisualElementConverter.cs" />
         <Compile Include="Helpers\GraphicBuilder.cs" />
         <Compile Include="Helpers\MxFactory.cs" />
         <Compile Include="Helpers\MxReference.cs" />

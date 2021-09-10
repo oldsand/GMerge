@@ -108,7 +108,7 @@ namespace GServer.Archestra.Extensions
                 attribute.EngUnits = units;
         }
 
-        public static ArchestraAttribute Map(this IAttribute attribute)
+        public static ArchestraAttribute MapAttribute(this IAttribute attribute)
         {
             return new ArchestraAttribute(attribute.Name, 
                 attribute.DataType.ToPrimitive(),

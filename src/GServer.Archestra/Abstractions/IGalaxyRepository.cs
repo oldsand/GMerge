@@ -20,7 +20,7 @@ namespace GServer.Archestra.Abstractions
         void CreateObject(ArchestraObject source);
         void CreateGraphic(ArchestraGraphic archestraGraphic);
         void DeleteObject(string tagName, bool recursive);
-        void DeleteObjects(IEnumerable<string> tagNames, bool recursive);
+        void DeleteGraphic(string tagName);
         void UpdateObject(ArchestraObject archestraObject);
         void UpdateGraphic(ArchestraGraphic archestraGraphic);
     }

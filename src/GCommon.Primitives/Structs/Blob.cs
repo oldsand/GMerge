@@ -10,15 +10,8 @@ namespace GCommon.Primitives.Structs
     {
         public int Guid { get; private set; } 
         public byte[] Data { get; private set; }
-        
-        public static Blob Empty()
-        {
-            return new Blob
-            {
-                Guid = -1,
-                Data = Array.Empty<byte>()
-            };
-        }
+
+        public static Blob Empty => FromData(new byte[] {0});
 
         public static Blob FromData(byte[] data, int guid = -1)
         {

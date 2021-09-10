@@ -10,7 +10,7 @@ namespace GCommon.Primitives.UnitTests.StructTests
         [Test]
         public void Empty_WhenCalled_ShouldHaveExpectedProperties()
         {
-            var blob = Blob.Empty();
+            var blob = Blob.Empty;
 
             blob.Should().NotBeNull();
             blob.Data.Should().NotBeNull();

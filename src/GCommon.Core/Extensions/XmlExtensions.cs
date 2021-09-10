@@ -64,6 +64,13 @@ namespace GCommon.Core.Extensions
 
             return current;
         }
+        
+        public static XDocument ToXDoc(this XmlNode input)
+        {
+            using var reader = new XmlNodeReader(input);
+            reader.MoveToContent();
+            return XDocument.Load(reader);
+        }
 
         public static byte [] ToByteArray(this XNode node, SaveOptions options = default, Encoding encoding = default)
         {

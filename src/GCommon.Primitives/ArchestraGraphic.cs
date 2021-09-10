@@ -11,17 +11,8 @@ namespace GCommon.Primitives
         {
             TagName = tagName;
         }
-        
-        public string TagName { get; private set; }
-        public XElement Root { get; set; }
-        public IEnumerable<CustomProperty> CustomProperties { get; set; }
-        public IEnumerable<PredefinedScript> PredefinedScripts { get; set; }
-        public IEnumerable<NamedScript> NamedScripts { get; set; }
-        public XElement VisualTree { get; set; }
-        public IEnumerable<WizardOption> WizardOptions { get; set; }
-        public IEnumerable<WizardLayer> WizardLayers { get; set; }
 
-        public ArchestraGraphic Materialize(XElement element)
+        private ArchestraGraphic(XElement element)
         {
             var root = new XElement(element);
             root.RemoveNodes();
@@ -32,7 +23,20 @@ namespace GCommon.Primitives
             VisualTree = element.Element("GraphicElements");
             PredefinedScripts = element.Element("PredefinedScripts")?.Descendants().Select(n => new PredefinedScript().Materialize(n)).ToList();;
             NamedScripts = element.Descendants("NamedScript").Select(n => new NamedScript().Materialize(n)).ToList();
-            return this;
+        }
+        
+        public string TagName { get; private set; }
+        public XElement Root { get; set; }
+        public IEnumerable<CustomProperty> CustomProperties { get; set; }
+        public IEnumerable<PredefinedScript> PredefinedScripts { get; set; }
+        public IEnumerable<NamedScript> NamedScripts { get; set; }
+        public XElement VisualTree { get; set; }
+        public IEnumerable<WizardOption> WizardOptions { get; set; }
+        public IEnumerable<WizardLayer> WizardLayers { get; set; }
+
+        public static ArchestraGraphic Materialize(XElement element)
+        {
+            return new ArchestraGraphic(element);
         }
 
         public XElement Serialize()

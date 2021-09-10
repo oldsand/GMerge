@@ -138,12 +138,11 @@ namespace GServer.Services
             var archestraObject = ArchestraObject.Materialize(element);
             return DataMapper.Map(archestraObject);
         }
-
-        //todo figure out tag name here
+        
         private static GalaxySymbolData MaterializeSymbol(ArchiveEntry latest)
         {
             var xml = XElement.Load(new MemoryStream(latest.CompressedData.Decompress()));
-            var galaxyObject = new ArchestraGraphic("").Materialize(xml);
+            var galaxyObject = ArchestraGraphic.Materialize(xml);
             return DataMapper.Map(galaxyObject);
         }
 

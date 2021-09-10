@@ -1,8 +1,8 @@
 using ArchestrA.GRAccess;
-using GServer.Archestra.Extensions;
+using FluentAssertions;
 using NUnit.Framework;
 
-namespace GServer.Archestra.IntegrationTests.ExtensionTests
+namespace GServer.Archestra.LibraryTests
 {
     [TestFixture]
     public class GrAccessTests
@@ -14,7 +14,7 @@ namespace GServer.Archestra.IntegrationTests.ExtensionTests
         public void Setup()
         {
             _grAccess = new GRAccessAppClass();
-            _galaxy = _grAccess.QueryGalaxies()[TestConfig.GalaxyName];
+            _galaxy = _grAccess.QueryGalaxies()["Test"];
             _galaxy.Login(string.Empty, string.Empty);
         }
 
@@ -26,6 +26,22 @@ namespace GServer.Archestra.IntegrationTests.ExtensionTests
         }
 
         [Test]
+        public void GetSymbolTemplate()
+        {
+            var conditions = _galaxy.CreateConditionsObject();
+            conditions.Add(EConditionType.NameSpaceIdIs, 3);
+            conditions.Add(EConditionType.NameEquals, "$Symbol");
+
+            var result = _galaxy.QueryObjectsMultiCondition(EgObjectIsTemplateOrInstance.gObjectIsTemplate, conditions);
+
+            var symbol = result[1];
+            symbol.Should().NotBeNull();
+
+            var tagName = symbol.Tagname;
+            tagName.Should().Be("$Symbol");
+        }
+
+        /*[Test]
         public void UndoCheckout_WhenCalled_Works()
         {
             var target = _galaxy.GetObjectByName(Known.Templates.ReactorSet.TagName);
@@ -35,8 +51,8 @@ namespace GServer.Archestra.IntegrationTests.ExtensionTests
             
             target.UndoCheckOut();
             Assert.True(target.CheckoutStatus == ECheckoutStatus.notCheckedOut);
-        }
-        
+        }*/
+
         /*[Test]
         public void SetUnits_TestTemplate_ShouldSetUnitsProperty()
         {
