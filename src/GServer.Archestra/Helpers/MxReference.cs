@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using ArchestrA.GRAccess;
 using GCommon.Primitives.Structs;
 
@@ -9,10 +10,11 @@ namespace GServer.Archestra.Helpers
 {
     
     /// <summary>
-    /// Since Archestra doesn't give us a way to create a reference type, I am implementing the interface just to set
+    /// Since GRAccess dll doesn't give us a way to create a reference type, I am implementing the interface just to set
     /// the public properties and pass into MxValue Put method in order to actually set reference values.
     /// Class only used for transferring data and has no implementation.
     /// </summary>
+    ///  [TypeLibType(2)]
     internal class MxReference : IMxReference
     {
         /// <summary>

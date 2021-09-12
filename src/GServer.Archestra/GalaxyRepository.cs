@@ -93,22 +93,20 @@ namespace GServer.Archestra
 
             return gObject?.MapObject();
         }
-
         
-
         public ArchestraGraphic GetGraphic(string tagName)
         {
             Galaxy.SynchronizeClient();
 
-            var symbol = Galaxy.GetSymbolByName(tagName).AsObject();
+            var symbol = Galaxy.GetSymbolByName(tagName);
 
-            return symbol.MapGraphic();
+            return symbol?.MapGraphic();
         }
 
         public void CreateObject(ArchestraObject source)
         {
             Galaxy.SynchronizeClient();
-            
+
             GalaxyBuilder.On(this).For(source).Build();
         }
 
@@ -116,17 +114,7 @@ namespace GServer.Archestra
         {
             Galaxy.SynchronizeClient();
 
-            var graphic = archestraGraphic.Serialize();
-            var doc = new XDocument(new XDeclaration("1.0", "utf-8", "yes"), graphic);
-            SchemaValidator.ValidateSymbol(doc);
-
-            using var tempDirectory = new TempDirectory(ApplicationPath.TempSymbolSubPath);
-            var fileName = Path.Combine(tempDirectory.FullName, $"{archestraGraphic.TagName}.xml");
-            doc.Save(fileName);
-            
-            Galaxy.ImportGraphic(fileName, archestraGraphic.TagName, false);
-
-            //TODO: Can we then set the folder container or no?
+            //todo user graphic builder
         }
 
         public void DeleteObject(string tagName, bool recursive)
@@ -142,11 +130,11 @@ namespace GServer.Archestra
             var gObject = Galaxy.GetObjectByName(tagName);
             gObject?.Delete();
         }
-        
+
         public void DeleteGraphic(string tagName)
         {
             Galaxy.SynchronizeClient();
-            
+
             var gObject = Galaxy.GetSymbolByName(tagName);
             gObject?.DeleteInstance();
         }
@@ -158,7 +146,7 @@ namespace GServer.Archestra
             var repositoryObject = Galaxy.GetObjectByName(archestraObject.TagName);
             var original = repositoryObject.MapObject();
 
-            try
+            /*try
             {
                 repositoryObject.CheckOut();
 
@@ -180,22 +168,14 @@ namespace GServer.Archestra
                 repositoryObject.Delete();
                 CreateObject(original);
                 throw;
-            }
+            }*/
         }
 
         public void UpdateGraphic(ArchestraGraphic archestraGraphic)
         {
             Galaxy.SynchronizeClient();
 
-            var graphic = archestraGraphic.Serialize();
-            var doc = new XDocument(new XDeclaration("1.0", "utf-8", "yes"), graphic);
-            SchemaValidator.ValidateSymbol(doc);
-
-            using var tempDirectory = new TempDirectory(ApplicationPath.TempSymbolSubPath);
-            var fileName = Path.Combine(tempDirectory.FullName, $"{archestraGraphic.TagName}.xml");
-            doc.Save(fileName);
-
-            Galaxy.ImportGraphic(fileName, archestraGraphic.TagName, true);
+            //todo user graphic builder
         }
     }
 }

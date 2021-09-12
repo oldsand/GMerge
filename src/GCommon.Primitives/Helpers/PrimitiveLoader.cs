@@ -10,7 +10,7 @@ using GCommon.Primitives.Enumerations;
 
 namespace GCommon.Primitives.Helpers
 {
-    internal static class PrimitiveAttributes
+    internal static class PrimitiveLoader
     {
         private const string NameSpace = "Resources";
         private const string FileName = "TemplatePrimitives.xml";
@@ -21,7 +21,7 @@ namespace GCommon.Primitives.Helpers
         private const string SecurityElement = "Security";
         private const string LockedElement = "Locked";
         private const string ValueElement = "Value";
-        private static readonly EmbeddedResources Resources = new EmbeddedResources(typeof(PrimitiveAttributes));
+        private static readonly EmbeddedResources Resources = new EmbeddedResources(typeof(PrimitiveLoader));
 
         public static IEnumerable<ArchestraAttribute> ForTemplate(Template template)
         {
@@ -30,6 +30,26 @@ namespace GCommon.Primitives.Helpers
 
             var rows = XDocument.Load(stream).Descendants("row")
                 .Where(e => e.Element(TemplateElement)?.Value == template.Name);
+
+            return (from row in rows
+                let name = row.Element(NameElement)?.Value
+                let dataType = DataType.FromValue(Convert.ToInt32(row.Element(DataTypeElement)?.Value))
+                let category = AttributeCategory.FromValue(Convert.ToInt32(row.Element(CategoryElement)?.Value))
+                let security = SecurityClassification.FromValue(Convert.ToInt32(row.Element(SecurityElement)?.Value))
+                let locked = Convert.ToBoolean(row.Element(LockedElement)?.Value) ? LockType.InMe : LockType.Unlocked
+                let parser = new HexParser(row.Element(ValueElement)?.Value)
+                let value = dataType.Parse((Hex)row.Element(ValueElement)?.Value)
+                let arrayCount = parser.ArrayLength
+                select new ArchestraAttribute(name, dataType, category, security, locked, value, arrayCount)).ToList();
+        }
+        
+        public static IEnumerable<ArchestraAttribute> ForExtension(Extension extension)
+        {
+            using var stream = Resources.GetStream(FileName, NameSpace);
+            if (stream == null) return Enumerable.Empty<ArchestraAttribute>(); //todo or throw exception?
+
+            var rows = XDocument.Load(stream).Descendants("row")
+                .Where(e => e.Element(TemplateElement)?.Value == extension.Name);
 
             return (from row in rows
                 let name = row.Element(NameElement)?.Value

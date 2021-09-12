@@ -16,6 +16,12 @@ namespace GServer.Archestra.IntegrationTests.ObjectTests
         }
 
         [Test]
+        public void METHOD()
+        {
+            
+        }
+
+        [Test]
         public void CreateObject_LimitAlarms_ReturnsCorrectConfiguration()
         {
             //Get the known template

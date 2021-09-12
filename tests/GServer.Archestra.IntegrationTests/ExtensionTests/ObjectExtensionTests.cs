@@ -1,4 +1,6 @@
 using System.Linq;
+using ApprovalTests;
+using ApprovalTests.Reporters;
 using ArchestrA.GRAccess;
 using FluentAssertions;
 using GServer.Archestra.Extensions;
@@ -68,6 +70,45 @@ namespace GServer.Archestra.IntegrationTests.ExtensionTests
             var attribute = template.GetAttribute(attributeName);
             
             Assert.AreEqual(attributeName, attribute.Name);
+        }
+        
+        [Test]
+        [UseReporter(typeof(DiffReporter))]
+        public void GetUaConfig_KnownTemplate_ShouldHaveExpectedValue()
+        {
+            var template = _galaxy.GetObjectByName(Known.Templates.ReactorSet.TagName);
+
+            var attribute = template.GetUaConfig();
+            var result = attribute.GetValue<string>();
+
+            result.Should().NotBeNull();
+            Approvals.VerifyXml(result);
+        }
+        
+        [Test]
+        [UseReporter(typeof(DiffReporter))]
+        public void GetFaConfig_KnownTemplate_ShouldHaveExpectedValue()
+        {
+            var template = _galaxy.GetObjectByName(Known.Templates.ReactorSet.TagName);
+
+            var attribute = template.GetFaConfig();
+            var result = attribute.GetValue<string>();
+
+            result.Should().NotBeNull();
+            Approvals.VerifyXml(result);
+        }
+        
+        [Test]
+        [UseReporter(typeof(DiffReporter))]
+        public void GetExtensionConfig_KnownTemplate_ShouldHaveExpectedValue()
+        {
+            var template = _galaxy.GetObjectByName(Known.Templates.ReactorSet.TagName);
+
+            var attribute = template.GetExtensionConfig();
+            var result = attribute.GetValue<string>();
+
+            result.Should().NotBeNull();
+            Approvals.VerifyXml(result);
         }
 
         [Test]

@@ -8,11 +8,11 @@ namespace GCommon.Primitives.UnitTests.EnumTests
     public class TemplateTests
     {
         [Test]
-        public void GetPrimitiveAttributes_WhenCalled_ShouldHaveNotBeEmpty()
+        public void Primitives_WhenCalled_ShouldHaveNotBeEmpty()
         {
             var template = Template.UserDefined;
 
-            var attributes = template.GetAttributes();
+            var attributes = template.Primitives;
 
             attributes.Should().NotBeEmpty();
         }

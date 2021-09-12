@@ -1,3 +1,5 @@
+using System;
+using System.Xml.Linq;
 using ArchestrA.GRAccess;
 using FluentAssertions;
 using NUnit.Framework;
@@ -39,6 +41,48 @@ namespace GServer.Archestra.LibraryTests
 
             var tagName = symbol.Tagname;
             tagName.Should().Be("$Symbol");
+        }
+        
+        [Test]
+        public void SetCmdDataOnObjectWithoutAttribute()
+        {
+            var target =
+                _galaxy.QueryObjectsByName(EgObjectIsTemplateOrInstance.gObjectIsTemplate, new[] { "$TestObject" })[1];
+            
+            target.CheckOut();
+
+            var cmdData = target.Attributes["CmdData"];
+
+            var element = new XElement("CmdData");
+            element.Add(new XElement("BooleanLabel", new XElement("Attribute", new XAttribute("Name", "AttributeName"))));
+
+            var value = cmdData.value;
+            value.PutString(element.ToString());
+            cmdData.SetValue(value);
+
+            if (!cmdData.CommandResult.Successful)
+            {
+                var message = cmdData.CommandResult.CustomMessage;
+                var id = cmdData.CommandResult.ID;
+                Assert.Fail();
+            }
+            
+            target.Save();
+            target.CheckIn();
+        }
+
+        [Test]
+        public void QueryToolsets()
+        {
+            var toolsets = _galaxy.QueryToolsets();
+
+            foreach (IToolset toolset in toolsets)
+            {
+                var name = toolset.Name;
+                var children = toolset.GetChildToolsets(-1);
+            }
+
+            toolsets.count.Should().BePositive();
         }
 
         /*[Test]

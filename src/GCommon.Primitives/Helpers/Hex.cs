@@ -82,6 +82,16 @@ namespace GCommon.Primitives.Helpers
             int.TryParse(Value, NumberStyles.HexNumber, CultureInfo.CurrentCulture, out var result);
             return result;
         }
+        
+        /// <summary>
+        /// Converts the current hex value to a <c>byte</c>
+        /// </summary>
+        /// <returns><c>int</c></returns>
+        public byte ToByte()
+        {
+            byte.TryParse(Value, NumberStyles.HexNumber, CultureInfo.CurrentCulture, out var result);
+            return result;
+        }
 
         /// <summary>
         /// Converts the current hex value to a <c>float</c>

@@ -27,12 +27,13 @@ namespace GServer.Archestra.Helpers
                 //Step0: Checkout.
                 _target.CheckOut();
 
-                //Step1: Configure the user defined and field attributes for the objects and save before going further.
-                UpdateUserAttributes();
+                //Step1: Update object predefined xml config attributes
+                /*UpdateUserAttributes();
                 UpdateFieldAttributes();
+                UpdateCommandData();*/
                 _target.Save();
 
-                //Step2: Configure each user defined attribute 
+                //Step2: Configure each user defined attribute and field attribute 
                 ConfigureUserAttributes();
                 //todo add configure field attributes
                 _target.Save();
@@ -53,15 +54,15 @@ namespace GServer.Archestra.Helpers
                 throw;
             }
         }
-        
-        private void UpdateUserAttributes()
+
+        /*private void UpdateUserAttributes()
         {
             var source = _source.UserAttributeConfig;
             if (source == null)
                 throw new InvalidOperationException(
                     $"Could not obtain user attribute config on source object '{_source.TagName}'");
 
-            var target = _target.GetAttribute("UDAs");
+            var target = _target.GetUaConfig();
             if (target == null)
                 throw new InvalidOperationException("Could not find attribute UDAs on target object");
             
@@ -74,15 +75,30 @@ namespace GServer.Archestra.Helpers
             var source = _source.FieldAttributeConfig;
             if (source == null)
                 throw new InvalidOperationException(
-                    $"Could not obtain user attribute config on source object '{_source.TagName}'");
+                    $"Could not obtain field attribute config on source object '{_source.TagName}'");
             
-            var target = _target.GetAttribute("UserAttrData");
+            var target = _target.GetFaConfig();
             if (target == null)
                 throw new InvalidOperationException("Could not find attribute UserAttrData on target object");
             
             target.SetValue(source);
             target.CommandResult.Process();
         }
+        
+        private void UpdateCommandData()
+        {
+            var source = _source.CommandDataConfig;
+            if (source == null)
+                throw new InvalidOperationException(
+                    $"Could not obtain command attribute config on source object '{_source.TagName}'");
+            
+            var target = _target.GetCmdDataConfig();
+            if (target == null)
+                throw new InvalidOperationException("Could not find attribute CmdData on target object");
+            
+            target.SetValue(source);
+            target.CommandResult.Process();
+        }*/
         
         private void ConfigureUserAttributes()
         {

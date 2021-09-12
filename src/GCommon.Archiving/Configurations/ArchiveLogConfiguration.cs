@@ -1,5 +1,4 @@
 using GCommon.Primitives;
-using GCommon.Primitives.Base;
 using GCommon.Primitives.Enumerations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

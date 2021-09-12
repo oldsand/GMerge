@@ -53,6 +53,9 @@ namespace GCommon.Primitives.Enumerations
 
         protected virtual object ParseSingle(Hex hex)
         {
+            if (hex.Length == 0)
+                return null;
+            
             return hex.Head(4) == "0x00" ? Hex.Empty : DefaultValue;
         }
 
@@ -372,6 +375,16 @@ namespace GCommon.Primitives.Enumerations
             public override object Parse(string value)
             {
                 return new Blob();
+            }
+
+            protected override object ParseSingle(Hex hex)
+            {
+                if (hex.Length == 0)
+                    return DefaultValue;
+                
+                var bytes = hex.DropHead(24).ToEnumerable(2).Select(b => b.ToByte());
+
+                return Blob.FromData(bytes.ToArray());
             }
         }
 

@@ -1,7 +1,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using GCommon.Primitives;
-using GCommon.Primitives.Base;
 using GCommon.Primitives.Enumerations;
 
 namespace GCommon.Data.Entities

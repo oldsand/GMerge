@@ -96,24 +96,45 @@ namespace GServer.Archestra.Extensions
             return gObject.Attributes[name];
         }
         
-        public static IEnumerable<XElement> GetUdaConfig(this IgObject gObject)
+        /// <summary>
+        /// Gets the predefined 'UDAs' attribute from the target object
+        /// </summary>
+        /// <param name="gObject">The current galaxy object</param>
+        /// <returns>IAttribute representing the attribute for the UDAs primitive type</returns>
+        /// <remarks>All objects have this primitive attribute which defines the set of user defined attributes on the object.
+        /// This attribute can be set to update the object attributes instead of adding each one</remarks>
+        public static IAttribute GetUaConfig(this IgObject gObject)
         {
-            var udaData = gObject.GetAttribute("UDAs").GetValue<string>();
-            
-            if (udaData == null)
-                throw new InvalidOperationException("Not able to fine attribute UDAs");
-
-            return XElement.Parse(udaData).Descendants("Attribute");
+            return gObject.GetAttribute("UDAs");
         }
         
-        public static IEnumerable<XElement> GetExtensionConfig(this IgObject gObject)
+        /// <summary>
+        /// Gets the predefined 'UserAttrData' attribute from the target object
+        /// </summary>
+        /// <param name="gObject">The current galaxy object</param>
+        /// <returns>IAttribute representing the attribute for the UserAttrData primitive type</returns>
+        /// <remarks>All objects have this primitive attribute which defines the set of field attributes on the object.
+        /// This attribute can be set to update the object attributes instead of adding each one</remarks>
+        public static IAttribute GetFaConfig(this IgObject gObject)
         {
-            var extensions = gObject.GetAttribute("Extensions").GetValue<string>();
-            
-            if (extensions == null)
-                throw new InvalidOperationException("Not able to fine attribute UDAs");
+            return gObject.GetAttribute("UserAttrData");
+        }
+        
+        /// <summary>
+        /// Gets the predefined 'CmdData' attribute from the target object
+        /// </summary>
+        /// <param name="gObject">The current galaxy object</param>
+        /// <returns>IAttribute representing the attribute for the CmdData primitive type</returns>
+        /// <remarks>All objects have this primitive attribute which defines which attributes have boolean command labels.
+        /// This attribute can be set to update the object attributes instead of adding each one</remarks>
+        public static IAttribute GetCmdDataConfig(this IgObject gObject)
+        {
+            return gObject.GetAttribute("CmdData");
+        }
 
-            return XElement.Parse(extensions).Descendants().Where(x => x.HasAttributes);
+        public static IAttribute GetExtensionConfig(this IgObject gObject)
+        {
+            return gObject.GetAttribute("Extensions");
         }
 
         public static IEnumerable<string> GetUdaNames(this IgObject gObject)
@@ -133,7 +154,7 @@ namespace GServer.Archestra.Extensions
                 ? "_VisualElementDefinition"
                 : $"{symbolName}._VisualElementDefinition";
             
-            var attribute = gObject.Attributes[name];
+            var attribute = gObject.GetAttribute(name);
             
             return attribute.GetValue<Blob>();
         }
@@ -148,45 +169,9 @@ namespace GServer.Archestra.Extensions
             gObject.Attributes["UserAttrData"].SetValue(xml);
         }
 
-        public static void SetUserDefinedAttributes(this IgObject gObject, ArchestraObject source)
+        public static void ConfigureExtension(this IgObject gObject, string primitiveName, Extension extension, ArchestraObject source)
         {
-            var sourceUda = source.Attributes.SingleOrDefault(a => a.Name == "UDAs")?.Value.ToString();
-            var targetUda = gObject.Attributes["UDAs"];
-            targetUda?.SetValue(sourceUda);
-        }
-
-        public static void SetFieldAttributes(this IgObject gObject, ArchestraObject source)
-        {
-            var sourceField = source.Attributes.SingleOrDefault(a => a.Name == "UserAttrData")?.Value.ToString();
-            var targetField = gObject.Attributes["UserAttrData"];
-            targetField?.SetValue(sourceField);
-        }
-
-        public static void ConfigureAttributes(this IgObject gObject, ArchestraObject source)
-        {
-            var udaData = gObject.GetAttribute("UDAs").GetValue<string>();
-            var attributeNames =
-                XElement.Parse(udaData)
-                    .Descendants("Attribute")
-                    .Select(uda => uda.Attribute("Name")?.Value);
-
-            foreach (var attributeName in attributeNames)
-            {
-                var attribute = source.Attributes.SingleOrDefault(a => a.Name == attributeName);
-                var description = source.Attributes
-                    .SingleOrDefault(a => a.Name == $"{attributeName}.Description")?.Value.ToString();
-                var engUnits = source.Attributes
-                    .SingleOrDefault(a => a.Name == $"{attributeName}.EngUnits")?.Value.ToString();
-
-                var target = gObject.GetAttribute(attributeName);
-                target.Configure(attribute, description, engUnits);
-                //gObject.ConfigureAttribute(attribute, description, engUnits);
-            }
-        }
-
-        public static void ConfigureExtension(this IgObject gObject, string primitiveName, ExtensionType extensionType, ArchestraObject source)
-        {
-            var configurableAttributes = extensionType.GenerateConfigurableAttributes(primitiveName);
+            var configurableAttributes = extension.GenerateConfigurableAttributes(primitiveName);
 
             var sourceAttributes = source.Attributes
                 .Where(a => configurableAttributes
@@ -213,7 +198,7 @@ namespace GServer.Archestra.Extensions
                 var name = extension.Attribute("Name")?.Value;
                 var type = extension.Attribute("ExtensionType")?.Value;
                 var isObjectExtension = extension.Name == "Extension";
-                var extensionType = ExtensionType.FromName(type);
+                var extensionType = Extension.FromName(type);
 
                 gObject.AddExtensionPrimitive(type, name, isObjectExtension);
                 gObject.ConfigureExtension(name, extensionType, source);
@@ -228,12 +213,11 @@ namespace GServer.Archestra.Extensions
         public static ArchestraObject MapObject(this IgObject obj)
         {
             return new ArchestraObject(obj.Tagname,
-                obj.ContainedName,
                 obj.HierarchicalName,
-                obj.category.ToPrimitive(),
+                obj.ContainedName,
                 obj.ConfigVersion,
+                Template.FromName(obj.basedOn),
                 obj.DerivedFrom,
-                obj.basedOn,
                 obj.Host,
                 obj.Area,
                 obj.Container,
@@ -261,7 +245,7 @@ namespace GServer.Archestra.Extensions
         }
         
         /// <summary>
-        /// Transforms the object to a ArchestraObject type
+        /// Transforms the object to a ArchestraGraphic type
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>

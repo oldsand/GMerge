@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using GCommon.Primitives;
-using GCommon.Primitives.Base;
 using GCommon.Primitives.Enumerations;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Global

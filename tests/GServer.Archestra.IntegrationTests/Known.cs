@@ -11,7 +11,7 @@ namespace GServer.Archestra.IntegrationTests
             public static ArchestraObject DrumConveyor => new(
                 "$Drum_Conveyor",
                 Template.UserDefined,
-                configVersion: 86,
+                version: 86,
                 attributes: new List<ArchestraAttribute>
                 {
                     new("Auto", DataType.Boolean),
@@ -31,7 +31,7 @@ namespace GServer.Archestra.IntegrationTests
             public static ArchestraObject ReactorSet => new(
                 "$ReactorSet",
                 Template.UserDefined,
-                configVersion: 94,
+                version: 94,
                 attributes: new List<ArchestraAttribute>
                 {
                     new("Auto", DataType.Boolean, security: SecurityClassification.Tune),

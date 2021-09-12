@@ -116,7 +116,6 @@
         <Compile Include="Helpers\MxFactory.cs" />
         <Compile Include="Helpers\MxReference.cs" />
         <Compile Include="Helpers\ObjectBuilder.cs" />
-        <Compile Include="Helpers\SchemaValidator.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
     <ItemGroup>

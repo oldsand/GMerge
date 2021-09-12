@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
-using GCommon.Primitives.Base;
+using GCommon.Primitives.Abstractions;
 using GCommon.Primitives.Enumerations;
 
 // Object will be deserialized via xml

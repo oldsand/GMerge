@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
-using GCommon.Primitives.Base;
+using GCommon.Primitives.Abstractions;
 
 namespace GCommon.Primitives
 {

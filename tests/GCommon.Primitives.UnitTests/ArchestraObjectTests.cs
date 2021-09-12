@@ -24,27 +24,31 @@ namespace GCommon.Primitives.UnitTests
             var result = new ArchestraObject("TagName", Template.UserDefined);
 
             result.TagName.Should().Be("TagName");
-            result.BasedOnName.Should().Be(Template.UserDefined.Name);
+            result.Template.Should().Be(Template.UserDefined);
             result.DerivedFromName.Should().Be(Template.UserDefined.Name);
         }
 
         [Test]
         public void New_FullProperties_ShouldHaveExpectedProperties()
         {
-            var result = new ArchestraObject("Test", "Contained", "Test.Contained", ObjectCategory.Galaxy, 100,
-                "Derived", "BasedOn", "Host", "Area", "Contained", Template.Galaxy.GetAttributes());
+            var result = new ArchestraObject("Test", "Test.Contained", "Contained", 100, Template.Galaxy, "Derived",
+                "Host", "Area", "Contained", new List<ArchestraAttribute>
+                {
+                    new ArchestraAttribute("Attribute1", DataType.Boolean),
+                    new ArchestraAttribute("Attribute2", DataType.Integer),
+                    new ArchestraAttribute("Attribute3", DataType.String)
+                });
 
             result.TagName.Should().Be("Test");
-            result.ContainedName.Should().Be("Contained");
             result.HierarchicalName.Should().Be("Test.Contained");
-            result.Category.Should().Be(ObjectCategory.Galaxy);
+            result.ContainedName.Should().Be("Contained");
             result.ConfigVersion.Should().Be(100);
+            result.Template.Should().Be(Template.Galaxy);
             result.DerivedFromName.Should().Be("Derived");
-            result.BasedOnName.Should().Be("BasedOn");
             result.HostName.Should().Be("Host");
             result.AreaName.Should().Be("Area");
             result.ContainerName.Should().Be("Contained");
-            result.Attributes.Should().BeEquivalentTo(Template.Galaxy.GetAttributes());
+            result.Attributes.Should().HaveCount(3);
         }
 
         [Test]
@@ -60,9 +64,8 @@ namespace GCommon.Primitives.UnitTests
         [Test]
         public void Serialize_SimpleFakeObject_ShouldHaveExpectedAttributes()
         {
-            var obj = new ArchestraObject("Test", "Contained", "Test.Contained", ObjectCategory.Galaxy, 100,
-                "Derived", "BasedOn", "Host", "Area", "Contained",
-                new List<ArchestraAttribute>
+            var obj = new ArchestraObject("Test", "Test.Contained", "Contained", 100, Template.Galaxy, "Derived",
+                "Host", "Area", "Contained", new List<ArchestraAttribute>
                 {
                     new ArchestraAttribute("Attribute1", DataType.Boolean),
                     new ArchestraAttribute("Attribute2", DataType.Integer),
@@ -72,12 +75,11 @@ namespace GCommon.Primitives.UnitTests
             var result = obj.Serialize();
 
             result.Should().HaveAttribute(nameof(obj.TagName), obj.TagName);
-            result.Should().HaveAttribute(nameof(obj.ContainedName), obj.ContainedName);
             result.Should().HaveAttribute(nameof(obj.HierarchicalName), obj.HierarchicalName);
-            result.Should().HaveAttribute(nameof(obj.Category), obj.Category.ToString());
+            result.Should().HaveAttribute(nameof(obj.ContainedName), obj.ContainedName);
             result.Should().HaveAttribute(nameof(obj.ConfigVersion), obj.ConfigVersion.ToString());
+            result.Should().HaveAttribute(nameof(obj.Template), obj.Template.Name);
             result.Should().HaveAttribute(nameof(obj.DerivedFromName), obj.DerivedFromName);
-            result.Should().HaveAttribute(nameof(obj.BasedOnName), obj.BasedOnName);
             result.Should().HaveAttribute(nameof(obj.HostName), obj.HostName);
             result.Should().HaveAttribute(nameof(obj.AreaName), obj.AreaName);
             result.Should().HaveAttribute(nameof(obj.ContainerName), obj.ContainerName);
@@ -87,9 +89,8 @@ namespace GCommon.Primitives.UnitTests
         [UseReporter(typeof(DiffReporter))]
         public void Serialize_SimpleFakeObject_ShouldHaveApprovedOutput()
         {
-            var obj = new ArchestraObject("Test", "Contained", "Test.Contained", ObjectCategory.Galaxy, 100,
-                "Derived", "BasedOn", "Host", "Area", "Contained",
-                new List<ArchestraAttribute>
+            var obj = new ArchestraObject("Test", "Test.Contained", "Contained", 100, Template.Galaxy, "Derived",
+                "Host", "Area", "Contained", new List<ArchestraAttribute>
                 {
                     new ArchestraAttribute("Attribute1", DataType.Boolean),
                     new ArchestraAttribute("Attribute2", DataType.Integer),

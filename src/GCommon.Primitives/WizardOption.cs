@@ -4,7 +4,7 @@ using System.Linq;
 using System.Xml.Linq;
 using GCommon.Differencing;
 using GCommon.Differencing.Abstractions;
-using GCommon.Primitives.Base;
+using GCommon.Primitives.Abstractions;
 using GCommon.Primitives.Enumerations;
 
 namespace GCommon.Primitives

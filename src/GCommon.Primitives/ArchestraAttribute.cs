@@ -5,7 +5,7 @@ using System.Linq;
 using System.Xml.Linq;
 using GCommon.Differencing;
 using GCommon.Differencing.Abstractions;
-using GCommon.Primitives.Base;
+using GCommon.Primitives.Abstractions;
 using GCommon.Primitives.Enumerations;
 
 namespace GCommon.Primitives
@@ -45,8 +45,8 @@ namespace GCommon.Primitives
         public SecurityClassification Security { get; set; }
         public LockType Locked { get; set; }
         public object Value { get; set; }
+        public bool IsArray => ArrayCount > 0;
         public int ArrayCount { get; set; }
-        public bool IsArray => ArrayCount > -1;
 
         public static ArchestraAttribute Materialize(XElement element)
         {
@@ -61,8 +61,33 @@ namespace GCommon.Primitives
             element.Add(new XAttribute(nameof(Category), Category.Name));
             element.Add(new XAttribute(nameof(Security), Security.Name));
             element.Add(new XAttribute(nameof(Locked), Locked.Name));
+            element.Add(new XAttribute(nameof(IsArray), IsArray));
             element.Add(new XAttribute(nameof(ArrayCount), ArrayCount));
             element.Add(WriteValue());
+            return element;
+        }
+
+        public XElement GenerateInfo()
+        {
+            var element = new XElement("Attribute");
+            element.Add(new XAttribute(nameof(Name), Name));
+            element.Add(new XAttribute(nameof(DataType), $"Mx{DataType.Name}"));
+            element.Add(new XAttribute(nameof(Category), $"MxCategory{Category.Name}"));
+            element.Add(new XAttribute(nameof(Security), $"MxSecurity{Security.Name}"));
+            element.Add(new XAttribute(nameof(IsArray), IsArray));
+            element.Add(new XAttribute("HasBuffer", false));
+            element.Add(new XAttribute("ArrayElementCount", ArrayCount));
+            element.Add(new XAttribute("InheritedFromTagName", string.Empty));
+            return element;
+        }
+
+        public XElement GenerateCmdData()
+        {
+            if (DataType != DataType.Boolean)
+                return null;
+            
+            var element = new XElement("Attribute");
+            element.Add(new XAttribute(nameof(Name), Name));
             return element;
         }
 
