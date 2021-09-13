@@ -71,10 +71,6 @@
       <Project>{1116a38e-aa67-46e3-9d09-e2de5c2a694e}</Project>
       <Name>GCommon.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GalaxyMerge.IO\GalaxyMerge.IO.csproj">
-      <Project>{9c3b117b-5acb-49c8-b19d-4fca1ce2be88}</Project>
-      <Name>GalaxyMerge.IO</Name>
-    </ProjectReference>
     <ProjectReference Include="..\GCommon.Core\GCommon.Core.csproj">
       <Project>{446fe87c-5122-4344-9df9-9f641e81a476}</Project>
       <Name>GCommon.Core</Name>

@@ -2,6 +2,7 @@ using System.Linq;
 using GClient.Data.Entities;
 using GClient.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
+using NLog;
 using NUnit.Framework;
 
 namespace GClient.Data.UnitTests

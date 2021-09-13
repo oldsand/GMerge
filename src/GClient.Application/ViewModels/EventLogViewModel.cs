@@ -1,5 +1,3 @@
-using System;
-using System.Windows;
 using System.Collections.ObjectModel;
 using GClient.Core.Mvvm;
 using GClient.Data.Entities;
