@@ -1,6 +1,4 @@
-﻿using GServer.Archestra;
-
-namespace GTest.ConsoleApp
+﻿namespace GTest.ConsoleApp
 {
     public static class Program
     {

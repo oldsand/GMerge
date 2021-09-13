@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ArchestrA.GRAccess;
-using GCommon.Core.Extensions;
-using GCommon.Primitives.Enumerations;
-using GCommon.Primitives.Structs;
+using GCommon.Extensions;
+using GCommon.Core.Enumerations;
+using GCommon.Core.Structs;
 
 namespace GServer.Archestra.Extensions
 {

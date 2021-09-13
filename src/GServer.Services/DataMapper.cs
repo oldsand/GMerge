@@ -1,7 +1,7 @@
 using System.Linq;
 using GCommon.Contracts;
 using GCommon.Data.Entities;
-using GCommon.Primitives;
+using GCommon.Core;
 using TableDependency.SqlClient.Base;
 
 namespace GServer.Services

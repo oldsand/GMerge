@@ -1,8 +1,7 @@
 using GClient.Core.Mvvm;
 using GClient.Core.Naming;
 using GClient.Events;
-using GCommon.Core.Logging;
-using ImTools;
+using GCommon.Logging;
 using NLog;
 using Prism.Commands;
 using Prism.Events;

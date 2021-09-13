@@ -4,8 +4,8 @@ using System.IO;
 using ArchestrA.GRAccess;
 using AutoFixture;
 using FluentAssertions;
-using GCommon.Core.Utilities;
-using GCommon.Primitives.Enumerations;
+using GCommon.Core.Enumerations;
+using GCommon.Utilities;
 using GServer.Archestra.Extensions;
 using NUnit.Framework;
 

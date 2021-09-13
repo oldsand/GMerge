@@ -1,6 +1,6 @@
 using System.Runtime.CompilerServices;
-using GCommon.Core.Utilities;
-using GCommon.Primitives;
+using GCommon.Core;
+using GCommon.Utilities;
 using Microsoft.EntityFrameworkCore;
 
 [assembly:InternalsVisibleTo("GCommon.Archiving.IntegrationTests")]

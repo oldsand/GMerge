@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using GCommon.Primitives;
+using GCommon.Core;
 
 namespace GServer.Archestra.Abstractions
 {

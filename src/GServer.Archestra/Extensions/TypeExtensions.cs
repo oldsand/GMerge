@@ -1,6 +1,6 @@
 using ArchestrA.GRAccess;
-using GCommon.Primitives.Enumerations;
-using GCommon.Primitives.Structs;
+using GCommon.Core.Enumerations;
+using GCommon.Core.Structs;
 using GServer.Archestra.Helpers;
 
 namespace GServer.Archestra.Extensions

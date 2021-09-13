@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ServiceModel;
 using Autofac;
-using Autofac.Integration.Wcf;
-using GalaxyMerge.Host.Configurations;
+using GServer.Host.Archiving.Configurations;
 using GServer.Services;
 using GServer.Services.Abstractions;
 using NLog;

@@ -1,6 +1,6 @@
 using System;
 using System.Runtime.CompilerServices;
-using GCommon.Primitives;
+using GCommon.Core;
 using GServer.Archestra.Abstractions;
 using GServer.Archestra.Extensions;
 

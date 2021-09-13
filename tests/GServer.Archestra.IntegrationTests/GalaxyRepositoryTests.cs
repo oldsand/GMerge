@@ -3,7 +3,7 @@ using System.Linq;
 using System.Security.Principal;
 using AutoFixture;
 using FluentAssertions;
-using GCommon.Primitives.Enumerations;
+using GCommon.Core.Enumerations;
 using NUnit.Framework;
 
 namespace GServer.Archestra.IntegrationTests

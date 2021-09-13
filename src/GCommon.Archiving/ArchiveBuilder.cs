@@ -1,6 +1,6 @@
 using GCommon.Archiving.Abstractions;
-using GCommon.Core.Utilities;
-using GCommon.Primitives;
+using GCommon.Core;
+using GCommon.Utilities;
 using Microsoft.EntityFrameworkCore;
 
 namespace GCommon.Archiving

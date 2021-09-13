@@ -11,7 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\GCommon.Core\GCommon.Core.csproj" />
+      <ProjectReference Include="..\GCommon.Utilities\GCommon.Utilities.csproj" />
     </ItemGroup>
 
 </Project>

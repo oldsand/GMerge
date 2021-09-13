@@ -1,6 +1,5 @@
 using System;
 using GClient.Data.Entities;
-using GCommon.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

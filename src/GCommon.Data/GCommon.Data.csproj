@@ -22,7 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\GCommon.Primitives\GCommon.Primitives.csproj" />
+      <ProjectReference Include="..\GCommon.Core\GCommon.Core.csproj" />
     </ItemGroup>
 
 </Project>

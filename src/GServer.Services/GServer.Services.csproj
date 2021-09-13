@@ -35,7 +35,6 @@
     <ItemGroup>
         <Reference Include="mscorlib" />
         <Reference Include="System" />
-        <Reference Include="System.ComponentModel.DataAnnotations" />
         <Reference Include="System.Core" />
         <Reference Include="System.Data" />
         <Reference Include="System.ServiceModel" />
@@ -60,6 +59,14 @@
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
     <ItemGroup>
+      <ProjectReference Include="..\GCommon.Extensions\GCommon.Extensions.csproj">
+        <Project>{ddc09b3f-a3c7-4fdd-ab33-7754ee368a98}</Project>
+        <Name>GCommon.Extensions</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\GCommon.Utilities\GCommon.Utilities.csproj">
+        <Project>{7dc26de3-34e1-4617-a64a-66cb181b25d8}</Project>
+        <Name>GCommon.Utilities</Name>
+      </ProjectReference>
       <ProjectReference Include="..\GServer.Archestra\GServer.Archestra.csproj">
         <Project>{32ea2985-26c5-44b5-b8c1-46c8d4da0979}</Project>
         <Name>GServer.Archestra</Name>
@@ -72,9 +79,9 @@
         <Project>{b72fb577-363e-493f-b9c7-66b6dd8720ae}</Project>
         <Name>GCommon.Contracts</Name>
       </ProjectReference>
-      <ProjectReference Include="..\GCommon.Primitives\GCommon.Primitives.csproj">
+      <ProjectReference Include="..\GCommon.Core\GCommon.Core.csproj">
         <Project>{446fe87c-5122-4344-9df9-9f641e81a476}</Project>
-        <Name>GCommon.Primitives</Name>
+        <Name>GCommon.Core</Name>
       </ProjectReference>
       <ProjectReference Include="..\GCommon.Core\GCommon.Core.csproj">
         <Project>{dd496472-fb15-4ffc-86ca-2ac8f0e6cf3c}</Project>

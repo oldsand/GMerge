@@ -4,7 +4,6 @@ using System.Windows.Controls;
 using GClient.Core.Converters;
 using GClient.Core.Utilities;
 using GCommon.Data.Entities;
-using GCommon.Primitives;
 
 namespace GClient.Converters
 {

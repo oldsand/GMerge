@@ -1,7 +1,7 @@
 using GCommon.Data.Base;
 using GCommon.Data.Entities;
-using GCommon.Primitives;
-using GCommon.Primitives.Enumerations;
+using GCommon.Core;
+using GCommon.Core.Enumerations;
 
 namespace GCommon.Data.Abstractions
 {

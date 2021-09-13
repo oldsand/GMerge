@@ -1,6 +1,6 @@
 using System.Runtime.Serialization;
-using GCommon.Primitives;
-using GCommon.Primitives.Enumerations;
+using GCommon.Core;
+using GCommon.Core.Enumerations;
 
 namespace GCommon.Contracts
 {

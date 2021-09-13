@@ -1,8 +1,8 @@
 using System.IO;
 using System.Linq;
-using GCommon.Core.Utilities;
-using GCommon.Primitives;
-using GCommon.Primitives.Enumerations;
+using GCommon.Core;
+using GCommon.Core.Enumerations;
+using GCommon.Utilities;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 

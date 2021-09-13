@@ -34,24 +34,11 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
-        <Reference Include="ArchestrA.Configuration, Version=1.0.0.0, Culture=neutral, PublicKeyToken=23106a86e706d0ae">
-          <HintPath>..\..\src\Lib\ArchestrA.Configuration.dll</HintPath>
-        </Reference>
-        <Reference Include="ArchestrA.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=23106a86e706d0ae">
-          <HintPath>..\..\src\Lib\ArchestrA.Core.dll</HintPath>
-        </Reference>
         <Reference Include="ArchestrA.GRAccess, Version=1.8.0.0, Culture=neutral, PublicKeyToken=23106a86e706d0ae">
           <HintPath>..\Lib\ArchestrA.GRAccess.dll</HintPath>
         </Reference>
-        <Reference Include="ArchestrA.PFServerPublic, Version=1.0.0.0, Culture=neutral, PublicKeyToken=23106a86e706d0ae">
-          <HintPath>..\..\..\..\..\..\Windows\assembly\GAC\ArchestrA.PFServerPublic\1.0.0.0__23106a86e706d0ae\ArchestrA.PFServerPublic.dll</HintPath>
-        </Reference>
-        <Reference Include="ArchestrA.Visualization.GraphicLibrary, Version=4.0.0.0, Culture=neutral, PublicKeyToken=23106a86e706d0ae">
-          <HintPath>..\..\src\Lib\ArchestrA.Visualization.GraphicLibrary.dll</HintPath>
-        </Reference>
         <Reference Include="mscorlib" />
         <Reference Include="System" />
-        <Reference Include="System.ComponentModel.DataAnnotations" />
         <Reference Include="System.Core" />
         <Reference Include="System.Data" />
         <Reference Include="System.Numerics" />
@@ -81,17 +68,17 @@
         <Project>{ae54813c-d492-49cf-99d8-42c22f7a6414}</Project>
         <Name>GCommon.Differencing</Name>
       </ProjectReference>
+      <ProjectReference Include="..\..\src\GCommon.Utilities\GCommon.Utilities.csproj">
+        <Project>{7dc26de3-34e1-4617-a64a-66cb181b25d8}</Project>
+        <Name>GCommon.Utilities</Name>
+      </ProjectReference>
       <ProjectReference Include="..\..\src\GServer.Archestra\GServer.Archestra.csproj">
         <Project>{32ea2985-26c5-44b5-b8c1-46c8d4da0979}</Project>
         <Name>GServer.Archestra</Name>
       </ProjectReference>
-      <ProjectReference Include="..\..\src\GCommon.Primitives\GCommon.Primitives.csproj">
+      <ProjectReference Include="..\..\src\GCommon.Core\GCommon.Core.csproj">
         <Project>{446fe87c-5122-4344-9df9-9f641e81a476}</Project>
-        <Name>GCommon.Primitives</Name>
-      </ProjectReference>
-      <ProjectReference Include="..\..\src\GCommon.Contracts\GCommon.Contracts.csproj">
-        <Project>{b72fb577-363e-493f-b9c7-66b6dd8720ae}</Project>
-        <Name>GCommon.Contracts</Name>
+        <Name>GCommon.Core</Name>
       </ProjectReference>
       <ProjectReference Include="..\..\src\GCommon.Core\GCommon.Core.csproj">
         <Project>{dd496472-fb15-4ffc-86ca-2ac8f0e6cf3c}</Project>

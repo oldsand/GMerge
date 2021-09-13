@@ -37,13 +37,6 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.ServiceModel.Activation" />
-    <Reference Include="System.ServiceModel.Web" />
-    <Reference Include="System.ServiceProcess" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bootstrapper.cs" />
@@ -54,6 +47,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GCommon.Utilities\GCommon.Utilities.csproj">
+      <Project>{7dc26de3-34e1-4617-a64a-66cb181b25d8}</Project>
+      <Name>GCommon.Utilities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GServer.Archestra\GServer.Archestra.csproj">
       <Project>{32ea2985-26c5-44b5-b8c1-46c8d4da0979}</Project>
       <Name>GServer.Archestra</Name>
@@ -78,9 +75,9 @@
       <Project>{9c3b117b-5acb-49c8-b19d-4fca1ce2be88}</Project>
       <Name>GalaxyMerge.IO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GCommon.Primitives\GCommon.Primitives.csproj">
+    <ProjectReference Include="..\GCommon.Core\GCommon.Core.csproj">
       <Project>{446fe87c-5122-4344-9df9-9f641e81a476}</Project>
-      <Name>GCommon.Primitives</Name>
+      <Name>GCommon.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\GServer.Services\GServer.Services.csproj">
       <Project>{0a10ea2f-bb40-4da4-b4b0-9efc58a58725}</Project>

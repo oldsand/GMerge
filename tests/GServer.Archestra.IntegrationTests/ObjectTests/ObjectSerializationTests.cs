@@ -1,7 +1,7 @@
 using ApprovalTests;
 using ApprovalTests.Reporters;
 using FluentAssertions;
-using GCommon.Primitives;
+using GCommon.Core;
 using NUnit.Framework;
 
 namespace GServer.Archestra.IntegrationTests.ObjectTests

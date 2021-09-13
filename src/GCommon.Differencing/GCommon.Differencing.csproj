@@ -6,7 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\GCommon.Core\GCommon.Core.csproj" />
+      <ProjectReference Include="..\GCommon.Extensions\GCommon.Extensions.csproj" />
     </ItemGroup>
 
 </Project>

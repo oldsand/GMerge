@@ -1,6 +1,6 @@
 using GClient.Data.Entities;
 using GClient.Wrappers.Base;
-using GCommon.Core.Utilities;
+using GCommon.Utilities;
 
 namespace GClient.Wrappers
 {

@@ -1,7 +1,7 @@
 using System.Xml;
 using System.Xml.Linq;
 using ArchestrA.Visualization.GraphicLibrary;
-using GCommon.Core.Extensions;
+using GCommon.Extensions;
 
 namespace GServer.Archestra.Extensions
 {

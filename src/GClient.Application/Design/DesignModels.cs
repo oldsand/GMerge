@@ -2,7 +2,6 @@
 using GClient.Application.ViewModels;
 using GClient.Data.Entities;
 using GClient.Wrappers;
-using GCommon.Core.Logging;
 using NLog;
 
 namespace GClient.Application.Design

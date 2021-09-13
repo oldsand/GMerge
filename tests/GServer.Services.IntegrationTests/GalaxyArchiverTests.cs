@@ -1,8 +1,8 @@
 using System.IO;
 using System.Security.Principal;
 using GCommon.Archiving;
-using GCommon.Primitives;
-using GCommon.Primitives.Enumerations;
+using GCommon.Core;
+using GCommon.Core.Enumerations;
 using GServer.Archestra;
 using GTest.Core;
 using Microsoft.Data.Sqlite;

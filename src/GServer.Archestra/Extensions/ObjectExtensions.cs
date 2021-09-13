@@ -4,9 +4,9 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 using ArchestrA.GRAccess;
-using GCommon.Primitives;
-using GCommon.Primitives.Enumerations;
-using GCommon.Primitives.Structs;
+using GCommon.Core;
+using GCommon.Core.Enumerations;
+using GCommon.Core.Structs;
 using GServer.Archestra.Helpers;
 
 // ReSharper disable SuspiciousTypeConversion.Global

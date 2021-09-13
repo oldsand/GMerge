@@ -33,16 +33,10 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
-        <Reference Include="Microsoft.CSharp" />
         <Reference Include="System" />
-        <Reference Include="System.Configuration" />
         <Reference Include="System.Core" />
-        <Reference Include="System.Data" />
         <Reference Include="System.IO.Compression" />
-        <Reference Include="System.Runtime.Serialization" />
         <Reference Include="System.ServiceModel" />
-        <Reference Include="System.Transactions" />
-        <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
         <Compile Include="MessagingService.cs" />
@@ -64,10 +58,6 @@
       <ProjectReference Include="..\GCommon.Core\GCommon.Core.csproj">
         <Project>{dd496472-fb15-4ffc-86ca-2ac8f0e6cf3c}</Project>
         <Name>GCommon.Core</Name>
-      </ProjectReference>
-      <ProjectReference Include="..\GCommon.Data\GCommon.Data.csproj">
-        <Project>{1116a38e-aa67-46e3-9d09-e2de5c2a694e}</Project>
-        <Name>GCommon.Data</Name>
       </ProjectReference>
       <ProjectReference Include="..\GServer.Services\GServer.Services.csproj">
         <Project>{0a10ea2f-bb40-4da4-b4b0-9efc58a58725}</Project>

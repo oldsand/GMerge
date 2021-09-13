@@ -1,7 +1,6 @@
 using System.Data;
-using System.IO;
-using GCommon.Core.Logging;
-using GCommon.Core.Utilities;
+using GCommon.Logging;
+using GCommon.Utilities;
 using NLog;
 using NLog.Config;
 using NLog.Targets;

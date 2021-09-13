@@ -1,7 +1,7 @@
 using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 using ArchestrA.Visualization.GraphicLibrary;
-using GCommon.Primitives.Structs;
+using GCommon.Core.Structs;
 using GServer.Archestra.Extensions;
 
 [assembly: InternalsVisibleTo("GServer.Archestra.IntegrationTests")]

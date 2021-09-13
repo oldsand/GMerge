@@ -35,20 +35,13 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
-        <Reference Include="Microsoft.CSharp" />
         <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c">
           <HintPath>..\packages\NLog.4.7.10\lib\net45\NLog.dll</HintPath>
           <Private>True</Private>
         </Reference>
         <Reference Include="System" />
-        <Reference Include="System.Configuration" />
         <Reference Include="System.Core" />
-        <Reference Include="System.Data" />
         <Reference Include="System.IO.Compression" />
-        <Reference Include="System.Runtime.Serialization" />
-        <Reference Include="System.ServiceModel" />
-        <Reference Include="System.Transactions" />
-        <Reference Include="System.Xml" />
         <Reference Include="System.Xaml">
             <RequiredTargetFramework>4.0</RequiredTargetFramework>
         </Reference>
@@ -94,10 +87,6 @@
       <ProjectReference Include="..\GCommon.Data\GCommon.Data.csproj">
         <Project>{1116a38e-aa67-46e3-9d09-e2de5c2a694e}</Project>
         <Name>GCommon.Data</Name>
-      </ProjectReference>
-      <ProjectReference Include="..\GCommon.Primitives\GCommon.Primitives.csproj">
-        <Project>{446fe87c-5122-4344-9df9-9f641e81a476}</Project>
-        <Name>GCommon.Primitives</Name>
       </ProjectReference>
     </ItemGroup>
     <ItemGroup>

@@ -1,7 +1,7 @@
 ﻿using System;
 using FluentMigrator.Runner;
 using GClient.Data.Migrator.Migrations;
-using GCommon.Core.Utilities;
+using GCommon.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace GClient.Data.Migrator

@@ -7,11 +7,11 @@ using System.Xml.Linq;
 using GServer.Archestra.Abstractions;
 using GCommon.Archiving.Abstractions;
 using GCommon.Contracts;
-using GCommon.Core.Extensions;
-using GCommon.Core.Utilities;
 using GCommon.Data.Abstractions;
-using GCommon.Primitives;
-using GCommon.Primitives.Enumerations;
+using GCommon.Extensions;
+using GCommon.Core;
+using GCommon.Core.Enumerations;
+using GCommon.Utilities;
 using GServer.Services.Abstractions;
 
 namespace GServer.Services

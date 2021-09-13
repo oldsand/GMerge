@@ -1,4 +1,4 @@
-using GCommon.Primitives;
+using GCommon.Core;
 using NUnit.Framework;
 
 namespace GServer.Archestra.IntegrationTests.ObjectTests

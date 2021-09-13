@@ -1,9 +1,9 @@
 using System.Linq;
 using ArchestrA.GRAccess;
 using FluentAssertions;
-using GCommon.Primitives;
-using GCommon.Primitives.Enumerations;
-using GCommon.Primitives.Structs;
+using GCommon.Core;
+using GCommon.Core.Enumerations;
+using GCommon.Core.Structs;
 using GServer.Archestra.Extensions;
 using NUnit.Framework;
 

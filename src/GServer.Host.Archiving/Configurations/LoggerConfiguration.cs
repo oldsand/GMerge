@@ -1,11 +1,11 @@
 using System.Data;
 using System.IO;
-using GCommon.Core.Utilities;
+using GCommon.Utilities;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
 
-namespace GalaxyMerge.Host.Configurations
+namespace GServer.Host.Archiving.Configurations
 {
     public static class LoggerConfiguration
     {

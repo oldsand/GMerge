@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using GCommon.Core.Extensions;
 using GCommon.Differencing.Abstractions;
 using GCommon.Differencing.Differentiators;
+using GCommon.Extensions;
 
 namespace GCommon.Differencing
 {

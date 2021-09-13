@@ -2,7 +2,7 @@ using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using ArchestrA.GRAccess;
-using GCommon.Primitives.Structs;
+using GCommon.Core.Structs;
 
 [assembly: InternalsVisibleTo("GServer.Archestra.UnitTests")]
 

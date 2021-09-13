@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using ArchestrA.GRAccess;
-using GCommon.Primitives;
-using GCommon.Primitives.Enumerations;
+using GCommon.Core;
+using GCommon.Core.Enumerations;
 
 namespace GServer.Archestra.Extensions
 {

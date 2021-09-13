@@ -6,7 +6,7 @@ using System.Security;
 using System.ServiceModel.Security;
 using ArchestrA.GRAccess;
 using ArchestrA.Visualization.GraphicAccess;
-using GCommon.Primitives.Enumerations;
+using GCommon.Core.Enumerations;
 using GServer.Archestra.Exceptions;
 
 [assembly: InternalsVisibleTo("GServer.Archestra.IntegrationTests")]

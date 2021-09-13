@@ -1,5 +1,5 @@
 using GCommon.Data.Entities;
-using GCommon.Primitives;
+using GCommon.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

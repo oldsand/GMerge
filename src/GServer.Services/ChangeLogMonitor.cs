@@ -1,7 +1,7 @@
 using System;
 using GServer.Archestra.Abstractions;
-using GCommon.Core.Utilities;
 using GCommon.Data.Entities;
+using GCommon.Utilities;
 using NLog;
 using TableDependency.SqlClient;
 using TableDependency.SqlClient.Base.Enums;

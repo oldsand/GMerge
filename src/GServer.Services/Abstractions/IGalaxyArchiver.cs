@@ -1,4 +1,4 @@
-using GCommon.Primitives;
+using GCommon.Core;
 
 namespace GServer.Services.Abstractions
 {

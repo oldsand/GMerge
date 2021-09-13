@@ -1,6 +1,6 @@
 using System.Runtime.CompilerServices;
 using GClient.Data.Entities;
-using GCommon.Core.Utilities;
+using GCommon.Utilities;
 using Microsoft.EntityFrameworkCore;
 
 [assembly: InternalsVisibleTo("GClient.Data.UnitTests")]

@@ -123,14 +123,6 @@
       <Page Include="Views\ResourceSettingsDialog.xaml" />
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\GCommon.Contracts\GCommon.Contracts.csproj">
-        <Project>{b72fb577-363e-493f-b9c7-66b6dd8720ae}</Project>
-        <Name>GCommon.Contracts</Name>
-      </ProjectReference>
-      <ProjectReference Include="..\GClient.Converters\GClient.Converters.csproj">
-        <Project>{710ea881-acd9-4c06-97e6-6c88e395e821}</Project>
-        <Name>GClient.Converters</Name>
-      </ProjectReference>
       <ProjectReference Include="..\GClient.Core\GClient.Core.csproj">
         <Project>{a52fad8f-28b0-4527-9937-ad3885eeccc9}</Project>
         <Name>GClient.Core</Name>
@@ -146,10 +138,6 @@
       <ProjectReference Include="..\GClient.Wrappers\GClient.Wrappers.csproj">
         <Project>{31a6b9b2-e1c6-41ac-a753-8a1985842fb6}</Project>
         <Name>GClient.Wrappers</Name>
-      </ProjectReference>
-      <ProjectReference Include="..\GClient.Proxies\GClient.Proxies.csproj">
-        <Project>{c080b539-439d-4c9e-bdf4-7578e215f34d}</Project>
-        <Name>GClient.Proxies</Name>
       </ProjectReference>
       <ProjectReference Include="..\GClient.Resources\GClient.Resources.csproj">
         <Project>{0db6d056-eee8-49e1-8ff5-c6edce7c48fc}</Project>

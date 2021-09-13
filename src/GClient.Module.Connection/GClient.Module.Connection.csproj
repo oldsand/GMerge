@@ -94,10 +94,6 @@
       <PackageReference Include="Prism.Wpf" Version="8.1.97" />
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\GCommon.Contracts\GCommon.Contracts.csproj">
-        <Project>{b72fb577-363e-493f-b9c7-66b6dd8720ae}</Project>
-        <Name>GCommon.Contracts</Name>
-      </ProjectReference>
       <ProjectReference Include="..\GClient.Converters\GClient.Converters.csproj">
         <Project>{710ea881-acd9-4c06-97e6-6c88e395e821}</Project>
         <Name>GClient.Converters</Name>
@@ -109,14 +105,6 @@
       <ProjectReference Include="..\GClient.Data\GClient.Data.csproj">
         <Project>{04b42b6e-dd66-49a8-84e8-bb2743293330}</Project>
         <Name>GClient.Data</Name>
-      </ProjectReference>
-      <ProjectReference Include="..\GClient.Events\GClient.Events.csproj">
-        <Project>{60790ac9-6add-444f-a812-22129782fa81}</Project>
-        <Name>GClient.Events</Name>
-      </ProjectReference>
-      <ProjectReference Include="..\GClient.Proxies\GClient.Proxies.csproj">
-        <Project>{c080b539-439d-4c9e-bdf4-7578e215f34d}</Project>
-        <Name>GClient.Proxies</Name>
       </ProjectReference>
       <ProjectReference Include="..\GClient.Resources\GClient.Resources.csproj">
         <Project>{0db6d056-eee8-49e1-8ff5-c6edce7c48fc}</Project>
@@ -133,10 +121,6 @@
       <ProjectReference Include="..\GCommon.Data\GCommon.Data.csproj">
         <Project>{1116a38e-aa67-46e3-9d09-e2de5c2a694e}</Project>
         <Name>GCommon.Data</Name>
-      </ProjectReference>
-      <ProjectReference Include="..\GCommon.Primitives\GCommon.Primitives.csproj">
-        <Project>{446fe87c-5122-4344-9df9-9f641e81a476}</Project>
-        <Name>GCommon.Primitives</Name>
       </ProjectReference>
     </ItemGroup>
     <ItemGroup>

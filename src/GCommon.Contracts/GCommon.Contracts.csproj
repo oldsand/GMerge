@@ -11,7 +11,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\GCommon.Core\GCommon.Core.csproj" />
-      <ProjectReference Include="..\GCommon.Primitives\GCommon.Primitives.csproj" />
     </ItemGroup>
 
 </Project>

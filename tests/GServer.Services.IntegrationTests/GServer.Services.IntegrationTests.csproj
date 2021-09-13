@@ -38,8 +38,6 @@
         <Reference Include="System" />
         <Reference Include="System.Core" />
         <Reference Include="System.Data" />
-        <Reference Include="System.Numerics" />
-        <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
         <Compile Include="ArchiveManagerTests.cs" />
@@ -53,13 +51,9 @@
         <Project>{15034b13-2af5-405f-8408-8015bee53ed3}</Project>
         <Name>GCommon.Archiving</Name>
       </ProjectReference>
-      <ProjectReference Include="..\..\src\GCommon.Contracts\GCommon.Contracts.csproj">
-        <Project>{b72fb577-363e-493f-b9c7-66b6dd8720ae}</Project>
-        <Name>GCommon.Contracts</Name>
-      </ProjectReference>
-      <ProjectReference Include="..\..\src\GCommon.Primitives\GCommon.Primitives.csproj">
+      <ProjectReference Include="..\..\src\GCommon.Core\GCommon.Core.csproj">
         <Project>{446fe87c-5122-4344-9df9-9f641e81a476}</Project>
-        <Name>GCommon.Primitives</Name>
+        <Name>GCommon.Core</Name>
       </ProjectReference>
       <ProjectReference Include="..\..\src\GServer.Archestra\GServer.Archestra.csproj">
         <Project>{32ea2985-26c5-44b5-b8c1-46c8d4da0979}</Project>

@@ -16,6 +16,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\src\GCommon.Archiving\GCommon.Archiving.csproj" />
+      <ProjectReference Include="..\..\src\GCommon.Utilities\GCommon.Utilities.csproj" />
     </ItemGroup>
 
 </Project>

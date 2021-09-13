@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using ArchestrA.GRAccess;
-using GCommon.Primitives;
+using GCommon.Core;
 using GServer.Archestra.Extensions;
 
 [assembly: InternalsVisibleTo("GServer.Archestra.IntegrationTests")]

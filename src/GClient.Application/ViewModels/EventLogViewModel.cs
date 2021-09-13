@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using GClient.Core.Mvvm;
 using GClient.Data.Entities;
 using GClient.Wrappers;
-using GCommon.Core.Logging;
+using GCommon.Logging;
 using NLog;
 using Prism.Commands;
 
