@@ -1,0 +1,13 @@
+﻿<Object TagName="Test" HierarchicalName="Test.Contained" ContainedName="Contained" ConfigVersion="100" Category="Galaxy" DerivedFromName="Derived" BasedOnName="BasedOn" HostName="Host" AreaName="Area" ContainerName="Contained">
+  <Attributes>
+    <Attribute Name="Attribute1" DataType="Boolean" Category="Writeable_UC_Lockable" Security="Operate" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[False]]></Value>
+    </Attribute>
+    <Attribute Name="Attribute2" DataType="Integer" Category="Writeable_UC_Lockable" Security="Operate" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[0]]></Value>
+    </Attribute>
+    <Attribute Name="Attribute3" DataType="String" Category="Writeable_UC_Lockable" Security="Operate" Locked="Unlocked" ArrayCount="-1">
+      <Value><![CDATA[]]></Value>
+    </Attribute>
+  </Attributes>
+</Object>

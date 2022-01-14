@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+        <ProjectGuid>{4275FC5B-FEDC-43DF-85D1-6B95E9359F2B}</ProjectGuid>
+        <OutputType>Exe</OutputType>
+        <AppDesignerFolder>Properties</AppDesignerFolder>
+        <RootNamespace>GServer.Host.Messaging</RootNamespace>
+        <AssemblyName>GServer.Host.Messaging</AssemblyName>
+        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+        <FileAlignment>512</FileAlignment>
+        <LangVersion>default</LangVersion>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <PlatformTarget>x86</PlatformTarget>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>bin\Debug\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>bin\Release\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="System" />
+        <Reference Include="System.Core" />
+        <Reference Include="System.IO.Compression" />
+        <Reference Include="System.ServiceModel" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="MessagingService.cs" />
+        <Compile Include="Properties\AssemblyInfo.cs" />
+    </ItemGroup>
+    <ItemGroup>
+      <PackageReference Include="Autofac" Version="6.2.0" />
+      <PackageReference Include="Autofac.Wcf" Version="6.0.0" />
+      <PackageReference Include="NLog" Version="4.7.10" />
+      <PackageReference Include="Topshelf" Version="4.3.0" />
+      <PackageReference Include="Topshelf.Autofac" Version="4.0.1" />
+      <PackageReference Include="Topshelf.NLog" Version="4.3.0" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\GCommon.Contracts\GCommon.Contracts.csproj">
+        <Project>{b72fb577-363e-493f-b9c7-66b6dd8720ae}</Project>
+        <Name>GCommon.Contracts</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\GCommon.Core\GCommon.Core.csproj">
+        <Project>{dd496472-fb15-4ffc-86ca-2ac8f0e6cf3c}</Project>
+        <Name>GCommon.Core</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\GServer.Services\GServer.Services.csproj">
+        <Project>{0a10ea2f-bb40-4da4-b4b0-9efc58a58725}</Project>
+        <Name>GServer.Services</Name>
+      </ProjectReference>
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+         Other similar extension points exist, see Microsoft.Common.targets.
+    <Target Name="BeforeBuild">
+    </Target>
+    <Target Name="AfterBuild">
+    </Target>
+    -->
+
+</Project>

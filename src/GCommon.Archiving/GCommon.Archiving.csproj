@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <LangVersion>default</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Ardalis.SmartEnum" Version="2.0.1" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.10" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.10" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\GCommon.Core\GCommon.Core.csproj" />
+      <ProjectReference Include="..\GCommon.Utilities\GCommon.Utilities.csproj" />
+    </ItemGroup>
+
+</Project>

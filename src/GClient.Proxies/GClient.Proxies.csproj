@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <LangVersion>default</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="System.ServiceModel.NetTcp" Version="4.8.1" />
+      <PackageReference Include="System.ServiceModel.Primitives" Version="4.8.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\GCommon.Contracts\GCommon.Contracts.csproj" />
+      <ProjectReference Include="..\GCommon.Core\GCommon.Core.csproj" />
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <LangVersion>latestmajor</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="System.IO.Abstractions" Version="13.2.47" />
+      <PackageReference Include="System.IO.Compression" Version="4.3.0" />
+      <PackageReference Include="System.IO.Compression.ZipFile" Version="4.3.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="Schemas\ObjectFile.xsd" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="Schemas\aaGraphics.xsd" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\GCommon.Extensions\GCommon.Extensions.csproj" />
+      <ProjectReference Include="..\GCommon.Utilities\GCommon.Utilities.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Microsoft.Deployment.Compression, Version=3.0.0.0, Culture=neutral, PublicKeyToken=ce35f76fcda82bad">
+        <HintPath>..\Lib\Microsoft.Deployment.Compression.dll</HintPath>
+      </Reference>
+      <Reference Include="Microsoft.Deployment.Compression.Cab, Version=3.0.0.0, Culture=neutral, PublicKeyToken=ce35f76fcda82bad">
+        <HintPath>..\Lib\Microsoft.Deployment.Compression.Cab.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+</Project>

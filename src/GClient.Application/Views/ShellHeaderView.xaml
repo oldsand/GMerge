@@ -1,0 +1,132 @@
+<UserControl x:Class="GClient.Application.Views.ShellHeaderView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:ui="http://gmerge.com/ui/wpf"
+             xmlns:design="clr-namespace:GClient.Application.Design"
+             xmlns:controls="clr-namespace:GClient.Application.Controls"
+             xmlns:wrappers="clr-namespace:GClient.Wrappers;assembly=GClient.Wrappers"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             d:DesignHeight="50"
+             d:DesignWidth="1920"
+             mc:Ignorable="d">
+
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <design:DesignModels x:Key="DesignModels" />
+      
+      <DataTemplate x:Key="ResourceSelectedItemTemplate">
+        <Grid d:DataContext="{Binding Source={StaticResource DesignModels}, Path=ResourceEntry}">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition />
+          </Grid.ColumnDefinitions>
+
+          <ui:Icon Grid.Column="0"
+                   Height="12" Width="12"
+                   VerticalAlignment="Center"
+                   Template="{Binding ResourceType, Converter={ui:ResourceTypeIconConverter}}" />
+          <TextBlock Grid.Column="1"
+                     Margin="10 0"
+                     Text="{Binding ResourceName}"
+                     FontWeight="SemiBold" />
+        </Grid>
+      </DataTemplate>
+
+      <DataTemplate x:Key="ResourceDropDownItemTemplate" DataType="{x:Type wrappers:ResourceEntryWrapper}">
+        <controls:ResourceItem Padding="0"/>
+      </DataTemplate>
+    </ResourceDictionary>
+  </UserControl.Resources>
+
+  <Border Background="{ui:ThemeResource ResourceKey=PanelBackground}"
+          BorderBrush="{ui:ThemeResource ResourceKey=PrimaryBorder}"
+          BorderThickness="0 0 0 1"
+          d:DataContext="{Binding ShellHeaderViewModel, Source={StaticResource DesignModels}}">
+    <Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto" />
+        <ColumnDefinition Width="Auto" />
+        <ColumnDefinition Width="Auto" />
+        <ColumnDefinition />
+        <ColumnDefinition />
+      </Grid.ColumnDefinitions>
+
+      <StackPanel Grid.Column="0"
+                  Margin="10,0"
+                  HorizontalAlignment="Left"
+                  Orientation="Horizontal">
+
+        <!--New Resource-->
+        <Button Width="60"
+                Height="26"
+                BorderThickness="0"
+                Command="{Binding NewResourceCommand}">
+          <StackPanel Orientation="Horizontal">
+            <ui:Icon Template="{DynamicResource Icon.Outlined.Add}"
+                     Foreground="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"
+                     Height="14" Width="14"
+                     Margin="0 0 5 0"/>
+            <TextBlock Text="New"
+                       Foreground="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}" />
+          </StackPanel>
+          <Button.Style>
+            <Style BasedOn="{StaticResource Style.Button.Primary}" TargetType="{x:Type Button}">
+              <Setter Property="Template" Value="{StaticResource Template.Button.Simple}" />
+            </Style>
+          </Button.Style>
+        </Button>
+
+        <!--Spacer Border-->
+        <Border Margin="5"
+                BorderBrush="Transparent"
+                BorderThickness="1" />
+
+        <!--Resource Selector-->
+        <ComboBox ItemsSource="{Binding Resources}"
+                  SelectedItem="{Binding SelectedResourceEntry}"
+                  Background="{ui:ThemeResource ResourceKey=PrimaryBackground}"
+                  ui:TextBoxProperties.DefaultText="Select Resource"
+                  Width="300" Height="26"
+                  MaxDropDownHeight="200"
+                  VerticalContentAlignment="Center"
+                  HorizontalContentAlignment="Stretch"
+                  ItemTemplateSelector="{ui:ComboBoxTemplateSelector 
+                  SelectedItemTemplate={StaticResource ResourceSelectedItemTemplate}, 
+                  DropdownItemsTemplate={StaticResource ResourceDropDownItemTemplate}}">
+          <ComboBox.ItemContainerStyle>
+            <Style TargetType="{x:Type ComboBoxItem}" BasedOn="{StaticResource Style.ComboBoxItem}">
+              <Setter Property="Padding" Value="0" />
+              <Setter Property="BorderThickness" Value="0" />
+            </Style>
+          </ComboBox.ItemContainerStyle>
+        </ComboBox>
+
+        <!--Spacer Border-->
+        <Border Margin="5"
+                BorderBrush="Transparent"
+                BorderThickness="1" />
+
+        <!--Resource Buttons-->
+        <ui:IconButton DefaultIcon="{StaticResource Icon.Filled.Cog}"
+                       Command="{Binding OpenSettingsCommand}"
+                       Margin="5 0 0 0"/>
+        <ui:IconButton DefaultIcon="{StaticResource Icon.Filled.Delete}"
+                       Command="{Binding DeleteResourceCommand}"
+                       Margin="5 0 0 0"/>
+        <!--<Button Style="{StaticResource Style.Button.Transparent}"
+                Margin="5 0 0 0">
+          <ui:Icon Template="{StaticResource Icon.Refresh}" />
+        </Button>-->
+        <!--<Button Style="{StaticResource Style.Button.Transparent}"
+                Margin="5 0 0 0">
+          <ui:Icon Template="{StaticResource Icon.More.Horizontal}" />
+        </Button>-->
+
+      </StackPanel>
+    </Grid>
+  </Border>
+
+</UserControl>
